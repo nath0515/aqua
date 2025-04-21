@@ -157,12 +157,28 @@
                             <div class="col-xl-6">
                             <div class="card">
 								<div class="card-header">
-									<div class="card-title">Multiple Line Chart</div>
+									<div class="card-title">Sales Chart</div>
 								</div>
 								<div class="card-body">
 									<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
 										<canvas id="multipleLineChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
 									</div>
+                                    <form action="expenses.php" method="GET">
+                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <div>
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
 								</div>
 							</div>
                             </div>

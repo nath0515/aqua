@@ -111,10 +111,10 @@
                             <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
-                        <button class="btn btn-success btn-round ms-auto mb-3 me-1" data-bs-toggle="modal" data-bs-target="#addsales">
+                        <a class="btn btn-success btn-round ms-auto mb-3 me-1" href="create_purchase.php">
                             <i class="fa fa-plus"></i>
                             Add Order
-                        </button>
+                        </a>
                         <div class="card mb-4">
                             
                         </div>
@@ -202,6 +202,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                <input type="text" name="order_id" id="editOrderId" hidden>
 
                                 <!-- Order Items -->
                                 <div class="mb-3" id="orderItemsContainer">
@@ -228,6 +229,7 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             $(document).ready(function() {
                 $("#editOrderBtn").click(function() {
@@ -243,7 +245,7 @@
                                 const orderItems = response.data2;
 
                                 $("#editStatusId").val(response.data.status_id);
-
+                                $("#editOrderId").val(response.data.order_id);
 
                                 let itemsHtml = '<h5>Order Items:</h5>';
                                 orderItems.forEach(item => {
@@ -268,5 +270,23 @@
                 });
             });
         </script>
+        <?php if (isset($_GET['editstatus'])): ?>
+            <script>
+                <?php if ($_GET['editstatus'] == 'success'): ?>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Edited!',
+                        text: 'The order has been successfully edited.',
+                    }).then((result) => {
+                    });
+                <?php elseif ($_GET['editstatus'] == 'error'): ?>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong while editing the order.',
+                    });
+                <?php endif; ?>    
+            </script>
+        <?php endif; ?>
     </body>
 </html>

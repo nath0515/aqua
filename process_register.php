@@ -6,6 +6,7 @@
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
+    ob_start();
 
     $globalquery = "INSERT INTO users (email, password, verification_token, role_id) VALUES (:email, :password, :verification_token, 0)";
     $verification_token = bin2hex(random_bytes(16));
@@ -77,9 +78,18 @@
     
             $mail->isHTML(true);
             $mail->Subject = 'Email Verification';
-            $mail->Body = "Hi,<br><br>Click the link below to verify your email address:<br><br>
-                           <a href='http://localhost/aquadrop/verify_email.php?token=$verification_token'>Verify Email</a><br><br>Thank you.";
-    
+            $mail->Body = "
+                        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
+                            <h2 style='color: #343a40;'>Hi,</h2>
+                            <p>Click the link below to verify your email address:</p>
+                            <a href='http://localhost/aquadrop/verify_email.php?token=$verification_token' 
+                            style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
+                                    text-decoration: none; border-radius: 5px;'>
+                            Verify Email
+                            </a>
+                            <p style='margin-top: 20px;'>Thank you.</p>
+                        </div>
+                        ";
             $mail->send();
             return true;
         } catch (Exception $e) {
@@ -88,4 +98,5 @@
         }
     }
 
+    ob_end_flush();
 ?>

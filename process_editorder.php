@@ -1,0 +1,26 @@
+<?php 
+    require ('db.php');
+    require ('session.php');
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        try{
+            $status_id = $_POST['status_id'];
+            $order_id = $_POST['order_id'];
+
+            $sql = "UPDATE orders SET status_id = :status_id WHERE order_id = :order_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':status_id', $status_id);
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+
+            header('Location: orders.php?editstatus=success');
+            exit();
+
+        }
+        catch (PDOException $e) {
+            header("Location: stock.php?editstatus=error");
+            exit();
+        }
+    }
+
+?>

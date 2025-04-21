@@ -111,9 +111,22 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Sales</li>
                         </ol>
-                        <div class="card mb-4">
-                            
-                        </div>
+                        <form action="expenses.php" method="GET">
+                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <div>
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>

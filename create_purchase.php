@@ -114,7 +114,7 @@
                                 <form id="purchaseForm" action="">
                                     <div class="mb-3">
 										<label for="product_name" class="form-label">Item</label>
-										<select name="" id="product_id" class="form-select" required>
+										<select name="" id="product_id" class="form-select" required onchange="fetchProductDetails(this.value)">
 											<option>Select Item</option>
 											<?php foreach($product_data as $row):?>
 												<option value="<?php echo $row['product_id']?>"><?php echo $row['product_name']?></option>
@@ -141,7 +141,7 @@
                                         </div>                    
                                         <div class="col">
                                             <div class="form-check float-end" id="sameQuantityDiv" style="display: none;">
-                                                <input class="form-check-input" type="checkbox" id="sameQUantity" onchange="toggleSameQuantity()">
+                                                <input class="form-check-input" type="checkbox" id="sameQuantity" onchange="toggleSameQuantity()">
                                                 <label class="form-check-label" for="hasContainer">
                                                     Same quantity as ordered
                                                 </label>
@@ -164,7 +164,7 @@
                                         <label for="price" class="form-label">Container Price</label>
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
-                                            <input type="number" class="form-control" step="0.01" id="price" name="price" readonly>
+                                            <input type="number" class="form-control" step="0.01" id="containerprice" name="price" readonly>
                                         </div>
                                     </div>
                                     <script>
@@ -178,14 +178,23 @@
                                             sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
                                         }
                                         function toggleSameQuantity() {
-                                            document.getElementById("containerQuantityInput").readOnly = true;
+                                            const sameQuantityCheckbox = document.getElementById("sameQuantity");
+                                            const containerQuantityInput = document.getElementById("containerQuantityInput");
+
+                                            if (sameQuantityCheckbox.checked) {
+                                                containerQuantityInput.readOnly = true;
+                                                containerQuantityInput.value = document.getElementById("quantity").value;
+                                            } else {
+                                                containerQuantityInput.readOnly = false;
+                                                containerQuantityInput.value = '';
+                                            }
                                         }
                                     </script>
                                     <div class="mb-3">
 										<label for="price" class="form-label">Total Price</label>
 										<div class="input-group">
 											<span class="input-group-text">₱</span>
-											<input type="number" class="form-control" step=0.01 id="price" name="price" readonly>
+											<input type="number" class="form-control" step=0.01 id="totalprice" name="price" readonly>
 										</div>
 									</div>
     								<div class="d-flex justify-content-end">
@@ -258,45 +267,22 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
+            function fetchProductDetails(productId) {
+                if (productId === '') return;
+            
+                fetch('process_getproductdata.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'product_id=' + encodeURIComponent(productId)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                })
+                .catch(error => console.error('Error:', error));
+            }
         </script>
     </body>
 </html>
