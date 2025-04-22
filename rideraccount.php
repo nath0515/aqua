@@ -119,19 +119,48 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                                        <label for="" class="form-label">Password</label>
+                                            <div class="input-group">
+                                                <input type="password" id="password" class="form-control" name="password"  onInput="check()" placeholder="Password" required>
+                                                <span class="input-group-text" onclick="togglePassword()">
+                                                    <i class="fa fa-eye" id="eyeIcon"></i> 
+                                                </span>
+                                            </div>
                                     </div>
+
+                                    <div class="mb-3 d-none" id="validation">
+                                            <div id="count">Length : 0</div>
+                                            <!-- Password Strength Check (Moved here under Confirm Password) -->
+                                            <div id="check0">
+                                                <i class="far fa-check-circle"></i> <span> Length more than 8.</span>
+                                            </div>
+                                            <div id="check2">
+                                                <i class="far fa-check-circle"></i> <span> Contains numerical character.</span>
+                                            </div>
+                                            <div id="check3">
+                                                <i class="far fa-check-circle"></i> <span> Contains special character.</span>
+                                            </div>
+                                            <div id="check4">
+                                                <i class="far fa-check-circle"></i> <span> Shouldn't contain spaces.</span>
+                                            </div>
+                                        </div>
 
                                     <div class="mb-3">
-                                        <label for="confirm_password" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
+                                        <label for="" class="form-label">Confirm Password</label>
+                                        <div class="input-group">
+                                            <input type="password" id="confirm_password" class="form-control" name="confirm_password" onInput="confirmCheck()" placeholder="Password" required>
+                                            <span class="input-group-text" onclick="toggleConfirmPassword()">
+                                                <i class="fa fa-eye" id="confirmEyeIcon"></i> 
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <div class="alert alert-danger d-none" id="passwordError" role="alert"></div>
+                                    <div class="mb-3 d-none" id="validation1">
+                                            <div id="check5">
+                                                <i class="far fa-check-circle"></i> <span> Passwords do not match.</span>
+                                            </div>       
                                     </div>
-
+                                    
                                     <button type="submit" class="btn btn-primary w-100">Register Rider</button>
                                 </form>
                             </div>
@@ -150,6 +179,117 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var eyeIcon = document.getElementById("eyeIcon");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+        function toggleConfirmPassword() {
+            var passwordField = document.getElementById("confirm_password");
+            var eyeIcon = document.getElementById("confirmEyeIcon");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+
+        function check(){
+            var input = document.getElementById("password").value;
+
+            input = input.trim();
+            document.getElementById("password").value = input;
+            document.getElementById("count").innerText = "Length : " + input.length;
+            var validationDiv = document.getElementById("validation");
+            if (input.length > 0) {
+                // Remove d-none class to make the validation div visible
+                validationDiv.classList.remove("d-none");
+            } else {
+                // Add d-none class to hide the validation div if input is empty
+                validationDiv.classList.add("d-none");
+            }
+            if(input.length >= 8){
+                document.getElementById("check0").style.color = "green";
+            }else{
+                document.getElementById("check0").style.color = "red";
+            }
+            if(input.match(/[0-9]/i)){
+                document.getElementById("check2").style.color = "green";
+            }else{
+                document.getElementById("check2").style.color = "red";
+            }
+
+            if(input.match(/[^A-Za-z0-9'']/i)){
+                document.getElementById("check3").style.color = "green";
+            }else{
+                document.getElementById("check3").style.color = "red";
+            }
+
+            if(input.match('')){
+                document.getElementById("check4").style.color = "green";
+            }else{
+                document.getElementById("check4").style.color = "red";
+            }
+        }
+
+        function checkForm() {
+            var check0 = document.getElementById("check0").style.color === "green";
+            var check2 = document.getElementById("check2").style.color === "green";
+            var check3 = document.getElementById("check3").style.color === "green";
+            var check4 = document.getElementById("check4").style.color === "green";
+
+            if (check0 && check2 && check3 && check4) {
+                return true;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please ensure all conditions are met before submitting.',
+                    confirmButtonText: 'Try again',
+                });
+                return false;
+            }
+        }
+
+        function confirmCheck(){
+            var input = document.getElementById("confirm_password").value;
+            var orig = document.getElementById("password").value;
+
+            input = input.trim();
+            document.getElementById("confirm_password").value = input;
+            var validationDiv = document.getElementById("validation1");
+            if (input.length > 0) {
+                validationDiv.classList.remove("d-none");
+            } else {
+                validationDiv.classList.add("d-none");
+            }
+            if(input == orig){
+                document.getElementById("check5").style.color = "green";
+                validationDiv.classList.add("d-none");
+            }else{
+                document.getElementById("check5").style.color = "red";
+                
+                validationDiv.classList.remove("d-none");
+            }
+        }
+    
+    </script>
         <script>
             $(document).ready(function() {
                 $("#editOrderBtn").click(function() {
