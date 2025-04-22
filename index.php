@@ -172,35 +172,63 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-6">
-                            <div class="card">
-								<div class="card-header">
-									<div class="card-title">Sales Chart</div>
-								</div>
-								<div class="card-body">
-									<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-										<canvas id="multipleLineChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
-									</div>
-                                    <form action="expenses.php" method="GET">
-                                        <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
-                                            <div>
-                                                <label for="start_date" class="form-label">Start Date</label>
-                                                <input type="date" id="start_date" name="start_date" class="form-control" required>
-                                            </div>
-                                            <div>
-                                                <label for="end_date" class="form-label">End Date</label>
-                                                <input type="date" id="end_date" name="end_date" class="form-control" required>
-                                            </div>
-                                            <div>
-                                                <label class="form-label d-block">&nbsp;</label>
-                                                <button type="submit" class="btn btn-primary">Filter</button>
-                                            </div>
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">Sales Chart</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                            <canvas id="multipleLineChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
                                         </div>
-                                    </form>
-								</div>
-							</div>
+                                        <form action="expenses.php" method="GET">
+                                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                                <div>
+                                                    <label for="start_date" class="form-label">Start Date</label>
+                                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                                </div>
+                                                <div>
+                                                    <label for="end_date" class="form-label">End Date</label>
+                                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label d-block">&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xl-6">
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">Income Chart</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                            <canvas id="incomeChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+                                        </div>
+                                        <form action="expenses.php" method="GET">
+                                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                                <div>
+                                                    <label for="start_date" class="form-label">Start Date</label>
+                                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                                </div>
+                                                <div>
+                                                    <label for="end_date" class="form-label">End Date</label>
+                                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label d-block">&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
@@ -391,6 +419,48 @@
                             }
                         }]
                     },
+                }
+            });
+
+            var incomeChart = document.getElementById('incomeChart').getContext('2d');
+            var myIncomeChart = new Chart(incomeChart, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Sales",
+                            borderColor: "#1d7af3",
+                            pointBorderColor: "#FFF",
+                            pointBackgroundColor: "#1d7af3",
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 4,
+                            pointHoverBorderWidth: 1,
+                            pointRadius: 4,
+                            backgroundColor: 'transparent',
+                            fill: true,
+                            borderWidth: 2,
+                            data: salesValues
+                        }]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltips: {
+                        bodySpacing: 4,
+                        mode: "nearest",
+                        intersect: 0,
+                        position: "nearest",
+                        xPadding: 10,
+                        yPadding: 10,
+                        caretPadding: 10
+                    },
+                    layout: {
+                        padding: { left: 15, right: 15, top: 15, bottom: 15 }
+                    }
                 }
             });
         </script>
