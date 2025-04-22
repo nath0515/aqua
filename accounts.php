@@ -111,17 +111,18 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Role</th>
+                                            <th>Contact Number</th>
                                             <th>Date Created</th>
+                                            
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <?php foreach($data as $row):?>
+                                    <tbody>                                   
                                         <tr>
                                             <td>awdad</td>
                                             <td>awdad</td>
                                             <td>awdad</td>
+                                            <td>awdad</td>
                                         </tr>
-                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
