@@ -6,7 +6,7 @@
     ob_start();
 
     $sql1 = "INSERT INTO users (email, password, role_id, created_at) VALUES (:email, :password, 3, :created_at)";
-    $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)"
+    $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)";
     $date = date('Y-m-d H:i:s');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
