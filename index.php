@@ -234,134 +234,168 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <?php 
-            $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders
+    // Fetch Sales Data
+    $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders
             WHERE status_id = 4
             GROUP BY DATE(date)
             ORDER BY day ASC";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $labels = [];
-		    $values = [];
+    // Fetch Expenses Data (Target Sales)
+    $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_expense FROM expense
+            GROUP BY DATE(date)
+            ORDER BY day ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($sales as $row) {
-                $labels[] = date("M d, Y", strtotime($row['day']));
-                $values[] = (float) $row['total_price'];
-            }
+    $labels = [];
+    $sales_values = [];
+    $expenses_values = [];
 
-            $sql = "SELECT product_name, stock FROM products";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Combine Sales and Expenses Data
+    $sales_data = [];
+    foreach ($sales as $row) {
+        $sales_data[$row['day']] = (float) $row['total_price'];
+    }
 
-            $productNames = [];
-            $productStocks = [];
-            $colors = [];
-            
-            $lowStockThreshold = 10;
+    $expenses_data = [];
+    foreach ($expenses as $row) {
+        $expenses_data[$row['day']] = (float) $row['total_expense'];
+    }
 
-            foreach ($products as $product) {
-                $productNames[] = $product['product_name'];
-                $productStocks[] = $product['stock'];
-                
-                if ($product['stock'] < $lowStockThreshold) {
-                    $colors[] = 'rgb(255, 99, 71)'; 
-                } else {
-                    $colors[] = 'rgb(34, 193, 34)';
-                }
-            }
-        ?>
-        <script>
-            var barChart = document.getElementById('barChart').getContext('2d');
-            var labels = <?php echo json_encode($labels); ?>;
-            var values = <?php echo json_encode($values); ?>;
+    // Collect labels and data for both Sales and Expenses
+    $all_dates = array_merge(array_keys($sales_data), array_keys($expenses_data));
+    $all_dates = array_unique($all_dates);  // Remove duplicates
 
-            var productNames = <?php echo json_encode($productNames); ?>;
-            var productStocks = <?php echo json_encode($productStocks); ?>;
-            var colors = <?php echo json_encode($colors); ?>;
+    foreach ($all_dates as $date) {
+        $labels[] = date("M d, Y", strtotime($date));
+        $sales_values[] = isset($sales_data[$date]) ? $sales_data[$date] : 0;
+        $expenses_values[] = isset($expenses_data[$date]) ? $expenses_data[$date] : 0;
+    }
+
+    // Fetch Product Data
+    $sql = "SELECT product_name, stock FROM products";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $productNames = [];
+    $productStocks = [];
+    $colors = [];
+    
+    $lowStockThreshold = 10;
+
+    foreach ($products as $product) {
+        $productNames[] = $product['product_name'];
+        $productStocks[] = $product['stock'];
         
-            console.log(values);
+        if ($product['stock'] < $lowStockThreshold) {
+            $colors[] = 'rgb(255, 99, 71)';  // Red color for low stock
+        } else {
+            $colors[] = 'rgb(34, 193, 34)';  // Green color for sufficient stock
+        }
+    }
+?>
 
-            var myMultipleLineChart = new Chart(multipleLineChart, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Sales",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: values
-                    },{
-                        label: "Target Sales",
-                        borderColor: "#f3545d",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#f3545d",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: false,
-                        borderWidth: 2,
-                        borderDash: [5, 5], // Dashed line for imaginary
-                        data: [100, 200, 300, 400] // <- Replace with your made-up values
-                    }
-                    ]
+<script>
+    // Prepare chart data for JavaScript
+    var labels = <?php echo json_encode($labels); ?>;
+    var salesValues = <?php echo json_encode($sales_values); ?>;
+    var expensesValues = <?php echo json_encode($expenses_values); ?>;
+
+    var productNames = <?php echo json_encode($productNames); ?>;
+    var productStocks = <?php echo json_encode($productStocks); ?>;
+    var colors = <?php echo json_encode($colors); ?>;
+
+    // Line Chart: Sales vs Target Sales (Expenses)
+    var multipleLineChart = document.getElementById('multipleLineChart').getContext('2d');
+    var myMultipleLineChart = new Chart(multipleLineChart, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Sales",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: salesValues
                 },
-                options : {
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode:"nearest",
-                        intersect: 0,
-                        position:"nearest",
-                        xPadding:10,
-                        yPadding:10,
-                        caretPadding:10
-                    },
-                    layout:{
-                        padding:{left:15,right:15,top:15,bottom:15}
-                    }
+                {
+                    label: "Target Sales (Expenses)",
+                    borderColor: "#f3545d",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#f3545d",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    borderDash: [5, 5], // Dashed line for expenses/target
+                    data: expensesValues
                 }
-            });
+            ]
+        },
+        options: {
+            responsive: true, 
+            maintainAspectRatio: false,
+            legend: {
+                position: 'top',
+            },
+            tooltips: {
+                bodySpacing: 4,
+                mode: "nearest",
+                intersect: 0,
+                position: "nearest",
+                xPadding: 10,
+                yPadding: 10,
+                caretPadding: 10
+            },
+            layout: {
+                padding: { left: 15, right: 15, top: 15, bottom: 15 }
+            }
+        }
+    });
 
-        var myBarChart = new Chart(barChart, {
-			type: 'bar',
-			data: {
-				labels: productNames,
-				datasets : [{
-					label: "Stocks",
-					backgroundColor: colors,
-					borderColor: colors,
-					data: productStocks,
-				}],
-			},
-			options: {
-				responsive: true, 
-				maintainAspectRatio: false,
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-				},
-			}
-		});
-        </script>
+    // Bar Chart: Product Stocks
+    var barChart = document.getElementById('barChart').getContext('2d');
+    var myBarChart = new Chart(barChart, {
+        type: 'bar',
+        data: {
+            labels: productNames,
+            datasets: [{
+                label: "Stocks",
+                backgroundColor: colors,
+                borderColor: colors,
+                data: productStocks,
+            }],
+        },
+        options: {
+            responsive: true, 
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+</script>
+
         
         
     </body>
