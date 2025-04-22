@@ -104,13 +104,18 @@
                                 <form id="riderForm" action="register_rider.php" method="POST" onsubmit="return validateForm()">
 
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" required placeholder="Juan Dela Cruz">
+                                        <label for="name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstname" name="name" required placeholder="Juan Dela Cruz">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastname" name="name" required placeholder="Juan Dela Cruz">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="contact" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contact" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+                                        <input type="tel" class="form-control" id="contactnumber" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
                                     </div>
 
                                     <div class="mb-3">
@@ -160,7 +165,7 @@
                                                 <i class="far fa-check-circle"></i> <span> Passwords do not match.</span>
                                             </div>       
                                     </div>
-                                    
+
                                     <button type="submit" class="btn btn-primary w-100">Register Rider</button>
                                 </form>
                             </div>
@@ -330,5 +335,35 @@
                 });
             });
         </script>
+        <?php if (isset($_GET['status'])): ?>
+        <script>
+            <?php if ($_GET['status'] == 'notmatch'): ?>
+            Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '<?php echo "Passwords do not match." ?>',
+            });
+            <?php elseif ($_GET['status'] == 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while creating the account.',
+                });
+            <?php elseif ($_GET['status'] == 'exist'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Email already exists.',
+                });
+            <?php elseif ($_GET['status'] == 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Account Added!',
+                    text: 'The account has been successfully created. Please check your email to verify.',
+                }).then((result) => { window.location.href = "login.php";
+                });
+            <?php endif ?>
+        </script>
+        <?php endif; ?>
     </body>
 </html>
