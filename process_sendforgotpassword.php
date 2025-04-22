@@ -55,8 +55,18 @@
     
             $mail->isHTML(true);
             $mail->Subject = 'Reset Password Link';
-            $mail->Body = "Hi,<br><br>Click the link below to recover your account:<br><br>
-                           <a href='http://aqua-drop.shop/forgot_password.php?token=$fp_token'>Recover Password</a><br><br>Thank you.";
+            $mail->Body = "
+                        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
+                            <h2 style='color: #343a40;'>Hi,</h2>
+                            <p>Click the link below to recover your account:</p>
+                            <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
+                            style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
+                                    text-decoration: none; border-radius: 5px;'>
+                            Recover Password
+                            </a>
+                            <p style='margin-top: 20px;'>Thank you.</p>
+                        </div>
+                        ";
     
             $mail->send();
             return true;
