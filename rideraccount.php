@@ -101,8 +101,7 @@
                                 <h4 class="mb-0">🚴 Rider Registration</h4>
                             </div>
                             <div class="card-body">
-                                <form id="riderForm" action="register_rider.php" method="POST" onsubmit="return validateForm()">
-
+                                <form action="process_registerrider.php" method="POST" onsubmit="return checkForm()">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">First Name</label>
                                         <input type="text" class="form-control" id="firstname" name="name" required placeholder="Juan Dela Cruz">
@@ -119,8 +118,8 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" placeholder="juandelacruz@gmail.com" required>
+                                        <label for="username" class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="juandelacruz@gmail.com" required>
                                     </div>
 
                                     <div class="mb-3">
