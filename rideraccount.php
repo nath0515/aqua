@@ -121,8 +121,12 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="juandelacruz@gmail.com" required>
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            placeholder="juandelacruz@gmail.com"
+                                            pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
+                                            required>
+                                        <div class="form-text">Must be a valid Gmail address (e.g., juan@gmail.com).</div>
                                     </div>
 
                                     <div class="mb-3">
