@@ -188,8 +188,21 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const emailInput = document.getElementById("email");
+
+            emailInput.addEventListener("input", function () {
+                const pattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                if (!pattern.test(emailInput.value)) {
+                    emailInput.classList.add("is-invalid");
+                    emailInput.classList.remove("is-valid");
+                } else {
+                    emailInput.classList.remove("is-invalid");
+                    emailInput.classList.add("is-valid");
+                }
+            });
+        </script>
 
         <script>
         function togglePassword() {
@@ -220,6 +233,7 @@
                 eyeIcon.classList.add("fa-eye");
             }
         }
+        
 
         function check(){
             var input = document.getElementById("password").value;
