@@ -84,7 +84,7 @@
                                     <a class="nav-link" href="#">Stock</a>
                                 </nav>
                             </div>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="accounts.php">Accounts</a>
                                     <a class="nav-link" href="rideraccount">Add Rider</a>
