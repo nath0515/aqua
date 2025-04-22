@@ -67,13 +67,13 @@
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'system.aquadrop@gmail.com';
-            $mail->Password = 'nasv xpiv whcv zuzd';
+            $mail->Username = 'techsupport@aqua-drop.shop';
+            $mail->Password = '8=4u?LaKm062';
             $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+            $mail->Port = 465;
             $mail->SMTPDebug = 2;
     
-            $mail->setFrom('system.aquadrop@gmail.com', 'aqua drop');
+            $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
             $mail->addAddress($email);
     
             $mail->isHTML(true);
@@ -82,7 +82,7 @@
                         <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
                             <h2 style='color: #343a40;'>Hi,</h2>
                             <p>Click the link below to verify your email address:</p>
-                            <a href='http://localhost/aquadrop/verify_email.php?token=$verification_token' 
+                            <a href='http://aqua-drop.shop/aquadrop/verify_email.php?token=$verification_token' 
                             style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
                                     text-decoration: none; border-radius: 5px;'>
                             Verify Email
