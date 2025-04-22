@@ -116,7 +116,7 @@
                             <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="accounts.php">Accounts</a>
-                                    <a class="nav-link" href="rideraccount">Add Rider</a>
+                                    <a class="nav-link" href="rideraccount.php">Add Rider</a>
                                 </nav>
                             </div>
                         </div>
