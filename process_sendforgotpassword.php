@@ -42,21 +42,21 @@
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
+            $mail->Host = 'smtp.hostinger.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'system.aquadrop@gmail.com';
-            $mail->Password = 'nasv xpiv whcv zuzd';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+            $mail->Username = 'techsupport@aqua-drop.shop';
+            $mail->Password = '8=4u?LaKm062';
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
             $mail->SMTPDebug = 2;
     
-            $mail->setFrom('system.aquadrop@gmail.com', 'aqua drop');
+            $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
             $mail->addAddress($email);
     
             $mail->isHTML(true);
             $mail->Subject = 'Reset Password Link';
             $mail->Body = "Hi,<br><br>Click the link below to recover your account:<br><br>
-                           <a href='http://localhost/aquadrop/forgot_password.php?token=$fp_token'>Recover Password</a><br><br>Thank you.";
+                           <a href='http://aqua-drop.shop/forgot_password.php?token=$fp_token'>Recover Password</a><br><br>Thank you.";
     
             $mail->send();
             return true;
