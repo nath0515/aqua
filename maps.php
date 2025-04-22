@@ -21,7 +21,7 @@ function getCoordinates($address) {
 
 // Example usage: Get coordinates for the given Plus Code and address
 $startAddress = 'Calamba, Laguna';  // Starting point: Plus Code address
-$endAddresses = ['Calauan,Laguna', 'Laguna', 'Manila'];  // Multiple end addresses
+$endAddresses = ['Calauan,Laguna', 'Santa Cruz,Laguna', 'Santisima Cruz'];  // Multiple end addresses
 
 // Get coordinates for the start address
 $startCoordinates = getCoordinates($startAddress);
@@ -59,8 +59,8 @@ foreach ($endAddresses as $endAddress) {
 <body>
 
 <h1>Map Showing Route with Multiple Endpoints</h1>
-
 <div id="map"></div>
+<button id="completeDeliveryBtn">Complete Delivery</button>
 
 <script>
 // Initialize the map with the start coordinates
@@ -74,6 +74,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Add a marker for the start coordinates
 var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
     .bindPopup("Start: Calamba, Laguna");
+
+// Array to store polyline (route) objects
+var routes = [];
 
 // Function to fetch route data from OpenRouteService API
 function fetchRoute(start, end) {
@@ -89,6 +92,9 @@ function fetchRoute(start, end) {
             var route = L.polyline(routeCoordinates.map(function(coord) {
                 return [coord[1], coord[0]];  // Switch lat/lon order
             }), {color: 'blue'}).addTo(map);
+
+            // Store the route for later removal
+            routes.push(route);
 
             // Calculate the route's distance manually using the polyline's coordinates
             var routeLength = calculateDistance([start, end]); // Calculate using Haversine formula
@@ -133,16 +139,51 @@ function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
-// Create markers for all end coordinates and fetch the route for each
+// Initial start coordinates
+var currentStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
 var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
+var deliveryIndex = 0;
 
-endCoordinates.forEach(function(endCoord) {
-    var endMarker = L.marker([endCoord.lat, endCoord.lon]).addTo(map)
-        .bindPopup("End: " + endCoord.lat + ", " + endCoord.lon); // Update to show more user-friendly address if desired
+// Function to start the simulation of deliveries
+function startDeliverySimulation() {
+    if (deliveryIndex < endCoordinates.length) {
+        var endCoord = endCoordinates[deliveryIndex];
 
-    // Call the fetchRoute function with the start and end coordinates
-    fetchRoute([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], [endCoord.lat, endCoord.lon]);
+        // Add marker on the endpoint
+        var endMarker = L.marker([endCoord.lat, endCoord.lon]).addTo(map)
+            .bindPopup("End: " + endCoord.lat + ", " + endCoord.lon);
+
+        // Fetch the route between current start and end coordinates
+        fetchRoute(currentStartCoord, [endCoord.lat, endCoord.lon]);
+
+        // Update current start coordinate after delivery
+        currentStartCoord = [endCoord.lat, endCoord.lon];
+        deliveryIndex++; // Move to the next delivery
+    } else {
+        alert('All deliveries completed!');
+    }
+}
+
+// Function to remove the last route (polyline)
+function removeLastRoute() {
+    if (routes.length > 0) {
+        // Remove the last route from the map
+        map.removeLayer(routes[routes.length - 1]);
+        // Remove the route from the array
+        routes.pop();
+    }
+}
+
+// Attach event listener to the "Complete Delivery" button
+document.getElementById("completeDeliveryBtn").addEventListener("click", function() {
+    startDeliverySimulation();
+
+    // Remove the last route after completing the delivery
+    removeLastRoute();
 });
+
+// Initial delivery simulation (first delivery)
+startDeliverySimulation();
 
 // Create a marker for the rider (initially placed at the start)
 var riderMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], {
@@ -179,5 +220,3 @@ function updateRiderPosition() {
 
 </body>
 </html>
-
-with distance view
