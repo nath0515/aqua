@@ -24,18 +24,13 @@
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = $stmt->fetch();
-                if($data['role_id'] != 0){
-                    header("Location: register.php?status=exist&email=".$email);
-                    exit();
-                }
-                else{
-                    $globalquery = "UPDATE users SET password = :password, role_id = 0 WHERE email = :email";
-                }
+                header("Location: rideraccount.php?status=exist&email=".$email);
+                exit();
             }
             if ($password == $confirm_password) {
                 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
             } else {
-                header("Location: register.php?status=notmatch&email=".$email);
+                header("Location: rideraccount.php?status=notmatch&email=".$email);
                 exit();
             }
             $stmt = $conn->prepare($globalquery);
@@ -52,7 +47,7 @@
 
             
         } catch (PDOException $e) {
-            header("Location: register.php?status=error");
+            header("Location: rideraccount.php?status=error");
             exit();
         }
     }
