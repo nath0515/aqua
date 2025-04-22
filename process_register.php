@@ -69,7 +69,7 @@
             $mail->SMTPAuth = true;
             $mail->Username = 'techsupport@aqua-drop.shop';
             $mail->Password = '8=4u?LaKm062';
-            $mail->SMTPSecure = 'tls';
+            $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
             $mail->SMTPDebug = 2;
     
