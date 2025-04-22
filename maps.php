@@ -56,7 +56,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>])
     .addTo(map)
-    .bindPopup("📍 Reference: Santa Cruz, Laguna")
+    .bindPopup("📍 Reference: Santa Cruz public market, Laguna")
     .openPopup();
 
 let selectedLat = null;
