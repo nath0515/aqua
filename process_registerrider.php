@@ -47,6 +47,9 @@
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
+            header("Location: accounts.php?status=success");
+            exit();
+
             
         } catch (PDOException $e) {
             header("Location: register.php?status=error");
