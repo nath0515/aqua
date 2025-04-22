@@ -12,8 +12,16 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, role_name, contact_number,created_at FROM users u
+    JOIN user_details ud ON u.user_id = ud.user_id
+    JOIN roles r ON u.role_id = r.role_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $alluserdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html>     
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -117,12 +125,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>                                   
+                                        <?php foreach($alluserdata as $row):?>
                                         <tr>
-                                            <td>awdad</td>
-                                            <td>awdad</td>
-                                            <td>awdad</td>
-                                            <td>awdad</td>
+                                            <td><?php echo $row['full_name']; ?></td>
+                                            <td><?php echo $row['role_name']; ?></td>
+                                            <td><?php echo $row['contact_number']; ?></td>
+                                            <td><?php echo $row['created_at']; ?></td>
                                         </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
