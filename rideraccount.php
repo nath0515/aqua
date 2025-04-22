@@ -115,17 +115,17 @@
                                 <form action="process_registerrider.php" method="POST" onsubmit="return checkForm()">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstname" name="name" required placeholder="Juan Dela Cruz">
+                                        <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan Dela Cruz">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastname" name="name" required placeholder="Juan Dela Cruz">
+                                        <input type="text" class="form-control" id="lastname" name="lastname" required placeholder="Juan Dela Cruz">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="contact_number" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contact_number" name="contact"
+                                        <input type="tel" class="form-control" id="contact_number" name="contact_number"
                                             required pattern="[0-9]{11}" maxlength="11"
                                             placeholder="09XXXXXXXXX"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
