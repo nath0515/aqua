@@ -82,7 +82,7 @@
                         <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
                             <h2 style='color: #343a40;'>Hi,</h2>
                             <p>Click the link below to verify your email address:</p>
-                            <a href='http://aqua-drop.shop/aquadrop/verify_email.php?token=$verification_token' 
+                            <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
                             style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
                                     text-decoration: none; border-radius: 5px;'>
                             Verify Email
