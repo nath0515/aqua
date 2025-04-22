@@ -113,11 +113,14 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="contact" class="form-label">Contact Number</label>
+                                        <label for="contact_number" class="form-label">Contact Number</label>
                                         <input type="tel" class="form-control" id="contact_number" name="contact"
                                             required pattern="[0-9]{11}" maxlength="11"
                                             placeholder="09XXXXXXXXX"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
+                                        <div class="invalid-feedback" id="contactError">
+                                            Please enter a valid 11-digit contact number starting with 09.
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
@@ -200,6 +203,25 @@
                 } else {
                     emailInput.classList.remove("is-invalid");
                     emailInput.classList.add("is-valid");
+                }
+            });
+        </script>
+        <script>
+            document.getElementById("riderForm").addEventListener("submit", function(e) {
+                const contactField = document.getElementById("contact_number");
+                const contactError = document.getElementById("contactError");
+                const contactValue = contactField.value;
+
+                // Check if it's exactly 11 digits and starts with "09"
+                const isValid = /^[0]{1}[9]{1}[0-9]{9}$/.test(contactValue);
+
+                if (!isValid) {
+                    e.preventDefault(); // Stop form submission
+                    contactField.classList.add("is-invalid");
+                    contactError.style.display = "block";
+                } else {
+                    contactField.classList.remove("is-invalid");
+                    contactError.style.display = "none";
                 }
             });
         </script>
