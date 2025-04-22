@@ -115,7 +115,7 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header">
                                 <img src="assets/img/logo.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
-                                    <h3 class="text-center font-weight-light my-4">Login Burat</h3>
+                                    <h3 class="text-center font-weight-light my-4">Login</h3>
                                 </div>
                                 <div class="card-body">
                                     <form action="" method="POST">
