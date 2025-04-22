@@ -91,7 +91,12 @@
                                     <a class="nav-link" href="#">Stock</a>
                                 </nav>
                             </div>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Account Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="accounts.php">Accounts</a>
                                     <a class="nav-link" href="rideraccount">Add Rider</a>
