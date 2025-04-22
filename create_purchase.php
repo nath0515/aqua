@@ -222,9 +222,10 @@
                                     <thead>
                                         <tr>
                                             <th>Item Name</th>
-                                            <th>Price</th>
+                                            <th>Unit Price</th>
                                             <th>Quantity</th>
                                             <th>Has Container</th>
+                                            <th>Container Quantity</th>
                                             <th>Container Price</th>
                                             <th>Total Price</th>
                                             <th>Action</th>
@@ -285,23 +286,7 @@
                 .catch(error => console.error('Error:', error));
             }
 
-            function calculateContainerPrice(){
-                let productId = document.getElementById("product_id").value;
-                let containerQuantity = document.getElementById("containerQuantityInput").value;
-                
-                fetch('process_getproductdata.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'product_id=' + encodeURIComponent(productId)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("containerprice").value = (data.container_price) * containerQuantity;
-                })
-                .catch(error => console.error('Error:', error));
-
-
-            }
+            
         </script>
     </body>
 </html>
