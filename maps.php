@@ -19,7 +19,7 @@ function getCoordinates($address) {
 }
 
 $startAddress = 'Santa Cruz, Laguna';
-$endAddresses = ['Calauan,Laguna', 'Santa Cruz,Laguna', 'Santisima Cruz'];
+$endAddresses = ['Calauan, Laguna', 'Santa Cruz, Laguna', 'Santisima Cruz'];
 $startCoordinates = getCoordinates($startAddress);
 $endCoordinatesArray = [];
 
@@ -32,15 +32,12 @@ foreach ($endAddresses as $endAddress) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Map with Pinned Location</title>
+    <title>Map with Closest Delivery First</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.1/dist/leaflet-routing-machine.js"></script>
     <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
+        #map { height: 500px; width: 100%; }
         .distance-label {
             background-color: rgba(255, 255, 255, 0.7);
             padding: 5px;
@@ -52,7 +49,7 @@ foreach ($endAddresses as $endAddress) {
 </head>
 <body>
 
-<h1>Map Showing Route with Pinned Location</h1>
+<h1>Map Showing Closest Route First</h1>
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
 <button id="confirmLocationBtn">✅ Confirm Pinned Location</button>
@@ -66,14 +63,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
-    .bindPopup("Start: Calamba, Laguna");
+    .bindPopup("Start: <?php echo htmlspecialchars($startAddress); ?>");
 
 let selectedLat = null;
 let selectedLng = null;
 let userMarker = null;
 let isLocationConfirmed = false;
 
-// Allow user to pin location
 map.on('click', function(e) {
     if (isLocationConfirmed) {
         alert("You've already confirmed your location.");
@@ -97,7 +93,6 @@ map.on('click', function(e) {
     console.log("Pinned location:", selectedLat, selectedLng);
 });
 
-// Confirm button
 document.getElementById("confirmLocationBtn").addEventListener("click", function() {
     if (selectedLat && selectedLng) {
         isLocationConfirmed = true;
@@ -109,7 +104,6 @@ document.getElementById("confirmLocationBtn").addEventListener("click", function
     }
 });
 
-// Save location to backend
 document.getElementById("saveLocationBtn").addEventListener("click", function() {
     if (selectedLat && selectedLng) {
         fetch("save_location.php", {
@@ -131,9 +125,8 @@ document.getElementById("saveLocationBtn").addEventListener("click", function() 
     }
 });
 
-// Routing and deliveries
+// Routing
 var routes = [];
-
 function fetchRoute(start, end) {
     var url = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
@@ -171,6 +164,14 @@ function toRad(degrees) {
 
 var currentStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
 var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
+
+// Sort by closest distance from current location
+endCoordinates.sort((a, b) => {
+    let distA = calculateDistance([currentStartCoord, [a.lat, a.lon]]);
+    let distB = calculateDistance([currentStartCoord, [b.lat, b.lon]]);
+    return distA - distB;
+});
+
 var deliveryIndex = 0;
 
 function startDeliverySimulation() {
