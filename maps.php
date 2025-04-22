@@ -194,44 +194,29 @@ var riderMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo 
     })
 }).addTo(map);
 
-// User location marker
+// Allow the user to select a location by clicking on the map
 var userMarker = null;
 
-document.getElementById("pinLocationBtn").addEventListener("click", function () {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
+map.on('click', function(e) {
+    var lat = e.latlng.lat;
+    var lon = e.latlng.lng;
 
-            // If already placed, update the marker location
-            if (userMarker) {
-                userMarker.setLatLng([lat, lon]);
-            } else {
-                // Add new marker
-                userMarker = L.marker([lat, lon], {
-                    icon: L.icon({
-                        iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
-                        iconSize: [30, 30]
-                    })
-                }).addTo(map).bindPopup("📍 Your pinned location").openPopup();
-            }
-
-            // Optional: send it to the server using fetch
-            fetch('save_location.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lat: lat, lon: lon })
-            })
-            .then(response => response.json())
-            .then(data => console.log(data.message))
-            .catch(error => console.error('Error saving location:', error));
-
-        }, function (error) {
-            alert("Geolocation failed: " + error.message);
-        });
+    // If the marker already exists, move it to the new location
+    if (userMarker) {
+        userMarker.setLatLng([lat, lon]);
     } else {
-        alert("Geolocation is not supported by your browser.");
+        // Add a new marker
+        userMarker = L.marker([lat, lon], {
+            icon: L.icon({
+                iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
+                iconSize: [30, 30]
+            })
+        }).addTo(map).bindPopup("📍 Your chosen location").openPopup();
     }
+
+    // Optionally, send the coordinates to the server or use them in your app
+    console.log("Chosen location: ", lat, lon);
+    // For example, you can send it to the server via AJAX, or store it locally
 });
 </script>
 
