@@ -115,12 +115,12 @@
 
                                     <div class="mb-3">
                                         <label for="contact" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contactnumber" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+                                        <input type="tel" class="form-control" id="contactnumber" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" required>
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="juandelacruz@gmail.com" required>
                                     </div>
 
                                     <div class="mb-3">
