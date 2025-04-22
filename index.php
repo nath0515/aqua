@@ -313,7 +313,7 @@
                         fill: false,
                         borderWidth: 2,
                         borderDash: [5, 5], // Dashed line for imaginary
-                        data: [50, 60, 55, 70, 65, 75, 80] // <- Replace with your made-up values
+                        data: values // <- Replace with your made-up values
                     ]
                 },
                 options : {
