@@ -12,37 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
-        $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
-
-        if (validateDate($start_date) && validateDate($end_date)) {
-            $start_datetime = $start_date . ' 00:00:00';
-            $end_datetime = $end_date . ' 23:59:59';
-
-            $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id WHERE date BETWEEN :start_date AND :end_date";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
-            $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        }
-    }
-    else{
-        $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id ";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-    function validateDate($date) {
-        $d = DateTime::createFromFormat('Y-m-d', $date);
-        return $d && $d->format('Y-m-d') === $date;
-    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -122,34 +92,53 @@
                     </div>
                 </nav>
             </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="registration-form">
-                    <h2>Rider Registration</h2>
-                    <form id="riderForm" action="register_rider.php" method="POST" onsubmit="return validateForm()">
-                        
-                        <label for="name">Full Name:</label>
-                        <input type="text" id="name" name="name" required>
+        <div id="layoutSidenav_content">
+            <main class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h4 class="mb-0">🚴 Rider Registration</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="riderForm" action="register_rider.php" method="POST" onsubmit="return validateForm()">
 
-                        <label for="contact">Contact Number:</label>
-                        <input type="tel" id="contact" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" required placeholder="Juan Dela Cruz">
+                                    </div>
 
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" required>
+                                    <div class="mb-3">
+                                        <label for="contact" class="form-label">Contact Number</label>
+                                        <input type="tel" class="form-control" id="contact" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+                                    </div>
 
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required minlength="6">
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
 
-                        <label for="confirm_password">Confirm Password:</label>
-                        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
-                        
-                        <div class="error" id="passwordError"></div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                                    </div>
 
-                        <button type="submit">Register</button>
-                    </form>
+                                    <div class="mb-3">
+                                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="alert alert-danger d-none" id="passwordError" role="alert"></div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Register Rider</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
