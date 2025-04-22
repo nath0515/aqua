@@ -65,7 +65,7 @@
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
+            $mail->Host = 'smtp.hostinger.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'techsupport@aqua-drop.shop';
             $mail->Password = '8=4u?LaKm062';
