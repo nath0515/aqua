@@ -15,6 +15,9 @@
     if($user_data['role_id'] != 1){
         header('Location: home.php');
     }
+    else{
+        //asd
+    }
 
     $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 4 AND DATE(date) = CURDATE()";
     $stmt = $conn->prepare($sql);
