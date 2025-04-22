@@ -361,20 +361,16 @@
 		});
         </script>
         <script>
-            var barChart = document.getElementById('barChart2').getContext('2d');
-            var labels = <?php echo json_encode($labels); ?>;
-            var values = <?php echo json_encode($values); ?>;
-
-            var productNames = <?php echo json_encode($productNames); ?>;
-            var productStocks = <?php echo json_encode($productStocks); ?>;
-            var colors = <?php echo json_encode($colors); ?>;
+            var barChart2 = document.getElementById('barChart2').getContext('2d');
+            var labels1 = <?php echo json_encode($labels); ?>;
+            var values1 = <?php echo json_encode($values); ?>;
         
-            console.log(values);
+            console.log(values1);
 
-            var myMultipleLineChart = new Chart(multipleLineChart, {
+            var myMultipleLineChart1 = new Chart(multipleLineChart1, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: labels1,
                     datasets: [{
                         label: "Sales",
                         borderColor: "#1d7af3",
@@ -410,30 +406,6 @@
                     }
                 }
             });
-
-        var myBarChart = new Chart(barChart, {
-			type: 'bar',
-			data: {
-				labels: productNames,
-				datasets : [{
-					label: "Stocks",
-					backgroundColor: colors,
-					borderColor: colors,
-					data: productStocks,
-				}],
-			},
-			options: {
-				responsive: true, 
-				maintainAspectRatio: false,
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true
-						}
-					}]
-				},
-			}
-		});
         </script>
         
     </body>
