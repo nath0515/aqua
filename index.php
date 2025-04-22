@@ -282,6 +282,7 @@
             $labels = [];
             $sales_values = [];
             $expenses_values = [];
+            $income_values = [];
 
             // Combine Sales and Expenses Data
             $sales_data = [];
@@ -302,6 +303,7 @@
                 $labels[] = date("M d, Y", strtotime($date));
                 $sales_values[] = isset($sales_data[$date]) ? $sales_data[$date] : 0;
                 $expenses_values[] = isset($expenses_data[$date]) ? $expenses_data[$date] : 0;
+                $income_values[] = isset($sales_data[$date]) ? $sales_data[$date] - (isset($expenses_data[$date]) ? $expenses_data[$date] : 0) : 0;
             }
 
             // Fetch Product Data
@@ -333,6 +335,7 @@
             var labels = <?php echo json_encode($labels); ?>;
             var salesValues = <?php echo json_encode($sales_values); ?>;
             var expensesValues = <?php echo json_encode($expenses_values); ?>;
+            var incomeValues = <?php echo json_encode($income_values); ?>;
 
             var productNames = <?php echo json_encode($productNames); ?>;
             var productStocks = <?php echo json_encode($productStocks); ?>;
@@ -429,8 +432,8 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: "Sales",
-                            borderColor: "#1d7af3",
+                            label: "Income",
+                            borderColor: "#28a745",
                             pointBorderColor: "#FFF",
                             pointBackgroundColor: "#1d7af3",
                             pointBorderWidth: 2,
@@ -440,7 +443,7 @@
                             backgroundColor: 'transparent',
                             fill: true,
                             borderWidth: 2,
-                            data: salesValues
+                            data: incomeValues
                         }]
                 },
                 options: {
