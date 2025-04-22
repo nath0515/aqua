@@ -18,7 +18,7 @@ function getCoordinates($address) {
     return null;
 }
 
-$startAddress = 'Calamba, Laguna';
+$startAddress = 'Santa Cruz, Laguna';
 $endAddresses = ['Calauan,Laguna', 'Santa Cruz,Laguna', 'Santisima Cruz'];
 $startCoordinates = getCoordinates($startAddress);
 $endCoordinatesArray = [];
