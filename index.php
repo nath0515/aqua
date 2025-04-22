@@ -300,7 +300,7 @@
                         fill: true,
                         borderWidth: 2,
                         data: values
-                    },
+                    },{
                         label: "Target Sales",
                         borderColor: "#f3545d",
                         pointBorderColor: "#FFF",
@@ -314,6 +314,7 @@
                         borderWidth: 2,
                         borderDash: [5, 5], // Dashed line for imaginary
                         data: values // <- Replace with your made-up values
+                    }
                     ]
                 },
                 options : {
