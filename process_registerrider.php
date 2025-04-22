@@ -40,7 +40,7 @@
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
-            $user_id = 1;
+            $user_id = $conn->lastInsertId();
 
             $stmt = $conn->prepare($sql2);
             $stmt->bindParam(':firstname', $firstname);
