@@ -383,7 +383,7 @@
                         backgroundColor: 'transparent',
                         fill: true,
                         borderWidth: 2,
-                        data: values
+                        data: values1
                     }]
                 },
                 options : {
