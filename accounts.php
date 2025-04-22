@@ -12,37 +12,6 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
-        $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
-
-        if (validateDate($start_date) && validateDate($end_date)) {
-            $start_datetime = $start_date . ' 00:00:00';
-            $end_datetime = $end_date . ' 23:59:59';
-
-            $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id WHERE date BETWEEN :start_date AND :end_date";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
-            $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        }
-    }
-    else{
-        $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id ";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-    function validateDate($date) {
-        $d = DateTime::createFromFormat('Y-m-d', $date);
-        return $d && $d->format('Y-m-d') === $date;
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,54 +94,32 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Expenses</h1>
+                        <h1 class="mt-4">Accounts</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Analytics</li>
-                            <li class="breadcrumb-item active">Expenses</li>
+                            <li class="breadcrumb-item active">Account Manager</li>
+                            <li class="breadcrumb-item active">Accounts</li>
                         </ol>
-                        <button class="btn btn-success btn-round ms-auto mb-3 me-1" data-bs-toggle="modal" data-bs-target="#addexpense">
-                            <i class="fa fa-plus"></i>
-                            Add Expense
-                        </button>                            
-                        <form action="expenses.php" method="GET">
-                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
-                                <div>
-                                    <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label class="form-label d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                </div>
-                            </div>
-                        </form>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Expenses
+                                Accounts
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Expenses</th>
-                                            <th>Comment</th>
-                                            <th>Amount</th>
+                                            <th>Name</th>
+                                            <th>Role</th>
+                                            <th>Date Created</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach($data as $row):?>
                                         <tr>
-                                            <td><?php echo $row['date']; ?></td>
-                                            <td><?php echo $row['expensetype_name']; ?></td>
-                                            <td><?php echo $row['comment']; ?></td>
-                                            <td>₱ <?php echo number_format($row['amount'], 2); ?></td>
+                                            <td>awdad</td>
+                                            <td>awdad</td>
+                                            <td>awdad</td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
