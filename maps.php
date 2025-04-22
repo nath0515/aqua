@@ -18,7 +18,7 @@ function getCoordinates($address) {
     return null;
 }
 
-$startAddress = 'Santa Cruz, Laguna';
+$startAddress = 'Santa Cruz public market, Laguna';
 $startCoordinates = getCoordinates($startAddress);
 ?>
 <!DOCTYPE html>
