@@ -153,7 +153,7 @@
                                             <label class="form-label">Container Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="containerQuantityInput" required>
+                                                <input type="number" class="form-control" id="containerQuantityInput" onchange="calculateContainerPrice()" required>
                                             </div>
                                         </div>
                                         <div class="col mt-2">
@@ -189,6 +189,7 @@
                                                 containerQuantityInput.value = '';
                                             }
                                         }
+                                        
                                     </script>
                                     <div class="mb-3">
 										<label for="price" class="form-label">Total Price</label>
@@ -282,6 +283,24 @@
                     
                 })
                 .catch(error => console.error('Error:', error));
+            }
+
+            function calculateContainerPrice(){
+                let productId = document.getElementById("product_id").value;
+                let containerQuantity = document.getElementById("containerQuantityInput").value;
+                
+                fetch('process_getproductdata.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'product_id=' + encodeURIComponent(productId)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("containerprice").value = (data.response.container_price) * containerQuantity;
+                })
+                .catch(error => console.error('Error:', error));
+
+
             }
         </script>
     </body>
