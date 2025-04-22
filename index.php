@@ -213,6 +213,19 @@
 								</div>
                                 </div>
                             </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        Bar Chart Example
+                                    </div>
+                                    <div class="card-body">
+									<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+										<canvas id="barChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+									</div>
+								</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -300,33 +313,7 @@
                         fill: true,
                         borderWidth: 2,
                         data: values
-                    }/*,{
-                        label: "PHP",
-                        borderColor: "#59d05d",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#59d05d",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: [10, 20, 55, 75, 80, 48, 59, 55, 23, 107, 60, 87]
-                    }, {
-                        label: "Ruby",
-                        borderColor: "#f3545d",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#f3545d",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: [10, 30, 58, 79, 90, 105, 117, 160, 185, 210, 185, 194]
-                    }*/]
+                    }]
                 },
                 options : {
                     responsive: true, 
@@ -373,5 +360,6 @@
 			}
 		});
         </script>
+        
     </body>
 </html>

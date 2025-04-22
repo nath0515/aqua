@@ -296,7 +296,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("containerprice").value = (data.response.container_price) * containerQuantity;
+                    document.getElementById("containerprice").value = (data.container_price) * containerQuantity;
                 })
                 .catch(error => console.error('Error:', error));
 
