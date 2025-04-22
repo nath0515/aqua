@@ -5,10 +5,13 @@
 
     ob_start();
 
-    $globalquery = "INSERT INTO users (email, password, verification_token, role_id, created_at) VALUES (:email, :password,  3, :created_at)";
+    $globalquery = "INSERT INTO users (firstname, lastname, contact_number,email, password, role_id, created_at) VALUES (:firstname, :lastname,:contact_number, :email, :password,  3, :created_at)";
     $date = date('Y-m-d H:i:s');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $contact_number = $_POST['contact_number'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
@@ -36,6 +39,9 @@
                 exit();
             }
             $stmt = $conn->prepare($globalquery);
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':contact_number', $contact_number);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password_hashed);
             $stmt->bindParam(':created_at', $date);

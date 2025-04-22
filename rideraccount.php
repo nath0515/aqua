@@ -114,7 +114,7 @@
 
                                     <div class="mb-3">
                                         <label for="contact" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contactnumber" name="contact"
+                                        <input type="tel" class="form-control" id="contact_number" name="contact"
                                             required pattern="[0-9]{11}" maxlength="11"
                                             placeholder="09XXXXXXXXX"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
