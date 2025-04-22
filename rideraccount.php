@@ -124,67 +124,34 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
+                    <div class="registration-form">
+                    <h2>Rider Registration</h2>
+                    <form id="riderForm" action="register_rider.php" method="POST" onsubmit="return validateForm()">
                         
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" name="name" required>
+
+                        <label for="contact">Contact Number:</label>
+                        <input type="tel" id="contact" name="contact" required pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required minlength="6">
+
+                        <label for="confirm_password">Confirm Password:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
+                        
+                        <div class="error" id="passwordError"></div>
+
+                        <button type="submit">Register</button>
+                    </form>
+                    </div>
                 </main>
             </div>
         </div>
 
-        <!-- Edit Order Modal -->
-        <div class="modal fade" id="addexpense" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-            
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-plus-circle"></i> Add Expense</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                                <!-- Status -->
-                            <div class="mb-3">
-                                <label for="stock" class="form-label">Expense</label>
-                                <div class="input-group">
-                                    <?php 
-                                        $sql = "SELECT * FROM expensetype";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-                                        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    ?>
-                                <select class="form-select" name="expensetype_id" required>
-                                    <option value="">Select Expense</option>
-                                    <?php foreach($data as $row):?>
-                                        <option value="<?php echo $row['expensetype_id']?>"><?php echo $row['expensetype_name']?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="commet" class="form-label">Comment</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-receipt"></i></span>
-                                    <input type="text" name="purpose" class="form-control" placeholder="Comment" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="commet" class="form-label">Amount</label>
-                                <div class="input-group">
-                                    <span class="input-group-text pe-3">₱</span>
-                                    <input type="number" step="0.01" name="amount" value="0.00" class="form-control" placeholder="Amount" required>
-                                </div>
-                            </div>
-                            <div class="mb-3" id="orderItemsContainer">
-                            </div>   
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Add Expense</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
