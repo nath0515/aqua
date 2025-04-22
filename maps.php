@@ -55,7 +55,8 @@ foreach ($endAddresses as $endAddress) {
 <h1>Map Showing Route with Pinned Location</h1>
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
-<button id="saveLocationBtn">💾 Save Pinned Location</button>
+<button id="confirmLocationBtn">✅ Confirm Pinned Location</button>
+<button id="saveLocationBtn" disabled>💾 Save Pinned Location</button>
 
 <script>
 var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
@@ -70,8 +71,15 @@ L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates[
 let selectedLat = null;
 let selectedLng = null;
 let userMarker = null;
+let isLocationConfirmed = false;
 
+// Allow user to pin location
 map.on('click', function(e) {
+    if (isLocationConfirmed) {
+        alert("You've already confirmed your location.");
+        return;
+    }
+
     selectedLat = e.latlng.lat;
     selectedLng = e.latlng.lng;
 
@@ -89,6 +97,19 @@ map.on('click', function(e) {
     console.log("Pinned location:", selectedLat, selectedLng);
 });
 
+// Confirm button
+document.getElementById("confirmLocationBtn").addEventListener("click", function() {
+    if (selectedLat && selectedLng) {
+        isLocationConfirmed = true;
+        alert("✅ Location confirmed!");
+        document.getElementById("confirmLocationBtn").disabled = true;
+        document.getElementById("saveLocationBtn").disabled = false;
+    } else {
+        alert("Please pin a location first.");
+    }
+});
+
+// Save location to backend
 document.getElementById("saveLocationBtn").addEventListener("click", function() {
     if (selectedLat && selectedLng) {
         fetch("save_location.php", {
@@ -110,8 +131,9 @@ document.getElementById("saveLocationBtn").addEventListener("click", function() 
     }
 });
 
-// Routing functionality
+// Routing and deliveries
 var routes = [];
+
 function fetchRoute(start, end) {
     var url = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
