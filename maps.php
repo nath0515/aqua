@@ -61,6 +61,7 @@ foreach ($endAddresses as $endAddress) {
 <h1>Map Showing Route with Multiple Endpoints</h1>
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
+<button id="pinLocationBtn">📍 Pin My Location</button>
 
 <script>
 // Initialize the map with the start coordinates
@@ -193,29 +194,45 @@ var riderMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo 
     })
 }).addTo(map);
 
-// Function to update rider's position using geolocation API (this will simulate real-time tracking)
-function updateRiderPosition() {
+// User location marker
+var userMarker = null;
+
+document.getElementById("pinLocationBtn").addEventListener("click", function () {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
-            riderMarker.setLatLng([lat, lon]);
+            // If already placed, update the marker location
+            if (userMarker) {
+                userMarker.setLatLng([lat, lon]);
+            } else {
+                // Add new marker
+                userMarker = L.marker([lat, lon], {
+                    icon: L.icon({
+                        iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
+                        iconSize: [30, 30]
+                    })
+                }).addTo(map).bindPopup("📍 Your pinned location").openPopup();
+            }
 
-            // Optionally, adjust the map view to center on the rider
-            map.setView([lat, lon], 15); // Zoom level can be adjusted
+            // Optional: send it to the server using fetch
+            fetch('save_location.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat: lat, lon: lon })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.message))
+            .catch(error => console.error('Error saving location:', error));
 
-        }, function(error) {
-            console.error("Error getting geolocation: ", error);
+        }, function (error) {
+            alert("Geolocation failed: " + error.message);
         });
     } else {
-        alert("Geolocation is not supported by this browser.");
+        alert("Geolocation is not supported by your browser.");
     }
-}
-
-// Update the rider's position every 5 seconds (adjust as needed)
-//setInterval(updateRiderPosition, 5000);
-
+});
 </script>
 
 </body>
