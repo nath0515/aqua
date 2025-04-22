@@ -5,7 +5,8 @@
 
     ob_start();
 
-    $globalquery = "INSERT INTO users (firstname, lastname, contact_number,email, password, role_id, created_at) VALUES (:firstname, :lastname,:contact_number, :email, :password,  3, :created_at)";
+    $sql1 = "INSERT INTO users (email, password, role_id, created_at) VALUES (:email, :password, 3, :created_at)";
+    $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)"
     $date = date('Y-m-d H:i:s');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -33,13 +34,19 @@
                 header("Location: rideraccount.php?status=notmatch&email=".$email);
                 exit();
             }
-            $stmt = $conn->prepare($globalquery);
-            $stmt->bindParam(':firstname', $firstname);
-            $stmt->bindParam(':lastname', $lastname);
-            $stmt->bindParam(':contact_number', $contact_number);
+            $stmt = $conn->prepare($sql1);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password_hashed);
             $stmt->bindParam(':created_at', $date);
+            $stmt->execute();
+
+            $user_id = $stmt->lastInsertId();
+
+            $stmt = $conn->prepare($sql2);
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':contact_number', $contact_number);
+            $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
 
             header("Location: accounts.php?status=success");
