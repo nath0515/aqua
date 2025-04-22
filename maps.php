@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Manila');
 require 'db.php';
 
 // Assume user is logged in and $userId is available
@@ -160,14 +161,14 @@ document.getElementById("pinLocationBtn").addEventListener("click", function () 
 });
 
 // 📍 If user has a saved location already
-<?php if (!empty($userLocation['latitude']) && !empty($userLocation['longitude'])): ?>
+/*<?php if (!empty($userLocation['latitude']) && !empty($userLocation['longitude'])): ?>
 L.marker([<?= $userLocation['latitude'] ?>, <?= $userLocation['longitude'] ?>], {
     icon: L.icon({
         iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
         iconSize: [32, 32]
     })
 }).addTo(map).bindPopup("📍 Your Saved Location");
-<?php endif; ?>
+<?php endif; ?>*/
 
 startDeliverySimulation();
 </script>

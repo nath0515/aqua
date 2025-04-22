@@ -3,13 +3,16 @@
     require 'PHPMailer/src/PHPMailer.php';
     require 'PHPMailer/src/SMTP.php';
     require 'db.php';
+    session_start();
+    date_default_timezone_set('Asia/Manila');
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
     ob_start();
 
-    $globalquery = "INSERT INTO users (email, password, verification_token, role_id) VALUES (:email, :password, :verification_token, 0)";
+    $globalquery = "INSERT INTO users (email, password, verification_token, role_id, created_at) VALUES (:email, :password, :verification_token, 0, :created_at)";
     $verification_token = bin2hex(random_bytes(16));
+    $date = date('Y-m-d H:i:s');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
@@ -42,6 +45,7 @@
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password_hashed);
             $stmt->bindParam(':verification_token', $verification_token);
+            $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
             $mailsent= sendVerificationEmail($email, $verification_token);

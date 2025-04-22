@@ -1,6 +1,7 @@
 <?php 
  require('db.php');
  session_start();
+ date_default_timezone_set('Asia/Manila');
 
  if (isset($_SESSION['loggedin'])) {
     switch($_SESSION['role_id']){

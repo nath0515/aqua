@@ -1,6 +1,7 @@
 <?php 
  require('db.php');
  session_start();
+ date_default_timezone_set('Asia/Manila');
 
  if (isset($_GET['token'])) {
     $token = $_GET['token'];

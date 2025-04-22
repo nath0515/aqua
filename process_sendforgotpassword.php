@@ -3,6 +3,8 @@
     require 'PHPMailer/src/PHPMailer.php';
     require 'PHPMailer/src/SMTP.php';
     require 'db.php';
+    session_start();
+    date_default_timezone_set('Asia/Manila');
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;

@@ -1,5 +1,7 @@
 <?php
     require 'db.php';
+    session_start();
+    date_default_timezone_set('Asia/Manila');
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $token = $_POST['token'];
         $password = $_POST['password'];
