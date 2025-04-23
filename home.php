@@ -3,6 +3,7 @@ require ('db.php');
 require ('session.php');
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15,6 +16,7 @@ require ('session.php');
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
+    
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
             <!-- Navbar Brand-->
@@ -108,6 +110,9 @@ require ('session.php');
                 </nav>
             </div>
             <div id="layoutSidenav_content">
+                <div class="text-center mt-3">
+                    <img src="assets/img/homepage.jpg" alt="Header Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                </div>
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Sidenav Light</h1>
