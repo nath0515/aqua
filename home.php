@@ -120,7 +120,7 @@ require ('session.php');
         </div>
 
         <div class="text-center mt-3">
-            <img src="assets/img/homedlapp.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto;">
+            <img src="assets/img/homedlapp.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto mt-3;">
         </div>
 
         <!-- Main content -->
