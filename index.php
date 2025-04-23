@@ -546,10 +546,7 @@
                 deferredPrompt = null;
                 document.getElementById('installBtn').style.display = 'none';
             });
-
         </script>
-
-
 
         <!-- PWA: Service Worker Registration -->
         <script>
