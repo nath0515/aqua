@@ -182,33 +182,36 @@ require ('session.php');
 <!-- PWA: Install Button Logic -->
 <script>
     let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const installBtn = document.getElementById('installBtn');
-        installBtn.style.display = 'inline-block';
+    // Check if app is already installed
+    const isInStandaloneMode = () =>
+        (window.matchMedia('(display-mode: standalone)').matches) ||
+        window.navigator.standalone === true;
 
-        installBtn.addEventListener('click', () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(choiceResult => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('✅ App installed');
-                }
-                deferredPrompt = null;
+    if (!isInStandaloneMode()) {
+        // Show the install button only when install is available
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+
+            installBtn.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ App installed');
+                    }
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none'; // Hide after install
+                });
             });
         });
-    });
-</script>
-
-<!-- PWA: Service Worker Registration -->
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
-            .then(reg => console.log('✅ Service Worker registered:', reg))
-            .catch(err => console.error('❌ Service Worker registration failed:', err));
+    } else {
+        installBtn.style.display = 'none'; // Already installed
     }
 </script>
+
 
 </body>
 </html>
