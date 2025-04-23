@@ -127,6 +127,42 @@ require ('session.php');
         <main class="text-center my-4">
             <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
         </main>
+        <section style="font-family: Arial, sans-serif; padding: 40px; background-color: #f8f8f8;">
+            <div style="max-width: 900px; margin: auto; text-align: center;">
+                <h2 style="color: #0077b6; font-size: 2.5em; margin-bottom: 10px;">Why Choose House of Local?</h2>
+                <p style="font-size: 1.1em; color: #555;">
+                Order inventory or products for your business with ease through the House of Local app! Whether you're located in NCR Philippines or nearby, we’ll do our best to serve you.
+                </p>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 40px; gap: 30px;">
+
+                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h3 style="color: #0077b6;">🌟 Hassle-Free Ordering</h3>
+                <p>Use our mobile-based system to find the products you need, compare prices, choose your supplier, and track your order — all in one place.</p>
+                </div>
+
+                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h3 style="color: #0077b6;">💧 Quality and Reliability</h3>
+                <p>Enjoy peace of mind with verified suppliers and government-standard checks, ensuring top-quality and certified products every time.</p>
+                </div>
+
+                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h3 style="color: #0077b6;">🔬 Verified Products</h3>
+                <p>All items are sourced from certified suppliers, following strict quality and safety measures to meet compliance and your needs.</p>
+                </div>
+
+                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h3 style="color: #0077b6;">💳 Easy Payments</h3>
+                <p>Support for GCash, Maya, GrabPay, and more — enjoy fast, secure transactions without the hassle of cash on delivery.</p>
+                </div>
+
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#order" style="background-color: #ff7f50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-size: 1.1em;">Order Now</a>
+            </div>
+        </section>
 
         <!-- Footer -->
         <footer class="py-4 bg-light mt-auto">
