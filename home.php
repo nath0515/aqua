@@ -125,7 +125,7 @@ require ('session.php');
 
         <!-- Main content -->
         <main class="text-center my-4">
-            <button id="installBtn" class="btn btn-primary" style="display: visible;">Install AquaDrop</button>
+            <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
         </main>
 
         <!-- Footer -->
