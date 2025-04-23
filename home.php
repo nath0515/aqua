@@ -209,20 +209,27 @@ require ('session.php');
 
 <!-- PWA: Install Button Logic -->
 <script>
-    installBtn.addEventListener('click', () => {
-    if (!deferredPrompt) return;
+    let deferredPrompt;
 
-    // Show loading overlay
-    document.getElementById('loadingOverlay').style.display = 'flex';
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); // Prevent automatic prompt
+        deferredPrompt = e; // Save the event for later
+        document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
+    });
 
-    deferredPrompt.prompt();
+    // Install button click handler
+    document.getElementById('installBtn').addEventListener('click', async () => {
+        if (!deferredPrompt) return;
 
-    deferredPrompt.userChoice.then((choiceResult) => {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+
         document.getElementById('loadingOverlay').style.display = 'none';
 
-        if (choiceResult.outcome === 'accepted') {
-            console.log('✅ App installed');
-
+        if (outcome === 'accepted') {
             Swal.fire({
                 icon: 'success',
                 title: 'Installation Complete',
@@ -239,8 +246,7 @@ require ('session.php');
         }
 
         deferredPrompt = null;
-        installBtn.style.display = 'none'; // Hide button
-        });
+        document.getElementById('installBtn').style.display = 'none';
     });
 </script>
 
