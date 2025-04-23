@@ -477,8 +477,34 @@
                 }
             });
         </script>
+        <script>
+            let deferredPrompt;
 
-        
-        
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const installBtn = document.getElementById('installBtn');
+                installBtn.style.display = 'inline-block';
+
+                installBtn.addEventListener('click', () => {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(choiceResult => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('✅ App installed');
+                        }
+                        deferredPrompt = null;
+                    });
+                });
+            });
+        </script>
+
+        <!-- PWA: Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
+                    .then(reg => console.log('✅ Service Worker registered:', reg))
+                    .catch(err => console.error('❌ Service Worker registration failed:', err));
+            }
+        </script>
     </body>
 </html>
