@@ -129,9 +129,9 @@ require ('session.php');
         </main>
         <section style="font-family: Arial, sans-serif; padding: 40px; background-color: #f8f8f8;">
             <div style="max-width: 900px; margin: auto; text-align: center;">
-                <h2 style="color: #0077b6; font-size: 2.5em; margin-bottom: 10px;">Why Choose House of Local?</h2>
+                <h2 style="color: #0077b6; font-size: 2.5em; margin-bottom: 10px;">Why Choose AquaDrop?</h2>
                 <p style="font-size: 1.1em; color: #555;">
-                Order inventory or products for your business with ease through the House of Local app! Whether you're located in NCR Philippines or nearby, we’ll do our best to serve you.
+                Order and track deliveries easily through the AquaDrop app now serving your barangay! We're committed to fast, reliable service right where you live.
                 </p>
             </div>
 
@@ -139,22 +139,22 @@ require ('session.php');
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <h3 style="color: #0077b6;">🌟 Hassle-Free Ordering</h3>
-                <p>Use our mobile-based system to find the products you need, compare prices, choose your supplier, and track your order — all in one place.</p>
+                <p>Use our web and mobile-based system to place orders and track them with ease all in one place.</p>
                 </div>
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <h3 style="color: #0077b6;">💧 Quality and Reliability</h3>
-                <p>Enjoy peace of mind with verified suppliers and government-standard checks, ensuring top-quality and certified products every time.</p>
+                <p>Enjoy peace of mind with clean, high-quality water delivered reliably by AquaDrop with care and consistency you can trust.</p>
                 </div>
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <h3 style="color: #0077b6;">🔬 Verified Products</h3>
-                <p>All items are sourced from certified suppliers, following strict quality and safety measures to meet compliance and your needs.</p>
+                <p>All our water is carefully processed and handled with strict quality and safety standards — so you always get clean, safe, and trustworthy service.</p>
                 </div>
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <h3 style="color: #0077b6;">💳 Easy Payments</h3>
-                <p>Support for GCash, Maya, GrabPay, and more — enjoy fast, secure transactions without the hassle of cash on delivery.</p>
+                <p>Simplify your payments with GCash for fast and secure transactions, or choose the ease of Cash on Delivery (COD) for added convenience.</p>
                 </div>
 
             </div>
