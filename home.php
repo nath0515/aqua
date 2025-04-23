@@ -119,9 +119,13 @@ require ('session.php');
             <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto;">
         </div>
 
+        <div class="text-center mt-3">
+            <img src="assets/img/homedlapp.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto;">
+        </div>
+
         <!-- Main content -->
         <main class="text-center my-4">
-            <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
+            <button id="installBtn" class="btn btn-primary" style="display: visible;">Install AquaDrop</button>
         </main>
 
         <!-- Footer -->
