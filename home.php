@@ -113,25 +113,12 @@ require ('session.php');
                 <div class="text-center mt-3">
                     <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid square" style="max-width: 100%; height: auto;">
                 </div>
+                <div class="text-center mt-3">
+                    <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid square" style="max-width: 100%; height: auto;">
+                </div>
                 <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sidenav Light</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Sidenav Light</li>
-                        </ol>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                This page is an example of using the light side navigation option. By appending the
-                                <code>.sb-sidenav-light</code>
-                                class to the
-                                <code>.sb-sidenav</code>
-                                class, the side navigation will take on a light color scheme. The
-                                <code>.sb-sidenav-dark</code>
-                                is also available for a darker option.
-                            </div>
-                        </div>
-                    </div>
+                <button id="installBtn" style="display:none;">Install AquaDrop</button>
+
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -149,5 +136,31 @@ require ('session.php');
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script>
+            let deferredPrompt;
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installBtn').style.display = 'inline-block';
+
+                document.getElementById('installBtn').addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                    console.log('User installed the app');
+                    }
+                    deferredPrompt = null;
+                });
+                });
+            });
+        </script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('✅ Service Worker registered:', reg))
+                .catch(err => console.error('❌ Service Worker registration failed:', err));
+            }
+        </script>
     </body>
 </html>
