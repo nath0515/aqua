@@ -363,7 +363,7 @@
                             data: salesValues
                         },
                         {
-                            label: "Target Sales (Expenses)",
+                            label: "Expenses",
                             borderColor: "#f3545d",
                             pointBorderColor: "#FFF",
                             pointBackgroundColor: "#f3545d",
