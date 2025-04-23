@@ -547,16 +547,6 @@
                 document.getElementById('installBtn').style.display = 'none';
             });
 
-            window.addEventListener('load', () => {
-                if (!window.matchMedia('(display-mode: standalone)').matches && !deferredPrompt) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Install AquaDrop',
-                        text: 'If the install button is not showing, please refresh the page or try again later. Your browser may take some time to allow reinstallation.',
-                        confirmButtonColor: '#0077b6'
-                    });
-                }
-            });
         </script>
 
 
