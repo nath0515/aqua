@@ -297,6 +297,7 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/datatables-simple-demo.js"></script>
 
         <?php 
@@ -545,7 +546,7 @@
                 deferredPrompt = null;
                 document.getElementById('installBtn').style.display = 'none';
             });
-            
+
             window.addEventListener('load', () => {
                 if (!window.matchMedia('(display-mode: standalone)').matches && !deferredPrompt) {
                     Swal.fire({
