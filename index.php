@@ -179,6 +179,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="loadingOverlay">
+                                <div class="spinner"></div>
+                            </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body" style="font-size:25px">Net Income<ol class="breadcrumb">₱ <?php echo number_format(($amount2['total_sales']-$amount1['total_expense']),2); ?></ol></div>
@@ -288,9 +291,7 @@
                 </footer>
             </div>
         </div>
-        <div id="loadingOverlay">
-            <div class="spinner"></div>
-        </div>
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
