@@ -101,12 +101,12 @@
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    <li class="text-center"><button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button></li>
-                </ul>
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        <li><button id="installBtn" class="btn btn-primary" style="display: none ms-2;">Install AquaDrop</button></li>
+                    </ul>
                 </li>
             </ul>
         </nav>
