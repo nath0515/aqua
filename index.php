@@ -63,7 +63,7 @@
                
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                <li class="nav-item dropdown me-3">
+                <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
