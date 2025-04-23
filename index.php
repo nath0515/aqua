@@ -105,7 +105,7 @@
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        <li><button id="installBtn" class="btn btn-primary" style="display: none ms-2;">Install AquaDrop</button></li>
+                        <li><button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button></li>
                     </ul>
                 </li>
             </ul>
@@ -508,44 +508,57 @@
             });
         </script>
         <script>
-            let deferredPrompt;
+            document.addEventListener('DOMContentLoaded', () => {
+                let deferredPrompt;
 
-            // Listen for the beforeinstallprompt event
-            window.addEventListener('beforeinstallprompt', (e) => {
+                // Listen for the beforeinstallprompt event
+                window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('beforeinstallprompt event fired');
                 e.preventDefault(); // Prevent automatic prompt
                 deferredPrompt = e; // Save the event for later
-                document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
-            });
+                const installBtn = document.getElementById('installBtn');
+                installBtn.style.display = 'inline-block'; // Show the button when ready
+                });
 
-            // Install button click handler
-            document.getElementById('installBtn').addEventListener('click', async () => {
-                if (!deferredPrompt) return;
+                // Install button click handler
+                const installBtn = document.getElementById('installBtn');
+                if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (!deferredPrompt) return;
 
-                document.getElementById('loadingOverlay').style.display = 'flex';
+                    // Show loading overlay
+                    document.getElementById('loadingOverlay').style.display = 'flex';
 
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
+                    // Prompt the user to install
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
 
-                document.getElementById('loadingOverlay').style.display = 'none';
+                    // Hide loading overlay
+                    document.getElementById('loadingOverlay').style.display = 'none';
 
-                if (outcome === 'accepted') {
+                    // Handle the outcome of the prompt
+                    if (outcome === 'accepted') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Installation Complete',
                         text: 'AquaDrop has been successfully installed!',
-                        confirmButtonColor: '#0077b6'
+                        confirmButtonColor: '#0077b6',
                     });
-                } else {
+                    } else {
                     Swal.fire({
                         icon: 'info',
                         title: 'Installation Cancelled',
                         text: 'You can install AquaDrop anytime!',
-                        confirmButtonColor: '#0077b6'
+                        confirmButtonColor: '#0077b6',
                     });
-                }
+                    }
 
-                deferredPrompt = null;
-                document.getElementById('installBtn').style.display = 'none';
+                    deferredPrompt = null; // Reset the prompt
+                    installBtn.style.display = 'none'; // Hide the button after installation
+                });
+                } else {
+                console.error('Install button not found');
+                }
             });
         </script>
 
