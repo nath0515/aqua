@@ -116,7 +116,7 @@ require ('session.php');
     <div id="layoutSidenav_content">
         <!-- Header image -->
         <div class="text-center mt-3">
-            <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid" style="max-width: 140%; height: auto;">
+            <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto;">
         </div>
 
         <div class="text-center mt-3">
