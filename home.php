@@ -115,7 +115,7 @@ require ('session.php');
                 </div>
                
                 <main>
-                <button id="installBtn" style="display:none;">Install AquaDrop</button>
+                <button id="installBtn" class="btn btn-primary">Install AquaDrop</button>
 
                 </main>
                 <footer class="py-4 bg-light mt-auto">
