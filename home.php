@@ -14,6 +14,30 @@ require ('session.php');
     <!-- Styles -->
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="manifest" href="/manifest.json"> <!-- ✅ Correct path to manifest -->
+    <style>
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.8);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #0077b6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 
     <!-- Icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -126,6 +150,9 @@ require ('session.php');
         <!-- Main content -->
         <main class="text-center my-4">
             <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
+            <div id="loadingOverlay">
+                <div class="spinner"></div>
+            </div>
         </main>
         <section style="font-family: Arial, sans-serif; padding: 40px; background-color: #f8f8f8;">
             <div style="max-width: 900px; margin: auto; text-align: center;">
@@ -177,39 +204,44 @@ require ('session.php');
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/scripts.js"></script>
 
 <!-- PWA: Install Button Logic -->
 <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
+    installBtn.addEventListener('click', () => {
+    if (!deferredPrompt) return;
 
-    // Check if app is already installed
-    const isInStandaloneMode = () =>
-        (window.matchMedia('(display-mode: standalone)').matches) ||
-        window.navigator.standalone === true;
+    // Show loading overlay
+    document.getElementById('loadingOverlay').style.display = 'flex';
 
-    if (!isInStandaloneMode()) {
-        // Show the install button only when install is available
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
+    deferredPrompt.prompt();
 
-            installBtn.addEventListener('click', () => {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ App installed');
-                    }
-                    deferredPrompt = null;
-                    installBtn.style.display = 'none'; // Hide after install
-                });
+    deferredPrompt.userChoice.then((choiceResult) => {
+        document.getElementById('loadingOverlay').style.display = 'none';
+
+        if (choiceResult.outcome === 'accepted') {
+            console.log('✅ App installed');
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Installation Complete',
+                text: 'AquaDrop has been successfully installed!',
+                confirmButtonColor: '#0077b6'
             });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Installation Cancelled',
+                text: 'You can install AquaDrop anytime!',
+                confirmButtonColor: '#0077b6'
+            });
+        }
+
+        deferredPrompt = null;
+        installBtn.style.display = 'none'; // Hide button
         });
-    } else {
-        installBtn.style.display = 'none'; // Already installed
-    }
+    });
 </script>
 
 
