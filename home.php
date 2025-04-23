@@ -14,6 +14,7 @@ require ('session.php');
         <meta name="author" content="" />
         <title>Home</title>
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="manifest" href="aqua/manifest.json">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     
@@ -155,7 +156,7 @@ require ('session.php');
         </script>
         <script>
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('aqua/js/service-worker.js')
                 .then(reg => console.log('✅ Service Worker registered:', reg))
                 .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
