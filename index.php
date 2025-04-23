@@ -105,7 +105,7 @@
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        <li><button id="installBtn" class="btn btn-primary" style="display: none ms-2;">Install AquaDrop</button></li>
+                        <li class="text-center"><button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button></li>
                     </ul>
                 </li>
             </ul>
