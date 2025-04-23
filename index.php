@@ -45,6 +45,31 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <style>
+            #loadingOverlay {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                background: rgba(255, 255, 255, 0.8);
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+            .spinner {
+                border: 6px solid #f3f3f3;
+                border-top: 6px solid #0077b6;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 0.8s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+    </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -479,35 +504,46 @@
         </script>
         <script>
             let deferredPrompt;
-            const installBtn = document.getElementById('installBtn');
 
-            // Check if app is already installed
-            const isInStandaloneMode = () =>
-                (window.matchMedia('(display-mode: standalone)').matches) ||
-                window.navigator.standalone === true;
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); // Prevent automatic prompt
+                deferredPrompt = e; // Save the event for later
+                document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
+            });
 
-            if (!isInStandaloneMode()) {
-                // Show the install button only when install is available
-                window.addEventListener('beforeinstallprompt', (e) => {
-                    e.preventDefault();
-                    deferredPrompt = e;
-                    installBtn.style.display = 'inline-block';
+            // Install button click handler
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
 
-                    installBtn.addEventListener('click', () => {
-                        deferredPrompt.prompt();
-                        deferredPrompt.userChoice.then((choiceResult) => {
-                            if (choiceResult.outcome === 'accepted') {
-                                console.log('✅ App installed');
-                            }
-                            deferredPrompt = null;
-                            installBtn.style.display = 'none'; // Hide after install
-                        });
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+
+                document.getElementById('loadingOverlay').style.display = 'none';
+
+                if (outcome === 'accepted') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Installation Complete',
+                        text: 'AquaDrop has been successfully installed!',
+                        confirmButtonColor: '#0077b6'
                     });
-                });
-            } else {
-                installBtn.style.display = 'none'; // Already installed
-            }
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Installation Cancelled',
+                        text: 'You can install AquaDrop anytime!',
+                        confirmButtonColor: '#0077b6'
+                    });
+                }
+
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
+            });
         </script>
+
 
 
         <!-- PWA: Service Worker Registration -->
