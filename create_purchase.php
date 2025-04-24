@@ -359,7 +359,13 @@
                     return;
                 }
                 
-                fetch("process_getproductdata.php?product_id=" + encodeURIComponent(productId))
+                fetch("process_getproductdata.php",{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "product_id=" + encodeURIComponent(productId)
+                    })
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
