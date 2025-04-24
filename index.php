@@ -554,11 +554,11 @@
 
         <!-- PWA: Service Worker Registration -->
         <script>
-            if ('serviceWorker' in navigator) {
+            /*if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
                     .then(reg => console.log('✅ Service Worker registered:', reg))
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
-            }
+            }*/
         </script>
     </body>
 </html>
