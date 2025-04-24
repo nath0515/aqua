@@ -199,6 +199,7 @@
                                                 containerQuantityInput.readOnly = false;
                                                 containerQuantityInput.value = '';
                                             }
+                                            updateTotalPrice();
                                         }
                                         function updateTotalPrice(){
                                             const unitPriceInput = document.getElementById('unitprice');
