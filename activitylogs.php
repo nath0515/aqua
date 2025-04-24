@@ -107,7 +107,7 @@
                 <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-3 ">
                     <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; All Notifications</h1>
                 </div> 
-                <div class="card card-body mb-4 animated fadeInUp">
+                <div class="card card-body mb-4 animated fadeInUp m-3">
                     <a class="text-dark" href="https://www.ilearnu.lu.edu.ph/student/class/7241/post/70080">
                         <div class="mx-4">
                                 Chrisna Fucio posted a new activity: CCS SUMMIT 2025
