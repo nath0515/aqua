@@ -414,6 +414,10 @@
                     .catch(error => console.error("Error:", error));
 
             }
+            document.getElementById("purchaseForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                addRow();
+            });
             
         </script>
     </body>
