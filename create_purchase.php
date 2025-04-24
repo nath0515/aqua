@@ -315,7 +315,7 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById("unitprice").value = data.data.water_price;
-                        document.getElementById("availableQuantity").innerHTML = "Available Container : "+data.data.stock;
+                        document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
                     } else {
                         console.error("Product not found");
