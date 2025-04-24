@@ -158,12 +158,11 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row" id="containerQuantity" style="display: none;">
-                                            <label class="form-label">Container Quantity</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
-                                            </div>
-                                        </div>    
+                                        <label class="form-label">Container Quantity</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
+                                            <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
+                                        </div>   
                                     </div>
                                     <div class="mb-3" id="priceContainer" style="display: none;">
                                         <label for="price" class="form-label">Available Container</label>
