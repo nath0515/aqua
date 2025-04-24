@@ -105,10 +105,9 @@
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        <li><button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button></li>
-                        <div id="loadingOverlay">
+                        <li><button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button> <div id="loadingOverlay">
                             <div class="spinner"></div>
-                        </div>
+                        </div></li>
                     </ul>
                 </li>
             </ul>
