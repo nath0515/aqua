@@ -165,8 +165,12 @@
                                                 <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
                                             </div>
                                         </div>
-                                        <div class="col mt-2">
-                                            <label for="price" class="form-label" id="availableQuantity">Available Container : 69</label>
+                                        <div class="col">
+                                            <label class="form-label">Available Quantity</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
+                                                <input type="number" class="form-control" id="availablequantity" value="0" onchange="updateTotalPrice()" readonly>
+                                            </div>
                                         </div>    
                                     </div>
                                     <div class="mb-3" id="priceContainer" style="display: none;">
