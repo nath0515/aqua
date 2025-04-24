@@ -135,7 +135,7 @@
                                         <label for="price" class="form-label">Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" required>
+                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
                                             </div>
                                         </div>	
 									</div>
@@ -162,7 +162,7 @@
                                             <label class="form-label">Container Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="containerQuantityInput" onchange="calculateContainerPrice()" required>
+                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="calculateContainerPrice()" required>
                                             </div>
                                         </div>
                                         <div class="col mt-2">
@@ -185,7 +185,7 @@
                                             const containerQuantityInput = document.getElementById('containerQuantityInput');
                                             priceContainer.style.display = checkbox.checked ? 'block' : 'none';
                                             containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
-                                            containerQuantityInput.value = '';
+                                            containerQuantityInput.value = '0';
                                             sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
                                         }
                                         function toggleSameQuantity() {
@@ -199,6 +199,22 @@
                                                 containerQuantityInput.readOnly = false;
                                                 containerQuantityInput.value = '';
                                             }
+                                        }
+                                        function updateTotalPrice(){
+                                            const unitPriceInput = document.getElementById('unitprice');
+                                            const quantityInput = document.getElementById('quantity');
+                                            const containerQuantityInput = document.getElementById('containerQuantityInput');
+                                            const containerPriceInput = document.getElementById('containerprice');
+                                            const totalPriceInput = document.getElementById('totalprice');
+
+                                            let unitprice = unitPriceInput.value;
+                                            let quantity = quantityInput.value;
+                                            let containerQuantity = containerQuantityInput.value;
+                                            let containerPrice = containerPriceInput.value;
+
+                                            let totalPrice = (unitPrice * quantity) + (containerQuantity * containerPrice);
+
+                                            totalPriceInput.value = totalPrice;
                                         }
                                         
                                     </script>
