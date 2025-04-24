@@ -105,9 +105,6 @@
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a> <div id="loadingOverlay">
-                            <div class="spinner"></div>
-                        </div></li>
                     </ul>
                 </li>
             </ul>
@@ -155,6 +152,10 @@
                                     <a class="nav-link" href="accounts.php">Accounts</a>
                                     <a class="nav-link" href="rideraccount.php">Add Rider</a>
                                 </nav>
+                            </div>
+                            <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
+                            <div id="loadingOverlay">
+                                <div class="spinner"></div>
                             </div>
                         </div>
                     </div>
