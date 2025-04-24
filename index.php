@@ -511,57 +511,44 @@
             });
         </script>
         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                let deferredPrompt;
+            let deferredPrompt;
 
-                // Listen for the beforeinstallprompt event
-                window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('beforeinstallprompt event fired');
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault(); // Prevent automatic prompt
                 deferredPrompt = e; // Save the event for later
-                const installBtn = document.getElementById('installBtn');
-                installBtn.style.display = 'inline-block'; // Show the button when ready
-                });
+                document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
+            });
 
-                // Install button click handler
-                const installBtn = document.getElementById('installBtn');
-                if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    if (!deferredPrompt) return;
+            // Install button click handler
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
 
-                    // Show loading overlay
-                    document.getElementById('loadingOverlay').style.display = 'flex';
+                document.getElementById('loadingOverlay').style.display = 'flex';
 
-                    // Prompt the user to install
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
 
-                    // Hide loading overlay
-                    document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('loadingOverlay').style.display = 'none';
 
-                    // Handle the outcome of the prompt
-                    if (outcome === 'accepted') {
+                if (outcome === 'accepted') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Installation Complete',
                         text: 'AquaDrop has been successfully installed!',
-                        confirmButtonColor: '#0077b6',
+                        confirmButtonColor: '#0077b6'
                     });
-                    } else {
+                } else {
                     Swal.fire({
                         icon: 'info',
                         title: 'Installation Cancelled',
                         text: 'You can install AquaDrop anytime!',
-                        confirmButtonColor: '#0077b6',
+                        confirmButtonColor: '#0077b6'
                     });
-                    }
-
-                    deferredPrompt = null; // Reset the prompt
-                    installBtn.style.display = 'none'; // Hide the button after installation
-                });
-                } else {
-                console.error('Install button not found');
                 }
+
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
             });
         </script>
 
