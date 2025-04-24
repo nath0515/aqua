@@ -331,7 +331,7 @@
                 const containerPriceInput = document.getElementById('containerprice');
                 const totalPriceInput = document.getElementById('totalprice');
                 const productIdInput = document.getElementById('product_id');
-                const availableInput = document.getELementById('availablequantity');
+                const availableInput = document.getElementById('availablequantity');
 
                 let unitprice = unitPriceInput.value;
                 let quantity = quantityInput.value;
