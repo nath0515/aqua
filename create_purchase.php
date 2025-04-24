@@ -162,7 +162,7 @@
                                             <label class="form-label">Container Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="calculateContainerPrice()" required>
+                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
                                             </div>
                                         </div>
                                         <div class="col mt-2">
