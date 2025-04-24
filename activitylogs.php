@@ -104,7 +104,9 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    
+                <div class="card card-body card-dark bg-success-gradient bubble-shadow mb-4 animated fadeInDown">
+                    <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; All Notifications</h1>
+                </div>   
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
