@@ -213,6 +213,7 @@
                                             let containerPrice = containerPriceInput.value;
 
                                             let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
+                                            totalPrice = totalPrice.toFixed(2);
 
                                             totalPriceInput.value = totalPrice;
                                         }
