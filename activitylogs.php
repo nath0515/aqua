@@ -104,7 +104,7 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown ">
+                <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-3 ">
                     <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; All Notifications</h1>
                 </div>   
                 </main>
