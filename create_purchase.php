@@ -359,7 +359,7 @@
                     return;
                 }
                 
-                fetch("process_getproductdata.php?product_id=" + encodeURIComponent(product_id))
+                fetch("process_getproductdata.php?product_id=" + encodeURIComponent(productId))
                     .then(response => response.json())
                     .then(data => {
                         if (data.error) {
@@ -373,7 +373,7 @@
 
                         let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
                         let rows = table.getElementsByTagName("tr");
-                        let waterPrice = parseFloat(data.water_price);
+                        let waterPrice = parseFloat(data.data.water_price);
                         let updated = false;
                         let checkbox = document.getElementById("hasContainer");
 
