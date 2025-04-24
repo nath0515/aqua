@@ -44,6 +44,7 @@
         <title>Dashboard</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="manifest" href="/manifest.json">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
         <style>
@@ -554,11 +555,11 @@
 
         <!-- PWA: Service Worker Registration -->
         <script>
-            /*if ('serviceWorker' in navigator) {
+            if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
                     .then(reg => console.log('✅ Service Worker registered:', reg))
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
-            }*/
+            }
         </script>
     </body>
 </html>
