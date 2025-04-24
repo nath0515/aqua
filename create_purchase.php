@@ -184,6 +184,7 @@
                                             const priceContainer = document.getElementById('priceContainer');
                                             priceContainer.style.display = checkbox.checked ? 'block' : 'none';
                                             containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
+                                            containerQuantity.value = '';
                                             sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
                                         }
                                         function toggleSameQuantity() {
