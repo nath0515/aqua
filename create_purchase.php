@@ -217,8 +217,7 @@
                                             totalPrice = totalPrice.toFixed(2);
 
                                             totalPriceInput.value = totalPrice;
-                                        }
-                                        
+                                        }                                        
                                     </script>
                                     <div class="mb-3">
 										<label for="price" class="form-label">Total Price</label>
@@ -296,7 +295,7 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>                                        
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
@@ -320,7 +319,102 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
+            
+            function addRow(){
+                const unitPriceInput = document.getElementById('unitprice');
+                const quantityInput = document.getElementById('quantity');
+                const containerQuantityInput = document.getElementById('containerQuantityInput');
+                const containerPriceInput = document.getElementById('containerprice');
+                const totalPriceInput = document.getElementById('totalprice');
+                const productIdInput = document.getElementById('productId');
 
+                let unitprice = unitPriceInput.value;
+                let quantity = quantityInput.value;
+                let containerQuantity = containerQuantityInput.value;
+                let containerPrice = containerPriceInput.value;
+                let totalPrice = totalPriceInput.value;
+                let productId = productIdInput.value;
+
+                if(!product_id){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "Please enter an item."
+				    });
+				    return;
+                }
+                else if(quantity < 1){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "Please enter a valid quantity."
+                    });
+                    return;
+                }
+                else if(quantity > available){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "Item out of stock."
+                    });
+                    return;
+                }
+                
+                fetch("process_getproductdata.php?product_id=" + encodeURIComponent(product_id))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: data.error
+                            });
+                            return;
+                        }
+
+                        let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
+                        let rows = table.getElementsByTagName("tr");
+                        let waterPrice = parseFloat(data.data.water_price);
+                        let updated = false;
+                        let checkbox = document.getElementById("hasContainer");
+
+                        if (!updated) {
+                            let newRow = table.insertRow();
+                            let cell1 = newRow.insertCell(0);
+                            let cell2 = newRow.insertCell(1);
+                            let cell3 = newRow.insertCell(2);
+                            let cell4 = newRow.insertCell(3);
+                            let cell5 = newRow.insertCell(4);
+                            let cell6 = newRow.insertCell(5);
+                            let cell7 = newRow.insertCell(6);
+                            let cell8 = newRow.insertCell(7);
+                            
+
+                            cell1.innerHTML = data.data.product_name;
+                            cell2.innerHTML = waterPrice;
+                            cell3.innerHTML = quantity;
+                            cell4.innerHTML = checkbox.checked ? 'Yes' : 'No';
+                            cell5.innerHTML = containerQuantity;
+                            cell6.innerHTML = containerPrice;
+                            cell7.innerHTML = totalPrice;
+
+                            //cell6.style.display = "none";
+                            //"<button type='button' class='btn btn-link btn-danger' title='Remove' onclick='deleteRow(this)'><i class='fa fa-times'></i></button>";
+                        }
+
+                        unitPriceInput.value = '';
+                        quantityInput.value = '';
+                        containerQuantityInput.value = '';
+                        containerPriceInput.value = '';
+                        totalPriceInput.value = '';
+                        productIdInput.value = '';
+
+                        //updateTotalPrice();
+                    })
+                    .catch(error => console.error("Error:", error));
+			    }
+
+            }
             
         </script>
     </body>
