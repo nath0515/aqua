@@ -182,9 +182,10 @@
                                             const sameQuantityDiv = document.getElementById('sameQuantityDiv');
                                             const containerQuantity = document.getElementById('containerQuantity');
                                             const priceContainer = document.getElementById('priceContainer');
+                                            const containerQuantityInput = document.getElementById('containerQuantityInput');
                                             priceContainer.style.display = checkbox.checked ? 'block' : 'none';
                                             containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
-                                            containerQuantity.value = '';
+                                            containerQuantityInput.value = '';
                                             sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
                                         }
                                         function toggleSameQuantity() {
