@@ -326,7 +326,7 @@
                 const containerQuantityInput = document.getElementById('containerQuantityInput');
                 const containerPriceInput = document.getElementById('containerprice');
                 const totalPriceInput = document.getElementById('totalprice');
-                const productIdInput = document.getElementById('productId');
+                const productIdInput = document.getElementById('product_id');
 
                 let unitprice = unitPriceInput.value;
                 let quantity = quantityInput.value;
@@ -335,7 +335,7 @@
                 let totalPrice = totalPriceInput.value;
                 let productId = productIdInput.value;
 
-                if(!product_id){
+                if(!productId){
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
