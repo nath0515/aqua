@@ -141,9 +141,12 @@
                                     <thead>
                                         <tr>
                                             <th>Item Name</th>
+                                            <th>Unit Price</th>
                                             <th>Quantity</th>
-                                            <th>Container Provided</th>
-                                            <th>Price</th>
+                                            <th>Has Container</th>
+                                            <th>Container Quantity</th>
+                                            <th>Container Price</th>
+                                            <th>Total Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -174,6 +177,9 @@
                                                     ?>
 
                                                 </td>
+                                                <td><?php echo $row['quantity'];?></td>
+                                                <td><?php echo $row['quantity'];?></td>
+                                                <td><?php echo $row['quantity'];?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
