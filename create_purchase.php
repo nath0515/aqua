@@ -111,7 +111,7 @@
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
-                                <form id="purchaseForm" action="">
+                                <form id="purchaseForm">
                                     <div class="mb-3">
 										<label for="product_name" class="form-label">Item</label>
 										<select name="" id="product_id" class="form-select" required onchange="fetchProductDetails(this.value)">
