@@ -158,18 +158,16 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row" id="containerQuantity" style="display: none;">
-                                        <label class="form-label">Container Quantity</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                            <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
-                                        </div>   
-                                    </div>
-                                    <div class="mb-3" id="priceContainer" style="display: none;">
-                                        <label for="price" class="form-label">Available Container</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                            <input type="number" class="form-control" step="0.01" id="availablecontainer" name="price" readonly>
+                                        <div class="col">
+                                            <label class="form-label">Container Quantity</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
+                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
+                                            </div>
                                         </div>
+                                        <div class="col mt-2">
+                                            <label for="price" class="form-label" id="availableQuantity">Available Container : 69</label>
+                                        </div>    
                                     </div>
                                     <div class="mb-3" id="priceContainer" style="display: none;">
                                         <label for="price" class="form-label">Container Price</label>
@@ -328,8 +326,7 @@
                 const containerQuantityInput = document.getElementById('containerQuantityInput');
                 const containerPriceInput = document.getElementById('containerprice');
                 const totalPriceInput = document.getElementById('totalprice');
-                const productIdInput = document.getElementById('product_id');
-                const availableInput = document.getElementById('availablecontainer');
+                const productIdInput = document.getElementById('product_d');
 
                 let unitprice = unitPriceInput.value;
                 let quantity = quantityInput.value;
@@ -337,7 +334,6 @@
                 let containerPrice = containerPriceInput.value;
                 let totalPrice = totalPriceInput.value;
                 let productId = productIdInput.value;
-                let available = availableInput.value;
 
                 if(!productId){
                     Swal.fire({
