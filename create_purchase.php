@@ -358,14 +358,6 @@
                     });
                     return;
                 }
-                else if(quantity > available){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: "Item out of stock."
-                    });
-                    return;
-                }
                 
                 fetch("process_getproductdata.php?product_id=" + encodeURIComponent(product_id))
                     .then(response => response.json())
