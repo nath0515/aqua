@@ -340,6 +340,7 @@
                 let totalPrice = totalPriceInput.value;
                 let productId = productIdInput.value;
                 let available = availableInput.value;
+                console.log(available);
 
                 if(!productId){
                     Swal.fire({
