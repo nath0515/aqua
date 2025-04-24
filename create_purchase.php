@@ -402,7 +402,7 @@
                             cell5.innerHTML = containerQuantity;
                             cell6.innerHTML = containerPrice;
                             cell7.innerHTML = totalPrice;
-                            cell8.innerHTML = "<button type='button' class='btn btn-link btn-danger' title='Remove' onclick='deleteRow(this)'><i class='fa fa-times'></i></button>";
+                            cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='fa fa-times'></i></button>";
 
                             //cell.style.display = "none";
                             //
