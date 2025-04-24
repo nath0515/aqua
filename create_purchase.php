@@ -291,7 +291,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById("unitprice").value = data.data.unit_price;
+                        document.getElementById("unitprice").value = data.data.water_price;
                     } else {
                         console.error("Product not found");
                     }
