@@ -290,7 +290,11 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("unitprice").value = data.water_price;
+                    if (data.success) {
+                        document.getElementById("unitprice").value = data.data.unit_price;
+                    } else {
+                        console.error("Product not found");
+                    }
                 })
                 .catch(error => console.error('Error:', error));
             }
