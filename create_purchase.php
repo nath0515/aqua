@@ -166,7 +166,7 @@
                                             </div>
                                         </div>
                                         <div class="col mt-2">
-                                            <label for="price" class="form-label">Available Container : 69</label>
+                                            <label for="price" class="form-label" id="availableQuantity">Available Container : 69</label>
                                         </div>    
                                     </div>
                                     <div class="mb-3" id="priceContainer" style="display: none;">
@@ -292,6 +292,7 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById("unitprice").value = data.data.water_price;
+                        document.getElementById("availableQuantity").innerHTML = "Available Container : "+data.data.stock;
                     } else {
                         console.error("Product not found");
                     }
