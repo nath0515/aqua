@@ -290,7 +290,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("unitprice").value = data.response.water_price;
+                    document.getElementById("unitprice").value = data.water_price;
                 })
                 .catch(error => console.error('Error:', error));
             }
