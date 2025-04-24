@@ -212,7 +212,7 @@
                                             let containerQuantity = containerQuantityInput.value;
                                             let containerPrice = containerPriceInput.value;
 
-                                            let totalPrice = (unitPrice * quantity) + (containerQuantity * containerPrice);
+                                            let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
 
                                             totalPriceInput.value = totalPrice;
                                         }
