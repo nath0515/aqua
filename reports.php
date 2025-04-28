@@ -19,6 +19,12 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT SUM(amount) as total_amount FROM orders";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $total_amount_data = $stmt->fetch();
+    $total_amount = $total_amount_data['total_amount'];
+
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -129,7 +135,7 @@
                                     <?php endforeach;?>
                                     <tr>
                                         <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
