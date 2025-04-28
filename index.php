@@ -290,17 +290,41 @@
                                 </div>
                             </div>
                             <div class="col-xl-4">
+                                <!-- Bar Chart Card -->
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
                                         Bar Chart Example
                                     </div>
                                     <div class="card-body">
-                                        <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                                        <div class="chart-container">
+                                            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                                                <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+                                                </div>
+                                                <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+                                                </div>
+                                            </div>
                                             <canvas id="barChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- End of Bar Chart Card -->
+
+                                <!-- SMA Card (Simple Moving Average) -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-calculator me-1"></i>
+                                        Simple Moving Average (SMA)
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Display the SMA value dynamically using PHP or JS -->
+                                        <p><strong>Predicted Production for the Next Day:</strong></p>
+                                        <p id="smaValue">Loading SMA...</p> <!-- This can be dynamically updated by JS or PHP -->
+                                    </div>
+                                </div>
+                                <!-- End of SMA Card -->
                             </div>
                         </div>
                     </div>

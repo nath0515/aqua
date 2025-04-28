@@ -18,6 +18,8 @@ try {
         $stmt->execute();
         $orders_data = $stmt->fetchAll();
 
+        $sql1 = "SELECT expense_id FROM expense";
+
         $sql1 = "INSERT INTO reports (date) VALUES (:today)";
         $stmt = $conn->prepare($sql1);
         $stmt->bindParam(':today', $today);
