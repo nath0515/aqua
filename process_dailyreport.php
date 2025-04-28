@@ -13,7 +13,8 @@ if($status){
 else{
     $sql = "UPDATE store_status SET status = 1 WHERE ss_id = 1";
 }
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+header('Location: index.php');
+exit();
 ?>
