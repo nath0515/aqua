@@ -191,7 +191,7 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
@@ -233,6 +233,22 @@
                     });
                 });
             });
+        </script>
+        <script>
+            window.addEventListener('DOMContentLoaded', event => {
+            // Simple-DataTables
+            // https://github.com/fiduswriter/Simple-DataTables/wikia
+
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+            const datatablesSimple2 = document.getElementById('datatablesSimple2');
+            if (datatablesSimple2) {
+                new simpleDatatables.DataTable(datatablesSimple2);
+            }
+        });
+
         </script>
     </body>
 </html>
