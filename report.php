@@ -125,7 +125,7 @@
                                     <tbody>
                                         <?php foreach($reports_data as $row):?>
                                             <tr>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><a href="reports.php?id=<?php echo $row['report_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
                                                 </a></td>

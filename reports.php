@@ -2,6 +2,14 @@
     require 'session.php';
     require 'db.php';
 
+    if(!isset($_GET['id'])){
+        header("Location: report.php");
+        exit();
+    }
+    else{
+        $report_id = $_GET['id'];
+    }
+
     $user_id = $_SESSION['user_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
@@ -12,9 +20,11 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
-    JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 4";
+    $sql = "SELECT a.order_id, a.report_id, b.product_id, c.product_name, d.amount FROM report_content a 
+    JOIN orderitems b ON a.order_id = b.order_id
+    JOIN products c ON b.product_id = c.product_id
+    JOIN orders d ON a.order_id = d.order_id
+    WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -129,7 +139,7 @@
                                 <tbody>
                                     <?php foreach($order_data as $row):?>
                                         <tr>
-                                            <td><?php echo $row['date'];?></td>
+                                            <td><?php echo $row['product_name'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
                                     <?php endforeach;?>
