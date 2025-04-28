@@ -26,6 +26,7 @@
     JOIN orders d ON a.order_id = d.order_id
     WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
