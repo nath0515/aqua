@@ -41,7 +41,7 @@
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
-    $date_data = $stmt->fetchColumn(PDO::FETCH_ASSOC);
+    $date_data = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
