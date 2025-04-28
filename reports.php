@@ -182,36 +182,6 @@
                             </table>
                         </div>
                     </div>
-
-                    <div class="report-section">
-                        <h3>📉 Expenses</h3>
-                        <table>
-                        <tr><th>Expense Item</th><th>Amount (₱)</th></tr>
-                        <tr><td>Electricity</td><td>300</td></tr>
-                        <tr><td>Filter Maintenance</td><td>150</td></tr>
-                        <tr><td>Staff Allowance</td><td>500</td></tr>
-                        <tr><td>Bottle Caps & Labels</td><td>200</td></tr>
-                        <tr><td>Fuel for Delivery</td><td>250</td></tr>
-                        <tr class="summary-table"><td>Total Expenses</td><td>₱1,400</td></tr>
-                        </table>
-                    </div>
-
-                    <div class="report-section">
-                        <h3>📊 Net Income</h3>
-                        <table>
-                        <tr><td>Total Sales</td><td>₱4,375</td></tr>
-                        <tr><td>Less: Total Expenses</td><td>₱1,400</td></tr>
-                        <tr class="net-income"><td>Net Income</td><td><strong>₱2,975</strong></td></tr>
-                        </table>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            
-                        </div>
-                    </div>
-                </footer>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
