@@ -111,7 +111,7 @@
                         $stmt->execute();
                         $status = $stmt->fetchColumn();
                         ?>
-                        <li><a class="dropdown-item"><?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?></a></li>
+                        <li><a href="process_dailyreport.php" class="dropdown-item"><?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?></a></li>
                         <div id="loadingOverlay">
                             <div class="spinner"></div>
                         </div>
