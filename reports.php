@@ -128,8 +128,7 @@
                                         </tr>
                                     <?php endforeach;?>
                                     <tr>
-                                        <td class="d-none"></td>
-                                        <td>Total : 69420</td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
