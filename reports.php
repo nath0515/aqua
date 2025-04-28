@@ -242,7 +242,7 @@
         </script>
         <script>
             window.addEventListener('DOMContentLoaded', event => {
-            // Simple-DataTables
+            // Simple-DataTablesa
             // https://github.com/fiduswriter/Simple-DataTables/wikia
 
             const datatablesSimple = document.getElementById('datatablesSimple');
