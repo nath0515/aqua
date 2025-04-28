@@ -110,7 +110,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Income
+                            Sales
                         </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
@@ -136,21 +136,23 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Income
+                            Expenses
                         </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
-                                        <th> Expense Name</th>
-                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Amount (₱)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Salary</td>
-                                        <td>₱ 500</td>
-                                    </tr>
+                                    <?php foreach($order_data as $row):?>
+                                        <tr>
+                                            <td><?php echo $row['date'];?></td>
+                                            <td>₱<?php echo $row['amount'];?></td>
+                                        </tr>
+                                    <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
@@ -165,15 +167,17 @@
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
-                                        <th> Total Sales</th>
-                                        <th>Less: Expense</th>
+                                        <th>Date</th>
+                                        <th>Expenses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach($data as $row):?>
                                     <tr>
-                                        <td>₱ 5000</td>
-                                        <td>₱ 500</td>
+                                        <td><?php echo $row['date']; ?></td>
+                                        <td><?php echo $row['expensetype_name']; ?></td>
                                     </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
