@@ -37,10 +37,11 @@
     $total_amount_data = $stmt->fetch();
     $total_amount = $total_amount_data['total_amount'];
 
-    $sql = "SELECT * FROM orderstatus";
+    $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
-    $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $date_data = $stmt->fetchColumn(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -123,7 +124,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <h1>💧 DoodsNer Water Refilling Station</h1>
-                    <h2>📅 Daily Sales & Expense Report - April 28, 2025</h2>
+                    <h2>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h2>
 
                     <div class="card mb-4">
                         <div class="card-header">
