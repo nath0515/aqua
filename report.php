@@ -12,12 +12,10 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
-    JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 4";
+    $sql = "SELECT report_id, date FROM reports";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $reports_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
@@ -125,10 +123,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row):?>
+                                        <?php foreach($reports_data as $row):?>
                                             <tr>
-                                                <td>₱<?php echo $row['date'];?></td>
-                                                <td><a href="reports.php" class="btn btn-outline-secondary btn-sm me-1">
+                                                <td><?php echo $row['date'];?></td>
+                                                <td><a href="reports.php?id=<?php echo $row['report_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
                                                 </a></td>
                                             </tr>
