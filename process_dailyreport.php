@@ -18,7 +18,25 @@ try {
         $stmt->execute();
         $orders_data = $stmt->fetchAll();
 
-        $sql1 = "SELECT expense_id FROM expense";
+        $sql1 = "SELECT SUM(amount) AS total_sales FROM orders WHERE DATE(date) = :today";
+        $stmt = $conn->prepare($sql1);
+        $stmt->bindParam(':today', $today);
+        $stmt->execute();
+        $total_sales = $stmt->fetchColumn();
+
+        $sql1 = "SELECT expense_id FROM expense WHERE DATE(date) = :today";
+        $stmt = $conn->prepare($sql1);
+        $stmt->bindParam(':today', $today);
+        $stmt->execute();
+        $expense_data = $stmt->fetchAll();
+
+        $sql1 = "SELECT SUM(amount) AS total_expense FROM expense WHERE DATE(date) = :today";
+        $stmt = $conn->prepare($sql1);
+        $stmt->bindParam(':today', $today);
+        $stmt->execute();
+        $total_expense = $stmt->fetchColumn();
+
+        $
 
         $sql1 = "INSERT INTO reports (date) VALUES (:today)";
         $stmt = $conn->prepare($sql1);

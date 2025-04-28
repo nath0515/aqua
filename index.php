@@ -32,6 +32,33 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Example: Historical daily production data (in gallons)
+    $productionData = [2000, 2500, 3000, 2800, 3100, 2700, 3200];
+    $days = 7;  // Number of days to calculate the average for
+
+    // Function to calculate Simple Moving Average (SMA)
+    function calculateSMA($data, $days) {
+        $sum = 0;
+        $count = count($data);
+
+        // Make sure we have enough data points
+        if ($count < $days) {
+            return "Not enough data to calculate SMA.";
+        }
+
+        // Calculate sum of the last 'days' data points
+        for ($i = $count - $days; $i < $count; $i++) {
+            $sum += $data[$i];
+        }
+
+        // Calculate SMA
+        return round($sum / $days, 2);
+    }
+
+    // Calculate the SMA for the last 7 days
+    $sma = calculateSMA($productionData, $days);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -320,7 +347,7 @@
                                     </div>
                                     <div class="card-body">
                                         <!-- Display the SMA value dynamically using PHP or JS -->
-                                        <p><strong>Predicted Production for the Next Day:</strong></p>
+                                        <p><strong>Predicted Production for today:</strong></p>
                                         <p id="smaValue">Loading SMA...</p> <!-- This can be dynamically updated by JS or PHP -->
                                     </div>
                                 </div>
