@@ -139,7 +139,7 @@
                             Income
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple1">
+                            <table id="datatablesSimple">
                                 <thead>
                                     <tr>
                                         <th> Expense Name</th>
@@ -162,7 +162,7 @@
                             Income
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple2">
+                            <table id="datatablesSimple">
                                 <thead>
                                     <tr>
                                         <th> Total Sales</th>
@@ -178,6 +178,7 @@
                             </table>
                         </div>
                     </div>
+                </main>    
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
