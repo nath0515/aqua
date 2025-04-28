@@ -247,6 +247,10 @@
             if (datatablesSimple2) {
                 new simpleDatatables.DataTable(datatablesSimple2);
             }
+            const datatablesSimple1 = document.getElementById('datatablesSimple1');
+            if (datatablesSimple1) {
+                new simpleDatatables.DataTable(datatablesSimple1);
+            }
         });
 
         </script>
