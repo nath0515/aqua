@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Report Modal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 60px;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 60%;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Water Refilling Station</h2>
+<button class="btn" id="openModal">View Daily Report</button>
+
+<div id="dailyReportModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h3>💧 Daily Sales & Expense Report</h3>
+    <p><strong>Date:</strong> April 28, 2025</p>
+    <p><strong>Branch:</strong> AquaPure Refilling Station</p>
+
+    <h4>💵 Sales Summary</h4>
+    <table>
+      <tr><th>Item</th><th>Amount (₱)</th></tr>
+      <tr><td>Purified Water Sales</td><td>2,500</td></tr>
+      <tr><td>Mineral Water Sales</td><td>1,200</td></tr>
+      <tr><td>Distilled Water Sales</td><td>375</td></tr>
+      <tr><td>Ice Packs</td><td>300</td></tr>
+      <tr><th>Total Sales</th><th>4,375</th></tr>
+    </table>
+
+    <h4>📉 Expenses</h4>
+    <table>
+      <tr><th>Expense Item</th><th>Amount (₱)</th></tr>
+      <tr><td>Electricity</td><td>300</td></tr>
+      <tr><td>Filter Maintenance</td><td>150</td></tr>
+      <tr><td>Staff Allowance</td><td>500</td></tr>
+      <tr><td>Bottle Caps & Labels</td><td>200</td></tr>
+      <tr><td>Fuel for Delivery</td><td>250</td></tr>
+      <tr><th>Total Expenses</th><th>1,400</th></tr>
+    </table>
+
+    <h4>📊 Net Income</h4>
+    <table>
+      <tr><td>Total Sales</td><td>₱4,375</td></tr>
+      <tr><td>Less: Total Expenses</td><td>₱1,400</td></tr>
+      <tr><th>Net Income</th><th>₱2,975</th></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("dailyReportModal");
+  const btn = document.getElementById("openModal");
+  const span = document.getElementById("closeModal");
+
+  btn.onclick = () => modal.style.display = "block";
+  span.onclick = () => modal.style.display = "none";
+  window.onclick = event => {
+    if (event.target == modal) modal.style.display = "none";
+  }
+</script>
+
+</body>
+</html>
