@@ -147,12 +147,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($order_data as $row):?>
-                                        <tr>
-                                            <td><?php echo $row['date'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
-                                        </tr>
-                                    <?php endforeach;?>
+                                    <tr>
+                                        <td>Salary</td>
+                                        <td>₱ 500</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -172,12 +170,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($order_data as $row):?>
-                                        <tr>
-                                            <td><?php echo $row['date'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
-                                        </tr>
-                                    <?php endforeach;?>
+                                    <tr>
+                                        <td>₱ 5000</td>
+                                        <td>₱ 500</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
