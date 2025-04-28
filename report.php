@@ -19,12 +19,6 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_amount FROM orders WHERE status_id = 4";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $total_amount_data = $stmt->fetch();
-    $total_amount = $total_amount_data['total_amount'];
-
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -110,96 +104,46 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <h1>💧 DoodsNer Water Refilling Station</h1>
-                    <h2>📅 Daily Sales & Expense Report - April 28, 2025</h2>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Sales
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th> Product Name</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($order_data as $row):?>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Income</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Analytics</li>
+                            <li class="breadcrumb-item active">Report</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Income
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo $row['date'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
+                                            <th>Date</th>
+                                            <th>Action</th>
                                         </tr>
-                                    <?php endforeach;?>
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($order_data as $row):?>
+                                            <tr>
+                                                <td><?php echo $row['date'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Expenses
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple1">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Amount (₱)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($order_data as $row):?>
-                                        <tr>
-                                            <td><?php echo $row['date'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            
                         </div>
                     </div>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Income
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple2">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Expenses</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($data as $row):?>
-                                    <tr>
-                                        <td><?php echo $row['date']; ?></td>
-                                        <td><?php echo $row['expensetype_name']; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </main>    
+                </footer>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -208,7 +152,7 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-
+        <script src="js/datatables-simple-demo.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
@@ -250,26 +194,6 @@
                     });
                 });
             });
-        </script>
-        <script>
-            window.addEventListener('DOMContentLoaded', event => {
-            // Simple-DataTablesa
-            // https://github.com/fiduswriter/Simple-DataTables/wikia
-
-            const datatablesSimple = document.getElementById('datatablesSimple');
-            if (datatablesSimple) {
-                new simpleDatatables.DataTable(datatablesSimple);
-            }
-            const datatablesSimple2 = document.getElementById('datatablesSimple2');
-            if (datatablesSimple2) {
-                new simpleDatatables.DataTable(datatablesSimple2);
-            }
-            const datatablesSimple1 = document.getElementById('datatablesSimple1');
-            if (datatablesSimple1) {
-                new simpleDatatables.DataTable(datatablesSimple1);
-            }
-        });
-
         </script>
     </body>
 </html>

@@ -105,6 +105,13 @@
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
+                        <?php 
+                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $status = $stmt->fetchColumn();
+                        ?>
+                        <li><a class="dropdown-item">Open Shop</a></li>
                         <div id="loadingOverlay">
                             <div class="spinner"></div>
                         </div>
