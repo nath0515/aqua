@@ -180,8 +180,9 @@
                             <table id="datatablesSimple2">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Expenses</th>
+                                        <th>Total Sales</th>
+                                        <th>Less : Expenses</th>
+                                        <th>Net Income</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,6 +193,7 @@
                                     </tr>
                                     <?php endforeach; ?>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
                                     </tr>
