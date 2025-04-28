@@ -135,13 +135,15 @@
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
+                                        <th> Date</th>
                                         <th> Product Name</th>
-                                        <th>Amount</th>
+                                        <th> Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach($order_data as $row):?>
                                         <tr>
+                                            <td><?php echo $row['product_name'];?></td>
                                             <td><?php echo $row['product_name'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
@@ -165,6 +167,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
+                                        <th>Purpose</th>
                                         <th>Amount (₱)</th>
                                     </tr>
                                 </thead>
