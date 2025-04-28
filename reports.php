@@ -125,7 +125,6 @@
                                         <tr>
                                             <td><?php echo $row['date'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
-
                                         </tr>
                                     <?php endforeach;?>
                                     <tr>
@@ -157,6 +156,10 @@
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
                                     <?php endforeach;?>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -182,6 +185,10 @@
                                         <td><?php echo $row['expensetype_name']; ?></td>
                                     </tr>
                                     <?php endforeach; ?>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
