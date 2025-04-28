@@ -127,10 +127,10 @@
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
                                             <tr>
+                                                <td>₱<?php echo $row['date'];?></td>
                                                 <td><a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
-                                                    </a></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                </a></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
