@@ -36,7 +36,7 @@ try {
         $stmt->execute();
         $total_expense = $stmt->fetchColumn();
 
-        $
+        $total_income = $total_sales - $total_expense;
 
         $sql1 = "INSERT INTO reports (date) VALUES (:today)";
         $stmt = $conn->prepare($sql1);
@@ -51,6 +51,21 @@ try {
             $stmt->bindParam(':order_id', $row['order_id']);
             $stmt->execute();
         }
+
+        foreach($expense_data as $row){
+            $sql2 = "INSERT INTO report_expense (report_id, expense_id) VALUES (:report_id, :expense_id)";
+            $stmt = $conn->prepare($sql2);
+            $stmt->bindParam(':report_id', $lastInsertId);
+            $stmt->bindParam(':order_id', $row['expense_id']);
+            $stmt->execute();
+        }
+
+        $sql2 = "INSERT INTO report_income (report_id, income) VALUES (:report_id, :income)";
+        $stmt = $conn->prepare($sql2);
+        $stmt->bindParam(':report_id', $lastInsertId);
+        $stmt->bindParam(':order_id', $total_income);
+        $stmt->execute();
+
     } else {
         $sql = "UPDATE store_status SET status = 1 WHERE ss_id = 1";
     }
