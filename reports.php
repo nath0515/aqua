@@ -107,16 +107,80 @@
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h2>📅 Daily Sales & Expense Report - April 28, 2025</h2>
 
-                    <div class="report-section">
-                        <h3>💵 Sales Summary</h3>
-                        <table>
-                        <tr><th>Item</th><th>Amount (₱)</th></tr>
-                        <tr><td>Purified Water Sales</td><td>2,500</td></tr>
-                        <tr><td>Mineral Water Sales</td><td>1,200</td></tr>
-                        <tr><td>Distilled Water Sales</td><td>375</td></tr>
-                        <tr><td>Ice Packs</td><td>300</td></tr>
-                        <tr class="summary-table"><td>Total Sales</td><td>₱4,375</td></tr>
-                        </table>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Income
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th> Product Name</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($order_data as $row):?>
+                                        <tr>
+                                            <td><?php echo $row['date'];?></td>
+                                            <td>₱<?php echo $row['amount'];?></td>
+
+                                        </tr>
+                                    <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Income
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th> Expense Name</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($order_data as $row):?>
+                                        <tr>
+                                            <td><?php echo $row['date'];?></td>
+                                            <td>₱<?php echo $row['amount'];?></td>
+                                        </tr>
+                                    <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Income
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th> Total Sales</th>
+                                        <th>Less: Expense</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($order_data as $row):?>
+                                        <tr>
+                                            <td><?php echo $row['date'];?></td>
+                                            <td>₱<?php echo $row['amount'];?></td>
+                                        </tr>
+                                    <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="report-section">
