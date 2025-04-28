@@ -139,7 +139,7 @@
                             Expenses
                         </div>
                         <div class="card-body">
-                            <table id="datatablesSimple1">
+                            <table id="datatablesSimple">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
