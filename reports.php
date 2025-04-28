@@ -125,16 +125,13 @@
                                         <tr>
                                             <td><?php echo $row['date'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
-
                                         </tr>
                                     <?php endforeach;?>
-                                </tbody>
-                                <tfoot>
                                     <tr>
-                                        <th style="text-align: right;">Total:</th>
-                                        <th>₱<?php echo number_format($total, 2); ?></th>
+                                        <td class="d-none"></td>
+                                        <td>Total : 69420</td>
                                     </tr>
-                                </tfoot>
+                                </tbody>
                             </table>
                         </div>
                     </div>
