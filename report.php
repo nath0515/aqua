@@ -105,7 +105,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Income</h1>
+                        <h1 class="mt-4">Report</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Analytics</li>
@@ -127,7 +127,9 @@
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
                                             <tr>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </a></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
                                             </tr>
                                         <?php endforeach;?>
