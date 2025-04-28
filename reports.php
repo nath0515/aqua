@@ -32,6 +32,7 @@
 
     $sql = "SELECT SUM(b.amount) as total_amount FROM report_content a JOIN orders b ON a.order_id = b.order_id WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
     $total_amount_data = $stmt->fetch();
     $total_amount = $total_amount_data['total_amount'];
