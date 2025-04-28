@@ -111,7 +111,17 @@
                         $stmt->execute();
                         $status = $stmt->fetchColumn();
                         ?>
-                        <li><a href="process_dailyreport.php" class="dropdown-item"><?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?></a></li>
+                        <li>
+                            <a 
+                                href="process_dailyreport.php" 
+                                class="dropdown-item"
+                                <?php if ($status == 1): ?>
+                                    onclick="return confirmCloseShop(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
+                            </a>
+                        </li>
                         <div id="loadingOverlay">
                             <div class="spinner"></div>
                         </div>
@@ -568,6 +578,27 @@
                 navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
                     .then(reg => console.log('✅ Service Worker registered:', reg))
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
+            }
+        </script>
+
+        <script>
+            function confirmCloseShop(event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to close the shop and report the daily sales.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, close it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = event.target.href;
+                    }
+                });
+
+                return false;
             }
         </script>
     </body>

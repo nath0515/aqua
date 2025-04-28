@@ -15,6 +15,6 @@ else{
 }
 $stmt = $conn->prepare($sql);
 $stmt->execute();
-header('Location: index.php');
+header('Location: index.php'); //sa reports today papunta
 exit();
 ?>
