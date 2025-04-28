@@ -30,7 +30,7 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_amount FROM orders WHERE status_id = 4";
+    $sql = "SELECT SUM(amount) as total_amount FROM report_content a JOIN orders b ON a.order_id = b.order_id WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $total_amount_data = $stmt->fetch();
