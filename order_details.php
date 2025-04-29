@@ -16,7 +16,7 @@
     if(isset($_GET['id'])){
         $order_id = $_GET['id'];
 
-        $sql = "SELECT a.quantity, a.with_container, 
+        $sql = "SELECT a.quantity, a.with_container,a.container_quantity
         b.product_name, b.water_price, b.container_price, 
         c.date, c.amount, c.rider, 
         d.firstname, d.lastname, d.address, d.contact_number,
@@ -216,18 +216,7 @@
                                                         
                                                     ?>
                                                 </td>
-                                                <td>
-                                                    <?php 
-                                                        if($row['with_container'] == 1){
-                                                            $item_price = ($row['container_price'] + $row['water_price']) * $row['quantity'];
-                                                        }
-                                                        else{
-                                                            $item_price = $row['water_price'] * $row['quantity'];
-                                                        }
-                                                        echo '₱' . number_format($item_price, 2);
-                                                    ?>
-
-                                                </td>
+                                                <td><?php echo $row['container_quantity'];?></td>
                                                 <td>₱<?php echo $row['container_price'];?></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
                                             </tr>
