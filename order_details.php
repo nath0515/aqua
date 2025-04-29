@@ -184,7 +184,7 @@
                                 $stmt->execute();
                                 $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                 ?>
-                                <h5 class="text-end mb-3">Total Price: <?php echo $total_data['amount']?></h5>
+                                <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
                                 <table class="table table-bordered p-1">
                                     <thead>
                                         <tr>
