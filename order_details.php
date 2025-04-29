@@ -201,7 +201,7 @@
                                         <?php foreach($order_data as $row):?>
                                             <tr>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td><?php echo $row['water_price'];?></td>
+                                                <td>₱<?php echo $row['water_price'];?></td>
                                                 <td><?php echo $row['quantity'];?></td>
                                                 <td>
                                                     <?php 
@@ -226,8 +226,8 @@
                                                     ?>
 
                                                 </td>
-                                                <td><?php echo $row['container_price'];?></td>
-                                                <td><?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo $row['container_price'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
