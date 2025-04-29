@@ -347,7 +347,7 @@
         <?php 
             // Fetch Sales Data
             $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders
-                    WHERE status_id = 4
+                    WHERE status_id = 5
                     GROUP BY DATE(date)
                     ORDER BY day ASC";
             $stmt = $conn->prepare($sql);
