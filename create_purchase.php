@@ -271,12 +271,12 @@
 							<div class="col-md-4 mt-3">
 								<div class="form-group form-group-default">
 									<label>Payment Method</label>
-									<select class="form-select" name="pm_id" required>
-										<option>Choose Payment Method</option>
-										<?php foreach ($data3 as $row):?>
-											<option value="<?php echo $row['pm_id']?>"><?php echo $row['payment_method']?></option>
-										<?php endforeach; ?>
-									</select>
+                                    <select name="" id="payment_id" class="form-select" required onchange="fetchProductDetails(this.value)">
+                                        <option>Select Item</option>
+                                        <?php foreach($payment_data as $row):?>
+                                            <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                        <?php endforeach;?>
+                                    </select>
 								</div>
 							</div>
                         </div>
