@@ -175,6 +175,7 @@
                                     <?php foreach($order_data as $row):?>
                                         <tr>
                                             <td><?php echo $row['date'];?></td>
+                                            <td>1500</td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
                                     <?php endforeach;?>
@@ -204,6 +205,7 @@
                                 <tbody>
                                     <?php foreach($data as $row):?>
                                     <tr>
+                                        <td><?php echo $row['date']; ?></td>
                                         <td><?php echo $row['date']; ?></td>
                                         <td><?php echo $row['expensetype_name']; ?></td>
                                     </tr>
