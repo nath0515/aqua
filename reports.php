@@ -36,7 +36,14 @@
     $total_amount_data = $stmt->fetch();
     $total_amount = $total_amount_data['total_amount'];
 
-    $sql = "SELECT a.report_id, a.expense_id, b.date, c.expensetype_name, ";
+    $sql = "SELECT a.report_id, a.expense_id, b.date, c.expensetype_name, b.amount FROM report_expense a 
+    JOIN expense b ON a.expense_id = b.expense_id 
+    JOIN expensetype c ON b.expensetype_id = c.expensetype_id
+    WHERE report_id = :report_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
+    $stmt->execute();
+    $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
@@ -191,10 +198,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($order_data as $row):?>
+                                    <?php foreach($expense_data as $row):?>
                                         <tr>
                                             <td><?php echo $row['date'];?></td>
-                                            <td>1500</td>
+                                            <td><?php echo $row['date'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
                                     <?php endforeach;?>
