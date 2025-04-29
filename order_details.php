@@ -226,7 +226,7 @@
                                                     ?>
 
                                                 </td>
-                                                <td><?php echo $row['quantity'];?></td>
+                                                <td><?php echo $row['container_price'];?></td>
                                                 <td><?php echo $row['amount'];?></td>
                                             </tr>
                                         <?php endforeach;?>
