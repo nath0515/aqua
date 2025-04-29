@@ -56,14 +56,14 @@ try {
             $sql2 = "INSERT INTO report_expense (report_id, expense_id) VALUES (:report_id, :expense_id)";
             $stmt = $conn->prepare($sql2);
             $stmt->bindParam(':report_id', $lastInsertId);
-            $stmt->bindParam(':order_id', $row['expense_id']);
+            $stmt->bindParam(':expense_id', $row['expense_id']);
             $stmt->execute();
         }
 
         $sql2 = "INSERT INTO report_income (report_id, income) VALUES (:report_id, :income)";
         $stmt = $conn->prepare($sql2);
         $stmt->bindParam(':report_id', $lastInsertId);
-        $stmt->bindParam(':order_id', $total_income);
+        $stmt->bindParam(':income', $total_income);
         $stmt->execute();
 
     } else {
