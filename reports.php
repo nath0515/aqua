@@ -243,17 +243,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($data as $row):?>
                                     <tr>
-                                        <td>1500</td>
-                                        <td>500</td>
-                                        <td><?php echo $row['expensetype_name']; ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
+                                        <td><?php echo number_format($total_sales, 2); ?></td>
+                                        <td><?php echo number_format($total_expense, 2); ?></td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_income, 2); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
