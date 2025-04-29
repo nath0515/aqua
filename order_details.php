@@ -166,7 +166,9 @@
                         <h1 class="mt-4">Orders</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Orders</li>
+                            <li class="breadcrumb-item active">View Orders</li>
                         </ol>
                         <div class="card mb-4">
                             
