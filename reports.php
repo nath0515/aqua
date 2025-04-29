@@ -56,7 +56,7 @@
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
-    $income_data = $stmt->fetchColumn();
+    $total_income = $stmt->fetchColumn();
 
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
@@ -244,7 +244,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><?php echo number_format($total_sales, 2); ?></td>
+                                        <td><?php echo number_format($total_amount, 2); ?></td>
                                         <td><?php echo number_format($total_expense, 2); ?></td>
                                         <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_income, 2); ?></strong></td>
                                     </tr>
