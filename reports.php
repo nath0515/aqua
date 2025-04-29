@@ -45,7 +45,7 @@
     $stmt->execute();
     $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM (b.amount) as total_amount FROM report_expense a JOIN expense b ON a.expense_id = b.expense_id WHERE report_id = :report_id";
+    $sql = "SELECT SUM(b.amount) as total_amount FROM report_expense a JOIN expense b ON a.expense_id = b.expense_id WHERE a.report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
