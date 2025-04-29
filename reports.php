@@ -12,7 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.report_id, b.product_id, c.product_name, d.amount FROM report_content a 
+    $sql = "SELECT a.order_id, a.report_id, b.product_id, c.product_name, d.amount, d.date FROM report_content a 
     JOIN orderitems b ON a.order_id = b.order_id
     JOIN products c ON b.product_id = c.product_id
     JOIN orders d ON a.order_id = d.order_id
@@ -135,7 +135,7 @@
                                 <tbody>
                                     <?php foreach($order_data as $row):?>
                                         <tr>
-                                            <td>auijwgdygad</td>
+                                            <td><?php echo $row['date'];?></td>
                                             <td><?php echo $row['product_name'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
