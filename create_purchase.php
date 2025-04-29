@@ -20,7 +20,7 @@
     $sql = "SELECT * FROM payment_method";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $product_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
