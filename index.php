@@ -23,7 +23,7 @@
     $stmt->execute();
     $amount1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 4";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $amount2 = $stmt->fetch(PDO::FETCH_ASSOC);
