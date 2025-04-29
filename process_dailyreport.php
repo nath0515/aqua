@@ -2,7 +2,7 @@
 require ('db.php');
 require ('session.php');
 try {
-    $today = date('Y-m-d');
+    $today = date('Y-m-d H:i:s');
 
     $sql = "SELECT status FROM store_status WHERE ss_id = 1";
     $stmt = $conn->prepare($sql);
