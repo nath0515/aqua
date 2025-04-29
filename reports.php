@@ -36,6 +36,8 @@
     $total_amount_data = $stmt->fetch();
     $total_amount = $total_amount_data['total_amount'];
 
+    $sql = "SELECT ";
+
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
