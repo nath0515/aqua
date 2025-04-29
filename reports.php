@@ -45,6 +45,13 @@
     $stmt->execute();
     $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT SUM (b.amount) as total_amount FROM report_expense a JOIN expense b ON a.expense_id = b.expense_id WHERE report_id = :report_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
+    $stmt->execute();
+    $total_expense_data = $stmt->fetch();
+    $total_expense = $total_expense_data['total_amount'];
+
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
@@ -208,7 +215,7 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total, 2); ?></strong></td>
+                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_expense, 2); ?></strong></td>
                                     </tr>
                                 </tbody>
                             </table>
