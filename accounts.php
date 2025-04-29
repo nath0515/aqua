@@ -174,6 +174,57 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            let deferredPrompt;
+
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); // Prevent automatic prompt
+                deferredPrompt = e; // Save the event for later
+                document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
+            });
+
+            // Install button click handler
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+
+                document.getElementById('loadingOverlay').style.display = 'none';
+
+                if (outcome === 'accepted') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Installation Complete',
+                        text: 'AquaDrop has been successfully installed!',
+                        confirmButtonColor: '#0077b6'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Installation Cancelled',
+                        text: 'You can install AquaDrop anytime!',
+                        confirmButtonColor: '#0077b6'
+                    });
+                }
+
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
+            });
+        </script>
+
+        <!-- PWA: Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
+                    .then(reg => console.log('✅ Service Worker registered:', reg))
+                    .catch(err => console.error('❌ Service Worker registration failed:', err));
+            }
+        </script>
     <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
         <script>
         Swal.fire({
