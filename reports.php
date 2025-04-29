@@ -2,14 +2,6 @@
     require 'session.php';
     require 'db.php';
 
-    if(!isset($_GET['id'])){
-        header("Location: report.php");
-        exit();
-    }
-    else{
-        $report_id = $_GET['id'];
-    }
-
     $user_id = $_SESSION['user_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
