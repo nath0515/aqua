@@ -52,6 +52,12 @@
     $total_expense_data = $stmt->fetch();
     $total_expense = $total_expense_data['total_amount'];
 
+    $sql = "SELECT income FROM report_income WHERE report_id = :report_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':report_id', $report_id);
+    $stmt->execute();
+    $income_data = $stmt->fetchColumn();
+
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
