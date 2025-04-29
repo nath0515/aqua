@@ -36,7 +36,7 @@
     $total_amount_data = $stmt->fetch();
     $total_amount = $total_amount_data['total_amount'];
 
-    $sql = "SELECT ";
+    $sql = "SELECT a.report_id, a.expense_id, b.date, c.expensetype_name, ";
 
     $sql = "SELECT date FROM reports WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
