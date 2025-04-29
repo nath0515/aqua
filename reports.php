@@ -3,6 +3,13 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    if(!isset($_GET['id'])){
+        header('Location: report.php');
+        exit();
+    }
+    else{
+        $report_id = $_GET['id'];
+    }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
