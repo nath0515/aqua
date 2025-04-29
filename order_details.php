@@ -16,7 +16,7 @@
     if(isset($_GET['id'])){
         $order_id = $_GET['id'];
 
-        $sql = "SELECT a.quantity, a.with_container,a.container_quantity
+        $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.container_price, 
         c.date, c.amount, c.rider, 
         d.firstname, d.lastname, d.address, d.contact_number,
