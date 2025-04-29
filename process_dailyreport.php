@@ -2,7 +2,8 @@
 require ('db.php');
 require ('session.php');
 try {
-    $today = date('Y-m-d H:i:s');
+    $today = date('Y-m-d');
+    $now = date('Y-m-d H:i:s');
 
     $sql = "SELECT status FROM store_status WHERE ss_id = 1";
     $stmt = $conn->prepare($sql);
@@ -40,7 +41,7 @@ try {
 
         $sql1 = "INSERT INTO reports (date) VALUES (:today)";
         $stmt = $conn->prepare($sql1);
-        $stmt->bindParam(':today', $today);
+        $stmt->bindParam(':today', $now);
         $stmt->execute();
         $lastInsertId = $conn->lastInsertId();
 
