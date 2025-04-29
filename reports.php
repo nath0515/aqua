@@ -159,7 +159,7 @@
                                 <tbody>
                                     <?php foreach($order_data as $row):?>
                                         <tr>
-                                            <td><?php echo $row['date'];?></td>
+                                            <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                             <td><?php echo $row['product_name'];?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                         </tr>
