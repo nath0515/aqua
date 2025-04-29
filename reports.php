@@ -270,15 +270,15 @@
 
             const datatablesSimple = document.getElementById('datatablesSimple');
             if (datatablesSimple) {
-                new simpleDatatables.DataTable(datatablesSimple);
+                new DataTable(datatablesSimple);
             }
             const datatablesSimple2 = document.getElementById('datatablesSimple2');
             if (datatablesSimple2) {
-                new simpleDatatables.DataTable(datatablesSimple2);
+                new DataTable(datatablesSimple2);
             }
             const datatablesSimple1 = document.getElementById('datatablesSimple1');
             if (datatablesSimple1) {
-                new simpleDatatables.DataTable(datatablesSimple1);
+                new DataTable(datatablesSimple1);
             }
         });
 
