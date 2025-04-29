@@ -181,8 +181,8 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>  
-                                            <th>Sales</th>
-                                            <th>Expenses</th>
+                                            <th>Total Sales</th>
+                                            <th>Total Expenses</th>
                                             <th>Income</th>
                                         </tr>
                                     </thead>
