@@ -72,6 +72,9 @@
                                 <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
                             </a>
                         </li>
+                        <div id="loadingOverlay">
+                            <div class="spinner"></div>
+                        </div>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
