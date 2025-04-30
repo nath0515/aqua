@@ -376,6 +376,14 @@
                     });
                     return;
                 }
+                else if(containerQuantity < 1 && hasContainer){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: "Please enter a valid container quantity."
+                    });
+                    return;
+                }
                 
                 fetch("process_getproductdata.php",{
                     method: "POST",
@@ -414,12 +422,12 @@
                             
 
                             cell1.innerHTML = data.data.product_name;
-                            cell2.innerHTML = waterPrice;
+                            cell2.innerHTML = "₱" + waterPrice.toFixed(2);
                             cell3.innerHTML = quantity;
                             cell4.innerHTML = checkbox.checked ? 'Yes' : 'No';
                             cell5.innerHTML = containerQuantity;
-                            cell6.innerHTML = containerPrice;
-                            cell7.innerHTML = totalPrice;
+                            cell6.innerHTML = "₱" + containerPrice.toFixed(2);
+                            cell7.innerHTML = "₱" + totalPrice.toFixed(2);
                             cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
 
                             //cell.style.display = "none";
