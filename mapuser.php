@@ -208,7 +208,7 @@
         });
 
         // Save Button
-        document.getElementById("saveLocationBtn").addEventListener("click", function() {
+        document.getElementById("saveLocationBtn").addEventListener("click", function () {
             if (selectedLat && selectedLng) {
                 fetch("save_location.php", {
                     method: "POST",
@@ -219,13 +219,30 @@
                 })
                 .then(response => response.text())
                 .then(result => {
-                    alert("📌 Location saved! Server response: " + result);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '📌 Location Saved!',
+                        text: 'Server says: ' + result,
+                        confirmButtonColor: '#3085d6'
+                    });
                 })
                 .catch(error => {
-                    console.error("Error saving location:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Error saving location: ' + error,
+                        confirmButtonColor: '#d33'
+                    });
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No location selected',
+                    text: 'Please select a location first.'
                 });
             }
         });
+
         </script>
     </body>
 </html>
