@@ -47,7 +47,7 @@
     $quantity = $stmt->fetchColumn();
     
     // Calculate SMA
-    $sma = calculateSMA($quantities, 7);
+    $sma = calculateSMA($quantity, 7);
     ?>
 <!DOCTYPE html>
 <html lang="en">
