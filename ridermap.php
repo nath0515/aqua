@@ -4,7 +4,7 @@ require('session.php');
 
 $user_id = $_SESSION['user_id'];
 
-// Get start location
+// Get start location (shop)
 $startCoordinates = null;
 $sql = "SELECT latitude, longitude FROM shop_location WHERE location_id = 1";
 $stmt = $conn->prepare($sql);
@@ -18,10 +18,11 @@ if ($row) {
     ];
 }
 
-// Get end locations
+// Get end locations (customer destinations)
 $endCoordinatesArray = [];
-$sql = "SELECT latitude, longitude FROM orders JOIN user_details ON orders.user_id = user_details.user_id
-WHERE (latitude IS NOT NULL AND longitude IS NOT NULL) AND status_id = 3";
+$sql = "SELECT latitude, longitude FROM orders 
+        JOIN user_details ON orders.user_id = user_details.user_id
+        WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND status_id = 3";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,6 +60,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var currentStartCoord = null;
 var currentStartMarker = null;
 var currentRouteLine = null;
+var destinationMarker = null;
+
 var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
 
 // Convert degrees to radians
@@ -81,7 +84,7 @@ function calculateDistance(coords) {
     return R * c;
 }
 
-// Get nearest delivery
+// Get nearest delivery point
 function findClosestEndCoordinate(currentCoord, endCoordinates) {
     let minDistance = Infinity;
     let closestIndex = -1;
@@ -107,7 +110,9 @@ function fetchRoute(start, end) {
         .then(data => {
             var coords = data.features[0].geometry.coordinates.map(c => [c[1], c[0]]);
 
-            if (currentRouteLine) map.removeLayer(currentRouteLine);
+            if (currentRouteLine) {
+                map.removeLayer(currentRouteLine);
+            }
 
             currentRouteLine = L.polyline(coords, { color: 'blue' }).addTo(map);
             map.fitBounds(currentRouteLine.getBounds());
@@ -115,24 +120,33 @@ function fetchRoute(start, end) {
         .catch(err => console.error("Route error:", err));
 }
 
-// Update on location change
+// Update location and redraw
 function updateStartLocation(position) {
     currentStartCoord = [position.coords.latitude, position.coords.longitude];
 
+    // Update or create marker for current location
     if (!currentStartMarker) {
         currentStartMarker = L.marker(currentStartCoord).addTo(map).bindPopup("You").openPopup();
     } else {
         currentStartMarker.setLatLng(currentStartCoord);
     }
 
+    // Determine closest destination and show route
     if (endCoordinates.length > 0) {
         const i = findClosestEndCoordinate(currentStartCoord, endCoordinates);
         const next = endCoordinates[i];
-        fetchRoute(currentStartCoord, [next.lat, next.lon]);
+        const destinationCoord = [next.lat, next.lon];
+
+        // Show destination marker only once
+        if (!destinationMarker) {
+            destinationMarker = L.marker(destinationCoord).addTo(map).bindPopup("Destination");
+        }
+
+        fetchRoute(currentStartCoord, destinationCoord);
     }
 }
 
-// Watch geolocation
+// Start geolocation tracking
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(updateStartLocation, err => {
         console.error("Location error:", err);
