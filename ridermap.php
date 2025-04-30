@@ -42,6 +42,7 @@ foreach ($rows as $row) {
     <title>Real-Time Delivery Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
     <style>
         #map { height: 500px; width: 100%; }
         #completeBtn { margin: 10px; padding: 10px 20px; font-size: 16px; }
@@ -49,8 +50,8 @@ foreach ($rows as $row) {
 </head>
 <body>
 
-<button id="completeBtn">Complete Delivery</button>
 <div id="map"></div>
+<button id="completeBtn">Complete Delivery</button>
 
 <script>
 var map = L.map('map').setView([14.1916, 121.1378], 14);
@@ -72,7 +73,7 @@ function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
-// Haversine formula for distance
+// Haversine formula
 function calculateDistance(coords) {
     var lat1 = coords[0][0], lon1 = coords[0][1];
     var lat2 = coords[1][0], lon2 = coords[1][1];
@@ -87,7 +88,7 @@ function calculateDistance(coords) {
     return R * c;
 }
 
-// Get nearest delivery point
+// Find closest end point
 function findClosestEndCoordinate(currentCoord, endCoordinates) {
     let minDistance = Infinity;
     let closestIndex = -1;
@@ -103,7 +104,7 @@ function findClosestEndCoordinate(currentCoord, endCoordinates) {
     return closestIndex;
 }
 
-// Fetch and draw route
+// Fetch route using OpenRouteService
 function fetchRoute(start, end) {
     var orsUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start='
         + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
@@ -123,7 +124,7 @@ function fetchRoute(start, end) {
         .catch(err => console.error("Route error:", err));
 }
 
-// Update location and draw destination
+// Update user's live location
 function updateStartLocation(position) {
     currentStartCoord = [position.coords.latitude, position.coords.longitude];
 
@@ -148,34 +149,57 @@ function updateStartLocation(position) {
     }
 }
 
-// Handle delivery completion
+// SweetAlert-enhanced delivery completion
 function completeDelivery() {
-    if (currentDestinationIndex !== -1) {
-        endCoordinates.splice(currentDestinationIndex, 1);
-        currentDestinationIndex = -1;
+    if (currentDestinationIndex === -1) return;
 
-        if (destinationMarker) {
-            map.removeLayer(destinationMarker);
-            destinationMarker = null;
-        }
+    Swal.fire({
+        title: 'Complete this delivery?',
+        text: "This will mark the current stop as delivered.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, complete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            endCoordinates.splice(currentDestinationIndex, 1);
+            currentDestinationIndex = -1;
 
-        if (currentRouteLine) {
-            map.removeLayer(currentRouteLine);
-            currentRouteLine = null;
-        }
+            if (destinationMarker) {
+                map.removeLayer(destinationMarker);
+                destinationMarker = null;
+            }
 
-        if (endCoordinates.length === 0) {
-            alert("All deliveries completed!");
-        } else {
-            updateStartLocation({ coords: { latitude: currentStartCoord[0], longitude: currentStartCoord[1] } });
+            if (currentRouteLine) {
+                map.removeLayer(currentRouteLine);
+                currentRouteLine = null;
+            }
+
+            if (endCoordinates.length === 0) {
+                Swal.fire({
+                    title: 'All deliveries completed!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Delivery completed!',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                // Recalculate and go to next destination
+                updateStartLocation({ coords: { latitude: currentStartCoord[0], longitude: currentStartCoord[1] } });
+            }
         }
-    }
+    });
 }
 
-// Button event
+// Button listener
 document.getElementById("completeBtn").addEventListener("click", completeDelivery);
 
-// Start tracking
+// Start geolocation
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(updateStartLocation, err => {
         console.error("Location error:", err);
