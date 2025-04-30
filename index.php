@@ -335,7 +335,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
-                                        <p><?php echo number_format($sma, 2); ?> gallons</p> 
+                                        <p><?php echo ($sma); ?> gallons</p> 
                                     </div>
                                 </div>
                             </div>
