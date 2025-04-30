@@ -357,7 +357,8 @@
                 let totalPrice = totalPriceInput.value;
                 let productId = productIdInput.value;
                 let available = availableInput.value;
-                console.log(available);
+                let hasContainer = document.getElementById("hasContainer").checked;
+                console.log(hasContainer);
 
                 if(!productId){
                     Swal.fire({
