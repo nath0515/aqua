@@ -12,17 +12,10 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
-    JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id";
+    $sql = "SELECT  message, date FROM activity_logs ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $sql = "SELECT * FROM orderstatus";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,24 +97,20 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
-                    <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
-                </div> 
-                <div class="card card-body mb-4 animated fadeInUp m-5">
-                    <a class="text-dark" href="https://www.ilearnu.lu.edu.ph/student/class/7241/post/70080">
-                        <div class="mx-4">
-                                Chrisna Fucio posted a new activity: CCS SUMMIT 2025
-                            <br>
-                        <small class="text-muted"><i>12:34 pm April 17</i></small>
-                </div>
-                </a> 
-                <hr>
-                    <a class="text-dark" href="https://www.ilearnu.lu.edu.ph/student/class/7241/post/70080">
-                    <div class="mx-4">
-                            Chrisna Fucio posted a new activity: CCS SUMMIT 2025
-                        <br>
-                    <small class="text-muted"><i>12:34 pm April 17</i></small>
-                    </a>
+                    <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
+                        <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
+                    </div> 
+                    <div class="card card-body mb-4 animated fadeInUp m-5">
+                        <a class="text-dark" href="#">
+                            <div class="mx-4">
+                                    Chrisna Fucio posted a new activity: CCS SUMMIT 2025
+                                <br>
+                            <small class="text-muted"><i>12:34 pm April 17</i></small>
+                            </div>
+                        </a> 
+                    </div>
+                    <hr>
+                   
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
