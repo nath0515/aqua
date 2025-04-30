@@ -32,15 +32,12 @@ foreach ($rows as $row) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map Showing Route with Multiple Endpoints</title>
-    <!-- Include Leaflet.js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.1/dist/leaflet-routing-machine.js"></script>
@@ -64,13 +61,11 @@ foreach ($rows as $row) {
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
 
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
+// Initialize the map
 var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -80,6 +75,7 @@ var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo 
 
 var routes = [];
 
+// Fetch the route for a start and end coordinates pair
 function fetchRoute(start, end) {
     var orsUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
@@ -110,11 +106,12 @@ function fetchRoute(start, end) {
         });
 }
 
+// Function to calculate the distance between two coordinates
 function calculateDistance(coords) {
     var lat1 = coords[0][0], lon1 = coords[0][1];
     var lat2 = coords[1][0], lon2 = coords[1][1];
 
-    var R = 6371;
+    var R = 6371; // Earth radius in km
     var dLat = toRad(lat2 - lat1);
     var dLon = toRad(lon2 - lon1);
 
@@ -131,21 +128,42 @@ function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
+// Select closest end point based on current location
+function findClosestEndCoordinate(currentCoord, endCoordinates) {
+    let minDistance = Infinity;
+    let closestIndex = -1;
+
+    endCoordinates.forEach((coord, index) => {
+        const distance = calculateDistance([currentCoord, [coord.lat, coord.lon]]);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+        }
+    });
+
+    return closestIndex;
+}
+
 const originalStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
 let currentStartCoord = [...originalStartCoord];
 let endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
 let deliveryIndex = 0;
 
 function startDeliverySimulation() {
-    if (deliveryIndex < endCoordinates.length) {
-        let endCoord = endCoordinates[deliveryIndex];
+    if (endCoordinates.length > 0) {
+        // Find the closest delivery location from the current position
+        const closestIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
+        let closestEndCoord = endCoordinates.splice(closestIndex, 1)[0]; // Remove selected endpoint
 
-        L.marker([endCoord.lat, endCoord.lon]).addTo(map)
+        // Display marker for the closest delivery point
+        L.marker([closestEndCoord.lat, closestEndCoord.lon]).addTo(map)
             .bindPopup("Delivery #" + (deliveryIndex + 1)).openPopup();
 
-        fetchRoute(currentStartCoord, [endCoord.lat, endCoord.lon]);
+        // Fetch route for the closest delivery
+        fetchRoute(currentStartCoord, [closestEndCoord.lat, closestEndCoord.lon]);
 
-        currentStartCoord = [endCoord.lat, endCoord.lon];
+        // Update the current delivery position
+        currentStartCoord = [closestEndCoord.lat, closestEndCoord.lon];
         deliveryIndex++;
     } else {
         Swal.fire({
@@ -154,8 +172,6 @@ function startDeliverySimulation() {
             text: 'Calculating route back to base...'
         }).then(() => {
             fetchRoute(currentStartCoord, originalStartCoord);
-
-            // Add return home marker
             L.marker(originalStartCoord, {
                 icon: L.icon({
                     iconUrl: 'https://img.icons8.com/color/48/home--v1.png',
@@ -163,7 +179,6 @@ function startDeliverySimulation() {
                     iconAnchor: [15, 30]
                 })
             }).addTo(map).bindPopup("🏠 Return to Shop").openPopup();
-
             map.fitBounds([currentStartCoord, originalStartCoord]);
         });
     }
@@ -209,7 +224,6 @@ function updateRiderPosition() {
 // Optional: Uncomment to simulate live tracking every 5 seconds
 // setInterval(updateRiderPosition, 5000);
 </script>
-
 
 </body>
 </html>
