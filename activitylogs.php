@@ -101,21 +101,16 @@
                         <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
+                        <?php foreach($logs as $row): ?>
                         <a class="text-dark" href="#">
                             <div class="mx-4">
-                                    Chrisna Fucio posted a new activity: CCS SUMMIT 2025
+                                    <?php echo $row['message']; ?>
                                 <br>
-                            <small class="text-muted"><i>12:34 pm April 17</i></small>
+                                <small class="text-muted"><i><?php echo date('g:i a F j', strtotime($row['date'])); ?></i></small>
                             </div>
                         </a> 
                         <hr>
-                        <a class="text-dark" href="#">
-                            <div class="mx-4">
-                                    Chrisna Fucio posted a new activity: CCS SUMMIT 2025
-                                <br>
-                            <small class="text-muted"><i>12:34 pm April 17</i></small>
-                            </div>
-                        </a> 
+                        <?php endforeach; ?> 
                     </div>
                    
                 </main>
