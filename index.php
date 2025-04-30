@@ -13,7 +13,7 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 4 AND DATE(date) = CURDATE()";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = CURDATE()";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $amount = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -331,7 +331,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
-                                        Simple Moving Average (SMA) - Predicted Production for Today
+                                        Predicted Production for Today
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
