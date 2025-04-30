@@ -44,10 +44,12 @@ foreach ($rows as $row) {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         #map { height: 500px; width: 100%; }
+        #completeBtn { margin: 10px; padding: 10px 20px; font-size: 16px; }
     </style>
 </head>
 <body>
 
+<button id="completeBtn">Complete Delivery</button>
 <div id="map"></div>
 
 <script>
@@ -61,6 +63,7 @@ var currentStartCoord = null;
 var currentStartMarker = null;
 var currentRouteLine = null;
 var destinationMarker = null;
+var currentDestinationIndex = -1;
 
 var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
 
@@ -120,33 +123,59 @@ function fetchRoute(start, end) {
         .catch(err => console.error("Route error:", err));
 }
 
-// Update location and redraw
+// Update location and draw destination
 function updateStartLocation(position) {
     currentStartCoord = [position.coords.latitude, position.coords.longitude];
 
-    // Update or create marker for current location
     if (!currentStartMarker) {
         currentStartMarker = L.marker(currentStartCoord).addTo(map).bindPopup("You").openPopup();
     } else {
         currentStartMarker.setLatLng(currentStartCoord);
     }
 
-    // Determine closest destination and show route
     if (endCoordinates.length > 0) {
-        const i = findClosestEndCoordinate(currentStartCoord, endCoordinates);
-        const next = endCoordinates[i];
+        currentDestinationIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
+        const next = endCoordinates[currentDestinationIndex];
         const destinationCoord = [next.lat, next.lon];
 
-        // Show destination marker only once
         if (!destinationMarker) {
-            destinationMarker = L.marker(destinationCoord).addTo(map).bindPopup("Destination");
+            destinationMarker = L.marker(destinationCoord).addTo(map).bindPopup("Destination").openPopup();
+        } else {
+            destinationMarker.setLatLng(destinationCoord).openPopup();
         }
 
         fetchRoute(currentStartCoord, destinationCoord);
     }
 }
 
-// Start geolocation tracking
+// Handle delivery completion
+function completeDelivery() {
+    if (currentDestinationIndex !== -1) {
+        endCoordinates.splice(currentDestinationIndex, 1);
+        currentDestinationIndex = -1;
+
+        if (destinationMarker) {
+            map.removeLayer(destinationMarker);
+            destinationMarker = null;
+        }
+
+        if (currentRouteLine) {
+            map.removeLayer(currentRouteLine);
+            currentRouteLine = null;
+        }
+
+        if (endCoordinates.length === 0) {
+            alert("All deliveries completed!");
+        } else {
+            updateStartLocation({ coords: { latitude: currentStartCoord[0], longitude: currentStartCoord[1] } });
+        }
+    }
+}
+
+// Button event
+document.getElementById("completeBtn").addEventListener("click", completeDelivery);
+
+// Start tracking
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(updateStartLocation, err => {
         console.error("Location error:", err);
