@@ -108,6 +108,7 @@
                             <small class="text-muted"><i>12:34 pm April 17</i></small>
                             </div>
                         </a> 
+                        <hr>
                         <a class="text-dark" href="#">
                             <div class="mx-4">
                                     Chrisna Fucio posted a new activity: CCS SUMMIT 2025
