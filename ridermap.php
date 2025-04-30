@@ -214,7 +214,7 @@ function updateRiderPosition() {
 }
 
 //Update the rider's position every 5 seconds (adjust as needed)
-setInterval(updateRiderPosition, 5000);
+//setInterval(updateRiderPosition, 5000);
 
 </script>
 
