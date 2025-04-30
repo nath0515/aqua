@@ -62,52 +62,44 @@ foreach ($endAddresses as $endAddress) {
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-// Initialize the map with the start coordinates
 var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
 
-// Set up the OpenStreetMap tiles layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Add a marker for the start coordinates
 var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
     .bindPopup("Start: Calamba, Laguna");
 
-// Array to store polyline (route) objects
 var routes = [];
 
-// Function to fetch route data from OpenRouteService API
 function fetchRoute(start, end) {
     var orsUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
     fetch(orsUrl)
         .then(response => response.json())
         .then(data => {
-            // Extract the coordinates of the route from the response
             var routeCoordinates = data.features[0].geometry.coordinates;
 
-            // Create a polyline (the route) and add it to the map
-            var route = L.polyline(routeCoordinates.map(function(coord) {
-                return [coord[1], coord[0]];  // Switch lat/lon order
-            }), {color: 'blue'}).addTo(map);
+            var route = L.polyline(routeCoordinates.map(coord => [coord[1], coord[0]]), {
+                color: 'blue'
+            }).addTo(map);
 
-            // Store the route for later removal
             routes.push(route);
 
-            // Calculate the route's distance manually using the polyline's coordinates
-            var routeLength = calculateDistance([start, end]); // Calculate using Haversine formula
+            var routeLength = calculateDistance([start, end]);
 
-            // Add a label with the distance on the map
             var label = L.divIcon({
                 className: 'distance-label',
                 html: 'Distance: ' + routeLength.toFixed(2) + ' km'
             });
 
-            var labelMarker = L.marker(route.getCenter(), {icon: label}).addTo(map);
-            
-            // Optionally, fit the map view to the route
+            var labelMarker = L.marker(route.getCenter(), { icon: label }).addTo(map);
+
             map.fitBounds(route.getBounds());
         })
         .catch(error => {
@@ -115,97 +107,95 @@ function fetchRoute(start, end) {
         });
 }
 
-// Function to calculate the distance between the start and end locations (Haversine Formula)
 function calculateDistance(coords) {
     var lat1 = coords[0][0], lon1 = coords[0][1];
     var lat2 = coords[1][0], lon2 = coords[1][1];
-    
-    var R = 6371; // Earth radius in kilometers
+
+    var R = 6371;
     var dLat = toRad(lat2 - lat1);
     var dLon = toRad(lon2 - lon1);
-    
+
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    
+
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
-    var distance = R * c; // Distance in kilometers
-    return distance;
+
+    return R * c;
 }
 
-// Helper function to convert degrees to radians
 function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
-// Initial start coordinates
-var currentStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
-var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
-var deliveryIndex = 0;
+const originalStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+let currentStartCoord = [...originalStartCoord];
+let endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
+let deliveryIndex = 0;
 
-// Function to start the simulation of deliveries
 function startDeliverySimulation() {
     if (deliveryIndex < endCoordinates.length) {
-        var endCoord = endCoordinates[deliveryIndex];
+        let endCoord = endCoordinates[deliveryIndex];
 
-        // Add marker on the endpoint
-        var endMarker = L.marker([endCoord.lat, endCoord.lon]).addTo(map)
-            .bindPopup("End: " + endCoord.lat + ", " + endCoord.lon);
+        L.marker([endCoord.lat, endCoord.lon]).addTo(map)
+            .bindPopup("Delivery #" + (deliveryIndex + 1)).openPopup();
 
-        // Fetch the route between current start and end coordinates
         fetchRoute(currentStartCoord, [endCoord.lat, endCoord.lon]);
 
-        // Update current start coordinate after delivery
         currentStartCoord = [endCoord.lat, endCoord.lon];
-        deliveryIndex++; // Move to the next delivery
+        deliveryIndex++;
     } else {
-        alert('All deliveries completed!');
+        Swal.fire({
+            icon: 'success',
+            title: 'All Deliveries Completed!',
+            text: 'Calculating route back to base...'
+        }).then(() => {
+            fetchRoute(currentStartCoord, originalStartCoord);
+
+            // Add return home marker
+            L.marker(originalStartCoord, {
+                icon: L.icon({
+                    iconUrl: 'https://img.icons8.com/color/48/home--v1.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30]
+                })
+            }).addTo(map).bindPopup("🏠 Return to Base").openPopup();
+
+            map.fitBounds([currentStartCoord, originalStartCoord]);
+        });
     }
 }
 
-// Function to remove the last route (polyline)
 function removeLastRoute() {
     if (routes.length > 0) {
-        // Remove the last route from the map
         map.removeLayer(routes[routes.length - 1]);
-        // Remove the route from the array
         routes.pop();
     }
 }
 
-// Attach event listener to the "Complete Delivery" button
-document.getElementById("completeDeliveryBtn").addEventListener("click", function() {
+document.getElementById("completeDeliveryBtn").addEventListener("click", function () {
     startDeliverySimulation();
-
-    // Remove the last route after completing the delivery
     removeLastRoute();
 });
 
-// Initial delivery simulation (first delivery)
 startDeliverySimulation();
 
-// Create a marker for the rider (initially placed at the start)
-var riderMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], {
+var riderMarker = L.marker(originalStartCoord, {
     icon: L.icon({
-        iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png', // Rider icon
+        iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png',
         iconSize: [25, 25]
     })
 }).addTo(map);
 
-// Function to update rider's position using geolocation API (this will simulate real-time tracking)
 function updateRiderPosition() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
             riderMarker.setLatLng([lat, lon]);
-
-            // Optionally, adjust the map view to center on the rider
-            map.setView([lat, lon], 15); // Zoom level can be adjusted
-
-        }, function(error) {
+            map.setView([lat, lon], 15);
+        }, function (error) {
             console.error("Error getting geolocation: ", error);
         });
     } else {
@@ -213,10 +203,10 @@ function updateRiderPosition() {
     }
 }
 
-//Update the rider's position every 5 seconds (adjust as needed)
-//setInterval(updateRiderPosition, 5000);
-
+// Optional: Uncomment to simulate live tracking every 5 seconds
+// setInterval(updateRiderPosition, 5000);
 </script>
+
 
 </body>
 </html>
