@@ -16,8 +16,9 @@ if ($row) {
 }
 
 $endCoordinatesArray = [];
-$sql = "SELECT latitude, longitude FROM user_details WHERE latitude IS NOT NULL AND longitude IS NOT NULL";
+$sql = "SELECT latitude, longitude FROM user_details WHERE (latitude IS NOT NULL AND longitude IS NOT NULL) AND user_id = :user_id";
 $stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
