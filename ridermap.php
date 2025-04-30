@@ -64,18 +64,13 @@ foreach ($rows as $row) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// Initialize the map
-var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
-    .bindPopup("Start: Calamba, Laguna");
-
+// Variables for tracking coordinates and routes
+var currentStartCoord = null;
 var routes = [];
+var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
+var deliveryIndex = 0;
 
-// Fetch the route for a start and end coordinates pair
+// Fetch route for a start and end coordinates pair
 function fetchRoute(start, end) {
     var orsUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
@@ -144,16 +139,29 @@ function findClosestEndCoordinate(currentCoord, endCoordinates) {
     return closestIndex;
 }
 
-const originalStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
-let currentStartCoord = [...originalStartCoord];
-let endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
-let deliveryIndex = 0;
+// Initialize the map
+var map = L.map('map').setView([14.1916, 121.1378], 14); // Default to Calamba, Laguna
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
+// Function to update the start coordinates to the device's location
+function updateStartLocation(position) {
+    currentStartCoord = [position.coords.latitude, position.coords.longitude];
+    map.setView(currentStartCoord, 14);
+
+    var startMarker = L.marker(currentStartCoord).addTo(map)
+        .bindPopup("Current Location");
+
+    // Start delivery simulation after fetching location
+    startDeliverySimulation();
+}
+
+// Function to simulate the delivery process
 function startDeliverySimulation() {
-    if (endCoordinates.length > 0) {
-        // Find the closest delivery location from the current position
+    if (endCoordinates.length > 0 && currentStartCoord) {
         const closestIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
-        let closestEndCoord = endCoordinates.splice(closestIndex, 1)[0]; // Remove selected endpoint
+        let closestEndCoord = endCoordinates.splice(closestIndex, 1)[0];
 
         // Display marker for the closest delivery point
         L.marker([closestEndCoord.lat, closestEndCoord.lon]).addTo(map)
@@ -171,58 +179,25 @@ function startDeliverySimulation() {
             title: 'All Deliveries Completed!',
             text: 'Calculating route back to base...'
         }).then(() => {
-            fetchRoute(currentStartCoord, originalStartCoord);
-            L.marker(originalStartCoord, {
-                icon: L.icon({
-                    iconUrl: 'https://img.icons8.com/color/48/home--v1.png',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30]
-                })
-            }).addTo(map).bindPopup("🏠 Return to Shop").openPopup();
-            map.fitBounds([currentStartCoord, originalStartCoord]);
+            fetchRoute(currentStartCoord, [14.1916, 121.1378]); // Route back to base (start)
         });
     }
 }
 
-function removeLastRoute() {
-    if (routes.length > 0) {
-        map.removeLayer(routes[routes.length - 1]);
-        routes.pop();
-    }
-}
-
+// Event listener to begin delivery simulation
 document.getElementById("completeDeliveryBtn").addEventListener("click", function () {
     startDeliverySimulation();
-    removeLastRoute();
 });
 
-startDeliverySimulation();
-
-var riderMarker = L.marker(originalStartCoord, {
-    icon: L.icon({
-        iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png',
-        iconSize: [25, 25]
-    })
-}).addTo(map);
-
-function updateRiderPosition() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-
-            riderMarker.setLatLng([lat, lon]);
-            map.setView([lat, lon], 15);
-        }, function (error) {
-            console.error("Error getting geolocation: ", error);
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
+// Get current geolocation
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(updateStartLocation, function (error) {
+        console.error("Error getting geolocation: ", error);
+    });
+} else {
+    alert("Geolocation is not supported by this browser.");
 }
 
-// Optional: Uncomment to simulate live tracking every 5 seconds
-// setInterval(updateRiderPosition, 5000);
 </script>
 
 </body>
