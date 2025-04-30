@@ -34,7 +34,7 @@
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
     function calculateSMA($data, $days) {
-        return $data / $days;
+        return round($data / $days);
     }
     
     // Fetch last 7 days of quantity data
