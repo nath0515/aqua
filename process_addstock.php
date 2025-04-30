@@ -24,12 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':product_id', $product_id);
         $stmt->execute();
 
+        //notif dito
         $message = "Added ".$stock." stock of ".$product_name." to inventory.";
-
-        $sql = "INSERT INTO activity_logs (message, date) VALUES (':message', :date)";
+        $destination = "stock.php";
+        
+        $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':message', $message);
         $stmt->bindParam(':date', $now);
+        $stmt->bindParam(':destination', $destination);
         $stmt->execute();
 
 

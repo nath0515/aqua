@@ -102,7 +102,7 @@
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
                         <?php foreach($logs as $row): ?>
-                        <a class="text-dark" href="#">
+                        <a class="text-dark" href="<?php echo $row['destination'];?>">
                             <div class="mx-4">
                                     <?php echo $row['message']; ?>
                                 <br>
