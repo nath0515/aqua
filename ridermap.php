@@ -1,36 +1,35 @@
 <?php
-// Function to get coordinates (latitude and longitude) from an address or Plus Code using Nominatim API
-function getCoordinates($address) {
-    $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
-    $options = [
-        'http' => [
-            'header' => "User-Agent: YourAppName/1.0 (youremail@example.com)\r\n"
-        ]
+require('db.php');
+require('session.php');
+
+$startCoordinates = null;
+$sql = "SELECT latitude, longitude FROM shop_location WHERE location_id = 1";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($row) {
+    $startCoordinates = [
+        'lat' => $row['latitude'],
+        'lon' => $row['longitude']
     ];
-    $context = stream_context_create($options);
-    $response = file_get_contents($url, false, $context);
-    $data = json_decode($response, true);
-    if (!empty($data)) {
-        return [
-            'lat' => $data[0]['lat'],
-            'lon' => $data[0]['lon']
-        ];
-    }
-    return null;
 }
 
-// Example usage: Get coordinates for the given Plus Code and address
-$startAddress = 'Calamba, Laguna';  // Starting point: Plus Code address
-$endAddresses = ['Calauan,Laguna', 'Santa Cruz,Laguna', 'Santisima Cruz'];  // Multiple end addresses
-
-// Get coordinates for the start address
-$startCoordinates = getCoordinates($startAddress);
 $endCoordinatesArray = [];
+$sql = "SELECT latitude, longitude FROM user_details WHERE latitude IS NOT NULL AND longitude IS NOT NULL";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($endAddresses as $endAddress) {
-    $endCoordinatesArray[] = getCoordinates($endAddress);
+foreach ($rows as $row) {
+    $endCoordinatesArray[] = [
+        'lat' => $row['latitude'],
+        'lon' => $row['longitude']
+    ];
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -159,7 +158,7 @@ function startDeliverySimulation() {
                     iconSize: [30, 30],
                     iconAnchor: [15, 30]
                 })
-            }).addTo(map).bindPopup("🏠 Return to Base").openPopup();
+            }).addTo(map).bindPopup("🏠 Return to Shop").openPopup();
 
             map.fitBounds([currentStartCoord, originalStartCoord]);
         });
