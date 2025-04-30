@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $product_id = $_POST['product_id'];
         $stock = $_POST['stock'];
-            
+        $now = date("Y-m-d H:i:s");    
 
         $sql = "SELECT product_name, stock FROM products WHERE product_id = :product_id";
         $stmt = $conn->prepare($sql);
