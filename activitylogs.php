@@ -12,7 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT  message, date FROM activity_logs ORDER BY date DESC";
+    $sql = "SELECT  message, date, destination FROM activity_logs ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
