@@ -9,7 +9,7 @@ try {
         $user_id = $_SESSION['user_id'];
 
         $stmt = $pdo->prepare("UPDATE user_details SET latitude = :lat, longitude = :lng WHERE user_id = :user_id");
-        $stmt->execute(['lat' => $lat, 'lng' => $lng]);
+        $stmt->execute(['lat' => $lat, 'lng' => $lng, 'user_id' => $user_id]);
 
         echo "Success";
     } else {
