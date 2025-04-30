@@ -507,16 +507,6 @@
             }
         </script>
 
-        <?php if (isset($_GET['deleted'])): ?>
-            <script>
-                Swal.fire(
-                    'Deleted!',
-                    'The product has been deleted.',
-                    'success'
-                );
-            </script>
-        <?php endif; ?>
-
         <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
             <script>
                 Swal.fire({
@@ -573,6 +563,26 @@
                     icon: 'success',
                     title: 'Success!',
                     text: 'Item edited successfully.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php elseif(isset($_GET['deleted']) && $_GET['deleted'] == 0): ?>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Something went wrong.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php elseif(isset($_GET['deleted']) && $_GET['deleted'] == 1): ?>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Product deleted successfully.',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
