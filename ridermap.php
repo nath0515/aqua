@@ -43,7 +43,7 @@ foreach ($rows as $row) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
-        #map { height: 100vh; width: 100%; }
+        #map { height: 500px; width: 100%; }
     </style>
 </head>
 <body>
