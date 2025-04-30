@@ -34,30 +34,17 @@
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
     function calculateSMA($data, $days) {
-        $length = count($data);
-        if ($length < $days) return 0;
-    
-        $sum = 0;
-        for ($i = $length - $days; $i < $length; $i++) {
-            $sum += $data[$i];
-        }
-        return $sum / $days;
+        return $data / $days;
     }
     
     // Fetch last 7 days of quantity data
-    $sql = "SELECT quantity, date 
+    $sql = "SELECT SUM(quantity) as total_quantity
             FROM orderitems 
             JOIN orders ON orderitems.order_id = orders.order_id 
             ORDER BY date DESC LIMIT 7";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Extract just the quantities
-    $quantities = array_column($rows, 'quantity');
-    
-    // Reverse the order so it's oldest to newest
-    $quantities = array_reverse($quantities);
+    $quantity = $stmt->fetchColumn();
     
     // Calculate SMA
     $sma = calculateSMA($quantities, 7);
@@ -348,7 +335,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
-                                        <p>₱<?php echo number_format($sma, 2); ?> gallons</p> 
+                                        <p><?php echo number_format($sma, 2); ?> gallons</p> 
                                     </div>
                                 </div>
                             </div>
