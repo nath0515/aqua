@@ -64,8 +64,14 @@ foreach ($rows as $row) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// Initialize the map without setting the start location initially
-var map = L.map('map').setView([14.0, 121.0], 14); // Default to a general area
+// Initialize the map
+var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
+    .bindPopup("Start: Calamba, Laguna");
 
 var routes = [];
 
@@ -190,27 +196,23 @@ document.getElementById("completeDeliveryBtn").addEventListener("click", functio
     removeLastRoute();
 });
 
-// Use geolocation to set current location as the start
-function setCurrentLocationAsStart() {
+startDeliverySimulation();
+
+var riderMarker = L.marker(originalStartCoord, {
+    icon: L.icon({
+        iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png',
+        iconSize: [25, 25]
+    })
+}).addTo(map);
+
+function updateRiderPosition() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
-            // Set map center and current start location to current position
-            map.setView([lat, lon], 14);
-
-            currentStartCoord = [lat, lon]; // Update start coordinates
-
-            // Add marker for current location
-            var riderMarker = L.marker([lat, lon], {
-                icon: L.icon({
-                    iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png',
-                    iconSize: [25, 25]
-                })
-            }).addTo(map);
-
-            startDeliverySimulation(); // Start delivery simulation with the current location
+            riderMarker.setLatLng([lat, lon]);
+            map.setView([lat, lon], 15);
         }, function (error) {
             console.error("Error getting geolocation: ", error);
         });
@@ -219,7 +221,8 @@ function setCurrentLocationAsStart() {
     }
 }
 
-setCurrentLocationAsStart(); // Call the function to set current location
+// Optional: Uncomment to simulate live tracking every 5 seconds
+// setInterval(updateRiderPosition, 5000);
 </script>
 
 </body>
