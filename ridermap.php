@@ -18,9 +18,9 @@ if ($row) {
 }
 
 $endCoordinatesArray = [];
-$sql = "SELECT latitude, longitude FROM user_details WHERE (latitude IS NOT NULL AND longitude IS NOT NULL) AND user_id = :user_id";
+$sql = "SELECT latitude, longitude FROM orders JOIN user_details ON orders.user_id = user_details.user_id
+WHERE (latitude IS NOT NULL AND longitude IS NOT NULL) AND status_id = 3";
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -68,8 +68,6 @@ foreach ($rows as $row) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    console.log(<?php echo $startCoordinates; ?>);
-    console.log(<?php echo $endCoordinatesArray; ?>);
 
 var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
 
