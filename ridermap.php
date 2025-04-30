@@ -179,7 +179,12 @@ function completeDelivery() {
                 Swal.fire({
                     title: 'All deliveries completed!',
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'Return to Shop'
+                }).then(() => {
+                    const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+
+                    L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                    fetchRoute(currentStartCoord, shopLatLng);
                 });
             } else {
                 Swal.fire({
