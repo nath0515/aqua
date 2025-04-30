@@ -2,6 +2,8 @@
 require('db.php');
 require('session.php');
 
+$user_id = $_SESSION['user_id'];
+
 $startCoordinates = null;
 $sql = "SELECT latitude, longitude FROM shop_location WHERE location_id = 1";
 $stmt = $conn->prepare($sql);
