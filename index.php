@@ -43,14 +43,24 @@
         }
         return $sum / $days;
     }
-
-    $sql = "SELECT quantity,date FROM orderitems 
-    JOIN orders ON orderitems.order_id = orders.order_id ORDER BY date DESC LIMIT 7";
+    
+    // Fetch last 7 days of quantity data
+    $sql = "SELECT quantity, date 
+            FROM orderitems 
+            JOIN orders ON orderitems.order_id = orders.order_id 
+            ORDER BY date DESC LIMIT 7";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-    $sma = calculateSMA(array_reverse($data), 7);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Extract just the quantities
+    $quantities = array_column($rows, 'quantity');
+    
+    // Reverse the order so it's oldest to newest
+    $quantities = array_reverse($quantities);
+    
+    // Calculate SMA
+    $sma = calculateSMA($quantities, 7);
     ?>
 <!DOCTYPE html>
 <html lang="en">
