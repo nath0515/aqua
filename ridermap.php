@@ -1,4 +1,5 @@
 <?php
+// Function to get coordinates (latitude and longitude) from an address or Plus Code using Nominatim API
 function getCoordinates($address) {
     $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
     $options = [
@@ -18,8 +19,11 @@ function getCoordinates($address) {
     return null;
 }
 
-$startAddress = 'Santa Cruz, Laguna';
-$endAddresses = ['Calauan, Laguna', 'Santa Cruz, Laguna', 'Santisima Cruz'];
+// Example usage: Get coordinates for the given Plus Code and address
+$startAddress = 'Calamba, Laguna';  // Starting point: Plus Code address
+$endAddresses = ['Calauan,Laguna', 'Santa Cruz,Laguna', 'Santisima Cruz'];  // Multiple end addresses
+
+// Get coordinates for the start address
 $startCoordinates = getCoordinates($startAddress);
 $endCoordinatesArray = [];
 
@@ -32,12 +36,17 @@ foreach ($endAddresses as $endAddress) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Map with Closest Delivery First</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Showing Route with Multiple Endpoints</title>
+    <!-- Include Leaflet.js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.1/dist/leaflet-routing-machine.js"></script>
     <style>
-        #map { height: 500px; width: 100%; }
+        #map {
+            height: 500px;
+            width: 100%;
+        }
         .distance-label {
             background-color: rgba(255, 255, 255, 0.7);
             padding: 5px;
@@ -49,155 +58,164 @@ foreach ($endAddresses as $endAddress) {
 </head>
 <body>
 
-<h1>Map Showing Closest Route First</h1>
+<h1>Map Showing Route with Multiple Endpoints</h1>
 <div id="map"></div>
 <button id="completeDeliveryBtn">Complete Delivery</button>
-<button id="confirmLocationBtn">✅ Confirm Pinned Location</button>
-<button id="saveLocationBtn" disabled>💾 Save Pinned Location</button>
 
 <script>
-var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 17);
+// Initialize the map with the start coordinates
+var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
 
+// Set up the OpenStreetMap tiles layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
-    .bindPopup("Start: <?php echo htmlspecialchars($startAddress); ?>");
+// Add a marker for the start coordinates
+var startMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>]).addTo(map)
+    .bindPopup("Start: Calamba, Laguna");
 
-let selectedLat = null;
-let selectedLng = null;
-let userMarker = null;
-let isLocationConfirmed = false;
-
-map.on('click', function(e) {
-    if (isLocationConfirmed) {
-        alert("You've already confirmed your location.");
-        return;
-    }
-
-    selectedLat = e.latlng.lat;
-    selectedLng = e.latlng.lng;
-
-    if (userMarker) {
-        userMarker.setLatLng([selectedLat, selectedLng]);
-    } else {
-        userMarker = L.marker([selectedLat, selectedLng], {
-            icon: L.icon({
-                iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
-                iconSize: [30, 30]
-            })
-        }).addTo(map).bindPopup("📍 Your chosen location").openPopup();
-    }
-
-    console.log("Pinned location:", selectedLat, selectedLng);
-});
-
-document.getElementById("confirmLocationBtn").addEventListener("click", function() {
-    if (selectedLat && selectedLng) {
-        isLocationConfirmed = true;
-        alert("✅ Location confirmed!");
-        document.getElementById("confirmLocationBtn").disabled = true;
-        document.getElementById("saveLocationBtn").disabled = false;
-    } else {
-        alert("Please pin a location first.");
-    }
-});
-
-document.getElementById("saveLocationBtn").addEventListener("click", function() {
-    if (selectedLat && selectedLng) {
-        fetch("save_location.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: lat=${selectedLat}&lng=${selectedLng}
-        })
-        .then(response => response.text())
-        .then(result => {
-            alert("Location saved! Server response: " + result);
-        })
-        .catch(error => {
-            console.error("Error saving location:", error);
-        });
-    } else {
-        alert("Please pin a location first.");
-    }
-});
-
-// Routing
+// Array to store polyline (route) objects
 var routes = [];
-function fetchRoute(start, end) {
-    var url = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
 
-    fetch(url)
-        .then(res => res.json())
+// Function to fetch route data from OpenRouteService API
+function fetchRoute(start, end) {
+    var orsUrl = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259&start=' + start[1] + ',' + start[0] + '&end=' + end[1] + ',' + end[0];
+
+    fetch(orsUrl)
+        .then(response => response.json())
         .then(data => {
+            // Extract the coordinates of the route from the response
             var routeCoordinates = data.features[0].geometry.coordinates;
-            var route = L.polyline(routeCoordinates.map(c => [c[1], c[0]]), {color: 'blue'}).addTo(map);
+
+            // Create a polyline (the route) and add it to the map
+            var route = L.polyline(routeCoordinates.map(function(coord) {
+                return [coord[1], coord[0]];  // Switch lat/lon order
+            }), {color: 'blue'}).addTo(map);
+
+            // Store the route for later removal
             routes.push(route);
 
+            // Calculate the route's distance manually using the polyline's coordinates
+            var routeLength = calculateDistance([start, end]); // Calculate using Haversine formula
+
+            // Add a label with the distance on the map
             var label = L.divIcon({
                 className: 'distance-label',
-                html: 'Distance: ' + calculateDistance([start, end]).toFixed(2) + ' km'
+                html: 'Distance: ' + routeLength.toFixed(2) + ' km'
             });
 
-            L.marker(route.getCenter(), {icon: label}).addTo(map);
+            var labelMarker = L.marker(route.getCenter(), {icon: label}).addTo(map);
+            
+            // Optionally, fit the map view to the route
             map.fitBounds(route.getBounds());
+        })
+        .catch(error => {
+            console.error("Error fetching the route:", error);
         });
 }
 
+// Function to calculate the distance between the start and end locations (Haversine Formula)
 function calculateDistance(coords) {
     var lat1 = coords[0][0], lon1 = coords[0][1];
     var lat2 = coords[1][0], lon2 = coords[1][1];
-    var R = 6371;
+    
+    var R = 6371; // Earth radius in kilometers
     var dLat = toRad(lat2 - lat1);
     var dLon = toRad(lon2 - lon1);
-    var a = Math.sin(dLat / 2) * 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * 2;
+    
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    
+    var distance = R * c; // Distance in kilometers
+    return distance;
 }
 
+// Helper function to convert degrees to radians
 function toRad(degrees) {
     return degrees * Math.PI / 180;
 }
 
+// Initial start coordinates
 var currentStartCoord = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
 var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
-
-// Sort by closest distance from current location
-endCoordinates.sort((a, b) => {
-    let distA = calculateDistance([currentStartCoord, [a.lat, a.lon]]);
-    let distB = calculateDistance([currentStartCoord, [b.lat, b.lon]]);
-    return distA - distB;
-});
-
 var deliveryIndex = 0;
 
+// Function to start the simulation of deliveries
 function startDeliverySimulation() {
     if (deliveryIndex < endCoordinates.length) {
         var endCoord = endCoordinates[deliveryIndex];
-        L.marker([endCoord.lat, endCoord.lon]).addTo(map).bindPopup("End: " + endCoord.lat + ", " + endCoord.lon);
+
+        // Add marker on the endpoint
+        var endMarker = L.marker([endCoord.lat, endCoord.lon]).addTo(map)
+            .bindPopup("End: " + endCoord.lat + ", " + endCoord.lon);
+
+        // Fetch the route between current start and end coordinates
         fetchRoute(currentStartCoord, [endCoord.lat, endCoord.lon]);
+
+        // Update current start coordinate after delivery
         currentStartCoord = [endCoord.lat, endCoord.lon];
-        deliveryIndex++;
+        deliveryIndex++; // Move to the next delivery
     } else {
         alert('All deliveries completed!');
     }
 }
 
+// Function to remove the last route (polyline)
 function removeLastRoute() {
     if (routes.length > 0) {
-        map.removeLayer(routes.pop());
+        // Remove the last route from the map
+        map.removeLayer(routes[routes.length - 1]);
+        // Remove the route from the array
+        routes.pop();
     }
 }
 
+// Attach event listener to the "Complete Delivery" button
 document.getElementById("completeDeliveryBtn").addEventListener("click", function() {
     startDeliverySimulation();
+
+    // Remove the last route after completing the delivery
     removeLastRoute();
 });
 
+// Initial delivery simulation (first delivery)
 startDeliverySimulation();
+
+// Create a marker for the rider (initially placed at the start)
+var riderMarker = L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], {
+    icon: L.icon({
+        iconUrl: 'https://img.icons8.com/ios-filled/50/000000/user-location.png', // Rider icon
+        iconSize: [25, 25]
+    })
+}).addTo(map);
+
+// Function to update rider's position using geolocation API (this will simulate real-time tracking)
+function updateRiderPosition() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            riderMarker.setLatLng([lat, lon]);
+
+            // Optionally, adjust the map view to center on the rider
+            map.setView([lat, lon], 15); // Zoom level can be adjusted
+
+        }, function(error) {
+            console.error("Error getting geolocation: ", error);
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// Update the rider's position every 5 seconds (adjust as needed)
+//setInterval(updateRiderPosition, 5000);
+
 </script>
 
 </body>
