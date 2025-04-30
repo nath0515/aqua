@@ -422,6 +422,7 @@
             
                         <!-- Modal Footer -->
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete(<?php echo $product['id']; ?>)">Delete Product</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
@@ -439,6 +440,23 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
+
+            function confirmDelete(productId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will permanently delete the product!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to delete script
+                    window.location.href = `delete_product.php?id=${productId}`;
+                }
+            });
+}
             let deferredPrompt;
 
             // Listen for the beforeinstallprompt event
@@ -488,6 +506,16 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
+
+        <?php if (isset($_GET['deleted'])): ?>
+            <script>
+                Swal.fire(
+                    'Deleted!',
+                    'The product has been deleted.',
+                    'success'
+                );
+            </script>
+        <?php endif; ?>
 
         <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
             <script>
