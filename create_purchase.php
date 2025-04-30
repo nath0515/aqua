@@ -353,8 +353,8 @@
                 let unitprice = unitPriceInput.value;
                 let quantity = quantityInput.value;
                 let containerQuantity = Number(containerQuantityInput.value);
-                let containerPrice = containerPriceInput.value;
-                let totalPrice = totalPriceInput.value;
+                let containerPrice = Number(containerPriceInput.value);
+                let totalPrice = Number(totalPriceInput.value);
                 let productId = productIdInput.value;
                 let available = availableInput.value;
                 let hasContainer = document.getElementById("hasContainer").checked;

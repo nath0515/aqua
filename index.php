@@ -32,6 +32,8 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
