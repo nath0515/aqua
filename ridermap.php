@@ -68,6 +68,9 @@ foreach ($rows as $row) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    console.log(<?php echo $startCoordinates; ?>);
+    console.log(<?php echo $endCoordinatesArray; ?>);
+
 var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 14);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
