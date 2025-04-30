@@ -352,7 +352,7 @@
 
                 let unitprice = unitPriceInput.value;
                 let quantity = quantityInput.value;
-                let containerQuantity = containerQuantityInput.value;
+                let containerQuantity = Number(containerQuantityInput.value);
                 let containerPrice = containerPriceInput.value;
                 let totalPrice = totalPriceInput.value;
                 let productId = productIdInput.value;
