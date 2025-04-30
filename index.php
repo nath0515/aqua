@@ -33,8 +33,25 @@
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    function calculateSMA($data, $days) {
+        $length = count($data);
+        if ($length < $days) return 0;
     
-?>
+        $sum = 0;
+        for ($i = $length - $days; $i < $length; $i++) {
+            $sum += $data[$i];
+        }
+        return $sum / $days;
+    }
+
+    $sql = "SELECT quantity,date FROM orderitems 
+    JOIN orders ON orderitems.order_id = orders.order_id ORDER BY date DESC LIMIT 7";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $sma = calculateSMA(array_reverse($data), 7);
+    ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -321,7 +338,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
-                                        <p id="smaValue">Loading SMA...</p> <!-- Dynamically filled by JavaScript -->
+                                        <p>₱<?php echo number_format($sma, 2); ?> gallons</p> 
                                     </div>
                                 </div>
                             </div>
@@ -623,26 +640,6 @@
 
                 return false;
             }
-        </script>
-        <script>
-        // Example: Historical daily production data (in gallons)
-        let productionData = [2000, 2500, 3000, 2800, 3100, 2700, 3200];
-        let days = 7;  // Number of days to average
-
-        // Function to calculate Simple Moving Average (SMA)
-        function calculateSMA(data, days) {
-            let sum = 0;
-            for (let i = data.length - days; i < data.length; i++) {
-                sum += data[i];
-            }
-            return sum / days;
-        }
-
-        // Calculate SMA
-        let sma = calculateSMA(productionData, days);
-
-        // Display SMA value in the HTML
-        document.getElementById('smaValue').textContent = `₱${sma.toFixed(2)} gallons`;
         </script>
     </body>
 </html>
