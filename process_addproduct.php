@@ -42,19 +42,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':container_price', $container_price);
             $stmt->bindParam(':stock', $stock);
 
-            $message = "New product added: $product_name – Water Price: ₱" . number_format($water_price, 2) .
-           ", Container Price: ₱" . number_format($container_price, 2) .
-           ", Stock: $stock stock.";
-            $destination = "stock.php";
-            
-            $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':message', $message);
-            $stmt->bindParam(':date', $now);
-            $stmt->bindParam(':destination', $destination);
-            $stmt->execute();
-
             if ($stmt->execute()) {
+                $message = "New product added: $product_name – Water Price: ₱" . number_format($water_price, 2) .
+                ", Container Price: ₱" . number_format($container_price, 2) .
+                ", Stock: $stock stock.";
+                 $destination = "stock.php";
+                 
+                 $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
+                 $stmt = $conn->prepare($sql);
+                 $stmt->bindParam(':message', $message);
+                 $stmt->bindParam(':date', $now);
+                 $stmt->bindParam(':destination', $destination);
+                 $stmt->execute();
                 header("Location: stock.php?status=success");
                 exit();
             } else {

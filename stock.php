@@ -422,7 +422,7 @@
             
                         <!-- Modal Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete(<?php echo $product['id']; ?>)">Delete Product</button>
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete(document.getElementById('editProductId').value)">Delete Product</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
