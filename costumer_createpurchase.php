@@ -140,7 +140,7 @@
                                     <?php echo $product_data['product_name']; ?>
                                 </div>
                                 <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                        <img src="<?php echo $product_data['product_photo']; ?>" width="250px" height="500px" class="rounded">
+                                        <img src="<?php echo $product_data['product_photo']; ?>" width="400px" height="400px" class="rounded">
                                 </div>
 							</div>	
                         </div>   
