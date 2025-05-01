@@ -147,7 +147,7 @@
                                             <th>Status</th>
                                             <th>Rider</th>
                                             <th>Action</th>
-                                        </tr>
+                                        </tr>a
                                     </thead>
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
