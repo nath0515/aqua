@@ -359,7 +359,7 @@
 
         <script>
             $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
+                $("#editOrderBtn").on('click', function() {
                     var orderId = $(this).data("id");
 
                     $.ajax({
