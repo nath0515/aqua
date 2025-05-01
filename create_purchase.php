@@ -462,6 +462,7 @@
             const containerQuantityInput = document.getElementById('containerQuantityInput');
             const containerPriceInput = document.getElementById('containerprice');
             const totalPriceInput = document.getElementById('totalprice');
+            
 
             let unitprice = unitPriceInput.value;
             let quantity = quantityInput.value;
@@ -472,8 +473,8 @@
             totalPrice = totalPrice.toFixed(2);
 
             totalPriceInput.value = totalPrice;
-            document.getElementById('quantity').addEventListener('input', updateUnitPrice);
-        }                                        
+        }             
+        document.getElementById('quantity').addEventListener('input', updateUnitPrice);                           
     </script>
     </body>
 </html>
