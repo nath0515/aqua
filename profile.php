@@ -148,84 +148,53 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h3 class="mb-0">Profile</h3>
+                                <h3 class="mb-0">My Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form action="process_registerrider.php" method="POST" onsubmit="return checkForm()">
+                                <form action="update_profile.php" method="POST" onsubmit="return checkForm()">
+                                    <!-- Full Name -->
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan Dela Cruz">
+                                        <label for="firstname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstname" name="firstname" required 
+                                            value="<?php echo htmlspecialchars($user_data['firstname']); ?>">
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastname" name="lastname" required placeholder="Juan Dela Cruz">
+                                        <label for="lastname" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastname" name="lastname" required
+                                            value="<?php echo htmlspecialchars($user_data['lastname']); ?>">
                                     </div>
 
+                                    <!-- Contact -->
                                     <div class="mb-3">
                                         <label for="contact_number" class="form-label">Contact Number</label>
                                         <input type="tel" class="form-control" id="contact_number" name="contact_number"
                                             required pattern="[0-9]{11}" maxlength="11"
-                                            placeholder="09XXXXXXXXX"
+                                            value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
                                         <div class="invalid-feedback" id="contactError">
-                                            Please enter a valid 11-digit contact number starting with 09.
+                                            Please enter a valid 11-digit number starting with 09.
                                         </div>
                                     </div>
 
+                                    <!-- Email -->
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                            placeholder="juandelacruz@gmail.com"
+                                        <input type="email" class="form-control" id="email" name="email" required
                                             pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
-                                            required>
-                                        <div class="form-text">Must be a valid Gmail address (e.g., juan@gmail.com).</div>
+                                            value="<?php echo htmlspecialchars($user_data['email']); ?>">
+                                        <div class="form-text">Must be a Gmail address.</div>
                                     </div>
 
+                                    <!-- Address -->
                                     <div class="mb-3">
-                                        <label for="" class="form-label">Password</label>
-                                            <div class="input-group">
-                                                <input type="password" id="password" class="form-control" name="password"  onInput="check()" placeholder="Password" required>
-                                                <span class="input-group-text" onclick="togglePassword()">
-                                                    <i class="fa fa-eye" id="eyeIcon"></i> 
-                                                </span>
-                                            </div>
+                                        <label for="address" class="form-label">Address</label>
+                                        <textarea class="form-control" name="address" id="address" rows="2" required><?php echo htmlspecialchars($user_data['address']); ?></textarea>
                                     </div>
 
-                                    <div class="mb-3 d-none" id="validation">
-                                            <div id="count">Length : 0</div>
-                                            <!-- Password Strength Check (Moved here under Confirm Password) -->
-                                            <div id="check0">
-                                                <i class="far fa-check-circle"></i> <span> Length more than 8.</span>
-                                            </div>
-                                            <div id="check2">
-                                                <i class="far fa-check-circle"></i> <span> Contains numerical character.</span>
-                                            </div>
-                                            <div id="check3">
-                                                <i class="far fa-check-circle"></i> <span> Contains special character.</span>
-                                            </div>
-                                            <div id="check4">
-                                                <i class="far fa-check-circle"></i> <span> Shouldn't contain spaces.</span>
-                                            </div>
-                                        </div>
-
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Confirm Password</label>
-                                        <div class="input-group">
-                                            <input type="password" id="confirm_password" class="form-control" name="confirm_password" onInput="confirmCheck()" placeholder="Password" required>
-                                            <span class="input-group-text" onclick="toggleConfirmPassword()">
-                                                <i class="fa fa-eye" id="confirmEyeIcon"></i> 
-                                            </span>
-                                        </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-success">Update Profile</button>
                                     </div>
-
-                                    <div class="mb-3 d-none" id="validation1">
-                                            <div id="check5">
-                                                <i class="far fa-check-circle"></i> <span> Passwords do not match.</span>
-                                            </div>       
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary w-100">Register Rider</button>
                                 </form>
                             </div>
                         </div>
