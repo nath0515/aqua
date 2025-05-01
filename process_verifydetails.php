@@ -63,7 +63,7 @@
             $_SESSION['loggedin'] = true;
             $_SESSION['role_id'] = $user['role_id'];
 
-            header("Location: index.php");
+            header("Location: home.php");
             exit();
             
         } catch (PDOException $e) {

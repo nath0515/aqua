@@ -160,7 +160,7 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <h3 style="color: #0077b6;">🔬 Verified Products</h3>
-                <p>All our water is carefully processed and handled with strict quality and safety standards — so you always get clean, safe, and trustworthy service.</p>
+                <p>All our water is carefully processed and handled with strict quality and safety standards so you always get clean, safe, and trustworthy service.</p>
                 </div>
 
                 <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
