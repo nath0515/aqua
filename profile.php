@@ -22,7 +22,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Orders</title>
+        <title>My Profile</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -31,116 +31,16 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
-            <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">
                 <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
             </a>
-            <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
-            <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                
-                <li class="nav-item dropdown me-1">
-                    <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 3</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user fa-fw"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
-                        <?php 
-                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $status = $stmt->fetchColumn();
-                        ?>
-                        <li>
-                            <a 
-                                href="process_dailyreport.php" 
-                                class="dropdown-item"
-                                <?php if ($status == 1): ?>
-                                    onclick="return confirmCloseShop(event)"
-                                <?php endif; ?>
-                            >
-                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
-                            </a>
-                        </li>
-                        <div id="loadingOverlay">
-                            <div class="spinner"></div>
-                        </div>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    </ul>
-                </li>
+                <!-- Notifications and Profile Settings -->
             </ul>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Menu</div>
-                            <a class="nav-link" href="index.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Order Management
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="orders.php">Orders</a>
-                                    <a class="nav-link" href="stock.php">Stock</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Analytics
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="sales.php">Sales</a>
-                                    <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="income.php">Income</a>
-                                    <a class="nav-link" href="report.php">Report</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Account Management
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="accounts.php">Accounts</a>
-                                    <a class="nav-link" href="rideraccount.php">Add Rider</a>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
-                    </div>
-                </nav>
+                <!-- Sidebar Menu -->
             </div>
         <div id="layoutSidenav_content">
             <main class="container py-4">
@@ -151,7 +51,7 @@
                                 <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form id="profileForm" action="update_profile.php" method="POST" onsubmit="return false;">
+                                <form id="profileForm" action="update_profile.php" method="POST">
                                     <!-- Full Name (Read-only) -->
                                     <div class="mb-3" id="fullnameGroup">
                                         <label for="fullname" class="form-label">Full Name</label>
@@ -179,9 +79,6 @@
                                             required pattern="[0-9]{11}" maxlength="11"
                                             value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)" readonly>
-                                        <div class="invalid-feedback" id="contactError">
-                                            Please enter a valid 11-digit number starting with 09.
-                                        </div>
                                     </div>
 
                                     <!-- Email -->
@@ -190,7 +87,6 @@
                                         <input type="email" class="form-control" id="email" name="email" required
                                             pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
                                             value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly>
-                                        <div class="form-text">Must be a Gmail address.</div>
                                     </div>
 
                                     <!-- Address -->
@@ -233,7 +129,6 @@
             }
 
             function enableEdit() {
-                // Hide fullname, show firstname and lastname
                 const fullName = document.getElementById("fullname").value.trim();
                 const parts = fullName.split(" ");
                 const first = parts.slice(0, -1).join(" ") || "";
@@ -255,12 +150,22 @@
             }
 
             function cancelEdit() {
-                location.reload(); // reset to original
+                location.reload();
             }
 
-            document.getElementById("profileForm").addEventListener("submit", function (e) {
+            // Handle AJAX form submission
+            $('#profileForm').submit(function(e) {
                 e.preventDefault();
+                
                 if (!checkForm()) return;
+
+                let formData = {
+                    firstname: $('#firstname').val(),
+                    lastname: $('#lastname').val(),
+                    email: $('#email').val(),
+                    contact_number: $('#contact_number').val(),
+                    address: $('#address').val()
+                };
 
                 Swal.fire({
                     title: "Are you sure?",
@@ -271,10 +176,42 @@
                     cancelButtonText: "Cancel"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.submit();
+                        $.ajax({
+                            url: 'update_profile.php',
+                            type: 'POST',
+                            data: formData,
+                            success: function(response) {
+                                const data = JSON.parse(response);
+                                if (data.status === 'success') {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Profile updated successfully!',
+                                        confirmButtonText: 'OK'
+                                    }).then(() => {
+                                        window.location.href = 'profile.php';
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Update failed!',
+                                        text: data.error,
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Something went wrong!',
+                                    text: 'Please try again later.',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
                     }
                 });
             });
         </script>
     </body>
 </html>
+
