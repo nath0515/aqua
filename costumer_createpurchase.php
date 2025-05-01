@@ -137,7 +137,7 @@
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <div class="text-center"style="font-size: 20px">
-                                    <?php echo $product_data['product_name']; ?>
+                                    <b><?php echo $product_data['product_name']; ?></b>
                                 </div>
                                 <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
                                         <img src="<?php echo $product_data['product_photo']; ?>" width="400px" height="400px" class="rounded">
