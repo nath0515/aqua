@@ -117,7 +117,7 @@
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Delivery Management</li>
-                            <li class="breadcrumb-item active">Assigned Delivery</li>
+                            <li class="breadcrumb-item active">Assigned Deliveries</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -152,6 +152,13 @@
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
                                                     </a>
+                                                    <button class="btn btn-outline-primary btn-sm" 
+                                                        id="editOrderBtn"
+                                                        data-id="<?php echo $row['order_id']; ?>"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editorder">
+                                                            <i class="bi bi-pencil"></i> Edit
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
@@ -168,6 +175,48 @@
                         </div>
                     </div>
                 </footer>
+            </div>
+        </div>
+        <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+            
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label for="stock" class="form-label">Status</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                        <select name="status_id" id="editStatusId" class="form-select">
+                                            <?php foreach($status_data as $row):?>
+                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="text" name="order_id" id="editOrderId" hidden>
+
+                                <!-- Order Items -->
+                                <div class="mb-3" id="orderItemsContainer">
+                                </div>
+
+                            
+                        </div>
+            
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -219,5 +268,23 @@
                 });
             });
         </script>
+        <?php if (isset($_GET['editstatus'])): ?>
+            <script>
+                <?php if ($_GET['editstatus'] == 'success'): ?>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Edited!',
+                        text: 'The order has been successfully edited.',
+                    }).then((result) => {
+                    });
+                <?php elseif ($_GET['editstatus'] == 'error'): ?>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong while editing the order.',
+                    });
+                <?php endif; ?>    
+            </script>
+        <?php endif; ?>
     </body>
 </html>
