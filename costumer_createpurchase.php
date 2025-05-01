@@ -124,94 +124,93 @@
                         <div class="card mb-4">
                         <div class="container mb-4 mt-4">                  
                     <div class="row">
-                        <div class="col-lg-6 col-md-12" >
-                            <div class="card p-3">
-                                <div class="text-center"style="font-size: 20px">
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div class="card p-3 h-100">
+                                <div class="text-center" style="font-size: 20px">
                                     <b><?php echo $product_data['product_name']; ?></b>
                                 </div>
-                                <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                        <img src="<?php echo $product_data['product_photo']; ?>" width="400px" height="400px" class="rounded">
+                                <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
+                                    <img src="<?php echo $product_data['product_photo']; ?>" class="img-fluid rounded" alt="Product Image">
                                 </div>
-							</div>	
-                        </div>   
-                        <div class="col-6">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
                             <div class="card p-3">
-                                <h5 class="mt-2">Add Order</h5>
+                                <h5 class="mt-2 text-center">Add Order</h5>
                                 <form id="purchaseForm">
                                     <div class="mb-3">
-                                        <div class="card-header"style="font-size: 20px">
+                                        <div class="card-header text-center fs-5">
                                             <?php echo $product_data['product_name']; ?>
                                         </div>
                                     </div>
-                                    <div class="mb-3 row">
-                                        <div class="col">
-                                        <label for="price" class="form-label">Quantity</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="fetchProductDetails(<?php echo $_GET['id'];?>)" required>
-                                            </div>
-                                        </div>	
-									</div>
-                                    <div class="mb-3 row">
-                                        <div class="col">
-                                        <label for="price" class="form-label">Unit Price</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="unitprice" required readonly>
-                                            </div>
-                                        </div>	
-									</div>
-                                    <div class="mb-3 row">
-                                        <div class="col">
+
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
+                                            <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="fetchProductDetails(<?php echo $_GET['id']; ?>)">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="unitprice" class="form-label">Unit Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                                            <input type="number" class="form-control" id="unitprice" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row align-items-center">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="hasContainer" onchange="togglePriceInput()">
-                                                <label class="form-check-label" for="hasContainer">
-                                                    Has Container
-                                                </label>
+                                                <label class="form-check-label" for="hasContainer">Has Container</label>
                                             </div>
-                                        </div>                    
-                                        <div class="col">
-                                            <div class="form-check float-end" id="sameQuantityDiv" style="display: none;">
+                                        </div>
+                                        <div class="col-6 text-end" id="sameQuantityDiv" style="display: none;">
+                                            <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="sameQuantity" onchange="toggleSameQuantity()">
-                                                <label class="form-check-label" for="hasContainer">
-                                                    Same quantity as ordered
-                                                </label>
+                                                <label class="form-check-label" for="sameQuantity">Same quantity as ordered</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mb-3 row" id="containerQuantity" style="display: none;">
-                                        <div class="col">
+
+                                    <div class="row mb-3" id="containerQuantity" style="display: none;">
+                                        <div class="col-md-6 mb-2">
                                             <label class="form-label">Container Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
+                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()">
                                             </div>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-md-6 mb-2">
                                             <label class="form-label">Available Quantity</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="availablequantity" value="0" onchange="updateTotalPrice()" readonly>
+                                                <span class="input-group-text"><i class="bi bi-bag-check"></i></span>
+                                                <input type="number" class="form-control" id="availablequantity" value="0" readonly>
                                             </div>
-                                        </div>    
+                                        </div>
                                     </div>
+
                                     <div class="mb-3" id="priceContainer" style="display: none;">
-                                        <label for="price" class="form-label">Container Price</label>
+                                        <label class="form-label">Container Price</label>
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
                                             <input type="number" class="form-control" step="0.01" id="containerprice" name="price" readonly>
                                         </div>
                                     </div>
+
                                     <div class="mb-3">
-										<label for="price" class="form-label">Total Price</label>
-										<div class="input-group">
-											<span class="input-group-text">₱</span>
-											<input type="number" class="form-control" step=0.01 id="totalprice" name="price" readonly>
-										</div>
-									</div>
-    								<div class="d-flex justify-content-end">
-										<button type="submit" class="btn btn-primary mb-2">Add To Cart</button>
-									</div>
+                                        <label for="totalprice" class="form-label">Total Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control" step="0.01" id="totalprice" name="price" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Add To Cart</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
