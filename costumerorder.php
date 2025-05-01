@@ -103,7 +103,7 @@
                             <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Order</li>
                         </ol>
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row">
                                 <!-- Card -->
                                 <?php foreach($products_data as $row):?>
