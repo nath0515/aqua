@@ -113,16 +113,16 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Order History</h1>
+                        <h1 class="mt-4">Assigned Delivery</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Order History</li>
+                            <li class="breadcrumb-item active">Delivery Management</li>
+                            <li class="breadcrumb-item active">Assigned Delivery</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Order History
+                                Assigned Delivery
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
