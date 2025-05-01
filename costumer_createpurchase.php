@@ -128,10 +128,10 @@
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <div class="card-header"style="font-size: 20px">
-                                    <?php echo $row['product_name']; ?>
+                                    <?php echo $product_data['product_name']; ?>
                                 </div>
                                 <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                        <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                        <img src="<?php echo $product_data['product_photo']; ?>" width="100px" height="100px" class="rounded">
                                 </div>
 							</div>	
                         </div>
