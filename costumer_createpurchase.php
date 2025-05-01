@@ -152,7 +152,7 @@
                                 <form id="purchaseForm">
                                     <div class="mb-3">
                                         <div class="card-header"style="font-size: 20px">
-                                            <?php echo $row['product_name']; ?>
+                                            <?php echo $product_data['product_name']; ?>
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
