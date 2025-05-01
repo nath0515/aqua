@@ -12,7 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, d.firstname, d.lastname FROM orders a
+    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, d.firstname as rider_firstname, d.lastname as rider_lastname FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
     JOIN orderstatus c ON a.status_id = c.status_id
     JOIN user_details d ON a.rider = d.user_id";
@@ -202,7 +202,7 @@
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
                                                 <td><?php echo $row['status_name'];?></td>
-                                                <td><?php echo $row['rider'];?></td>
+                                                <td><?php echo $row['rider_firstname'];?> <?php echo $row['rider_lastname'];?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
