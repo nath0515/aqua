@@ -124,7 +124,7 @@
                         </ol>
                         <div class="card mb-4">
                         <div class="container mb-4 mt-4">                  
-                    <div class="row">
+                        <div class="row">
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
@@ -140,19 +140,19 @@
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Unit Price</label>
+                                        <label for="price" class="form-label">Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="unitprice" required readonly>
+                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
                                             </div>
                                         </div>	
 									</div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Quantity</label>
+                                        <label for="price" class="form-label">Unit Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
+                                                <input type="number" class="form-control" id="unitprice" required readonly>
                                             </div>
                                         </div>	
 									</div>
@@ -331,7 +331,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        const quantity = documen
+                        const quantity = doc
                         document.getElementById("unitprice").value = data.data.water_price;
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
