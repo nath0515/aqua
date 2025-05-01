@@ -148,7 +148,7 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h3 class="mb-0"><i class="bi bi-person-circle"></i>My Profile</h3>
+                                <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
                             </div>
                             <div class="card-body">
                                 <form action="update_profile.php" method="POST" onsubmit="return checkForm()">
@@ -205,5 +205,16 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+        function checkForm() {
+            const contact = document.getElementById("contact_number").value;
+            if (!/^09\d{9}$/.test(contact)) {
+                document.getElementById("contactError").style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+        </script>
     </body>
 </html>
