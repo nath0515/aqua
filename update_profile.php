@@ -4,16 +4,16 @@ require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
-    $fullname = trim($_POST['fullname']);
+
+    // Get individual fields from POST
+    $firstname = trim($_POST['firstname']);
+    $lastname = trim($_POST['lastname']);
     $email = trim($_POST['email']);
     $contact_number = trim($_POST['contact_number']);
-
-    $name_parts = preg_split('/\s+/', $fullname, 2);
-    $firstname = $name_parts[0];
-    $lastname = isset($name_parts[1]) ? $name_parts[1] : '';
+    $address = trim($_POST['address']);
 
     try {
-        // Update users
+        // Update users table
         $sql = "UPDATE users SET email = :email WHERE user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
@@ -21,17 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':user_id' => $user_id
         ]);
 
-        // Update user_details
-        $sql = "UPDATE user_details SET firstname = :firstname, lastname = :lastname, contact_number = :contact_number WHERE user_id = :user_id";
+        // Update user_details table
+        $sql = "UPDATE user_details 
+                SET firstname = :firstname, lastname = :lastname, contact_number = :contact_number, address = :address 
+                WHERE user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':firstname' => $firstname,
             ':lastname' => $lastname,
             ':contact_number' => $contact_number,
+            ':address' => $address,
             ':user_id' => $user_id
         ]);
 
-        // Show SweetAlert success
+        // Success alert
         echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
@@ -47,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
 
     } catch (PDOException $e) {
-        // Show SweetAlert error
+        // Error alert
         echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
