@@ -296,9 +296,7 @@
                         }
                         else{
                             document.getElementById("unitprice").value = data.data.water_price;
-                        }
-                        
-                        
+                        } 
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
                     } else {
