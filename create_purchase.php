@@ -125,37 +125,38 @@
                         <div class="card mb-4">
                         <div class="container mb-4 mt-4">                  
                         <div class="row">
-                        <div class="col-lg-6 col-md-12" >
+                        <!-- First Column (Form) -->
+                        <div class="col-lg-6 col-md-12">
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
                                 <form id="purchaseForm">
                                     <div class="mb-3">
-										<label for="product_name" class="form-label">Item</label>
-										<select name="" id="product_id" class="form-select" required onchange="fetchProductDetails(this.value)">
-											<option>Select Item</option>
-											<?php foreach($product_data as $row):?>
-												<option value="<?php echo $row['product_id']?>"><?php echo $row['product_name']?></option>
-											<?php endforeach;?>
-										</select>
+                                        <label for="product_name" class="form-label">Item</label>
+                                        <select name="" id="product_id" class="form-select" required onchange="fetchProductDetails(this.value)">
+                                            <option>Select Item</option>
+                                            <?php foreach($product_data as $row):?>
+                                                <option value="<?php echo $row['product_id']?>"><?php echo $row['product_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Quantity</label>
+                                            <label for="price" class="form-label">Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
                                                 <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
                                             </div>
-                                        </div>	
-									</div>
+                                        </div>  
+                                    </div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Unit Price</label>
+                                            <label for="price" class="form-label">Unit Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
                                                 <input type="number" class="form-control" id="unitprice" required readonly>
                                             </div>
-                                        </div>	
-									</div>
+                                        </div>  
+                                    </div>
                                     <div class="mb-3 row">
                                         <div class="col">
                                             <div class="form-check">
@@ -168,7 +169,7 @@
                                         <div class="col">
                                             <div class="form-check float-end" id="sameQuantityDiv" style="display: none;">
                                                 <input class="form-check-input" type="checkbox" id="sameQuantity" onchange="toggleSameQuantity()">
-                                                <label class="form-check-label" for="hasContainer">
+                                                <label class="form-check-label" for="sameQuantity">
                                                     Same quantity as ordered
                                                 </label>
                                             </div>
@@ -197,105 +198,63 @@
                                             <input type="number" class="form-control" step="0.01" id="containerprice" name="price" readonly>
                                         </div>
                                     </div>
-                                    <script>
-                                        function togglePriceInput() {
-                                            const checkbox = document.getElementById('hasContainer');
-                                            const sameQuantityDiv = document.getElementById('sameQuantityDiv');
-                                            const containerQuantity = document.getElementById('containerQuantity');
-                                            const priceContainer = document.getElementById('priceContainer');
-                                            const containerQuantityInput = document.getElementById('containerQuantityInput');
-                                            priceContainer.style.display = checkbox.checked ? 'block' : 'none';
-                                            containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
-                                            containerQuantityInput.value = '0';
-                                            sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
-                                        }
-                                        function toggleSameQuantity() {
-                                            const sameQuantityCheckbox = document.getElementById("sameQuantity");
-                                            const containerQuantityInput = document.getElementById("containerQuantityInput");
-
-                                            if (sameQuantityCheckbox.checked) {
-                                                containerQuantityInput.readOnly = true;
-                                                containerQuantityInput.value = document.getElementById("quantity").value;
-                                            } else {
-                                                containerQuantityInput.readOnly = false;
-                                                containerQuantityInput.value = '';
-                                            }
-                                            updateTotalPrice();
-                                        }
-                                        function updateTotalPrice(){
-                                            const unitPriceInput = document.getElementById('unitprice');
-                                            const quantityInput = document.getElementById('quantity');
-                                            const containerQuantityInput = document.getElementById('containerQuantityInput');
-                                            const containerPriceInput = document.getElementById('containerprice');
-                                            const totalPriceInput = document.getElementById('totalprice');
-
-                                            let unitprice = unitPriceInput.value;
-                                            let quantity = quantityInput.value;
-                                            let containerQuantity = containerQuantityInput.value;
-                                            let containerPrice = containerPriceInput.value;
-
-                                            let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
-                                            totalPrice = totalPrice.toFixed(2);
-
-                                            totalPriceInput.value = totalPrice;
-                                        }                                        
-                                    </script>
                                     <div class="mb-3">
-										<label for="price" class="form-label">Total Price</label>
-										<div class="input-group">
-											<span class="input-group-text">₱</span>
-											<input type="number" class="form-control" step=0.01 id="totalprice" name="price" readonly>
-										</div>
-									</div>
-    								<div class="d-flex justify-content-end">
-										<button type="submit" class="btn btn-primary mb-2">Submit</button>
-									</div>
+                                        <label for="price" class="form-label">Total Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control" step=0.01 id="totalprice" name="price" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
-                        <div class="col-6">
+
+                        <!-- Second Column (Receipt and Checkout) -->
+                        <div class="col-lg-6 col-md-12">
                             <div class="card p-3">
-								<div class="row">
-									<div class="col-6">
-										<button class="btn btn-primary mb-2" onclick="submitReceipt()">Checkout</button>
-									</div>
-									<div class="col-6">
-										<h5 class="text-end" id="totalPrice">Total Price: ₱0.00</h5>
-									</div>
-									
-									
-								</div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <button class="btn btn-primary mb-2" onclick="submitReceipt()">Checkout</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <h5 class="text-end" id="totalPrice">Total Price: ₱0.00</h5>
+                                    </div>
+                                </div>
                                 <h5 class="mt-2 text-center fw-bold">AquaDrop</h5>
-								<div class="table-responsive">
-                                <table class="table table-bordered" id="receipt">
-                                    <thead>
-                                        <tr>
-                                            <th>Item Name</th>
-                                            <th>Unit Price</th>
-                                            <th>Quantity</th>
-                                            <th>Has Container</th>
-                                            <th>Container Quantity</th>
-                                            <th>Container Price</th>
-                                            <th>Total Price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="receipt">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Unit Price</th>
+                                                <th>Quantity</th>
+                                                <th>Has Container</th>
+                                                <th>Container Quantity</th>
+                                                <th>Container Price</th>
+                                                <th>Total Price</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Receipt items will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <div class="form-group form-group-default">
+                                        <label>Payment Method</label>
+                                        <select name="" id="payment_id" class="form-select"  onchange="fetchProductDetails(this.value)">
+                                            <option>Select Item</option>
+                                            <?php foreach($payment_data as $row):?>
+                                                <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-							<div class="col-md-4 mt-3">
-								<div class="form-group form-group-default">
-									<label>Payment Method</label>
-                                    <select name="" id="payment_id" class="form-select"  onchange="fetchProductDetails(this.value)">
-                                        <option>Select Item</option>
-                                        <?php foreach($payment_data as $row):?>
-                                            <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
-                                        <?php endforeach;?>
-                                    </select>
-								</div>
-							</div>
                         </div>
                     </div>
                 </main>
@@ -331,8 +290,15 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        const quantity = doc
-                        document.getElementById("unitprice").value = data.data.water_price;
+                        let quantity = document.getElementById("quantity").value;
+                        if(quantity >= 10){
+                            document.getElementById("unitprice").value = data.data.water_price_promo;
+                        }
+                        else{
+                            document.getElementById("unitprice").value = data.data.water_price;
+                        }
+                        
+                        
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
                     } else {
@@ -466,5 +432,48 @@
             }
             
         </script>
+        <script>
+        function togglePriceInput() {
+            const checkbox = document.getElementById('hasContainer');
+            const sameQuantityDiv = document.getElementById('sameQuantityDiv');
+            const containerQuantity = document.getElementById('containerQuantity');
+            const priceContainer = document.getElementById('priceContainer');
+            const containerQuantityInput = document.getElementById('containerQuantityInput');
+            priceContainer.style.display = checkbox.checked ? 'block' : 'none';
+            containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
+            containerQuantityInput.value = '0';
+            sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
+        }
+        function toggleSameQuantity() {
+            const sameQuantityCheckbox = document.getElementById("sameQuantity");
+            const containerQuantityInput = document.getElementById("containerQuantityInput");
+
+            if (sameQuantityCheckbox.checked) {
+                containerQuantityInput.readOnly = true;
+                containerQuantityInput.value = document.getElementById("quantity").value;
+            } else {
+                containerQuantityInput.readOnly = false;
+                containerQuantityInput.value = '';
+            }
+            updateTotalPrice();
+        }
+        function updateTotalPrice(){
+            const unitPriceInput = document.getElementById('unitprice');
+            const quantityInput = document.getElementById('quantity');
+            const containerQuantityInput = document.getElementById('containerQuantityInput');
+            const containerPriceInput = document.getElementById('containerprice');
+            const totalPriceInput = document.getElementById('totalprice');
+
+            let unitprice = unitPriceInput.value;
+            let quantity = quantityInput.value;
+            let containerQuantity = containerQuantityInput.value;
+            let containerPrice = containerPriceInput.value;
+
+            let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
+            totalPrice = totalPrice.toFixed(2);
+
+            totalPriceInput.value = totalPrice;
+        }                                        
+    </script>
     </body>
 </html>
