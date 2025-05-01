@@ -179,7 +179,7 @@
 
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
-                                        <button type="submit" class="btn btn-success d-none" id="updateBtn">Update Profile</button>
+                                        <button type="submit" class="btn btn-success d-none me-3" id="updateBtn">Update Profile</button>
                                         <button type="button" class="btn btn-secondary d-none" id="cancelBtn" onclick="cancelEdit()">Cancel</button>
                                     </div>
                                 </form>
