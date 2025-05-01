@@ -140,19 +140,19 @@
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Unit Price</label>
+                                        <label for="price" class="form-label">Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="unitprice" required readonly>
+                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
                                             </div>
                                         </div>	
 									</div>
                                     <div class="mb-3 row">
                                         <div class="col">
-                                        <label for="price" class="form-label">Quantity</label>
+                                        <label for="price" class="form-label">Unit Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
+                                                <input type="number" class="form-control" id="unitprice" required readonly>
                                             </div>
                                         </div>	
 									</div>
