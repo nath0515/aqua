@@ -19,7 +19,7 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM orderstatus WHERE status_id = 3 AND status_id = 4";
+    $sql = "SELECT * FROM orderstatus WHERE status_id = 3 ";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
