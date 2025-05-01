@@ -143,9 +143,7 @@
                                         <img src="<?php echo $product_data['product_photo']; ?>" width="100px" height="100px" class="rounded">
                                 </div>
 							</div>	
-                        </div>
-                    </div> 
-                    <div class="row">   
+                        </div>   
                         <div class="col-6">
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
