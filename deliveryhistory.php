@@ -14,7 +14,7 @@
 
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 5";
+    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 4";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
