@@ -125,6 +125,50 @@
                         <div class="card mb-4">
                         <div class="container mb-4 mt-4">                  
                     <div class="row">
+                        <div class="col-6">
+                            <div class="card p-3">
+								<div class="row">
+									<div class="col-6">
+										<button class="btn btn-primary mb-2" onclick="submitReceipt()">Checkout</button>
+									</div>
+									<div class="col-6">
+										<h5 class="text-end" id="totalPrice">Total Price: ₱0.00</h5>
+									</div>
+									
+									
+								</div>
+                                <h5 class="mt-2 text-center fw-bold">AquaDrop</h5>
+								<div class="table-responsive">
+                                <table class="table table-bordered" id="receipt">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Name</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Has Container</th>
+                                            <th>Container Quantity</th>
+                                            <th>Container Price</th>
+                                            <th>Total Price</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+							<div class="col-md-4 mt-3">
+								<div class="form-group form-group-default">
+									<label>Payment Method</label>
+                                    <select name="" id="payment_id" class="form-select"  onchange="fetchProductDetails(this.value)">
+                                        <option>Select Item</option>
+                                        <?php foreach($payment_data as $row):?>
+                                            <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                        <?php endforeach;?>
+                                    </select>
+								</div>
+							</div>
+                        </div>
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
@@ -248,7 +292,7 @@
 										</div>
 									</div>
     								<div class="d-flex justify-content-end">
-										<button type="submit" class="btn btn-primary mb-2">Add To Cart</button>
+										<button type="submit" class="btn btn-primary mb-2">Submit</button>
 									</div>
                                 </form>
                             </div>
