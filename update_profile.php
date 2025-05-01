@@ -1,11 +1,12 @@
 <?php
+ob_start(); // Ensure no output before headers
+
 require 'session.php';
 require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
 
-    // Get individual fields from POST
     $firstname = trim($_POST['firstname']);
     $lastname = trim($_POST['lastname']);
     $email = trim($_POST['email']);
@@ -13,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['address']);
 
     try {
-        // Update users table
+        // Update users
         $sql = "UPDATE users SET email = :email WHERE user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':user_id' => $user_id
         ]);
 
-        // Update user_details table
+        // Update user_details
         $sql = "UPDATE user_details 
                 SET firstname = :firstname, lastname = :lastname, contact_number = :contact_number, address = :address 
                 WHERE user_id = :user_id";
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':user_id' => $user_id
         ]);
 
-        // Success alert
+        // SweetAlert success
         echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
@@ -47,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             </script>
         ";
+        ob_end_flush();
         exit;
 
     } catch (PDOException $e) {
-        // Error alert
         echo "
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
@@ -64,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             </script>
         ";
+        ob_end_flush();
         exit;
     }
 } else {
