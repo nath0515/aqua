@@ -202,7 +202,13 @@
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
                                                 <td><?php echo $row['status_name'];?></td>
-                                                <td><?php echo $row['rider_firstname'];?> <?php echo $row['rider_lastname'];?></td>
+                                                <td>
+                                                <?php
+                                                    $riderFirst = $row['rider_firstname'] ?? '';
+                                                    $riderLast = $row['rider_lastname'] ?? '';
+                                                    echo $riderFirst . ' ' . $riderLast;
+                                                ?>
+                                                </td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
