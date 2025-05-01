@@ -24,9 +24,9 @@
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT user_id, firstname, lastname FROM users 
-    JOIN user_details ON users.user_id = user_details.user_id 
-    WHERE users.role_id = 3";
+    $sql = "SELECT a.user_id, firstname, lastname FROM users a
+    JOIN user_details b ON a.user_id = b.user_id 
+    WHERE a.role_id = 3";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $rider_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -262,7 +262,9 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
                                         <select name="role_id" id="editRiderId" class="form-select">
-                                            
+                                        <?php foreach($rider_data as $row):?>
+                                                <option value="<?php echo $row['user_id'];?>"><?php echo $row['firstname'];?> <?php echo $row['lastname'];?></option>
+                                            <?php endforeach;?>
                                         </select>
                                     </div>
                                 </div>
