@@ -22,6 +22,7 @@
             $sql = "SELECT * FROM users WHERE email = :email";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':email', $email);
+            $now = date("Y-m-d H:i:s"); 
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = $stmt->fetch();
@@ -47,6 +48,16 @@
             $stmt->bindParam(':lastname', $lastname);
             $stmt->bindParam(':contact_number', $contact_number);
             $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+
+            $message = "Rider account created: {$firstname} {$lastname} has successfully registered.";
+            $destination = "accounts.php";
+            
+            $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':message', $message);
+            $stmt->bindParam(':date', $now);
+            $stmt->bindParam(':destination', $destination);
             $stmt->execute();
 
             header("Location: accounts.php?status=success");
