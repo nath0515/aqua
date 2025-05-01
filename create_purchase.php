@@ -297,6 +297,7 @@
                         else{
                             document.getElementById("unitprice").value = data.data.water_price;
                         } 
+                        updateTotalPrice();  // Update the total price after changing the unit price
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
                     } else {
@@ -471,6 +472,7 @@
             totalPrice = totalPrice.toFixed(2);
 
             totalPriceInput.value = totalPrice;
+            document.getElementById('quantity').addEventListener('input', updateUnitPrice);
         }                                        
     </script>
     </body>
