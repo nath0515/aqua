@@ -13,7 +13,7 @@
                 $d = "home.php";
                 break;
             case 3:
-                $d = "rider.php";
+                $d = "riderdashboard.php";
                 break;
             default:
                 $error_message = "Unexpected error. Please try again.";
