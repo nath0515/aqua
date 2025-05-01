@@ -151,20 +151,21 @@
                                 <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form action="update_profile.php" method="POST" onsubmit="return checkForm()">
+                                <form id="profileForm" action="update_profile.php" method="POST" onsubmit="return false;">
                                     <!-- Full Name -->
                                     <div class="mb-3">
                                         <label for="fullname" class="form-label">Full Name</label>
                                         <input type="text" class="form-control" id="fullname" name="fullname" required
-                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>">
+                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>" readonly>
                                     </div>
+
                                     <!-- Contact -->
                                     <div class="mb-3">
                                         <label for="contact_number" class="form-label">Contact Number</label>
                                         <input type="tel" class="form-control" id="contact_number" name="contact_number"
                                             required pattern="[0-9]{11}" maxlength="11"
                                             value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)" readonly>
                                         <div class="invalid-feedback" id="contactError">
                                             Please enter a valid 11-digit number starting with 09.
                                         </div>
@@ -175,18 +176,20 @@
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" name="email" required
                                             pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
-                                            value="<?php echo htmlspecialchars($user_data['email']); ?>">
+                                            value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly>
                                         <div class="form-text">Must be a Gmail address.</div>
                                     </div>
 
                                     <!-- Address -->
                                     <div class="mb-3">
                                         <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" name="address" id="address" rows="2" required><?php echo htmlspecialchars($user_data['address']); ?></textarea>
+                                        <textarea class="form-control" name="address" id="address" rows="2" required readonly><?php echo htmlspecialchars($user_data['address']); ?></textarea>
                                     </div>
 
                                     <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-success">Update Profile</button>
+                                        <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
+                                        <button type="submit" class="btn btn-success d-none" id="updateBtn">Update Profile</button>
+                                        <button type="button" class="btn btn-secondary d-none" id="cancelBtn" onclick="cancelEdit()">Cancel</button>
                                     </div>
                                 </form>
                             </div>
@@ -215,6 +218,49 @@
             }
             return true;
         }
+        </script>
+        <script>
+        function checkForm() {
+            const contact = document.getElementById("contact_number").value;
+            if (!/^09\d{9}$/.test(contact)) {
+                document.getElementById("contactError").style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+
+        function enableEdit() {
+            ["fullname", "email", "contact_number", "address"].forEach(id =>
+                document.getElementById(id).removeAttribute("readonly"));
+
+            document.getElementById("editBtn").classList.add("d-none");
+            document.getElementById("updateBtn").classList.remove("d-none");
+            document.getElementById("cancelBtn").classList.remove("d-none");
+        }
+
+        function cancelEdit() {
+            // Revert to default values (page load state)
+            location.reload();
+        }
+
+        // SweetAlert for confirm on submit
+        document.getElementById("profileForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (!checkForm()) return;
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to update your profile?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, update it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
         </script>
     </body>
 </html>
