@@ -122,18 +122,8 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Stock</li>
+                            <li class="breadcrumb-item active">Order</li>
                         </ol>
-                        <button class="btn btn-success btn-round ms-auto mb-3 me-1" data-bs-toggle="modal" data-bs-target="#additem">
-                            <i class="fa fa-plus"></i>
-                            Add Product
-                        </button>
-                        <button class="btn btn-success btn-round ms-auto mb-3" data-bs-toggle="modal" data-bs-target="#addstock">
-                            <i class="fa fa-plus"></i>
-                            Add Stock
-                        </button>
-                        
-
                         <div class="row">
 
                             <!-- Card -->
