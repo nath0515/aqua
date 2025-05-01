@@ -156,7 +156,7 @@
                                         
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>a
 							<div class="col-md-4 mt-3">
 								<div class="form-group form-group-default">
 									<label>Payment Method</label>
