@@ -23,6 +23,11 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT user_id, firstname, lastname FROM users JOIN user_details ON users.user_id = user_details.user_id WHERE role_id = 3";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $rider_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -251,12 +256,12 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="stock" class="form-label">Status</label>
+                                    <label for="stock" class="form-label">Rider</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
-                                        <select name="status_id" id="editStatusId" class="form-select">
-                                            <?php foreach($status_data as $row):?>
-                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                        <select name="role_id" id="editRiderId" class="form-select">
+                                            <?php foreach($rider_data as $row):?>
+                                                <option value="<?php echo $row['user_id']?>"><?php echo $row['firstname'].' '.$row['lastname'];?> </option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
