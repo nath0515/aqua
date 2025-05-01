@@ -270,7 +270,7 @@
                                     <label for="stock" class="form-label">Rider</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
-                                        <select name="role_id" id="editRiderId" class="form-select">
+                                        <select name="rider" id="editRiderId" class="form-select">
                                             <option value="">Select Rider</option>
                                             <?php foreach($rider_data as $row):?>
                                                 <option value="<?php echo $row['user_id'];?>"><?php echo $row['firstname'];?> <?php echo $row['lastname'];?></option>

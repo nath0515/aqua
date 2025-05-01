@@ -6,11 +6,13 @@
         try{
             $status_id = $_POST['status_id'];
             $order_id = $_POST['order_id'];
+            $rider = $_POST['rider'];
 
-            $sql = "UPDATE orders SET status_id = :status_id WHERE order_id = :order_id";
+            $sql = "UPDATE orders SET status_id = :status_id, rider = :rider WHERE order_id = :order_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':status_id', $status_id);
             $stmt->bindParam(':order_id', $order_id);
+            $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
             header('Location: orders.php?editstatus=success');
