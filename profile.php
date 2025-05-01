@@ -91,7 +91,7 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
+                    <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menu</div>
                             <a class="nav-link" href="index.php">
@@ -152,11 +152,24 @@
                             </div>
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" onsubmit="return false;">
-                                    <!-- Full Name -->
-                                    <div class="mb-3">
+                                    <!-- Full Name (Read-only) -->
+                                    <div class="mb-3" id="fullnameGroup">
                                         <label for="fullname" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="fullname" name="fullname" required
-                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>" readonly>
+                                        <input type="text" class="form-control" id="fullname" 
+                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>" 
+                                            readonly>
+                                    </div>
+
+                                    <!-- First Name (Hidden initially) -->
+                                    <div class="mb-3 d-none" id="firstnameGroup">
+                                        <label for="firstname" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstname" name="firstname" required>
+                                    </div>
+
+                                    <!-- Last Name (Hidden initially) -->
+                                    <div class="mb-3 d-none" id="lastnameGroup">
+                                        <label for="lastname" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastname" name="lastname" required>
                                     </div>
 
                                     <!-- Contact -->
@@ -210,57 +223,59 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-        function checkForm() {
-            const contact = document.getElementById("contact_number").value;
-            if (!/^09\d{9}$/.test(contact)) {
-                document.getElementById("contactError").style.display = 'block';
-                return false;
-            }
-            return true;
-        }
-        </script>
-        <script>
-        function checkForm() {
-            const contact = document.getElementById("contact_number").value;
-            if (!/^09\d{9}$/.test(contact)) {
-                document.getElementById("contactError").style.display = 'block';
-                return false;
-            }
-            return true;
-        }
-
-        function enableEdit() {
-            ["fullname", "email", "contact_number", "address"].forEach(id =>
-                document.getElementById(id).removeAttribute("readonly"));
-
-            document.getElementById("editBtn").classList.add("d-none");
-            document.getElementById("updateBtn").classList.remove("d-none");
-            document.getElementById("cancelBtn").classList.remove("d-none");
-        }
-
-        function cancelEdit() {
-            // Revert to default values (page load state)
-            location.reload();
-        }
-
-        // SweetAlert for confirm on submit
-        document.getElementById("profileForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            if (!checkForm()) return;
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to update your profile?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, update it!",
-                cancelButtonText: "Cancel"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
+            function checkForm() {
+                const contact = document.getElementById("contact_number").value;
+                if (!/^09\d{9}$/.test(contact)) {
+                    document.getElementById("contactError").style.display = 'block';
+                    return false;
                 }
+                return true;
+            }
+
+            function enableEdit() {
+                // Hide fullname, show firstname and lastname
+                const fullName = document.getElementById("fullname").value.trim();
+                const parts = fullName.split(" ");
+                const first = parts.slice(0, -1).join(" ") || "";
+                const last = parts.slice(-1).join(" ") || "";
+
+                document.getElementById("fullnameGroup").classList.add("d-none");
+                document.getElementById("firstnameGroup").classList.remove("d-none");
+                document.getElementById("lastnameGroup").classList.remove("d-none");
+
+                document.getElementById("firstname").value = first;
+                document.getElementById("lastname").value = last;
+
+                ["email", "contact_number", "address"].forEach(id =>
+                    document.getElementById(id).removeAttribute("readonly"));
+
+                document.getElementById("editBtn").classList.add("d-none");
+                document.getElementById("updateBtn").classList.remove("d-none");
+                document.getElementById("cancelBtn").classList.remove("d-none");
+            }
+
+            function cancelEdit() {
+                location.reload(); // reset to original
+            }
+
+            document.getElementById("profileForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+                if (!checkForm()) return;
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Do you want to update your profile?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, update it!",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
             });
-        });
-        </script>
+            </script>
+
     </body>
 </html>
