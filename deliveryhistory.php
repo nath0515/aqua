@@ -130,11 +130,11 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sales</h1>
+                        <h1 class="mt-4">Delivery History</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Analytics</li>
-                            <li class="breadcrumb-item active">Sales</li>
+                            <li class="breadcrumb-item active">Delivery Management</li>
+                            <li class="breadcrumb-item active">Delivery History</li>
                         </ol>
                         <form action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
