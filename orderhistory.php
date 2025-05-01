@@ -22,10 +22,10 @@
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM orderstatus";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM orderstatus";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -147,7 +147,7 @@
                                                 <td><?php echo $row['status_name'];?></td>
                                                 <td><?php echo $row['rider'];?></td>
                                                 <td>
-                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
+                                                    <a href="costumer_orderdetails.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
                                                     </a>
                                                 </td>
