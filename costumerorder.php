@@ -103,34 +103,35 @@
                             <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Order</li>
                         </ol>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <!-- Card -->
-                                <?php foreach($products_data as $row):?>
-                                    <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" style="text-decoration: none; color: inherit;">
-                                        <div class="col-xl-3 col-md-6 mb-4">
-                                            <div class="card bg-primary text-white mb-4">
-                                                <div class="card-header" style="font-size: 20px">
-                                                    <?php echo $row['product_name']; ?>
-                                                </div>
-                                                <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                                    <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                                                </div>
-                                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                        Container Price: ₱<?php echo $row['container_price']; ?><br>
-                                                        Stock: <?php echo $row['stock']; ?>
-                                                    </div>
-                                                    <div class="small text-white">
-                                                        <i class="bi bi-cart-plus"></i>
-                                                    </div>
-                                                </div>
+                        <div class="row">
+                            <!-- Card -->
+                            <?php foreach($products_data as $row):?>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card bg-primary text-white position-relative h-100">
+                                        <!-- Invisible link covering the whole card -->
+                                        <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" class="stretched-link" style="z-index: 1;"></a>
+
+                                        <div class="card-header text-center" style="font-size: 20px;">
+                                            <?php echo $row['product_name']; ?>
+                                        </div>
+
+                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
+                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                        </div>
+
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <div>
+                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
+                                                Container Price: ₱<?php echo $row['container_price']; ?><br>
+                                                Stock: <?php echo $row['stock']; ?>
+                                            </div>
+                                            <div class="small text-white">
+                                                <i class="bi bi-cart-plus"></i>
                                             </div>
                                         </div>
-                                    </a>
-                                <?php endforeach;?>
-                            </div>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
                         </div>
                     </div>
                 </main>
