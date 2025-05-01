@@ -98,7 +98,7 @@ require ('session.php');
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="costumerorder.php">Order</a>
-                            <a class="nav-link" href="Orderhistory.php">Order History</a>
+                            <a class="nav-link" href="orderhistory.php">Order History</a>
                         </nav>
                     </div>
                 </div>

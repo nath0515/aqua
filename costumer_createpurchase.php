@@ -253,7 +253,7 @@
 										</div>
 									</div>
     								<div class="d-flex justify-content-end">
-										<button type="submit" class="btn btn-primary mb-2">Submit</button>
+										<button type="submit" class="btn btn-primary mb-2">Add To Cart</button>
 									</div>
                                 </form>
                             </div>
