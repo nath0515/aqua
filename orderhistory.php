@@ -217,5 +217,14 @@
                 });
             });
         </script>
+        <script>
+            setInterval(() => {
+                fetch('get_order_status.php?order_id=123')  // Replace 123 with dynamic ID
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('statusText').innerText = data.status_name;
+                    });
+            }, 5000);
+        </script>
     </body>
 </html>
