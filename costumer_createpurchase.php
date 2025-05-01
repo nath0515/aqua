@@ -2,6 +2,14 @@
     require 'session.php';
     require 'db.php';
 
+    if(!isset($_GET['id'])){
+        header('Location: costumerorder.php');
+        exit;
+    }
+    else{
+        $id = $_GET['id'];
+    }
+
     $user_id = $_SESSION['user_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
@@ -12,10 +20,11 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM products";
+    $sql = "SELECT * FROM products WHERE product_id = :id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $id);
     $stmt->execute();
-    $product_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $product_data = $stmt->fetch();
 
     $sql = "SELECT * FROM payment_method";
     $stmt = $conn->prepare($sql);
