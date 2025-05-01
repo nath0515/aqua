@@ -160,7 +160,7 @@
                                         <label for="price" class="form-label">Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="updateTotalPrice()" required>
+                                                <input type="number" class="form-control" id="quantity" required min="1" max="15" onchange="fetchProductDetails(<?php echo $_GET['id'];?>)" required>
                                             </div>
                                         </div>	
 									</div>
@@ -169,7 +169,7 @@
                                         <label for="price" class="form-label">Unit Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="unitprice" value="<?php echo $product_data['water_price']?>" required readonly>
+                                                <input type="number" class="form-control" id="unitprice" required readonly>
                                             </div>
                                         </div>	
 									</div>
