@@ -169,6 +169,7 @@
 								</div>
 							</div>
                         </div>
+                    </div>    
                         <div class="col-6">
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
