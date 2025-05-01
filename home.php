@@ -171,7 +171,7 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
             </div>
 
             <div style="text-align: center; margin-top: 40px;">
-                <a href="#order" style="background-color: #ff7f50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-size: 1.1em;">Order Now</a>
+                <a href="costumerorder.php" style="background-color: #ff7f50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-size: 1.1em;">Order Now</a>
             </div>
         </section>
 
