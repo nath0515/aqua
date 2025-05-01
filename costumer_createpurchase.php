@@ -169,7 +169,7 @@
                                         <label for="price" class="form-label">Unit Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" class="form-control" id="unitprice" value="<?php echo $product_data['unit_price']?>" required readonly>
+                                                <input type="number" class="form-control" id="unitprice" value="<?php echo $product_data['water_price']?>" required readonly>
                                             </div>
                                         </div>	
 									</div>
