@@ -50,17 +50,17 @@
                             $destination = "home.php";
                             break;
                         case 3:
-                            $destination = "rider.php";
+                            $destination = "riderdashboard.php";
                             break;
                         default:
                             $error_message = "Unexpected error. Please try again.";
                     }
-                    $_SESSION['role_id'] = $user['role_id'];
+                    
                     if(isset($destination)){
                         $_SESSION['username'] = $username;
                         $_SESSION['user_id'] = $user['user_id'];
                         $_SESSION['loggedin'] = true;
-                        
+                        $_SESSION['role_id'] = $user['role_id'];
                         header("Location: ".$destination);
                         exit();
                     }
