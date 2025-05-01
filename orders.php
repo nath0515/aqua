@@ -12,10 +12,12 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, d.firstname as rider_firstname, d.lastname as rider_lastname FROM orders a
-    JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id
-    JOIN user_details d ON a.rider = d.user_id";
+    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+               c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname
+        FROM orders a
+        JOIN user_details b ON a.user_id = b.user_id
+        JOIN orderstatus c ON a.status_id = c.status_id
+        LEFT JOIN user_details d ON a.rider = d.user_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -206,7 +208,7 @@
                                                 <?php
                                                     $riderFirst = $row['rider_firstname'] ?? '';
                                                     $riderLast = $row['rider_lastname'] ?? '';
-                                                    echo $riderFirst . ' ' . $riderLast;
+                                                    echo trim("$riderFirst $riderLast") ?: 'Unassigned';
                                                 ?>
                                                 </td>
                                                 <td>
