@@ -159,11 +159,11 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Delivery History</h1>
+                        <h1 class="mt-4">Maps</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Delivery Management</li>
-                            <li class="breadcrumb-item active">Delivery History</li>
+                            <li class="breadcrumb-item active">Maps</li>
                         </ol>
                         <div id="map"></div>
                         <button id="completeBtn">Complete Delivery</button>               
