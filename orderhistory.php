@@ -16,7 +16,7 @@
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
-        WHERE a.user_id = :user_id AND a.status_id = 3";
+        WHERE a.user_id = :user_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $user_id); 
         $stmt->execute();
