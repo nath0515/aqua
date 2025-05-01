@@ -372,7 +372,7 @@
                                 const orderItems = response.data2;
 
                                 $("#editStatusId").val(response.data.status_id);
-                                $("#editOrderId").val(response.data.order_id);
+                                $("#editOrderId").val(orderId);
 
                                 let itemsHtml = '<h5>Order Items:</h5>';
                                 orderItems.forEach(item => {
