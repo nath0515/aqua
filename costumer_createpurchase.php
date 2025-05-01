@@ -125,7 +125,7 @@
                         <div class="card mb-4">
                         <div class="container mb-4 mt-4">                  
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
 								<div class="row">
 									<div class="col-6">
@@ -169,7 +169,7 @@
 								</div>
 							</div>
                         </div>
-                        <div class="col-lg-6 col-md-12" >
+                        <div class="col-6">
                             <div class="card p-3">
                                 <h5 class="mt-2">Add Order</h5>
                                 <form id="purchaseForm">
