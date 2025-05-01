@@ -111,7 +111,7 @@
                         <div class="card-body d-flex align-items-center">
                           <img src="https://via.placeholder.com/60" class="me-3" alt="Shop Logo">
                           <div>
-                            <h5 class="mb-1">ABC Water Refilling Station</h5>
+                            <h5 class="mt-5 mb-1">ABC Water Refilling Station</h5>
                             <p class="text-muted mb-0">Driver: John Doe (ID: D001)</p>
                           </div>
                         </div>
