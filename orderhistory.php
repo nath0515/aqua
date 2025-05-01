@@ -104,32 +104,16 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sales</h1>
+                        <h1 class="mt-4">Order History</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Analytics</li>
-                            <li class="breadcrumb-item active">Sales</li>
+                            <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Order Management</li>
+                            <li class="breadcrumb-item active">Order History</li>
                         </ol>
-                        <form action="expenses.php" method="GET">
-                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
-                                <div>
-                                    <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label class="form-label d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                </div>
-                            </div>
-                        </form>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Sales
+                                Order History
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
