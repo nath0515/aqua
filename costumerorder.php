@@ -127,7 +127,7 @@
                         <div class="row">
                             <!-- Card -->
                             <?php foreach($products_data as $row):?>
-                                <a href="customer_createpurchase.php?id=<?php echo $row['product_id']; ?>" style="text-decoration: none; color: inherit;">
+                                <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" style="text-decoration: none; color: inherit;">
                                     <div class="col-xl-3 col-md-6">
                                         <div class="card bg-primary text-white mb-4">
                                             <div class="card-header" style="font-size: 20px">
