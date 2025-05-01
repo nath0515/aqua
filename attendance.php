@@ -12,10 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM products";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +22,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Stock</title>
+        <title>Orders</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -63,6 +60,27 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
+                        <?php 
+                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $status = $stmt->fetchColumn();
+                        ?>
+                        <li>
+                            <a 
+                                href="process_dailyreport.php" 
+                                class="dropdown-item"
+                                <?php if ($status == 1): ?>
+                                    onclick="return confirmCloseShop(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
+                            </a>
+                        </li>
+                        <div id="loadingOverlay">
+                            <div class="spinner"></div>
+                        </div>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -75,7 +93,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menu</div>
-                            <a class="nav-link" href="home.php">
+                            <a class="nav-link" href="index.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -86,8 +104,32 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="costumerorder.php">Order</a>
-                                    <a class="nav-link" href="orderhistory.php">Order History</a>
+                                    <a class="nav-link" href="orders.php">Orders</a>
+                                    <a class="nav-link" href="stock.php">Stock</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Analytics
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="sales.php">Sales</a>
+                                    <a class="nav-link" href="expenses.php">Expenses</a>
+                                    <a class="nav-link" href="income.php">Income</a>
+                                    <a class="nav-link" href="report.php">Report</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Account Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="accounts.php">Accounts</a>
+                                    <a class="nav-link" href="rideraccount.php">Add Rider</a>
                                 </nav>
                             </div>
                         </div>
@@ -101,41 +143,52 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Order</h1>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Order</li>
+                        <h1 class="mt-4">Attendance</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Attendance</li>
                         </ol>
-                        <div class="row">
-                            <!-- Card -->
-                            <?php foreach($products_data as $row):?>
-                                <div class="col-xl-3 col-md-6 mb-4">
-                                    <div class="card bg-primary text-white position-relative h-100">
-                                        <!-- Invisible link covering the whole card -->
-                                        <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" class="stretched-link" style="z-index: 1;"></a>
-
-                                        <div class="card-header text-center" style="font-size: 20px;">
-                                            <?php echo $row['product_name']; ?>
-                                        </div>
-
-                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                                        </div>
-
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <div>
-                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                Container Price: ₱<?php echo $row['container_price']; ?><br>
-                                                Stock: <?php echo $row['stock']; ?>
-                                            </div>
-                                            <div class="small text-white">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <form action="expenses.php" method="GET">
+                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <div>
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
                                 </div>
-                            <?php endforeach;?>
+                                <div>
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Income
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>  
+                                            <th>Time-In</th>
+                                            <th>Time-Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($order_data as $row):?>
+                                            <tr>
+                                                <td><?php echo $row['date'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>1500</td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -147,7 +200,7 @@
                     </div>
                 </footer>
             </div>
-        </div>        
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -156,6 +209,7 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
             let deferredPrompt;
@@ -207,99 +261,5 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
-
-        <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Your action was completed successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'error'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Unexpected error.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'filetype'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Invalid file type. Please upload a valid file.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'exist'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Product name already exists.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['stock']) && $_GET['stock'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Stock added successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['edit']) && $_GET['edit'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Item edited successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php endif; ?>
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $(".editProductBtn").click(function() {
-                    var productId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getproductdata.php",
-                        type: "POST",
-                        data: { product_id: productId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                $("#editProductId").val(productId);
-                                $("#editProductName").val(response.data.product_name);
-                                $("#editWaterPrice").val(response.data.water_price);
-                                $("#editContainerPrice").val(response.data.container_price);
-                                $("#editStock").val(response.data.stock);
-                                $("#editProductImagePreview").attr("src", response.data.product_photo);
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-            
     </body>
 </html>
