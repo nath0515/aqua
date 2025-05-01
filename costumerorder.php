@@ -97,7 +97,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stock</h1>
+                        <h1 class="mt-4">Order</h1>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">Order Management</li>
