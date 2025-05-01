@@ -250,6 +250,17 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="stock" class="form-label">Status</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                        <select name="status_id" id="editStatusId" class="form-select">
+                                            <?php foreach($status_data as $row):?>
+                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="text" name="order_id" id="editOrderId" hidden>
 
                                 <!-- Order Items -->
