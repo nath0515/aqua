@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12" >
                             <div class="card p-3">
-                                <div class="card-header"style="font-size: 20px">
+                                <div class="card-header text-center"style="font-size: 20px">
                                     <?php echo $product_data['product_name']; ?>
                                 </div>
                                 <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
