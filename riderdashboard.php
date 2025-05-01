@@ -111,7 +111,7 @@
                         <div class="card-body d-flex align-items-center">
                           <img src="assets/img/icon-192.png" class="me-3" alt="Shop Logo">
                           <div>
-                            <h5 class="mb-1">ABC Water Refilling Station</h5>
+                            <b><h3 class="mb-1">DoodsNer Water Refilling Station</h3></b>
                             <p class="text-muted mb-0">Driver: John Doe (ID: D001)</p>
                           </div>
                         </div>
