@@ -125,36 +125,31 @@
                             <li class="breadcrumb-item active">Order</li>
                         </ol>
                         <div class="row">
-
                             <!-- Card -->
                             <?php foreach($products_data as $row):?>
                                 <a href="product_details.php?id=<?php echo $row['product_id']; ?>" style="text-decoration: none; color: inherit;">
-                                    <div class="card bg-primary text-white mb-4 d-flex flex-row" style="height: 150px;">
-                                        <!-- Image Section -->
-                                        <div class="d-flex align-items-center justify-content-center bg-white p-3" style="width: 150px;">
-                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                                        </div>
-                                        
-                                        <!-- Details Section -->
-                                        <div class="flex-grow-1 p-3">
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="card bg-primary text-white mb-4">
                                             <div class="card-header" style="font-size: 20px">
                                                 <?php echo $row['product_name']; ?>
                                             </div>
-                                            <div class="card-body p-0">
-                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                Container Price: ₱<?php echo $row['container_price']; ?><br>
-                                                Stock: <?php echo $row['stock']; ?>
+                                            <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
+                                                <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
                                             </div>
-                                        </div>
-                                        
-                                        <!-- Icon Section -->
-                                        <div class="d-flex align-items-center justify-content-center px-3">
-                                            <i class="bi bi-cart-plus fs-3 text-white"></i>
+                                            <div class="card-footer d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    Water Price: ₱<?php echo $row['water_price']; ?><br>
+                                                    Container Price: ₱<?php echo $row['container_price']; ?><br>
+                                                    Stock: <?php echo $row['stock']; ?>
+                                                </div>
+                                                <div class="small text-white">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </a>
                             <?php endforeach;?>
-                
                         </div>
                     </div>
                 </main>
