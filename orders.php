@@ -24,7 +24,9 @@
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT user_id, firstname, lastname FROM users JOIN user_details ON users.user_id = user_details.user_id WHERE role_id = 3";
+    $sql = "SELECT user_id, firstname, lastname FROM users 
+JOIN user_details ON users.user_id = user_details.user_id 
+WHERE users.role_id = 3";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $rider_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
