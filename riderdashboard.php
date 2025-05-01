@@ -107,53 +107,47 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Order History</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Order History</li>
-                        </ol>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Order History
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Amount (₱)</th>
-                                            <th>Full Name</th>
-                                            <th>Contact #</th>
-                                            <th>Address</th>
-                                            <th>Status</th>
-                                            <th>Rider</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($order_data as $row):?>
-                                            <tr>
-                                                <td><?php echo $row['date'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
-                                                <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
-                                                <td><?php echo $row['status_name'];?></td>
-                                                <td><?php echo $row['rider'];?></td>
-                                                <td>
-                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach;?>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="card mb-3">
+                        <div class="card-body d-flex align-items-center">
+                          <img src="https://via.placeholder.com/60" class="me-3" alt="Shop Logo">
+                          <div>
+                            <h5 class="mb-1">ABC Water Refilling Station</h5>
+                            <p class="text-muted mb-0">Driver: John Doe (ID: D001)</p>
+                          </div>
                         </div>
+                      </div>
+                    
+                      <!-- Assigned Orders Today -->
+                      <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                          Assigned Deliveries (Today)
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                              Order #2012 — <strong>Barangay 123</strong><br>
+                              3 containers of 5-gallon
+                            </div>
+                            <span class="badge bg-warning text-dark">Pending</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between">
+                            <div>
+                              Order #2013 — <strong>Zone 5, Purok 6</strong><br>
+                              2 containers + 2 refills
+                            </div>
+                            <span class="badge bg-success">Delivered</span>
+                          </li>
+                        </ul>
+                      </div>
+                    
+                      <!-- Shift Info -->
+                      <div class="card">
+                        <div class="card-body">
+                          <h5>Shift Schedule</h5>
+                          <p>8:00 AM – 5:00 PM</p>
+                          <p>Status: <span class="badge bg-success">On Duty</span></p>
+                        </div>
+                      </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -174,45 +168,7 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-    </body>
+    
+</body>
 </html>
+
