@@ -141,13 +141,9 @@
                                 <h5 class="mt-2">Add Order</h5>
                                 <form id="purchaseForm">
                                     <div class="mb-3">
-										<label for="product_name" class="form-label">Item</label>
-										<select name="" id="product_id" class="form-select" required onchange="fetchProductDetails(this.value)">
-											<option>Select Item</option>
-											<?php foreach($product_data as $row):?>
-												<option value="<?php echo $row['product_id']?>"><?php echo $row['product_name']?></option>
-											<?php endforeach;?>
-										</select>
+                                        <div class="card-header"style="font-size: 20px">
+                                            <?php echo $row['product_name']; ?>
+                                        </div>
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col">
