@@ -148,23 +148,16 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h3 class="mb-0">My Profile</h3>
+                                <h3 class="mb-0"><i class="bi bi-person-circle"></i>My Profile</h3>
                             </div>
                             <div class="card-body">
                                 <form action="update_profile.php" method="POST" onsubmit="return checkForm()">
                                     <!-- Full Name -->
                                     <div class="mb-3">
-                                        <label for="firstname" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstname" name="firstname" required 
-                                            value="<?php echo htmlspecialchars($user_data['firstname']); ?>">
+                                        <label for="fullname" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="fullname" name="fullname" required
+                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>">
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="lastname" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastname" name="lastname" required
-                                            value="<?php echo htmlspecialchars($user_data['lastname']); ?>">
-                                    </div>
-
                                     <!-- Contact -->
                                     <div class="mb-3">
                                         <label for="contact_number" class="form-label">Contact Number</label>
