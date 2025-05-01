@@ -63,6 +63,27 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
+                        <?php 
+                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $status = $stmt->fetchColumn();
+                        ?>
+                        <li>
+                            <a 
+                                href="process_dailyreport.php" 
+                                class="dropdown-item"
+                                <?php if ($status == 1): ?>
+                                    onclick="return confirmCloseShop(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
+                            </a>
+                        </li>
+                        <div id="loadingOverlay">
+                            <div class="spinner"></div>
+                        </div>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -72,23 +93,25 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                    <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="home.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Interface</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order Management
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="costumerorder.php">Order</a>
-                                <a class="nav-link" href="Orderhistory.php">Order History</a>
-                            </nav>
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="home.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Order Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="costumerorder.php">Order</a>
+                                    <a class="nav-link" href="Orderhistory.php">Order History</a>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </nav>
