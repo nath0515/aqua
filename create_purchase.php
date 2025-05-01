@@ -212,7 +212,7 @@
                         </div>
 
                         <!-- Second Column (Receipt and Checkout) -->
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-6 col-md-12 mt-3">
                             <div class="card p-3">
                                 <div class="row mb-3">
                                     <div class="col-6">
