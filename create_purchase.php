@@ -290,14 +290,14 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        let quantity = document.getElementById("quantity").value;
-                        if(quantity >= 10){
-                            document.getElementById("unitprice").value = data.data.water_price_promo;
-                        }
-                        else{
-                            document.getElementById("unitprice").value = data.data.water_price;
-                        } 
-                        updateTotalPrice();  // Update the total price after changing the unit price
+                        document.getElementById("quantity").addEventListener("input", function () {
+                            let quantity = parseInt(this.value, 10);
+                            if (!isNaN(quantity) && quantity >= 10) {
+                                document.getElementById("unitprice").value = data.data.water_price_promo;
+                            } else {
+                                document.getElementById("unitprice").value = data.data.water_price;
+                            }
+                        });
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
                     } else {
@@ -473,8 +473,7 @@
             totalPrice = totalPrice.toFixed(2);
 
             totalPriceInput.value = totalPrice;
-        }             
-        document.getElementById('quantity').addEventListener('input', updateUnitPrice);                           
+        }                                       
     </script>
     </body>
 </html>
