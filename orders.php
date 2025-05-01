@@ -369,22 +369,8 @@
                         dataType: "json",
                         success: function(response) {
                             if (response.success) {
-                                const orderItems = response.data2;
-
                                 $("#editStatusId").val(response.data.status_id);
                                 $("#editOrderId").val(orderId);
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
                                 
                             } else {
                                 alert("Error fetching product data.");
