@@ -143,57 +143,43 @@
                 </nav>
             </div>
         <div id="layoutSidenav_content">
-            <main class="container py-4">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6 col-md-8">
-                        <div class="card shadow border-0">
-                            <div class="card-header bg-primary text-white text-center">
-                                <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
+            <div class="container mt-5">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h3 class="mb-0">Profile</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="profileForm" action="update_profile.php" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullname" name="fullname"
+                                    value="<?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?>"
+                                    disabled required>
                             </div>
-                            <div class="card-body">
-                                <form action="update_profile.php" method="POST" onsubmit="return checkForm()">
-                                    <!-- Full Name -->
-                                    <div class="mb-3">
-                                        <label for="fullname" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="fullname" name="fullname" required
-                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>">
-                                    </div>
-                                    <!-- Contact -->
-                                    <div class="mb-3">
-                                        <label for="contact_number" class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contact_number" name="contact_number"
-                                            required pattern="[0-9]{11}" maxlength="11"
-                                            value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
-                                        <div class="invalid-feedback" id="contactError">
-                                            Please enter a valid 11-digit number starting with 09.
-                                        </div>
-                                    </div>
 
-                                    <!-- Email -->
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" required
-                                            pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
-                                            value="<?php echo htmlspecialchars($user_data['email']); ?>">
-                                        <div class="form-text">Must be a Gmail address.</div>
-                                    </div>
-
-                                    <!-- Address -->
-                                    <div class="mb-3">
-                                        <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" name="address" id="address" rows="2" required><?php echo htmlspecialchars($user_data['address']); ?></textarea>
-                                    </div>
-
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-success">Update Profile</button>
-                                    </div>
-                                </form>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="<?= htmlspecialchars($user['email']) ?>"
+                                    disabled required pattern="[a-zA-Z0-9._%+-]+@gmail\.com$">
                             </div>
-                        </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="contact_number" name="contact_number"
+                                    value="<?= htmlspecialchars($user['contact_number']) ?>"
+                                    disabled required pattern="[0-9]{11}" maxlength="11"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
+                                <button type="submit" class="btn btn-success d-none" id="saveBtn">Save</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -205,6 +191,32 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function enableEdit() {
+                document.getElementById('fullname').disabled = false;
+                document.getElementById('email').disabled = false;
+                document.getElementById('contact_number').disabled = false;
+
+                document.getElementById('editBtn').classList.add('d-none');
+                document.getElementById('saveBtn').classList.remove('d-none');
+            }
+
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Save changes?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, save it!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit(); // Proceed with the form submission
+                    }
+                });
+            });
+        </script>
 
         <script>
         function checkForm() {
