@@ -393,6 +393,7 @@
                             let cell6 = newRow.insertCell(5);
                             let cell7 = newRow.insertCell(6);
                             let cell8 = newRow.insertCell(7);
+                            let cell9 = newRow.insertCell(8);
                             
 
                             cell1.innerHTML = data.data.product_name;
@@ -400,12 +401,11 @@
                             cell3.innerHTML = quantity;
                             cell4.innerHTML = checkbox.checked ? 'Yes' : 'No';
                             cell5.innerHTML = containerQuantity;
-                            cell6.innerHTML = "₱" + containerPrice.toFixed(2);
+                            cell6.innerHTML = checkbox.checked ? "₱" + containerPrice.toFixed(2) : "₱0.00";
                             cell7.innerHTML = "₱" + totalPrice.toFixed(2);
                             cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
-
-                            //cell.style.display = "none";
-                            //
+                            cell9.innerText = productId;
+                            cell9.style.display = 'none';
                         }
 
                         unitPriceInput.value = '';

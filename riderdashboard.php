@@ -128,6 +128,7 @@
                             </div>
 
                             <!-- Assigned Deliveries Today -->
+                            <?php foreach($order_data as $row):?>
                             <div class="col-12">
                             <div class="card mb-3">
                                 <div class="card-header bg-primary text-white">
@@ -136,7 +137,7 @@
                                 <ul class="list-group list-group-flush">
                                 <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                                     <div>
-                                    Order #2012 — <strong>Barangay 123</strong><br>
+                                    Order #<?php echo $row['order_id']; ?> — <strong>Barangay 123</strong><br>
                                     3 containers of 5-gallon
                                     </div>
                                     <span class="badge bg-warning text-dark mt-2 mt-md-0">Pending</span>
