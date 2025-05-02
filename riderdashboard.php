@@ -78,7 +78,7 @@
                         ?>
                         <li>
                             <a 
-                                href="process_dailyreport.php" 
+                                href="attendance_toggle.php" 
                                 class="dropdown-item"
                                 <?php if ($status == 1): ?>
                                     onclick="return confirmOffDuty(event)"
