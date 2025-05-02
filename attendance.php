@@ -12,7 +12,18 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-   
+
+    $stmt = $conn->prepare("
+        SELECT DATE(in_time) AS date, 
+            TIME(in_time) AS time_in, 
+            TIME(out_time) AS time_out
+        FROM attendance
+        WHERE user_id = :user_id
+        ORDER BY in_time DESC
+    ");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $attendance_data = $stmt->fetchAll(PDO::FETCH_ASSOC);  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,7 +140,7 @@
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Attendance</li>
                         </ol>
-                        <form action="expenses.php" method="GET">
+                        <form action="attendance.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
@@ -147,8 +158,8 @@
                         </form>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Income
+                                <i class="fas fa-clock me-1"></i>
+                                Attendance Records
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -160,13 +171,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row):?>
+                                        <?php foreach ($attendance_data as $row): ?>
                                             <tr>
-                                                <td><?php echo $row['date'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td>1500</td>
+                                                <td><?= htmlspecialchars($row['date']) ?></td>
+                                                <td><?= htmlspecialchars($row['time_in']) ?></td>
+                                                <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                             </tr>
-                                        <?php endforeach;?>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
