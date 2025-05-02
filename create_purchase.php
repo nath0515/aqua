@@ -436,7 +436,7 @@
                 let total = 0;
 
                 for (let i = 0; i < rows.length; i++) {
-                    let cellText = rows[i].cells[6].innerHTML; // cell7
+                    let cellText = rows[i].cells[7].innerHTML;
                     let price = parseFloat(cellText.replace(/[₱,]/g, '')) || 0; // remove ₱ and commas
                     total += price;
                 }

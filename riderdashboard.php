@@ -71,7 +71,7 @@
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <?php 
-                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $sql = "SELECT status FROM rider_status WHERE riderstatus_id = 1";
                         $stmt = $conn->prepare($sql);
                         $stmt->execute();
                         $status = $stmt->fetchColumn();
