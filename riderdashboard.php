@@ -336,48 +336,69 @@
             </script>
         <?php endif; ?> 
         <script>
-        function confirmToggle(event, status_rider) {
-            // Prevent the default action of the link (i.e., don't actually navigate to another page)
-            event.preventDefault();
-            
-            // Show SweetAlert2 confirmation dialog based on the current status
-            if (status_rider === 1) {
-                // If the user is currently On Duty, confirm Clocking Out
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Do you want to Clock Out?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Clock Out',
-                    cancelButtonText: 'No, Cancel',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Proceed with the Clock Out (submit the form, or send a request, etc.)
-                        window.location.href = "attendance_toggle.php?status=0";
-                    }
-                });
-            } else {
-                // If the user is currently Off Duty, confirm Clocking In
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Do you want to Clock In?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Clock In',
-                    cancelButtonText: 'No, Cancel',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Proceed with the Clock In (submit the form, or send a request, etc.)
-                        window.location.href = "attendance_toggle.php?status=1";
-                    }
-                });
-            }
+            function confirmToggle(event, status_rider) {
+                // Prevent the default action of the link (i.e., don't actually navigate to another page)
+                event.preventDefault();
+                
+                // Show SweetAlert2 confirmation dialog based on the current status
+                if (status_rider === 1) {
+                    // If the user is currently On Duty, confirm Clocking Out
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you want to Clock Out?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Clock Out',
+                        cancelButtonText: 'No, Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Proceed with the Clock Out (submit the form, or send a request, etc.)
+                            window.location.href = "attendance_toggle.php?status=0";
+                        }
+                    });
+                } else {
+                    // If the user is currently Off Duty, confirm Clocking In
+                    // Check if the user has already clocked out today by sending an AJAX request
 
-            return false;  // Prevent default action (i.e., preventing the link click from doing anything)
-        }
-    </script>
-</body>
+                    // AJAX call to check if clock-in is allowed
+                    fetch('check_clock_in.php')
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data === 'ClockInNotAllowed') {
+                                // Show SweetAlert2 message if clock-in is not allowed
+                                Swal.fire({
+                                    title: 'Cannot Clock In',
+                                    text: "You have already clocked out today and cannot clock in again.",
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            } else {
+                                // If clock-in is allowed, confirm Clocking In
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to Clock In?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, Clock In',
+                                    cancelButtonText: 'No, Cancel',
+                                    reverseButtons: true
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Proceed with the Clock In (submit the form, or send a request, etc.)
+                                        window.location.href = "attendance_toggle.php?status=1";
+                                    }
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+
+                return false;  // Prevent default action (i.e., preventing the link click from doing anything)
+            }
+        </script>
+    </body>
 </html>
 
