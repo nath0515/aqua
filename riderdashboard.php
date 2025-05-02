@@ -4,6 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
 
+    // Fetch user data
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
@@ -12,6 +13,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Fetch assigned orders
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
     JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 3";
@@ -19,10 +21,18 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Fetch order status options
     $sql = "SELECT * FROM orderstatus WHERE status_id IN (3, 4, 6)";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch rider status
+    $sql = "SELECT status FROM rider_status WHERE riderstatus_id = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $status_rider = $row ? $row['status'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,12 +80,6 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <?php 
-                        $sql = "SELECT status FROM rider_status WHERE riderstatus_id = 1";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $status_rider = $stmt->fetchColumn();
-                        ?>
                         <li>
                             <a 
                                 href="attendance_toggle.php" 
@@ -138,7 +142,7 @@
                                         <img src="assets/img/icon-192.png" class="mb-3 mb-sm-0 me-sm-3" alt="Shop Logo" style="width: 64px; height: 64px;">
                                         <div class="text-center text-sm-start">
                                             <h5 class="fw-bold mb-1">DoodsNer Water Refilling Station</h5>
-                                            <p class="text-muted mb-0">Rider: John Doe (ID: D001)</p>
+                                            <p class="text-muted mb-0">Rider: <?= htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']) ?> (ID: <?= htmlspecialchars($user_data['user_id']) ?>)</p>
                                         </div>
                                     </div>
                                 </div>
@@ -194,9 +198,8 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        <button class="btn btn-outline-primary btn-sm" 
-                                                                            id="editOrderBtn"
-                                                                            data-id="<?php echo $row['order_id']; ?>"
+                                                                        <button class="btn btn-outline-primary btn-sm editOrderBtn" 
+                                                                            data-id="<?= $row['order_id']; ?>"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#editorder">
                                                                                 <i class="bi bi-pencil"></i> Edit
@@ -235,11 +238,14 @@
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             
+
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
+
+        <!-- Edit Order Modal -->
         <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -249,47 +255,33 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="update_status.php" method="POST" enctype="multipart/form-data">
-                        <!-- Modal Body -->
+                    <form method="POST" action="update_status.php">
                         <div class="modal-body">
-                                <!-- Status -->
+                            <input type="hidden" id="editOrderId" name="order_id">
                             <div class="mb-3">
-                                <label for="stock" class="form-label">Status</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
-                                    <select name="status_id" id="editStatusId" class="form-select">
-                                        <?php foreach($status_data as $row):?>
-                                            <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
-                                        <?php endforeach;?>
-                                    </select>
-                                </div>
+                                <label for="editStatusId" class="form-label">Status</label>
+                                <select id="editStatusId" name="status_id" class="form-select">
+                                    <?php foreach ($status_data as $status): ?>
+                                        <option value="<?= $status['status_id']; ?>"><?= $status['status_name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                            
-                            <input type="text" name="order_id" id="editOrderId" hidden>
                         </div>
-            
-                        <!-- Modal Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.1/dist/sweetalert2.all.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
         <script>
             $(document).ready(function() {
-                $("#editOrderBtn").on('click', function() {
+                $(".editOrderBtn").on('click', function() {
                     var orderId = $(this).data("id");
 
                     $.ajax({
@@ -301,57 +293,16 @@
                             if (response.success) {
                                 $("#editStatusId").val(response.data.status_id);
                                 $("#editOrderId").val(orderId);
-                                
                             } else {
-                                alert("Error fetching product data.");
+                                alert("Error fetching order data.");
                             }
                         },
                         error: function() {
-                            alert("Failed to fetch product details.");
+                            alert("Failed to fetch order details.");
                         }
                     });
                 });
             });
         </script>
-        <?php if (isset($_GET['editstatus'])): ?>
-            <script>
-                <?php if ($_GET['editstatus'] == 'success'): ?>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Order Edited!',
-                        text: 'The order has been successfully edited.',
-                    }).then((result) => {
-                    });
-                <?php elseif ($_GET['editstatus'] == 'error'): ?>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong while editing the order.',
-                    });
-                <?php endif; ?>    
-            </script>
-        <?php endif; ?>  
-        <script>
-            function confirmOffDuty(event) {
-                event.preventDefault();
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to off duty.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Off Duty!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = event.target.href;
-                    }
-                });
-
-                return false;
-            }
-        </script> 
-
-</body>
+    </body>
 </html>
-
