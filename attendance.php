@@ -185,8 +185,8 @@
                                             </tr>
                                         <?php endforeach; ?>
                                         <tr class="table-success fw-bold">
-                                            <td colspan="3" class="text-end">Total Salary</td>
-                                            <td>₱<?= number_format($total_salary, 2) ?></td>
+                                            <td colspan="3" style="text-align: right;"><strong>Total Salary:</strong></td>
+                                            <td><strong>₱<?= number_format($total_salary, 2) ?></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
