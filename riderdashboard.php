@@ -224,7 +224,7 @@
                                 <div class="card-body">
                                 <h5>Shift Schedule</h5>
                                 <p class="mb-1">8:00 AM – 5:00 PM</p>
-                                <p class="mb-0">Status: <span class="badge bg-success">On Duty</span></p>
+                                <p class="mb-0">Status: <span class="badge bg-success"><?php echo ($status) ? 'Off Duty' : 'On Duty'; ?></span></p>
                                 </div>
                             </div>
                             </div>
