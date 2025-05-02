@@ -130,36 +130,53 @@
                             <!-- Assigned Deliveries Today -->
                             <div class="container my-3">
                                 <div class="row">
-                                    <?php if (!empty($order_data)): ?>
-                                    <?php foreach ($order_data as $row): ?>
-                                        <div class="col-12">
-                                        <div class="card mb-3">
-                                            <div class="card-header bg-primary text-white">
-                                            Assigned Delivery — Order #<?= htmlspecialchars($row['order_id']) ?>
-                                            </div>
-                                            <ul class="list-group list-group-flush">
-                                            <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                                                <div>
-                                                <strong><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?></strong><br>
-                                                <?= htmlspecialchars($row['address']) ?><br>
-                                                Contact: <?= htmlspecialchars($row['contact_number']) ?><br>
-                                                Amount: ₱<?= number_format($row['amount'], 2) ?>
-                                                </div>
-                                                <span class="badge bg-warning text-dark mt-2 mt-md-0"><?= htmlspecialchars($row['status_name']) ?></span>
-                                            </li>
-                                            </ul>
-                                        </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    <?php else: ?>
                                     <div class="col-12">
-                                        <div class="alert alert-info text-center">
-                                        No assigned deliveries at the moment.
-                                        </div>
+                                        <?php if (!empty($order_data)): ?>
+                                            <div class="card">
+                                                <div class="card-header bg-primary text-white">
+                                                    Assigned Deliveries (Today)
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-hover mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th scope="col">Order #</th>
+                                                                <th scope="col">Customer</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">Contact</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($order_data as $row): ?>
+                                                                <tr>
+                                                                    <td><?= htmlspecialchars($row['order_id']) ?></td>
+                                                                    <td><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?></td>
+                                                                    <td><?= htmlspecialchars($row['address']) ?></td>
+                                                                    <td><?= htmlspecialchars($row['contact_number']) ?></td>
+                                                                    <td>₱<?= number_format($row['amount'], 2) ?></td>
+                                                                    <td>
+                                                                        <span class="badge 
+                                                                            <?= $row['status_name'] === 'Delivered' ? 'bg-success' : 'bg-warning text-dark' ?>">
+                                                                            <?= htmlspecialchars($row['status_name']) ?>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="alert alert-info text-center">
+                                                No assigned deliveries at the moment.
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php endif; ?>
                                 </div>
                             </div>
+
 
                             <!-- Shift Info -->
                             <div class="col-12">
