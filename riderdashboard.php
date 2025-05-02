@@ -136,7 +136,7 @@
                                         <img src="assets/img/icon-192.png" class="mb-3 mb-sm-0 me-sm-3" alt="Shop Logo" style="width: 64px; height: 64px;">
                                         <div class="text-center text-sm-start">
                                             <h5 class="fw-bold mb-1">DoodsNer Water Refilling Station</h5>
-                                            <p class="text-muted mb-0">Rider: John Doe (ID: D001)</p>
+                                            <p class="text-muted mb-0">Rider: <?= htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']) ?> (ID:#00<?= htmlspecialchars($user_data['user_id']) ?>)</p>
                                         </div>
                                     </div>
                                 </div>
