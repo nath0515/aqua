@@ -43,7 +43,7 @@ try {
         $insertInTime->execute();
     }
 
-    header('Location: index.php');
+    header('Location: riderdashboard.php');
     exit();
     
 } catch (PDOException $e) {
