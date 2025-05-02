@@ -220,7 +220,7 @@
                                         <button class="btn btn-primary mb-2" onclick="submitReceipt()">Checkout</button>
                                     </div>
                                     <div class="col-6">
-                                        <h5 class="text-end" id="totalPrice">Total Price: ₱0.00</h5>
+                                        <h5 class="text-end" id="totalDisplay">Total Price: ₱0.00</h5>
                                     </div>
                                 </div>
                                 <h5 class="mt-2 text-center fw-bold">AquaDrop</h5>
@@ -415,7 +415,7 @@
                         totalPriceInput.value = '';
                         productIdInput.value = '';
 
-                        //updateTotalPrice();
+                        updateTotalPrice();
                     })
                     .catch(error => console.error("Error:", error));
 
@@ -428,6 +428,20 @@
             function deleteRow(button) {
                 const row = button.closest("tr");
                 row.remove();
+            }
+
+            function updateTotalPrice() {
+                let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
+                let rows = table.getElementsByTagName("tr");
+                let total = 0;
+
+                for (let i = 0; i < rows.length; i++) {
+                    let cellText = rows[i].cells[6].innerText; // cell7
+                    let price = parseFloat(cellText.replace(/[₱,]/g, '')) || 0; // remove ₱ and commas
+                    total += price;
+                }
+
+                document.getElementById("totalDisplay").innerText = "₱" + total.toFixed(2);
             }
             
         </script>
