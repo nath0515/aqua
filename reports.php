@@ -93,7 +93,7 @@
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <?php 
                         $sql = "SELECT status FROM store_status WHERE ss_id = 1";
