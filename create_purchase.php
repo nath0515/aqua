@@ -404,7 +404,7 @@
                             cell6.innerHTML = checkbox.checked ? "₱" + containerPrice.toFixed(2) : "₱0.00";
                             cell7.innerHTML = "₱" + totalPrice.toFixed(2);
                             cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
-                            cell9.innerText = productId;
+                            cell9.innerHTML = productId;
                             cell9.style.display = 'none';
                         }
 
@@ -441,7 +441,7 @@
                     total += price;
                 }
 
-                document.getElementById("totalDisplay").innerText = "₱" + total.toFixed(2);
+                document.getElementById("totalDisplay").innerHTML = "₱" + total.toFixed(2);
             }
             
         </script>
