@@ -80,11 +80,11 @@
                             <a 
                                 href="attendance_toggle.php" 
                                 class="dropdown-item"
-                                <?php if ($status == 1): ?>
+                                <?php if ($status): ?>
                                     onclick="return confirmOffDuty(event)"
                                 <?php endif; ?>
                             >
-                                <?php echo ($status == 1) ? 'Off Duty' : 'On Duty'; ?>
+                                <?php echo ($status) ? 'Off Duty' : 'On Duty'; ?>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
