@@ -81,12 +81,9 @@
                         $status_rider = $row ? $row['status'] : 0;
                         ?>
                         <li>
-                            <a 
-                                href="attendance_toggle.php" 
-                                class="dropdown-item"
-                                onclick="return confirmToggle(event, <?= $status_rider ?>)">
-                                <?= $status_rider ? 'Off Duty' : 'On Duty'; ?>
-                            </a>
+                        <a href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
+                            <?php echo ($status_rider) ? 'On Duty' : 'Off Duty'; ?>
+                        </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -339,34 +336,28 @@
             </script>
         <?php endif; ?> 
         <script>
-            function confirmToggle(event, status) {
-                const action = status ? 'go Off Duty' : 'start your shift (On Duty)';
-                if (!confirm(`Are you sure you want to ${action}?`)) {
-                    event.preventDefault();
-                    return false;
+            function confirmToggle(event, status_rider) {
+            // Prevent the default action of the link (i.e., don't actually navigate to another page)
+            event.preventDefault();
+            
+            // Show confirmation dialog based on the current status
+            if (status_rider === 1) {
+                // If the user is currently On Duty, confirm Clocking Out
+                if (confirm("Are you sure you want to Clock Out?")) {
+                    // Proceed with the Clock Out (submit the form, or send a request, etc.)
+                    window.location.href = "attendance_toggle.php?status=0";
                 }
-                return true;
+            } else {
+                // If the user is currently Off Duty, confirm Clocking In
+                if (confirm("Are you sure you want to Clock In?")) {
+                    // Proceed with the Clock In (submit the form, or send a request, etc.)
+                    window.location.href = "attendance_toggle.php?status=1";
+                }
             }
-        </script> 
-        <script>
-            function confirmOffDuty(event) {
-                event.preventDefault();
+            
+            return false;  // Prevent default action (i.e., preventing the link click from doing anything)
+        }
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to off duty.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Off Duty!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = event.target.href;
-                    }
-                });
-
-                return false;
-            }
         </script> 
 </body>
 </html>

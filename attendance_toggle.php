@@ -1,76 +1,37 @@
 <?php
-require 'db.php';
+// Ensure session is started
 require 'session.php';
+require 'db.php';
 
-try {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: login.php');
-        exit();
-    }
-
-    $now = date('Y-m-d H:i:s');
-    $today = date('Y-m-d');
+if (isset($_GET['status'])) {
+    $status = (int) $_GET['status'];  // 1 for On Duty, 0 for Off Duty
     $user_id = $_SESSION['user_id'];
+    $now = date('Y-m-d H:i:s');  // Current time
 
-    // Check if rider_status exists for this user
-    $stmt = $conn->prepare("SELECT status, last_toggle FROM rider_status WHERE user_id = :user_id");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Update rider status
+    $updateStatus = $conn->prepare("UPDATE rider_status SET status = :status, last_toggle = :now WHERE user_id = :user_id");
+    $updateStatus->bindParam(':status', $status);
+    $updateStatus->bindParam(':now', $now);
+    $updateStatus->bindParam(':user_id', $user_id);
+    $updateStatus->execute();
 
-    if (!$row) {
-        // If no record exists, insert a default row
-        $insert = $conn->prepare("INSERT INTO rider_status (user_id, status, last_toggle) VALUES (:user_id, 0, :now)");
-        $insert->bindParam(':user_id', $user_id);
-        $insert->bindParam(':now', $now);
-        $insert->execute();
-
-        $row = ['status' => 0, 'last_toggle' => $now];
-    }
-
-    $status = $row['status'];
-    $lastToggle = $row['last_toggle'];
-
+    // Optionally, update attendance based on the status
     if ($status == 1) {
-        // Clock out
-        $updateStatus = $conn->prepare("UPDATE rider_status SET status = 0, last_toggle = :now WHERE user_id = :user_id");
-        $updateStatus->bindParam(':now', $now);
-        $updateStatus->bindParam(':user_id', $user_id);
-        $updateStatus->execute();
-
-        $updateOutTime = $conn->prepare("
-            UPDATE attendance 
-            SET out_time = :out_time 
-            WHERE user_id = :user_id AND out_time IS NULL
-        ");
+        // Insert clock-in time
+        $insertInTime = $conn->prepare("INSERT INTO attendance (user_id, in_time) VALUES (:user_id, :in_time)");
+        $insertInTime->bindParam(':user_id', $user_id);
+        $insertInTime->bindParam(':in_time', $now);
+        $insertInTime->execute();
+    } elseif ($status == 0) {
+        // Update clock-out time
+        $updateOutTime = $conn->prepare("UPDATE attendance SET out_time = :out_time WHERE user_id = :user_id AND out_time IS NULL");
         $updateOutTime->bindParam(':out_time', $now);
         $updateOutTime->bindParam(':user_id', $user_id);
         $updateOutTime->execute();
-
-    } else {
-        $toggleDate = date('Y-m-d', strtotime($lastToggle));
-        if ($toggleDate !== $today) {
-            // Clock in
-            $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, last_toggle = :now WHERE user_id = :user_id");
-            $updateStatus->bindParam(':now', $now);
-            $updateStatus->bindParam(':user_id', $user_id);
-            $updateStatus->execute();
-
-            $insertInTime = $conn->prepare("
-                INSERT INTO attendance (user_id, in_time) 
-                VALUES (:user_id, :in_time)
-            ");
-            $insertInTime->bindParam(':user_id', $user_id);
-            $insertInTime->bindParam(':in_time', $now);
-            $insertInTime->execute();
-        }
-        // Otherwise, do nothing (already clocked in today)
     }
 
+    // Redirect back to the dashboard
     header('Location: riderdashboard.php');
     exit();
-
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
 }
 ?>
