@@ -232,7 +232,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                    <form action="update_status.php" method="POST" enctype="multipart/form-data">
                         <!-- Modal Body -->
                         <div class="modal-body">
                                 <!-- Status -->
