@@ -15,7 +15,7 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
-            header('Location: orders.php?editstatus=success');
+            header('Location: orderhistory.php?editstatus=success');
             exit();
 
         }
