@@ -16,9 +16,9 @@
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id 
-        WHERE a.status_id = 4 AND rider = :rider";
+        WHERE a.status_id = 4 AND a.user_id = :user_id";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':rider', $rider); 
+        $stmt->bindParam(':user_id', $user_id); 
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
