@@ -146,6 +146,7 @@
                                                                 <th scope="col">Contact</th>
                                                                 <th scope="col">Amount</th>
                                                                 <th scope="col">Status</th>
+                                                                <th scope="col">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
