@@ -157,10 +157,23 @@
                                                                     <td><?= htmlspecialchars($row['contact_number']) ?></td>
                                                                     <td>₱<?= number_format($row['amount'], 2) ?></td>
                                                                     <td>
-                                                                        <span class="badge 
-                                                                            <?= $row['status_name'] === 'Delivered' ? 'bg-success' : 'bg-warning text-dark' ?>">
-                                                                            <?= htmlspecialchars($row['status_name']) ?>
-                                                                        </span>
+                                                                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
+                                                                            <?php
+                                                                                $status = htmlspecialchars($row['status_name']);
+                                                                                $badgeClass = 'bg-secondary'; // Default
+
+                                                                                if ($status === 'Delivered') {
+                                                                                    $badgeClass = 'bg-success';
+                                                                                } elseif ($status === 'Pending') {
+                                                                                    $badgeClass = 'bg-warning text-dark';
+                                                                                } elseif ($status === 'Cancelled') {
+                                                                                    $badgeClass = 'bg-danger';
+                                                                                }
+                                                                            ?>
+                                                                            <span class="badge <?= $badgeClass ?>">
+                                                                                <?= $status ?>
+                                                                            </span>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
