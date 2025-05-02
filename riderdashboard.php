@@ -77,14 +77,10 @@
                         $status_rider = $stmt->fetchColumn();
                         ?>
                         <li>
-                            <a 
-                                href="attendance_toggle.php" 
-                                class="dropdown-item"
-                                <?php if ($status_rider): ?>
-                                    onclick="return confirmOffDuty(event)"
-                                <?php endif; ?>
-                            >
-                                <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
+                            <a href="#" 
+                            class="dropdown-item" 
+                            onclick="confirmDutyToggle(event)">
+                                <?= $status_rider ? 'Off Duty' : 'On Duty' ?>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
