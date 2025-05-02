@@ -48,8 +48,9 @@ try {
             // Check if the user has already toggled Off Duty today
             if ($toggleDate !== $today) {
                 // Update status to On Duty (1) and update the last toggle time
-                $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, last_toggle = :now WHERE riderstatus_id = 1");
+                $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, last_toggle = :now WHERE user_id = :user_id");
                 $updateStatus->bindParam(':now', $now);
+                $updateStatus->bindParam(':user_id', $user_id);
                 $updateStatus->execute();
 
                 // Insert new attendance record with the current in_time (Clock In)
