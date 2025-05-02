@@ -415,7 +415,7 @@
                         totalPriceInput.value = '';
                         productIdInput.value = '';
 
-                        updateTotalPrice();
+                        updateTotalPrice1();
                     })
                     .catch(error => console.error("Error:", error));
 
@@ -430,14 +430,14 @@
                 row.remove();
             }
 
-            function updateTotalPrice() {
+            function updateTotalPrice1() {
                 let total = 0;
                 let table = document.getElementById("receipt");
                 let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 
                 for (let i = 0; i < rows.length; i++) {
                     let cell7 = rows[i].getElementsByTagName("td")[6];
-                    let price = parseFloat(cell4.innerText.replace("₱", "").replace(",", "")) || 0;
+                    let price = parseFloat(cell7.innerText.replace("₱", "").replace(",", "")) || 0;
                     total += price;
                 }
 
