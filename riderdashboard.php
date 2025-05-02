@@ -82,7 +82,7 @@
                         ?>
                         <li>
                         <a href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
-                            <?php echo ($status_rider) ? 'On Duty' : 'Off Duty'; ?>
+                            <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                         </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
