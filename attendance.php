@@ -173,7 +173,7 @@
                                     <tbody>
                                         <?php foreach ($attendance_data as $row): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($row['date']) ?></td>
+                                                <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td><?= htmlspecialchars($row['time_in']) ?></td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                             </tr>
