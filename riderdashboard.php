@@ -351,6 +351,26 @@
                 return false;
             }
         </script> 
+        <script>
+            function confirmDutyToggle(event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to go back On Duty today once you clock out.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Off Duty',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to PHP script that toggles attendance
+                        window.location.href = "attendance_toggle.php";
+                    }
+                });
+            }
+        </script>
+
 </body>
 </html>
 
