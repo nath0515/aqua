@@ -314,7 +314,51 @@
                 <?php endif; ?>    
             </script>
         <?php endif; ?>
-    
+    <script>
+        // Listen for the edit order button click event
+        $('#editOrderBtn').on('click', function() {
+            // Get the order id
+            var orderId = $(this).data('id');
+            
+            // You can open a modal or inline form here to update the status
+            // For example, populate the modal with the current status
+
+            $.ajax({
+                url: 'update_status.php', // PHP file to handle the status update
+                method: 'POST',
+                data: {
+                    order_id: orderId,
+                    new_status: 'Delivered'  // This would come from your form or modal input
+                },
+                success: function(response) {
+                    if(response.success) {
+                        // Find the corresponding row in the table
+                        var statusCell = $("tr").find("td[data-order-id='" + orderId + "']").closest("tr").find('td:nth-child(6)');
+
+                        // Update the status badge
+                        var status = response.new_status;
+                        var badgeClass = 'bg-secondary'; // Default
+
+                        if (status === 'Delivered') {
+                            badgeClass = 'bg-success';
+                        } else if (status === 'Delivering') {
+                            badgeClass = 'bg-warning text-dark';
+                        } else if (status === 'Cancelled') {
+                            badgeClass = 'bg-danger';
+                        }
+
+                        statusCell.find('span').removeClass().addClass('badge ' + badgeClass).text(status);
+
+                        // Optionally, close the modal here
+                        $('#editorder').modal('hide');
+                    }
+                },
+                error: function() {
+                    alert("Error updating status.");
+                }
+            });
+        });
+    </script>  
 </body>
 </html>
 
