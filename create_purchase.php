@@ -180,14 +180,14 @@
                                             <label class="form-label">Container Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" name="container_quantity" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()" required>
+                                                <input type="number" class="form-control" id="containerQuantityInput" value="0" onchange="updateTotalPrice()">
                                             </div>
                                         </div>
                                         <div class="col">
                                             <label class="form-label">Available Quantity</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-bag-plus"></i></span>
-                                                <input type="number" name="available_quantity" class="form-control" id="availablequantity" value="0" onchange="updateTotalPrice()" readonly>
+                                                <input type="number" class="form-control" id="availablequantity" value="0" onchange="updateTotalPrice()" readonly>
                                             </div>
                                         </div>    
                                     </div>
@@ -195,14 +195,14 @@
                                         <label for="price" class="form-label">Container Price</label>
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
-                                            <input type="number" name="container_price" class="form-control" step="0.01" id="containerprice" name="price" readonly>
+                                            <input type="number" class="form-control" step="0.01" id="containerprice" name="price" readonly>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="price" class="form-label">Total Price</label>
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
-                                            <input type="number" name="total_price" class="form-control" step=0.01 id="totalprice" name="price" readonly>
+                                            <input type="number" class="form-control" step=0.01 id="totalprice" name="price" readonly>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end">

@@ -7,13 +7,13 @@ try {
     $user_id = $_SESSION['user_id']; // assumes session holds user_id
 
     // Get current store status
-    $stmt = $conn->prepare("SELECT status FROM store_status WHERE ss_id = 1");
+    $stmt = $conn->prepare("SELECT status FROM rider_status WHERE riderstatus_id = 1");
     $stmt->execute();
     $status = $stmt->fetchColumn();
 
     if ($status) {
         // Clocking out: set store to closed
-        $updateStatus = $conn->prepare("UPDATE store_status SET status = 0 WHERE ss_id = 1");
+        $updateStatus = $conn->prepare("UPDATE rider_status SET status = 0 WHERE riderstatus_id = 1");
         $updateStatus->execute();
 
         // Update the latest attendance with out_time
@@ -30,7 +30,7 @@ try {
 
     } else {
         // Clocking in: set store to open
-        $updateStatus = $conn->prepare("UPDATE store_status SET status = 1 WHERE ss_id = 1");
+        $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1 WHERE riderstatus_id = 1");
         $updateStatus->execute();
 
         // Insert new attendance with in_time
