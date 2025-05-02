@@ -428,6 +428,7 @@
             function deleteRow(button) {
                 const row = button.closest("tr");
                 row.remove();
+                updateTotalPrice1();
             }
 
             function updateTotalPrice1() {
