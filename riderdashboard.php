@@ -164,7 +164,7 @@
 
                                                                                 if ($status === 'Delivered') {
                                                                                     $badgeClass = 'bg-success';
-                                                                                } elseif ($status === 'Pending') {
+                                                                                } elseif ($status === 'Delivering') {
                                                                                     $badgeClass = 'bg-warning text-dark';
                                                                                 } elseif ($status === 'Cancelled') {
                                                                                     $badgeClass = 'bg-danger';
@@ -174,6 +174,15 @@
                                                                                 <?= $status ?>
                                                                             </span>
                                                                         </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <button class="btn btn-outline-primary btn-sm" 
+                                                                            id="editOrderBtn"
+                                                                            data-id="<?php echo $row['order_id']; ?>"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editorder">
+                                                                                <i class="bi bi-pencil"></i> Edit
+                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
@@ -211,6 +220,43 @@
                         </div>
                     </div>
                 </footer>
+            </div>
+        </div>
+        <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+            
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                                <!-- Status -->
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Status</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                    <select name="status_id" id="editStatusId" class="form-select">
+                                        <?php foreach($status_data as $row):?>
+                                            <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <input type="text" name="order_id" id="editOrderId" hidden>
+                        </div>
+            
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
