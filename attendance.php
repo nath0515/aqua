@@ -3,9 +3,6 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
-    $salary_per_day = 500;
-    $total_days = count($attendance_data);
-    $total_salary = $total_days * $salary_per_day;
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -27,6 +24,10 @@
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $attendance_data = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+
+    $salary_per_day = 500;
+    $total_days = count($attendance_data);
+    $total_salary = $total_days * $salary_per_day;
 ?>
 <!DOCTYPE html>
 <html lang="en">
