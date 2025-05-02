@@ -172,7 +172,10 @@
                                             Please enter a valid 11-digit contact number starting with 09.
                                         </div>
                                     </div>
-
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="lastname" required >
+                                    </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" name="email"
@@ -437,49 +440,6 @@
                 validationDiv.classList.remove("d-none");
             }
         }
-    
-    </script>
-        <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");  
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-        <?php if (isset($_GET['status'])): ?>
         <script>
             <?php if ($_GET['status'] == 'notmatch'): ?>
             Swal.fire({

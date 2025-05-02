@@ -5,7 +5,7 @@
 
     ob_start();
 
-    $sql1 = "INSERT INTO users (email, password, role_id, created_at) VALUES (:email, :password, 3, :created_at)";
+    $sql1 = "INSERT INTO users (email, password,username role_id, created_at) VALUES (:email, :password,:username, 3, :created_at)";
     $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)";
     $date = date('Y-m-d H:i:s');
 
@@ -14,6 +14,7 @@
         $lastname = $_POST['lastname'];
         $contact_number = $_POST['contact_number'];
         $email = $_POST['email'];
+        $username=$_POST['username'];
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
@@ -37,6 +38,7 @@
             }
             $stmt = $conn->prepare($sql1);
             $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $password_hashed);
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
