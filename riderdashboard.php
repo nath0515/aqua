@@ -74,17 +74,17 @@
                         $sql = "SELECT status FROM rider_status WHERE riderstatus_id = 1";
                         $stmt = $conn->prepare($sql);
                         $stmt->execute();
-                        $status = $stmt->fetchColumn();
+                        $status_rider = $stmt->fetchColumn();
                         ?>
                         <li>
                             <a 
                                 href="attendance_toggle.php" 
                                 class="dropdown-item"
-                                <?php if ($status): ?>
+                                <?php if ($status_rider): ?>
                                     onclick="return confirmOffDuty(event)"
                                 <?php endif; ?>
                             >
-                                <?php echo ($status) ? 'Off Duty' : 'On Duty'; ?>
+                                <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
@@ -224,7 +224,7 @@
                                 <div class="card-body">
                                 <h5>Shift Schedule</h5>
                                 <p class="mb-1">8:00 AM – 5:00 PM</p>
-                                <p class="mb-0">Status: <span class="badge bg-success"><?php echo ($status) ? 'Off Duty' : 'On Duty'; ?></span></p>
+                                <p class="mb-0">Status: <span class="badge bg-success"><?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?></span></p>
                                 </div>
                             </div>
                             </div>
