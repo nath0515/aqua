@@ -77,10 +77,14 @@
                         $status_rider = $stmt->fetchColumn();
                         ?>
                         <li>
-                            <a href="#" 
-                            class="dropdown-item" 
-                            onclick="confirmDutyToggle(event)">
-                                <?= $status_rider ? 'Off Duty' : 'On Duty' ?>
+                            <a 
+                                href="attendance_toggle.php" 
+                                class="dropdown-item"
+                                <?php if ($status_rider): ?>
+                                    onclick="return confirmOffDuty(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
@@ -347,25 +351,6 @@
                 return false;
             }
         </script> 
-        <script>
-            function confirmDutyToggle(event) {
-                event.preventDefault();
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to go back On Duty today once you clock out.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Off Duty',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to PHP script that toggles attendance
-                        window.location.href = "attendance_toggle.php";
-                    }
-                });
-            }
-        </script>
 
 </body>
 </html>
