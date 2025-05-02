@@ -185,7 +185,7 @@
                                             </tr>
                                         <?php endforeach; ?>
                                         <tr class="table-success fw-bold">
-                                            <td colspan="1"></td> <!-- Skip Date and Time-In columns -->
+                                            <td colspan="3"></td> <!-- Skip Date and Time-In columns -->
                                             <td style="text-align: right;"><strong>Total Salary:</strong></td>
                                             <td><strong>₱<?= number_format($total_salary, 2) ?></strong></td>
                                         </tr>
