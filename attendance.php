@@ -3,6 +3,9 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $salary_per_day = 500;
+    $total_days = count($attendance_data);
+    $total_salary = $total_days * $salary_per_day;
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -12,7 +15,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+    
     $stmt = $conn->prepare("
         SELECT DATE(in_time) AS date, 
             TIME(in_time) AS time_in, 
@@ -168,6 +171,7 @@
                                             <th>Date</th>  
                                             <th>Time-In</th>
                                             <th>Time-Out</th>
+                                            <th>Daily Salary</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -176,8 +180,13 @@
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td><?= htmlspecialchars($row['time_in']) ?></td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
+                                                <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
+                                        <tr class="table-success fw-bold">
+                                            <td colspan="3" class="text-end">Total Salary</td>
+                                            <td>₱<?= number_format($total_salary, 2) ?></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
