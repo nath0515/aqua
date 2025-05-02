@@ -307,7 +307,7 @@
                 .catch(error => console.error('Error:', error));
             }
             
-            function addRow(){
+            function addRow() {
                 const unitPriceInput = document.getElementById('unitprice');
                 const quantityInput = document.getElementById('quantity');
                 const containerQuantityInput = document.getElementById('containerQuantityInput');
@@ -316,110 +316,92 @@
                 const productIdInput = document.getElementById('product_id');
                 const availableInput = document.getElementById('availablequantity');
 
-                let unitprice = unitPriceInput.value;
-                let quantity = quantityInput.value;
-                let containerQuantity = Number(containerQuantityInput.value);
-                let containerPrice = Number(containerPriceInput.value);
-                let totalPrice = Number(totalPriceInput.value);
+                let unitprice = parseFloat(unitPriceInput.value);
+                let quantity = parseInt(quantityInput.value);
+                let containerQuantity = parseInt(containerQuantityInput.value);
+                let containerPrice = parseFloat(containerPriceInput.value);
+                let totalPrice = parseFloat(totalPriceInput.value);
                 let productId = productIdInput.value;
-                let available = availableInput.value;
+                let available = parseInt(availableInput.value);
                 let hasContainer = document.getElementById("hasContainer").checked;
-                console.log(hasContainer);
 
-                if(!productId){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: "Please enter an item."
-				    });
-				    return;
-                }
-                else if(quantity < 1){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: "Please enter a valid quantity."
-                    });
+                if (!productId) {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: "Please enter an item." });
+                    return;
+                } else if (quantity < 1) {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: "Please enter a valid quantity." });
+                    return;
+                } else if (containerQuantity < 1 && hasContainer) {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: "Please enter a valid container quantity." });
+                    return;
+                } else if (containerQuantity > available) {
+                    Swal.fire({ icon: 'error', title: 'Error!', text: "Container out of stock." });
                     return;
                 }
-                else if(containerQuantity < 1 && hasContainer){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: "Please enter a valid container quantity."
-                    });
-                    return;
-                }
-                else if(containerQuantity > available){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: "Container out of stock."
-                    });
-                    return;
-                }
-                
-                fetch("process_getproductdata.php",{
+
+                fetch("process_getproductdata.php", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: "product_id=" + encodeURIComponent(productId)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: data.error
-                            });
-                            return;
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        Swal.fire({ icon: 'error', title: 'Error!', text: data.error });
+                        return;
+                    }
+
+                    let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
+                    let rows = table.getElementsByTagName("tr");
+                    let waterPrice = parseFloat(data.data.water_price);
+                    let found = false;
+
+                    for (let i = 0; i < rows.length; i++) {
+                        let existingProductId = rows[i].cells[8].innerText;
+                        if (existingProductId === productId) {
+                            // Update existing row
+                            let existingQuantity = parseInt(rows[i].cells[2].innerText);
+                            let existingContainerQuantity = parseInt(rows[i].cells[4].innerText);
+                            let newQuantity = existingQuantity + quantity;
+                            let newContainerQuantity = existingContainerQuantity + (hasContainer ? containerQuantity : 0);
+                            let newTotal = newQuantity * unitprice + (hasContainer ? newContainerQuantity * containerPrice : 0);
+
+                            rows[i].cells[2].innerText = newQuantity;
+                            rows[i].cells[4].innerText = hasContainer ? newContainerQuantity : 0;
+                            rows[i].cells[6].innerText = "₱" + newTotal.toFixed(2);
+                            found = true;
+                            break;
                         }
+                    }
 
-                        let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
-                        let rows = table.getElementsByTagName("tr");
-                        let waterPrice = parseFloat(data.data.water_price);
-                        let updated = false;
-                        let checkbox = document.getElementById("hasContainer");
+                    if (!found) {
+                        // Insert new row
+                        let newRow = table.insertRow();
+                        newRow.insertCell(0).innerText = data.data.product_name;
+                        newRow.insertCell(1).innerText = "₱" + waterPrice.toFixed(2);
+                        newRow.insertCell(2).innerText = quantity;
+                        newRow.insertCell(3).innerText = hasContainer ? 'Yes' : 'No';
+                        newRow.insertCell(4).innerText = containerQuantity;
+                        newRow.insertCell(5).innerText = hasContainer ? "₱" + containerPrice.toFixed(2) : "₱0.00";
+                        newRow.insertCell(6).innerText = "₱" + totalPrice.toFixed(2);
+                        newRow.insertCell(7).innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
+                        newRow.insertCell(8).innerText = productId;
+                        newRow.cells[8].style.display = 'none';
+                    }
 
-                        if (!updated) {
-                            let newRow = table.insertRow();
-                            let cell1 = newRow.insertCell(0);
-                            let cell2 = newRow.insertCell(1);
-                            let cell3 = newRow.insertCell(2);
-                            let cell4 = newRow.insertCell(3);
-                            let cell5 = newRow.insertCell(4);
-                            let cell6 = newRow.insertCell(5);
-                            let cell7 = newRow.insertCell(6);
-                            let cell8 = newRow.insertCell(7);
-                            let cell9 = newRow.insertCell(8);
-                            
+                    // Clear inputs
+                    unitPriceInput.value = '';
+                    quantityInput.value = '';
+                    containerQuantityInput.value = '';
+                    containerPriceInput.value = '';
+                    totalPriceInput.value = '';
+                    productIdInput.value = '';
 
-                            cell1.innerHTML = data.data.product_name;
-                            cell2.innerHTML = "₱" + waterPrice.toFixed(2);
-                            cell3.innerHTML = quantity;
-                            cell4.innerHTML = checkbox.checked ? 'Yes' : 'No';
-                            cell5.innerHTML = containerQuantity;
-                            cell6.innerHTML = checkbox.checked ? "₱" + containerPrice.toFixed(2) : "₱0.00";
-                            cell7.innerHTML = "₱" + totalPrice.toFixed(2);
-                            cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
-                            cell9.innerHTML = productId;
-                            cell9.style.display = 'none';
-                        }
-
-                        unitPriceInput.value = '';
-                        quantityInput.value = '';
-                        containerQuantityInput.value = '';
-                        containerPriceInput.value = '';
-                        totalPriceInput.value = '';
-                        productIdInput.value = '';
-
-                        updateTotalPrice1();
-                    })
-                    .catch(error => console.error("Error:", error));
-
+                    updateTotalPrice1();
+                })
+                .catch(error => console.error("Error:", error));
             }
+
             document.getElementById("purchaseForm").addEventListener("submit", function(event) {
                 event.preventDefault();
                 addRow();
