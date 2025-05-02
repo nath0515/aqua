@@ -23,6 +23,8 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,20 +73,19 @@
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <?php 
-                        $sql = "SELECT status FROM rider_status WHERE riderstatus_id = 1";
+                        $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
                         $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(':user_id', $user_id);
                         $stmt->execute();
-                        $status_rider = $stmt->fetchColumn();
+                        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $status_rider = $row ? $row['status'] : 0;
                         ?>
                         <li>
                             <a 
                                 href="attendance_toggle.php" 
                                 class="dropdown-item"
-                                <?php if ($status_rider): ?>
-                                    onclick="return confirmOffDuty(event)"
-                                <?php endif; ?>
-                            >
-                                <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
+                                onclick="return confirmToggle(event, <?= $status_rider ?>)">
+                                <?= $status_rider ? 'Off Duty' : 'On Duty'; ?>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider" /></li>
@@ -224,7 +225,13 @@
                                 <div class="card-body">
                                 <h5>Shift Schedule</h5>
                                 <p class="mb-1">8:00 AM – 5:00 PM</p>
-                                <p class="mb-0">Status: <span class="badge bg-success"><?php echo ($status_rider) ? 'On Duty' : 'Off Duty'; ?></span></p>
+                                <?php
+                                    $badgeClass = $status_rider ? 'bg-success' : 'bg-secondary';
+                                    $statusText = $status_rider ? 'On Duty' : 'Off Duty';
+                                    ?>
+                                    <p class="mb-0">Status: 
+                                        <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
+                                    </p>
                                 </div>
                             </div>
                             </div>
@@ -330,7 +337,17 @@
                     });
                 <?php endif; ?>    
             </script>
-        <?php endif; ?>  
+        <?php endif; ?> 
+        <script>
+            function confirmToggle(event, status) {
+                const action = status ? 'go Off Duty' : 'start your shift (On Duty)';
+                if (!confirm(`Are you sure you want to ${action}?`)) {
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            }
+        </script> 
         <script>
             function confirmOffDuty(event) {
                 event.preventDefault();
