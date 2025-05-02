@@ -81,7 +81,7 @@
                         $status_rider = $row ? $row['status'] : 0;
                         ?>
                         <li>
-                        <a href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
                             <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                         </a>
                         </li>
