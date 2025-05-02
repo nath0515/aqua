@@ -5,7 +5,7 @@
 
     ob_start();
 
-    $sql1 = "INSERT INTO users (email, password,username role_id, created_at) VALUES (:email, :password,:username, 3, :created_at)";
+    $sql1 = "INSERT INTO users (email, password,username,role_id, created_at) VALUES (:email, :password,:username, 3, :created_at)";
     $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)";
     $date = date('Y-m-d H:i:s');
 
