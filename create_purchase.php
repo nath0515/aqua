@@ -471,6 +471,75 @@
 
             totalPriceInput.value = totalPrice;
         }                                       
+        function submitReceipt() {
+            let table = document.getElementById("receipt");
+            let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            let receiptData = [];
+
+            let paymentMethod = document.querySelector("select[name='payment_id']").value;
+            if (paymentMethod === "Choose Payment Method") {
+                Swal.fire("Error!", "Please select a valid payment method.", "error");
+                return;
+            }
+
+            let totalPriceText = document.getElementById("totalPrice").innerText;
+            let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
+
+            for (let i = 0; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName("td");
+
+                let rowData = {
+                    product_name: cells[0].innerText,
+                    unit_price: parseFloat(cells[1].innerText.replace("₱", "").trim()),
+                    quantity: parseInt(cells[2].innerText),
+                    has_container: cells[3].innerText === 'Yes',
+                    container_quantity: parseInt(cells[4].innerText),
+                    container_price: parseFloat(cells[5].innerText.replace("₱", "").trim()),
+                    total_price: parseFloat(cells[6].innerText.replace("₱", "").trim()),
+                    product_id: parseInt(cells[8].innerText) // hidden
+                };
+
+                receiptData.push(rowData);
+            }
+
+            if (receiptData.length === 0) {
+                Swal.fire("Error!", "Your receipt is empty. Add items before checking out.", "error");
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure you want to checkout?",
+                text: "You won't be able to undo this action.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Checkout!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("process_receipt.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            receipt: receiptData,
+                            total_price: totalPrice,
+                            payment_method: paymentMethod,
+                            branch_id: <?php echo $_SESSION['branch_id']; ?>
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire("Success!", "Purchase submitted successfully!", "success")
+                                .then(() => window.location.href = "purchase.php");
+                        } else {
+                            Swal.fire("Error!", data.error, "error");
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                }
+            });
+        }
+
     </script>
     </body>
 </html>
