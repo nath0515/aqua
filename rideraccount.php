@@ -172,10 +172,7 @@
                                             Please enter a valid 11-digit contact number starting with 09.
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" required >
-                                    </div>
+
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" name="email"
@@ -440,6 +437,9 @@
                 validationDiv.classList.remove("d-none");
             }
         }
+    
+    </script>
+        <?php if (isset($_GET['status'])): ?>
         <script>
             <?php if ($_GET['status'] == 'notmatch'): ?>
             Swal.fire({
