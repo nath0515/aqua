@@ -269,6 +269,51 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $("#editOrderBtn").on('click', function() {
+                    var orderId = $(this).data("id");
+
+                    $.ajax({
+                        url: "process_getorderdata.php",
+                        type: "POST",
+                        data: { order_id: orderId },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                $("#editStatusId").val(response.data.status_id);
+                                $("#editOrderId").val(orderId);
+                                
+                            } else {
+                                alert("Error fetching product data.");
+                            }
+                        },
+                        error: function() {
+                            alert("Failed to fetch product details.");
+                        }
+                    });
+                });
+            });
+        </script>
+        <?php if (isset($_GET['editstatus'])): ?>
+            <script>
+                <?php if ($_GET['editstatus'] == 'success'): ?>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Edited!',
+                        text: 'The order has been successfully edited.',
+                    }).then((result) => {
+                    });
+                <?php elseif ($_GET['editstatus'] == 'error'): ?>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong while editing the order.',
+                    });
+                <?php endif; ?>    
+            </script>
+        <?php endif; ?>
     
 </body>
 </html>
