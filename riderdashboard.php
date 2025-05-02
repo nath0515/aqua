@@ -114,34 +114,63 @@
                 <main>
                     <div class="container my-3">
                         <div class="row">
-                            <?php if (!empty($order_data)): ?>
-                            <?php foreach ($order_data as $row): ?>
-                                <div class="col-12">
-                                <div class="card mb-3">
-                                    <div class="card-header bg-primary text-white">
-                                    Assigned Delivery — Order #<?= htmlspecialchars($row['order_id']) ?>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                                        <div>
-                                        <strong><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?></strong><br>
-                                        <?= htmlspecialchars($row['address']) ?><br>
-                                        Contact: <?= htmlspecialchars($row['contact_number']) ?><br>
-                                        Amount: ₱<?= number_format($row['amount'], 2) ?>
-                                        </div>
-                                        <span class="badge bg-warning text-dark mt-2 mt-md-0"><?= htmlspecialchars($row['status_name']) ?></span>
-                                    </li>
-                                    </ul>
-                                </div>
-                                </div>
-                            <?php endforeach; ?>
-                            <?php else: ?>
+                            <!-- Rider Header Info -->
                             <div class="col-12">
-                                <div class="alert alert-info text-center">
-                                No assigned deliveries at the moment.
+                                <div class="card mb-3">
+                                    <div class="card-body d-flex flex-column flex-sm-row align-items-center">
+                                        <img src="assets/img/icon-192.png" class="mb-3 mb-sm-0 me-sm-3" alt="Shop Logo" style="width: 64px; height: 64px;">
+                                        <div class="text-center text-sm-start">
+                                            <h5 class="fw-bold mb-1">DoodsNer Water Refilling Station</h5>
+                                            <p class="text-muted mb-0">Rider: John Doe (ID: D001)</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <?php endif; ?>
+
+                            <!-- Assigned Deliveries Today -->
+                            <div class="container my-3">
+                                <div class="row">
+                                    <?php if (!empty($order_data)): ?>
+                                    <?php foreach ($order_data as $row): ?>
+                                        <div class="col-12">
+                                        <div class="card mb-3">
+                                            <div class="card-header bg-primary text-white">
+                                            Assigned Delivery — Order #<?= htmlspecialchars($row['order_id']) ?>
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                                                <div>
+                                                <strong><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?></strong><br>
+                                                <?= htmlspecialchars($row['address']) ?><br>
+                                                Contact: <?= htmlspecialchars($row['contact_number']) ?><br>
+                                                Amount: ₱<?= number_format($row['amount'], 2) ?>
+                                                </div>
+                                                <span class="badge bg-warning text-dark mt-2 mt-md-0"><?= htmlspecialchars($row['status_name']) ?></span>
+                                            </li>
+                                            </ul>
+                                        </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                    <?php else: ?>
+                                    <div class="col-12">
+                                        <div class="alert alert-info text-center">
+                                        No assigned deliveries at the moment.
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <!-- Shift Info -->
+                            <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                <h5>Shift Schedule</h5>
+                                <p class="mb-1">8:00 AM – 5:00 PM</p>
+                                <p class="mb-0">Status: <span class="badge bg-success">On Duty</span></p>
+                                </div>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </main>
