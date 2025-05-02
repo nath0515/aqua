@@ -129,30 +129,30 @@
 
                             <!-- Assigned Deliveries Today -->
                             <?php foreach($order_data as $row):?>
-                            <div class="col-12">
-                            <div class="card mb-3">
-                                <div class="card-header bg-primary text-white">
-                                Assigned Deliveries (Today)
+                                <div class="col-12">
+                                    <div class="card mb-3">
+                                        <div class="card-header bg-primary text-white">
+                                        Assigned Deliveries (Today)
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                                            <div>
+                                            Order #<?php echo $row['order_id']; ?> — <strong>Barangay 123</strong><br>
+                                            3 containers of 5-gallon
+                                            </div>
+                                            <span class="badge bg-warning text-dark mt-2 mt-md-0">Pending</span>
+                                        </li>
+                                        <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                                            <div>
+                                            Order #2013 — <strong>Zone 5, Purok 6</strong><br>
+                                            2 containers + 2 refills
+                                            </div>
+                                            <span class="badge bg-success mt-2 mt-md-0">Delivered</span>
+                                        </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                                    <div>
-                                    Order #<?php echo $row['order_id']; ?> — <strong>Barangay 123</strong><br>
-                                    3 containers of 5-gallon
-                                    </div>
-                                    <span class="badge bg-warning text-dark mt-2 mt-md-0">Pending</span>
-                                </li>
-                                <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                                    <div>
-                                    Order #2013 — <strong>Zone 5, Purok 6</strong><br>
-                                    2 containers + 2 refills
-                                    </div>
-                                    <span class="badge bg-success mt-2 mt-md-0">Delivered</span>
-                                </li>
-                                </ul>
-                            </div>
-                            </div>
-
+                            <?php endforeach;?>
                             <!-- Shift Info -->
                             <div class="col-12">
                             <div class="card">
