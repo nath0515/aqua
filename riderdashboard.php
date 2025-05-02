@@ -336,29 +336,48 @@
             </script>
         <?php endif; ?> 
         <script>
-            function confirmToggle(event, status_rider) {
+        function confirmToggle(event, status_rider) {
             // Prevent the default action of the link (i.e., don't actually navigate to another page)
             event.preventDefault();
             
-            // Show confirmation dialog based on the current status
+            // Show SweetAlert2 confirmation dialog based on the current status
             if (status_rider === 1) {
                 // If the user is currently On Duty, confirm Clocking Out
-                if (confirm("Are you sure you want to Clock Out?")) {
-                    // Proceed with the Clock Out (submit the form, or send a request, etc.)
-                    window.location.href = "attendance_toggle.php?status=0";
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to Clock Out?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Clock Out',
+                    cancelButtonText: 'No, Cancel',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with the Clock Out (submit the form, or send a request, etc.)
+                        window.location.href = "attendance_toggle.php?status=0";
+                    }
+                });
             } else {
                 // If the user is currently Off Duty, confirm Clocking In
-                if (confirm("Are you sure you want to Clock In?")) {
-                    // Proceed with the Clock In (submit the form, or send a request, etc.)
-                    window.location.href = "attendance_toggle.php?status=1";
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to Clock In?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Clock In',
+                    cancelButtonText: 'No, Cancel',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with the Clock In (submit the form, or send a request, etc.)
+                        window.location.href = "attendance_toggle.php?status=1";
+                    }
+                });
             }
-            
+
             return false;  // Prevent default action (i.e., preventing the link click from doing anything)
         }
-
-        </script> 
+    </script>
 </body>
 </html>
 
