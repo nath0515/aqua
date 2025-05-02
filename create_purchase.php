@@ -431,17 +431,17 @@
             }
 
             function updateTotalPrice() {
-                let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
-                let rows = table.getElementsByTagName("tr");
                 let total = 0;
+                let table = document.getElementById("receipt");
+                let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 
                 for (let i = 0; i < rows.length; i++) {
-                    let cellText = rows[i].cells[7].innerHTML;
-                    let price = parseFloat(cellText.replace(/[₱,]/g, '')) || 0; // remove ₱ and commas
+                    let cell7 = rows[i].getElementsByTagName("td")[6];
+                    let price = parseFloat(cell4.innerText.replace("₱", "").replace(",", "")) || 0;
                     total += price;
                 }
 
-                document.getElementById("totalDisplay").innerHTML = "₱" + total.toFixed(2);
+                document.getElementById("totalDisplay").innerText = "Total Price: ₱" + total.toFixed(2);
             }
             
         </script>
