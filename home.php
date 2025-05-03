@@ -83,6 +83,7 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                 <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li><a class="dropdown-item" href="mapuser.php">Pinned Location</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
             </ul>
