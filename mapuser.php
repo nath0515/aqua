@@ -13,8 +13,23 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    $savedLat = !empty($user_data['latitude']) ? $user_data['latitude'] : null;
-    $savedLng = !empty($user_data['longitude']) ? $user_data['longitude'] : null;
+    $savedLat = isset($user_data['latitude']) ? floatval($user_data['latitude']) : null;
+    $savedLng = isset($user_data['longitude']) ? floatval($user_data['longitude']) : null;
+
+    // Check if both coordinates are missing or invalid (e.g., 0 or null)
+    if (!$savedLat && !$savedLng) {
+        // Fallback to start address
+        $startAddress = 'Santa Cruz public market, Laguna';
+        $startCoordinates = getCoordinates($startAddress);
+
+        // Ensure fallback coordinates are used as the "saved" ones
+        $savedLat = $startCoordinates['lat'];
+        $savedLng = $startCoordinates['lon'];
+    } else {
+        // Use user's saved coordinates as the default map center
+        $startCoordinates = ['lat' => $savedLat, 'lon' => $savedLng];
+    }
+
 
     function getCoordinates($address) {
         $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
