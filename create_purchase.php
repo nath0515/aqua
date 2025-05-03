@@ -514,8 +514,6 @@
                 return;
             }
 
-            console.log(receiptData);
-
             Swal.fire({
                 title: "Are you sure you want to checkout?",
                 text: "You won't be able to undo this action.",

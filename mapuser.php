@@ -4,7 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -12,40 +12,31 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider
-        FROM orders a
-        JOIN user_details b ON a.user_id = b.user_id
-        JOIN orderstatus c ON a.status_id = c.status_id 
-        WHERE a.status_id = 5 AND a.user_id = :user_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id); 
-        $stmt->execute();
-        $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $savedLat = !empty($user_data['latitude']) ? $user_data['latitude'] : null;
-        $savedLng = !empty($user_data['longitude']) ? $user_data['longitude'] : null;
-    
-        function getCoordinates($address) {
-            $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
-            $options = [
-                'http' => [
-                    'header' => "User-Agent: YourAppName/1.0 (youremail@example.com)\r\n"
-                ]
+    $savedLat = !empty($user_data['latitude']) ? $user_data['latitude'] : null;
+    $savedLng = !empty($user_data['longitude']) ? $user_data['longitude'] : null;
+
+    function getCoordinates($address) {
+        $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
+        $options = [
+            'http' => [
+                'header' => "User-Agent: YourAppName/1.0 (youremail@example.com)\r\n"
+            ]
+        ];
+        $context = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $data = json_decode($response, true);
+        if (!empty($data)) {
+            return [
+                'lat' => $data[0]['lat'],
+                'lon' => $data[0]['lon']
             ];
-            $context = stream_context_create($options);
-            $response = file_get_contents($url, false, $context);
-            $data = json_decode($response, true);
-            if (!empty($data)) {
-                return [
-                    'lat' => $data[0]['lat'],
-                    'lon' => $data[0]['lon']
-                ];
-            }
-            return null;
         }
-    
-        $startAddress = 'Santa Cruz public market, Laguna';
-        $startCoordinates = getCoordinates($startAddress);
+        return null;
+    }
+
+    $startAddress = 'Santa Cruz public market, Laguna';
+    $startCoordinates = getCoordinates($startAddress);
 
 ?>
 <!DOCTYPE html>
