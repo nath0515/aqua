@@ -17,7 +17,7 @@
         $order_id = $_GET['id'];
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
-        b.product_name, b.water_price, b.container_price, 
+        b.product_name, b.water_price, b.water_price_promo, b.container_price, 
         c.date, c.amount, c.rider, 
         d.firstname, d.lastname, d.address, d.contact_number,
         e.status_name
@@ -203,7 +203,17 @@
                                         <?php foreach($order_data as $row):?>
                                             <tr>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td>₱<?php echo $row['water_price'];?></td>
+                                                <td>₱
+                                                    <?php 
+                                                        if($row['quantity'] >= 10){
+                                                            echo $row['unit_price_promo'];
+                                                        }
+                                                        else{
+                                                            echo $row['unit_price'];
+                                                        }
+                                                
+                                                    ?>
+                                                </td>
                                                 <td><?php echo $row['quantity'];?></td>
                                                 <td>
                                                     <?php 
