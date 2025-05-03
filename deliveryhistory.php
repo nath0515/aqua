@@ -183,23 +183,7 @@
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
-                                                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
-                                                    <?php
-                                                        $status = htmlspecialchars($row['status_name']);
-                                                        $badgeClass = 'bg-secondary'; // Default
-
-                                                        if ($status === 'Delivered') {
-                                                            $badgeClass = 'bg-success';
-                                                        } elseif ($status === 'Delivering') {
-                                                            $badgeClass = 'bg-warning text-dark';
-                                                        } elseif ($status === 'Cancelled') {
-                                                            $badgeClass = 'bg-danger';
-                                                        }
-                                                    ?>
-                                                    <span class="badge <?= $badgeClass ?>">
-                                                        <?= $status ?>
-                                                    </span>
-                                                </div>
+                                                <td><?php echo $row['status_name'];?></td>
                                                 <td><?php echo $row['rider'];?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">

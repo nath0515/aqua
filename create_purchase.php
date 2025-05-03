@@ -485,7 +485,7 @@
 
             let paymentMethod = document.getElementById("payment_id").value;
             console.log(paymentMethod);
-            if (paymentMethod != 1 && paymentMethod != 2) {
+            if (paymentMethod != '1' && paymentMethod != '2') {
                 Swal.fire("Error!", "Please select a valid payment method.", "error");
                 return;
             }
