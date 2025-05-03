@@ -35,6 +35,10 @@ try {
     VALUES 
     (:order_id, :product_id, :quantity, :with_container, :container_quantity)');
 
+    $selectStmt = $conn->prepare('SELECT stock FROM products WHERE product_id = :product_id');
+
+    $updateStmt = $conn->prepare('UPDATE products SET stock = :stock WHERE product_id = :product_id');
+
     foreach ($receipt as $item) {
         $itemStmt->execute([
             ':order_id' => $orderId,
@@ -43,6 +47,15 @@ try {
             ':with_container' => $item['has_container'],
             ':container_quantity' => $item['container_quantity']
         ]);
+
+        $selectStmt->execute([':product_id' => $item['product_id']]);
+        $currentStock = $selectStmt->fetchColumn();
+        $newStock = $currentStock - $item['container_quantity'];
+
+        $updateStmt->execute(
+            ':stock' => $newStock,
+            ':product_id' => $item['product_id']
+        );
     }
 
     $conn->commit();
