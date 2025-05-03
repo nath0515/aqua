@@ -13,7 +13,7 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
-               c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname
+               c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
@@ -238,7 +238,7 @@
                                                     echo trim("$riderFirst $riderLast") ?: 'Unassigned';
                                                 ?>
                                                 </td>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><?php echo $row['payment_name'];?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
