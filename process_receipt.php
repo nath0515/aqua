@@ -30,7 +30,7 @@ try {
 
     $orderId = $conn->lastInsertId();
 
-    $itemStmt = $conn->prepare('INSERT INTO order_items 
+    $itemStmt = $conn->prepare('INSERT INTO orderitems 
     (order_id, product_id, quantity, with_container, container_quantity) 
     VALUES 
     (:order_id, :product_id, :quantity, :with_container, :container_quantity)');
