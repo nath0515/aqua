@@ -187,7 +187,7 @@
             selectedLng = e.latlng.lng;
 
             if (userMarker) {
-                userMarker.setLatLng([selectedLat, selectedLng]);
+                userMarker.setLatLng([selectedLat, selectedLng]).bindPopup("📍 Your Chosen Location").openPopup();
             } else {
                 userMarker = L.marker([selectedLat, selectedLng], {
                     icon: L.icon({
