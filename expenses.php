@@ -245,7 +245,7 @@
                         <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-plus-circle"></i> Add Expense</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                    <form action="addexpense.php" method="POST" enctype="multipart/form-data">
                         <!-- Modal Body -->
                         <div class="modal-body">
                                 <!-- Status -->
@@ -270,7 +270,7 @@
                                 <label for="commet" class="form-label">Comment</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-receipt"></i></span>
-                                    <input type="text" name="purpose" class="form-control" placeholder="Comment" required>
+                                    <input type="text" name="comment" class="form-control" placeholder="Comment" required>
                                 </div>
                             </div>
                             <div class="mb-3">
