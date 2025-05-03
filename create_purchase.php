@@ -489,7 +489,7 @@
                 return;
             }
 
-            let totalPriceText = document.getElementById("totalPrice").innerText;
+            let totalPriceText = document.getElementById("totalDisplay").innerText;
             let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
 
             for (let i = 0; i < rows.length; i++) {
