@@ -199,11 +199,20 @@
         document.getElementById("confirmLocationBtn").addEventListener("click", function() {
             if (selectedLat && selectedLng) {
                 isLocationConfirmed = true;
-                alert("✅ Location confirmed!");
+                Swal.fire({
+                    icon: 'success',
+                    title: '✅ Location Confirmed!',
+                    text: 'Your location has been confirmed. You can now save it.',
+                    confirmButtonColor: '#3085d6'
+                });
                 document.getElementById("confirmLocationBtn").disabled = true;
                 document.getElementById("saveLocationBtn").disabled = false;
             } else {
-                alert("Please pin a location first.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No location selected',
+                    text: 'Please pin a location first.'
+                });
             }
         });
 
@@ -222,8 +231,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: '📌 Location Saved!',
-                        text: 'Server says: ' + result,
-                        confirmButtonColor: '#3085d6'
+                        text: 'Your delivery location has been saved successfully.',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Go to Home'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            window.location.href = "home.php"; // 🔁 redirect after success
+                        }
                     });
                 })
                 .catch(error => {
