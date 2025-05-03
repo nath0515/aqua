@@ -134,6 +134,8 @@
                     <div class="button-group">
                         <button id="confirmLocationBtn">✅ Confirm Location</button>
                         <button id="saveLocationBtn" disabled>💾 Save Location</button>
+                        <button id="editLocationBtn" style="display: none;">✏️ Edit Location</button>
+
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -256,6 +258,34 @@
                 });
             }
         });
+
+            document.getElementById("editLocationBtn").addEventListener("click", function () {
+            isLocationConfirmed = false;
+            document.getElementById("confirmLocationBtn").disabled = false;
+            document.getElementById("saveLocationBtn").disabled = true;
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Edit Location Mode',
+                text: 'You can now re-pin a new location on the map.',
+                confirmButtonColor: '#3085d6'
+            });
+        });
+        .then(result => {
+        Swal.fire({
+            icon: 'success',
+            title: '📌 Location Saved!',
+            text: 'Your delivery location has been saved successfully.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Go to Home or Edit'
+        }).then((res) => {
+            if (res.isConfirmed) {
+                document.getElementById("editLocationBtn").style.display = "inline-block";
+                // Optional: Uncomment below to redirect
+                window.location.href = "costumerorder.php";
+            }
+        });
+    })
 
         </script>
     </body>
