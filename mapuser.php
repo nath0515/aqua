@@ -238,9 +238,13 @@
                         confirmButtonText: 'Go to Home'
                     }).then((res) => {
                         if (res.isConfirmed) {
-                            window.location.href = "costumerorder.php"; // 🔁 redirect after success
+                            // 🔁 Redirect to home
+                            window.location.href = "costumerorder.php";
                         }
                     });
+
+                    // ✅ Show edit button after saving
+                    document.getElementById("editLocationBtn").style.display = "inline-block";
                 })
                 .catch(error => {
                     Swal.fire({
@@ -259,33 +263,19 @@
             }
         });
 
-            document.getElementById("editLocationBtn").addEventListener("click", function () {
-            isLocationConfirmed = false;
-            document.getElementById("confirmLocationBtn").disabled = false;
-            document.getElementById("saveLocationBtn").disabled = true;
 
-            Swal.fire({
-                icon: 'info',
-                title: 'Edit Location Mode',
-                text: 'You can now re-pin a new location on the map.',
-                confirmButtonColor: '#3085d6'
-            });
-        });
-        .then(result => {
+        document.getElementById("editLocationBtn").addEventListener("click", function () {
+        isLocationConfirmed = false;
+        document.getElementById("confirmLocationBtn").disabled = false;
+        document.getElementById("saveLocationBtn").disabled = true;
+
         Swal.fire({
-            icon: 'success',
-            title: '📌 Location Saved!',
-            text: 'Your delivery location has been saved successfully.',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Go to Home or Edit'
-        }).then((res) => {
-            if (res.isConfirmed) {
-                document.getElementById("editLocationBtn").style.display = "inline-block";
-                // Optional: Uncomment below to redirect
-                window.location.href = "costumerorder.php";
-            }
+            icon: 'info',
+            title: 'Edit Location Mode',
+            text: 'You can now re-pin a new location on the map.',
+            confirmButtonColor: '#3085d6'
         });
-    })
+    });
 
         </script>
     </body>
