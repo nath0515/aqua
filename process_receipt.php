@@ -30,28 +30,25 @@ try {
 
     $orderId = $conn->lastInsertId();
 
-    // Prepare insert for order_items
-    $itemStmt = $conn->prepare('INSERT INTO order_items (order_id, product_id, quantity, has_container, container_quantity, container_price, total_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+    $itemStmt = $conn->prepare('INSERT INTO order_items 
+    (order_id, product_id, quantity, with_container, container_quantity) 
+    VALUES 
+    (:order_id, :product_id, :quantity, :with_container, :container_quantity)');
 
     foreach ($receipt as $item) {
         $itemStmt->execute([
-            $orderId,
-            $item['product_id'],
-            $item['unit_price'],
-            $item['quantity'],
-            $item['has_container'],
-            $item['container_quantity'],
-            $item['container_price'],
-            $item['total_price']
+            ':order_id' => $orderId,
+            ':product_id' => $item['product_id'],
+            ':quantity' => $item['quantity'],
+            ':with_container' => $item['has_container'],
+            ':container_quantity' => $item['container_quantity']
         ]);
     }
 
-    // Commit transaction
     $conn->commit();
 
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
-    // Rollback if something fails
     if ($conn->inTransaction()) {
         $conn->rollBack();
     }
