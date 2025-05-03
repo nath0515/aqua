@@ -50,9 +50,6 @@
         return null;
     }
 
-    $startAddress = 'Santa Cruz public market, Laguna';
-    $startCoordinates = getCoordinates($startAddress);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

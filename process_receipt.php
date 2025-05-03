@@ -7,7 +7,7 @@ require 'session.php';
 try {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!$data || !isset($data['receipt'], $data['total_price'], $data['payment_method'], $data['now'])) {
+    if (!$data || !isset($data['receipt'], $data['total_price'], $data['payment_method'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input data.']);
         exit;
     }
@@ -52,10 +52,10 @@ try {
         $currentStock = $selectStmt->fetchColumn();
         $newStock = $currentStock - $item['container_quantity'];
 
-        $updateStmt->execute(
+        $updateStmt->execute([
             ':stock' => $newStock,
             ':product_id' => $item['product_id']
-        );
+        ]);
     }
 
     $conn->commit();
