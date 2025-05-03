@@ -483,7 +483,7 @@
             let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
             let receiptData = [];
 
-            let paymentMethod = document.getElementbyId("payment_id").value;
+            let paymentMethod = document.getElementById("payment_id").value;
             if (paymentMethod === 0) {
                 Swal.fire("Error!", "Please select a valid payment method.", "error");
                 return;
