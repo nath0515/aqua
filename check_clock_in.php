@@ -9,20 +9,27 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$today = date('Y-m-d');  // Current date only (for checking if already clocked out today)
+$today = date('Y-m-d');
 
-// Check if user has already clocked out today
-$sql = "SELECT out_time FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today AND out_time IS NOT NULL";
+// Fetch the most recent completed attendance record
+$sql = "SELECT in_time, out_time FROM attendance 
+        WHERE user_id = :user_id AND out_time IS NOT NULL 
+        ORDER BY in_time DESC LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':user_id', $user_id);
-$stmt->bindParam(':today', $today);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// If the user has already clocked out today, return "ClockInNotAllowed"
 if ($row) {
-    echo 'ClockInNotAllowed';
-} else {
-    echo 'ClockInAllowed';
+    $lastOutDate = date('Y-m-d', strtotime($row['out_time']));
+
+    if ($lastOutDate == $today) {
+        // Already completed a shift today
+        echo 'ClockInNotAllowed';
+        exit();
+    }
 }
+
+// No completed shift today — allow clock in
+echo 'ClockInAllowed';
 ?>
