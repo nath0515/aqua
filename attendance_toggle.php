@@ -44,15 +44,17 @@ if ($status == 1) {
     $updateOut->execute();
 } else {
     // Prevent multiple clock-ins after clocking out
-    $checkAttendance = $conn->prepare("SELECT * FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today AND out_time IS NOT NULL");
-    $checkAttendance->bindParam(':user_id', $user_id);
-    $checkAttendance->bindParam(':today', $today);
-    $checkAttendance->execute();
-    $alreadyOut = $checkAttendance->fetch(PDO::FETCH_ASSOC);
+    $checkLastAttendance = $conn->prepare("SELECT in_time, out_time FROM attendance WHERE user_id = :user_id AND out_time IS NOT NULL ORDER BY in_time DESC LIMIT 1");
+    $checkLastAttendance->bindParam(':user_id', $user_id);
+    $checkLastAttendance->execute();
+    $lastAttendance = $checkLastAttendance->fetch(PDO::FETCH_ASSOC);
 
-    if ($alreadyOut) {
-        echo "You have already clocked out today. Cannot clock in again.";
-        exit();
+    if ($lastAttendance) {
+        $lastOutDate = date('Y-m-d', strtotime($lastAttendance['out_time']));
+        if ($lastOutDate == $today) {
+            echo "You have already completed your shift today. You can only clock in again tomorrow.";
+            exit();
+        }
     }
 
     // Clock In
