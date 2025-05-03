@@ -15,7 +15,7 @@ try {
     $receipt = $data['receipt'];
     $totalPrice = $data['total_price'];
     $paymentMethod = $data['payment_method'];
-    $now = $data['now'];
+    $now = date("Y-m-d H:i:s");
 
     $conn->beginTransaction();
 

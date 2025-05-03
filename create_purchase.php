@@ -491,7 +491,6 @@
 
             let totalPriceText = document.getElementById("totalDisplay").innerText;
             let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
-            let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
             for (let i = 0; i < rows.length; i++) {
                 let cells = rows[i].getElementsByTagName("td");
