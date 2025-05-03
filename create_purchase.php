@@ -478,8 +478,7 @@
             
         </script>
         <script>                                     
-        function 
-        submitReceipt() {
+        function submitReceipt() {
             let table = document.getElementById("receipt");
             let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
             let receiptData = [];
@@ -515,6 +514,8 @@
                 return;
             }
 
+            console.log(receiptData);
+
             Swal.fire({
                 title: "Are you sure you want to checkout?",
                 text: "You won't be able to undo this action.",
@@ -538,7 +539,7 @@
                     .then(data => {
                         if (data.success) {
                             Swal.fire("Success!", "Purchase submitted successfully!", "success")
-                                .then(() => window.location.href = "purchase.php");
+                                .then(() => window.location.href = "orders.php");
                         } else {
                             Swal.fire("Error!", data.error, "error");
                         }
