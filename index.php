@@ -43,21 +43,30 @@
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    function calculateSMA($data, $days) {
-        return round($data / $days);
+    function calculateSMA($data, $period) {
+        if (count($data) < $period) return null;
+        return array_sum(array_slice($data, -$period)) / $period;
     }
     
     // Fetch last 7 days of quantity data
-    $sql = "SELECT SUM(quantity) as total_quantity
-            FROM orderitems 
-            JOIN orders ON orderitems.order_id = orders.order_id 
-            ORDER BY date DESC LIMIT 7";
+    $sql = "SELECT DATE(orders.date) as order_date, SUM(orderitems.quantity) as total_quantity
+        FROM orderitems
+        JOIN orders ON orderitems.order_id = orders.order_id
+        GROUP BY order_date
+        ORDER BY order_date DESC
+        LIMIT 7";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $quantity = $stmt->fetchColumn();
-    
-    // Calculate SMA
-    $sma = calculateSMA($quantity, 7);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Reverse the array to maintain chronological order
+    $data = array_reverse($data);
+
+    // Extract quantities
+    $quantities = array_column($data, 'total_quantity');
+
+    // Now calculate SMA
+    $sma = calculateSMA($quantities, 7);
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -634,5 +643,6 @@
                 return false;
             }
         </script>
+            
     </body>
 </html>
