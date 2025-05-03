@@ -351,45 +351,16 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
+        <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
         <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");  
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
+            Swal.fire({
+                icon: 'success',
+                title: 'Expense Added',
+                text: 'Your expense was successfully added!',
+                confirmButtonColor: '#0077b6'
             });
         </script>
+        <?php endif; ?>
+        
     </body>
 </html>

@@ -5,7 +5,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the form data
-    $expenses_id = $_POST['expensetype_id'];
+    $expensetype_id = $_POST['expensetype_id'];
     $comment = $_POST['comment'];
     $amount = $_POST['amount'];
 
