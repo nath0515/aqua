@@ -17,7 +17,8 @@
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
-        LEFT JOIN user_details d ON a.rider = d.user_id";
+        LEFT JOIN user_details d ON a.rider = d.user_id
+        ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
