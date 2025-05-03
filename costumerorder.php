@@ -12,13 +12,10 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (
+    $needsPinning = (
         empty($user_data['latitude']) || empty($user_data['longitude']) ||
         $user_data['latitude'] == 0 || $user_data['longitude'] == 0
-    ) {
-        header('Location: mapuser.php');
-        exit();
-    }
+    );
 
     $sql = "SELECT * FROM products";
     $stmt = $conn->prepare($sql);
@@ -308,6 +305,20 @@
                 });
             });
         </script>
-            
+        <script>
+            <?php if ($needsPinning): ?>
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Location Required',
+                    text: 'Please pin your delivery location before placing an order.',
+                    confirmButtonText: 'Pin Now',
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'mapuser.php';
+                    }
+                });
+            <?php endif; ?>
+    </script>    
     </body>
 </html>
