@@ -43,21 +43,31 @@
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    function calculateSMA($data, $days) {
-        return round($data / $days);
+    function calculateSMA($quantities, $days) {
+        if (count($quantities) < $days) return null;
+        return round(array_sum(array_slice($quantities, -$days)) / $days);
     }
     
-    // Fetch last 7 days of quantity data
-    $sql = "SELECT SUM(quantity) as total_quantity
-            FROM orderitems 
-            JOIN orders ON orderitems.order_id = orders.order_id 
-            ORDER BY date DESC LIMIT 7";
+    // Fetch the last 7 full days of order quantities (excluding today)
+    $sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
+            FROM orderitems
+            JOIN orders ON orderitems.order_id = orders.order_id
+            WHERE DATE(orders.date) >= CURDATE() - INTERVAL 8 DAY
+              AND DATE(orders.date) < CURDATE()
+            GROUP BY order_date
+            ORDER BY order_date ASC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
-    $quantity = $stmt->fetchColumn();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Calculate SMA
-    $sma = calculateSMA($quantity, 7);
+    // Extract daily totals
+    $quantities = array_column($data, 'total_quantity');
+    
+    // Calculate SMA based on the last 7 days
+    $sma = calculateSMA($quantities, 7);
+    
+    echo "Predicted Load for Today: $sma";
+    
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -331,7 +341,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
-                                        <p><?php echo ($sma); ?> gallons</p> 
+                                        <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
                                     </div>
                                 </div>
                             </div>
