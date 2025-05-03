@@ -290,7 +290,7 @@
                                 <div class="col-md-4 mt-3">
                                     <div class="form-group form-group-default">
                                         <label>Payment Method</label>
-                                        <select name="payment_id" id="payment_id" class="form-select"  onchange="fetchProductDetails(this.value)">
+                                        <select name="payment_id" id="payment_id" class="form-select">
                                             <option value="0">Select Payment Method</option>
                                             <?php foreach($payment_data as $row):?>
                                                 <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
@@ -484,7 +484,8 @@
             let receiptData = [];
 
             let paymentMethod = document.getElementById("payment_id").value;
-            if (paymentMethod === 0) {
+            console.log(paymentMethod);
+            if (paymentMethod != 1 || paymentMethod != 2) {
                 Swal.fire("Error!", "Please select a valid payment method.", "error");
                 return;
             }
