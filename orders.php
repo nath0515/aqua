@@ -18,6 +18,7 @@
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
         LEFT JOIN user_details d ON a.rider = d.user_id
+        JOIN payment_method e ON a.payment_id = e.payment_id
         ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -200,7 +201,7 @@
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
                                             <tr>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
