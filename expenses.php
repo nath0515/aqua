@@ -351,16 +351,24 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
-        <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
+        <?php if (isset($_GET['status'])): ?>
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Expense Added',
-                text: 'Your expense was successfully added!',
-                confirmButtonColor: '#0077b6'
-            });
+            <?php if ($_GET['status'] === 'success'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Expense Added',
+                    text: 'Your expense was successfully recorded!',
+                    confirmButtonColor: '#0077b6'
+                });
+            <?php elseif ($_GET['status'] === 'error'): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Add Expense',
+                    text: 'There was an error while saving the expense. Please try again.',
+                    confirmButtonColor: '#d33'
+                });
+            <?php endif; ?>
         </script>
         <?php endif; ?>
-        
     </body>
 </html>
