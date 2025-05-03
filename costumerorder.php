@@ -12,6 +12,14 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if (
+        empty($user_data['latitude']) || empty($user_data['longitude']) ||
+        $user_data['latitude'] == 0 || $user_data['longitude'] == 0
+    ) {
+        header('Location: mapuser.php');
+        exit();
+    }
+
     $sql = "SELECT * FROM products";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
