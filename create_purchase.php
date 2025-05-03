@@ -397,7 +397,12 @@
 
                     let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
                     let rows = table.getElementsByTagName("tr");
-                    let waterPrice = parseFloat(data.data.water_price);
+                    let waterPrice;
+                    if (quantity >= 10) {
+                        waterPrice = parseFloat(data.data.water_price_promo);
+                    } else {
+                        waterPrice = parseFloat(data.data.water_price);
+                    }
                     let found = false;
 
                     for (let i = 0; i < rows.length; i++) {
