@@ -215,7 +215,7 @@
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4">
-                                    <div class="card-body" style="font-size:25px">Net Income<ol class="breadcrumb">₱ <?php echo number_format(($amount2['total_sales']-$amount1['total_expense']),2); ?></ol></div>
+                                    <div class="card-body" style="font-size:25px">Net Income Today<ol class="breadcrumb">₱ <?php echo number_format(($amount2['total_sales']-$amount1['total_expense']),2); ?></ol></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="income.php">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right text-success"></i></div>
@@ -224,7 +224,7 @@
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body" style="font-size:25px">Expenses<ol class="breadcrumb">₱ <?php echo number_format($amount1['total_expense'],2); ?></ol></div>
+                                    <div class="card-body" style="font-size:25px">Expenses Today<ol class="breadcrumb">₱ <?php echo number_format($amount1['total_expense'],2); ?></ol></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="#">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
