@@ -206,10 +206,10 @@
                                                 <td>₱
                                                     <?php 
                                                         if($row['quantity'] >= 10){
-                                                            echo $row['unit_price_promo'];
+                                                            echo $row['water_price_promo'];
                                                         }
                                                         else{
-                                                            echo $row['unit_price'];
+                                                            echo $row['water_price'];
                                                         }
                                                 
                                                     ?>
