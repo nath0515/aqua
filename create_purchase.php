@@ -528,8 +528,7 @@
                         body: JSON.stringify({
                             receipt: receiptData,
                             total_price: totalPrice,
-                            payment_method: paymentMethod,
-                            now: now
+                            payment_method: paymentMethod
                         })
                     })
                     .then(response => response.json())
