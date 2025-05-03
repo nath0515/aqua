@@ -265,17 +265,26 @@
 
 
         document.getElementById("editLocationBtn").addEventListener("click", function () {
-        isLocationConfirmed = false;
-        document.getElementById("confirmLocationBtn").disabled = false;
-        document.getElementById("saveLocationBtn").disabled = true;
+            isLocationConfirmed = false;
+            selectedLat = null;
+            selectedLng = null;
 
-        Swal.fire({
-            icon: 'info',
-            title: 'Edit Location Mode',
-            text: 'You can now re-pin a new location on the map.',
-            confirmButtonColor: '#3085d6'
+            // Reset marker and map state
+            if (userMarker) {
+                map.removeLayer(userMarker);
+                userMarker = null;
+            }
+
+            document.getElementById("confirmLocationBtn").disabled = false;
+            document.getElementById("saveLocationBtn").disabled = true;
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Edit Location Mode',
+                text: 'You can now re-pin a new location on the map.',
+                confirmButtonColor: '#3085d6'
+            });
         });
-    });
 
         </script>
     </body>
