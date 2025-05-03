@@ -485,7 +485,6 @@
             let receiptData = [];
 
             let paymentMethod = document.getElementById("payment_id").value;
-            console.log(paymentMethod);
             if (paymentMethod != '1' && paymentMethod != '2') {
                 Swal.fire("Error!", "Please select a valid payment method.", "error");
                 return;
@@ -493,6 +492,7 @@
 
             let totalPriceText = document.getElementById("totalDisplay").innerText;
             let totalPrice = parseFloat(totalPriceText.replace("Total Price: ₱", "").replace(",", ""));
+            let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
             for (let i = 0; i < rows.length; i++) {
                 let cells = rows[i].getElementsByTagName("td");
@@ -500,7 +500,7 @@
                 let rowData = {
                     unit_price: parseFloat(cells[1].innerText.replace("₱", "").trim()),
                     quantity: parseInt(cells[2].innerText),
-                    has_container: cells[3].innerText === 'Yes',
+                    has_container: cells[3].innerText === 'Yes' ? 1 : 0,
                     container_quantity: parseInt(cells[4].innerText),
                     container_price: parseFloat(cells[5].innerText.replace("₱", "").trim()),
                     total_price: parseFloat(cells[6].innerText.replace("₱", "").trim()),
@@ -530,7 +530,8 @@
                         body: JSON.stringify({
                             receipt: receiptData,
                             total_price: totalPrice,
-                            payment_method: paymentMethod
+                            payment_method: paymentMethod,
+                            now: now
                         })
                     })
                     .then(response => response.json())

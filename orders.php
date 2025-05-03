@@ -239,8 +239,7 @@
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
                                                     </a>
-                                                    <button class="btn btn-outline-primary btn-sm" 
-                                                        id="editOrderBtn"
+                                                    <button class="btn btn-outline-primary btn-sm editOrderBtn"
                                                         data-id="<?php echo $row['order_id']; ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#editorder">
@@ -275,7 +274,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                    <form action="process_editorder_orders.php" method="POST" enctype="multipart/form-data">
                         <!-- Modal Body -->
                         <div class="modal-body">
                                 <!-- Status -->
@@ -383,7 +382,7 @@
 
         <script>
             $(document).ready(function() {
-                $("#editOrderBtn").on('click', function() {
+                $(".editOrderBtn").on('click', function() {
                     var orderId = $(this).data("id");
 
                     $.ajax({
