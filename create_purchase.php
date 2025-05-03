@@ -524,8 +524,7 @@
                         body: JSON.stringify({
                             receipt: receiptData,
                             total_price: totalPrice,
-                            payment_method: paymentMethod,
-                            branch_id: <?php echo $_SESSION['branch_id']; ?>
+                            payment_method: paymentMethod
                         })
                     })
                     .then(response => response.json())
