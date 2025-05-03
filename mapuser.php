@@ -236,7 +236,7 @@
                         confirmButtonText: 'Go to Home'
                     }).then((res) => {
                         if (res.isConfirmed) {
-                            window.location.href = "home.php"; // 🔁 redirect after success
+                            window.location.href = "costumerorder.php"; // 🔁 redirect after success
                         }
                     });
                 })
