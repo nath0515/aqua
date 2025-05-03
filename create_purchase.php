@@ -478,7 +478,8 @@
             
         </script>
         <script>                                     
-        function submitReceipt() {
+        function 
+        submitReceipt() {
             let table = document.getElementById("receipt");
             let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
             let receiptData = [];
@@ -497,7 +498,6 @@
                 let cells = rows[i].getElementsByTagName("td");
 
                 let rowData = {
-                    product_name: cells[0].innerText,
                     unit_price: parseFloat(cells[1].innerText.replace("₱", "").trim()),
                     quantity: parseInt(cells[2].innerText),
                     has_container: cells[3].innerText === 'Yes',

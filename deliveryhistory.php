@@ -183,7 +183,31 @@
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
-                                                <td><?php echo $row['status_name'];?></td>
+                                                <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
+                                                    <?php
+                                                        $status = htmlspecialchars($row['status_name']);
+                                                        $badgeClass = 'bg-secondary'; // Default for unknown status
+
+                                                        // Assign colors to each status
+                                                        if ($status === 'Pending') {
+                                                            $badgeClass = 'bg-light'; // Light grey for pending
+                                                        } elseif ($status === 'Accepted') {
+                                                            $badgeClass = 'bg-primary'; // Blue for accepted
+                                                        } elseif ($status === 'Delivering') {
+                                                            $badgeClass = 'bg-warning text-dark'; // Yellow with dark text for delivering
+                                                        } elseif ($status === 'Delivered') {
+                                                            $badgeClass = 'bg-success'; // Green for delivered
+                                                        } elseif ($status === 'Completed') {
+                                                            $badgeClass = 'bg-info'; // Light blue for completed
+                                                        } elseif ($status === 'Cancel') {
+                                                            $badgeClass = 'bg-danger'; // Red for cancelled
+                                                        }
+                                                    ?>
+                                                    <span class="badge <?= $badgeClass ?>">
+                                                        <?= $status ?>
+                                                    </span>
+                                                </div>
+                                                </td>
                                                 <td><?php echo $row['rider'];?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
