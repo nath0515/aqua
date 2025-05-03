@@ -235,7 +235,7 @@
                         title: '📌 Location Saved!',
                         text: 'Your delivery location has been saved successfully.',
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Go to Home'
+                        confirmButtonText: 'Proceed To Order'
                     }).then((res) => {
                         if (res.isConfirmed) {
                             // 🔁 Redirect to home
