@@ -1,6 +1,7 @@
 <?php 
     require 'session.php';
     require 'db.php';
+    $dateNow = date("Y-m-d");
 
     $user_id = $_SESSION['user_id'];
     
@@ -18,23 +19,27 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = CURDATE()";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
     $amount = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_expense FROM expense";
+    $sql = "SELECT SUM(amount) as total_expense FROM expense WHERE DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
     $amount1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
     $amount2 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT count(*) as order_count FROM orders WHERE DATE(date) = CURDATE() ";
+    $sql = "SELECT count(*) as order_count FROM orders WHERE DATE(date) = :dateNow ";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
