@@ -4,7 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname,latitude,longitude, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -167,6 +167,9 @@
             .addTo(map)
             .bindPopup("📍 Reference: Santa Cruz public market, Laguna")
             .openPopup();
+
+        let savedLat = <?php echo $savedLat ? $savedLat : 'null'; ?>;
+        let savedLng = <?php echo $savedLng ? $savedLng : 'null'; ?>;    
 
         let selectedLat = null;
         let selectedLng = null;
