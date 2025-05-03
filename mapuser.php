@@ -4,13 +4,18 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname,latitude,longitude, address, contact_number FROM users u
-    JOIN user_details ud ON u.user_id = ud.user_id
-    WHERE u.user_id = :user_id";
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, latitude, longitude, address, contact_number 
+            FROM users u
+            JOIN user_details ud ON u.user_id = ud.user_id
+            WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Saved coordinates from database
+    $savedLat = !empty($user_data['latitude']) ? $user_data['latitude'] : null;
+    $savedLng = !empty($user_data['longitude']) ? $user_data['longitude'] : null;
 
     function getCoordinates($address) {
         $url = 'https://nominatim.openstreetmap.org/search?format=json&q=' . urlencode($address);
@@ -30,27 +35,18 @@
         }
         return null;
     }
-    
+
     $startAddress = 'Santa Cruz public market, Laguna';
     $startCoordinates = getCoordinates($startAddress);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Orders</title>
-        <link rel="manifest" href="/manifest.json">
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <style>
+<head>
+    <meta charset="utf-8" />
+    <title>Pin Your Location</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
         #map {
             height: 500px;
             width: 100%;
@@ -59,124 +55,61 @@
             margin-top: 10px;
         }
     </style>
-    </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
-            <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.php">
-                <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
-            </a>
-            <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
-            <!-- Navbar-->
-            <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                <li class="nav-item dropdown me-1">
-                    <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 3</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user fa-fw"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="home.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Order Management
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="costumerorder.php">Order</a>
-                                    <a class="nav-link" href="Orderhistory.php">Order History</a>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
-                    </div>
-                </nav>
-            </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <h2>📍 Pin Your Location</h2>
-                    <div id="map"></div>
-                    <div class="button-group">
-                        <button id="confirmLocationBtn">✅ Confirm Location</button>
-                        <button id="saveLocationBtn" disabled>💾 Save Location</button>
-                        <button id="editLocationBtn" style="display: none;">✏️ Edit Location</button>
+</head>
+<body>
+    <h2>📍 Pin Your Location</h2>
+    <div id="map"></div>
+    <div class="button-group">
+        <button id="confirmLocationBtn">✅ Confirm Location</button>
+        <button id="saveLocationBtn" disabled>💾 Save Location</button>
+        <button id="editLocationBtn" style="display: none;">✏️ Edit Location</button>
+    </div>
 
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-        var map = L.map('map').setView([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 17);
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const map = L.map('map').setView(
+            [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 
+            17
+        );
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // Reference marker
         L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>])
             .addTo(map)
             .bindPopup("📍 Reference: Santa Cruz public market, Laguna")
             .openPopup();
 
-        let savedLat = <?php echo $savedLat ? $savedLat : 'null'; ?>;
-        let savedLng = <?php echo $savedLng ? $savedLng : 'null'; ?>;    
+        let savedLat = <?php echo $savedLat !== null ? json_encode(floatval($savedLat)) : 'null'; ?>;
+        let savedLng = <?php echo $savedLng !== null ? json_encode(floatval($savedLng)) : 'null'; ?>;
 
         let selectedLat = null;
         let selectedLng = null;
         let userMarker = null;
         let isLocationConfirmed = false;
 
-        // User clicks on map to pin location
+        // Show existing location if available
+        if (savedLat !== null && savedLng !== null) {
+            userMarker = L.marker([savedLat, savedLng], {
+                icon: L.icon({
+                    iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map).bindPopup("📍 Your Saved Location").openPopup();
+
+            map.setView([savedLat, savedLng], 17);
+
+            selectedLat = savedLat;
+            selectedLng = savedLng;
+            isLocationConfirmed = true;
+
+            document.getElementById("confirmLocationBtn").disabled = true;
+            document.getElementById("saveLocationBtn").disabled = false;
+            document.getElementById("editLocationBtn").style.display = "inline-block";
+        }
+
         map.on('click', function(e) {
             if (isLocationConfirmed) {
                 alert("You've already confirmed your location.");
@@ -200,15 +133,13 @@
             console.log("Pinned location:", selectedLat, selectedLng);
         });
 
-        // Confirm Button
         document.getElementById("confirmLocationBtn").addEventListener("click", function() {
             if (selectedLat && selectedLng) {
                 isLocationConfirmed = true;
                 Swal.fire({
                     icon: 'success',
                     title: '✅ Location Confirmed!',
-                    text: 'Your location has been confirmed. You can now save it.',
-                    confirmButtonColor: '#3085d6'
+                    text: 'Your location has been confirmed. You can now save it.'
                 });
                 document.getElementById("confirmLocationBtn").disabled = true;
                 document.getElementById("saveLocationBtn").disabled = false;
@@ -221,7 +152,6 @@
             }
         });
 
-        // Save Button
         document.getElementById("saveLocationBtn").addEventListener("click", function () {
             if (selectedLat && selectedLng) {
                 fetch("save_location.php", {
@@ -237,42 +167,30 @@
                         icon: 'success',
                         title: '📌 Location Saved!',
                         text: 'Your delivery location has been saved successfully.',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Proceed To Order'
+                        confirmButtonText: 'Proceed to Order'
                     }).then((res) => {
                         if (res.isConfirmed) {
-                            // 🔁 Redirect to home
                             window.location.href = "costumerorder.php";
                         }
                     });
 
-                    // ✅ Show edit button after saving
                     document.getElementById("editLocationBtn").style.display = "inline-block";
                 })
                 .catch(error => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error saving location: ' + error,
-                        confirmButtonColor: '#d33'
+                        text: 'Error saving location: ' + error
                     });
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'No location selected',
-                    text: 'Please select a location first.'
                 });
             }
         });
-
 
         document.getElementById("editLocationBtn").addEventListener("click", function () {
             isLocationConfirmed = false;
             selectedLat = null;
             selectedLng = null;
 
-            // Reset marker and map state
             if (userMarker) {
                 map.removeLayer(userMarker);
                 userMarker = null;
@@ -284,11 +202,9 @@
             Swal.fire({
                 icon: 'info',
                 title: 'Edit Location Mode',
-                text: 'You can now re-pin a new location on the map.',
-                confirmButtonColor: '#3085d6'
+                text: 'You can now re-pin a new location on the map.'
             });
         });
-
-        </script>
-    </body>
+    </script>
+</body>
 </html>
