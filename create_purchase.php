@@ -211,6 +211,50 @@
                                 </form>
                             </div>
                         </div>
+                        <script>
+                            function togglePriceInput() {
+                                const checkbox = document.getElementById('hasContainer');
+                                const sameQuantityDiv = document.getElementById('sameQuantityDiv');
+                                const containerQuantity = document.getElementById('containerQuantity');
+                                const priceContainer = document.getElementById('priceContainer');
+                                const containerQuantityInput = document.getElementById('containerQuantityInput');
+                                priceContainer.style.display = checkbox.checked ? 'block' : 'none';
+                                containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
+                                containerQuantityInput.value = '0';
+                                sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
+                            }
+                            function toggleSameQuantity() {
+                                const sameQuantityCheckbox = document.getElementById("sameQuantity");
+                                const containerQuantityInput = document.getElementById("containerQuantityInput");
+
+                                if (sameQuantityCheckbox.checked) {
+                                    containerQuantityInput.readOnly = true;
+                                    containerQuantityInput.value = document.getElementById("quantity").value;
+                                } else {
+                                    containerQuantityInput.readOnly = false;
+                                    containerQuantityInput.value = '';
+                                }
+                                updateTotalPrice();
+                            }
+                            function updateTotalPrice(){
+                                const unitPriceInput = document.getElementById('unitprice');
+                                const quantityInput = document.getElementById('quantity');
+                                const containerQuantityInput = document.getElementById('containerQuantityInput');
+                                const containerPriceInput = document.getElementById('containerprice');
+                                const totalPriceInput = document.getElementById('totalprice');
+                                
+
+                                let unitprice = unitPriceInput.value;
+                                let quantity = quantityInput.value;
+                                let containerQuantity = containerQuantityInput.value;
+                                let containerPrice = containerPriceInput.value;
+
+                                let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
+                                totalPrice = totalPrice.toFixed(2);
+
+                                totalPriceInput.value = totalPrice;
+                            }  
+                        </script>
 
                         <!-- Second Column (Receipt and Checkout) -->
                         <div class="col-lg-6 col-md-12 mt-3">
@@ -428,49 +472,7 @@
             }
             
         </script>
-        <script>
-        function togglePriceInput() {
-            const checkbox = document.getElementById('hasContainer');
-            const sameQuantityDiv = document.getElementById('sameQuantityDiv');
-            const containerQuantity = document.getElementById('containerQuantity');
-            const priceContainer = document.getElementById('priceContainer');
-            const containerQuantityInput = document.getElementById('containerQuantityInput');
-            priceContainer.style.display = checkbox.checked ? 'block' : 'none';
-            containerQuantity.style.display = checkbox.checked ? 'block' : 'none';
-            containerQuantityInput.value = '0';
-            sameQuantityDiv.style.display = checkbox.checked ? 'block' : 'none';
-        }
-        function toggleSameQuantity() {
-            const sameQuantityCheckbox = document.getElementById("sameQuantity");
-            const containerQuantityInput = document.getElementById("containerQuantityInput");
-
-            if (sameQuantityCheckbox.checked) {
-                containerQuantityInput.readOnly = true;
-                containerQuantityInput.value = document.getElementById("quantity").value;
-            } else {
-                containerQuantityInput.readOnly = false;
-                containerQuantityInput.value = '';
-            }
-            updateTotalPrice();
-        }
-        function updateTotalPrice(){
-            const unitPriceInput = document.getElementById('unitprice');
-            const quantityInput = document.getElementById('quantity');
-            const containerQuantityInput = document.getElementById('containerQuantityInput');
-            const containerPriceInput = document.getElementById('containerprice');
-            const totalPriceInput = document.getElementById('totalprice');
-            
-
-            let unitprice = unitPriceInput.value;
-            let quantity = quantityInput.value;
-            let containerQuantity = containerQuantityInput.value;
-            let containerPrice = containerPriceInput.value;
-
-            let totalPrice = (unitprice * quantity) + (containerQuantity * containerPrice);
-            totalPrice = totalPrice.toFixed(2);
-
-            totalPriceInput.value = totalPrice;
-        }                                       
+        <script>                                     
         function submitReceipt() {
             let table = document.getElementById("receipt");
             let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
