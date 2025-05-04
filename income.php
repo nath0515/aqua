@@ -186,12 +186,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row):?>
+                                        <?php foreach($reports_data as $row):?>
                                             <tr>
                                                 <td><?php echo $row['date'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td>1500</td>
-                                                <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
+                                                <td>₱<?php echo $row['total_sales'];?></td>
+                                                <td>₱<?php echo $row['total_expense'];?></td>
+                                                <td>₱<?php echo $row['total_income'];?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
