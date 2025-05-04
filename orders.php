@@ -51,6 +51,12 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $rider_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $unread_count = $unread_result['unread_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,7 +104,12 @@
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            3
+                            <?php if ($unread_count > 0): ?>
+                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                    <?php echo $unread_count; ?>
+                                    <span class="visually-hidden">unread notifications</span>
+                                </span>
+                            <?php endif; ?>
                             <span class="visually-hidden">unread notifications</span>
                         </span>
                     </a>
