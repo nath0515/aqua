@@ -250,7 +250,7 @@
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body" style="font-size:25px">Orders Today<ol class="breadcrumb"><?php echo $orders['order_count']; ?></ol></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="orders.php">View Details</a>
+                                        <a class="small text-white stretched-link" href="orders.php?from_card">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>

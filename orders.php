@@ -3,6 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $dateNow = date('Y-m-d');
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -12,14 +13,27 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+    if(isset($_GET['from_card'])){
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
                c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
         LEFT JOIN user_details d ON a.rider = d.user_id
         JOIN payment_method e ON a.payment_id = e.payment_id
+        WHERE DATE(date) = :date
         ORDER BY date DESC";
+    }
+    else{
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+        c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
+    FROM orders a
+    JOIN user_details b ON a.user_id = b.user_id
+    JOIN orderstatus c ON a.status_id = c.status_id
+    LEFT JOIN user_details d ON a.rider = d.user_id
+    JOIN payment_method e ON a.payment_id = e.payment_id
+    ORDER BY date DESC";
+    }
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
