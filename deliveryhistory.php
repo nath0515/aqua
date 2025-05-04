@@ -14,10 +14,17 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Fetch orders assigned to the logged-in rider (user_id is the rider's user_id)
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
-    JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id 
-    WHERE a.status_id = 4 AND a.rider = :user_id";  // Filter by rider's user_id (status_id = 4)
+    $sql = "SELECT 
+            a.order_id, a.date, a.amount, 
+            b.firstname AS customer_firstname, b.lastname AS customer_lastname, 
+            b.address, b.contact_number, 
+            c.status_name, 
+            r.firstname AS rider_firstname, r.lastname AS rider_lastname 
+        FROM orders a
+        JOIN user_details b ON a.user_id = b.user_id
+        JOIN orderstatus c ON a.status_id = c.status_id 
+        JOIN user_details r ON a.rider = r.user_id
+        WHERE a.status_id = 4 AND a.rider = :user_id";  // Filter by rider's user_id (status_id = 4)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);  // Bind user_id here
     $stmt->execute();
@@ -214,7 +221,7 @@
                                                     </span>
                                                 </div>
                                                 </td>
-                                                <td><?php echo $row['rider'];?></td>
+                                                <td><?php echo htmlspecialchars($row['rider_firstname'] . ' ' . $row['rider_lastname']); ?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
