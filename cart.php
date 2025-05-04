@@ -168,6 +168,46 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <script>
+        const selectAllCheckbox = document.getElementById('select-all');
+        const productCheckboxes = document.querySelectorAll('.product-checkbox');
+        const totalPriceEl = document.getElementById('total-price');
+        const selectedCountEl = document.getElementById('selected-count');
+
+        function updateTotal() {
+            let total = 0;
+            let count = 0;
+
+            productCheckboxes.forEach((cb, index) => {
+            if (cb.checked) {
+                count++;
+                const productCard = cb.closest('.product-item');
+                const price = parseFloat(productCard.querySelector('.price').dataset.price);
+                total += price;
+            }
+            });
+
+            selectedCountEl.textContent = count;
+            totalPriceEl.textContent = total.toLocaleString();
+        }
+
+        // Toggle all checkboxes when "Select All" is clicked
+        selectAllCheckbox.addEventListener('change', function () {
+            productCheckboxes.forEach(cb => cb.checked = this.checked);
+            updateTotal();
+        });
+
+        // Update "Select All" state and total when any checkbox changes
+        productCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+            const allChecked = Array.from(productCheckboxes).every(cb => cb.checked);
+            selectAllCheckbox.checked = allChecked;
+            updateTotal();
+            });
+        });
+
+        </script>
+
         
     </body>
 </html>
