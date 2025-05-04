@@ -22,15 +22,15 @@
             $rider_data = $stmt->fetch();
             $firstname = $rider_data['firstname'];
             $lastname = $rider_data['lastname'];
-
             
             $message = "ORDER #{$order_id} - Successfully delivered by Rider: {$firstname} {$lastname}.";
             $now = date('Y-m-d H:i:s');
+            $destination = "orders.php";
 
             $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':message', $message);
-            $stmt->bindParam(':date', $date);
+            $stmt->bindParam(':date', $now);
             $stmt->bindParam(':destination', $destination);
             $stmt->execute();
 
