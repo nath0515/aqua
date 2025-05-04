@@ -24,7 +24,7 @@
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id 
         JOIN user_details r ON a.rider = r.user_id
-        WHERE a.status_id = 4 AND a.rider = :user_id"; 
+        WHERE a.status_id = 3 AND a.rider = :user_id"; 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);  // Bind user_id here
     $stmt->execute();
