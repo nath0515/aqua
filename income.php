@@ -12,6 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT a.date, ";
    
 ?>
 <!DOCTYPE html>
