@@ -77,20 +77,30 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                <li class="nav-item dropdown me-1">
+                <?php 
+                    $sql = "SELECT * FROM activity_logs";
+                    $stmt = $conn->prepare($sql);
+                    $stmt-?>
+                ?>
+                <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
                             3
-                            <span class="visually-hidden">unread messages</span>
+                            <span class="visually-hidden">unread notifications</span>
                         </span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 3</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2 text-primary"></i> New delivery assigned</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2 text-success"></i> Delivery in progress</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-check me-2 text-info"></i> Delivery completed</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center text-muted small" href="#">View all notifications</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
