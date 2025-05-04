@@ -5,7 +5,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the form data
-    $expensetype = $POST['expensetype'];
+    $expensetype = $_POST['expensetype'];
 
     try{
         $sql_insert = "INSERT INTO expensetype (expensetype_name) VALUES (:expensetype_name)";
