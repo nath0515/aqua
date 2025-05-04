@@ -95,7 +95,7 @@
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
+                        <li><a class="dropdown-item" style="max-width: 200px" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
                         <?php endforeach; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
