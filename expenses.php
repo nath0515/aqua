@@ -175,10 +175,16 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
-                        <button class="btn btn-success btn-round ms-auto mb-3 me-1" data-bs-toggle="modal" data-bs-target="#addexpense">
-                            <i class="fa fa-plus"></i>
-                            Add Expense
-                        </button>                            
+                        <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-success btn-round me-2" data-bs-toggle="modal" data-bs-target="#addexpense">
+                                <i class="fa fa-plus"></i>
+                                Add Expense
+                            </button> 
+                            <button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#addexpensetype">
+                                <i class="fa fa-plus"></i>
+                                Add Expense Type
+                            </button>
+                        </div>                            
                         <form action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
