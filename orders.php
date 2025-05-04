@@ -109,7 +109,6 @@
                         <li><a class="dropdown-item notification-text" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
                         <hr>
                         <?php endforeach; ?>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
