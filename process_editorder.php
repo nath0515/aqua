@@ -15,7 +15,7 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
-            $sql = "SELECT firstname, lastname FROM orders JOIN users ON orders.rider = users.user_id WHERE orders.order_id = :order_id";
+            $sql = "SELECT firstname, lastname FROM orders JOIN user_details ON orders.rider = users.user_id WHERE orders.order_id = :order_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':order_id', $order_id);
             $stmt->execute();
