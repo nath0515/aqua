@@ -6,7 +6,7 @@
         try{
             $status_id = $_POST['status_id'];
             $order_id = $_POST['order_id'];
-            $rider = $_POST['rider'];
+            $rider = $_SESSION['user_id'];
 
             $sql = "UPDATE orders SET status_id = :status_id, rider = :rider WHERE order_id = :order_id";
             $stmt = $conn->prepare($sql);
@@ -15,7 +15,7 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
-            $sql = "SELECT firstname, lastname FROM orders JOIN user_details ON orders.rider = users.user_id WHERE orders.order_id = :order_id";
+            $sql = "SELECT firstname, lastname FROM orders JOIN user_details ON orders.rider = user_details.user_id WHERE orders.order_id = :order_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':order_id', $order_id);
             $stmt->execute();
