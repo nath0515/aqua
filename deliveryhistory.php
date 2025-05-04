@@ -193,7 +193,7 @@
                                             <tr>
                                                 <td><?php echo $row['date'];?></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
-                                                <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
+                                                <td><?php echo "".$row['customer_firstname']." ".$row['customer_lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
                                                 <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
