@@ -74,19 +74,47 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
         <style>
-            .notification-text{
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: block;
-                max-width: 200px;
-                
-            }
-            .notification-text.fw-bold {
-                font-weight: 600;
-                color: #000;
-            }
-        </style>
+    .notification-dropdown {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s ease;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .notification-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .notification-text {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .notification-text.fw-bold {
+        font-weight: 600;
+        color: #000;
+    }
+
+    .dropdown-menu.dropdown-menu-end {
+        width: 320px;
+        padding: 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+</style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
