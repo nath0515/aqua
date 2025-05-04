@@ -109,70 +109,42 @@
 
                             <div class="card-body">
                             <!-- Product Card -->
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body d-flex align-items-center">
-                                <input class="form-check-input me-3" type="checkbox">
+                            <div class="card mb-3 shadow-sm product-item">
+                            <div class="card-body d-flex align-items-center">
+                                <input class="form-check-input me-3 product-checkbox" type="checkbox">
 
                                 <img src="https://via.placeholder.com/80" class="me-3" alt="Product" style="width: 80px; height: auto;">
 
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-1">PUMA Unisex Smash Vulcanised V3 Low Shoes (Black)</h6>
-                                    <p class="mb-1 text-muted small">Variation: PUMA White-Black, UK:7.5</p>
-                                    <p class="mb-0 text-danger">₱2,975 ON MAY 4, 8PM!</p>
+                                <h6 class="mb-1">PUMA Unisex Smash Vulcanised V3</h6>
+                                <p class="mb-1 text-muted small">Variation: PUMA White-Black, UK:7.5</p>
+                                <p class="mb-0 text-danger">₱2,975 ON MAY 4, 8PM!</p>
                                 </div>
 
                                 <div class="text-end me-3">
-                                    <p class="mb-2 fw-bold">₱3,500</p>
-                                    <div class="input-group input-group-sm w-auto">
+                                <p class="mb-2 fw-bold price" data-price="3500">₱3,500</p>
+                                <div class="input-group input-group-sm w-auto">
                                     <button class="btn btn-outline-secondary">-</button>
                                     <input type="text" class="form-control text-center" value="1" style="width: 40px;">
                                     <button class="btn btn-outline-secondary">+</button>
-                                    </div>
+                                </div>
                                 </div>
 
                                 <div>
-                                    <button class="btn btn-link text-danger btn-sm">Delete</button>
-                                </div>
-                                </div>
-                            </div>
-                            
-                            <div class="card mb-3 shadow-sm">
-                                <div class="card-body d-flex align-items-center">
-                                <input class="form-check-input me-3" type="checkbox">
-
-                                <img src="https://via.placeholder.com/80" class="me-3" alt="Product" style="width: 80px; height: auto;">
-
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1">PUMA Unisex Smash Vulcanised V3 Low Shoes (Black)</h6>
-                                    <p class="mb-1 text-muted small">Variation: PUMA White-Black, UK:7.5</p>
-                                    <p class="mb-0 text-danger">₱2,975 ON MAY 4, 8PM!</p>
-                                </div>
-
-                                <div class="text-end me-3">
-                                    <p class="mb-2 fw-bold">₱3,500</p>
-                                    <div class="input-group input-group-sm w-auto">
-                                    <button class="btn btn-outline-secondary">-</button>
-                                    <input type="text" class="form-control text-center" value="1" style="width: 40px;">
-                                    <button class="btn btn-outline-secondary">+</button>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <button class="btn btn-link text-danger btn-sm">Delete</button>
-                                </div>
+                                <button class="btn btn-link text-danger btn-sm">Delete</button>
                                 </div>
                             </div>
+                            </div>
 
-                            <!-- Bottom Bar -->
                             <div class="card-footer d-flex justify-content-between align-items-center bg-white border-top">
-                            <div>
-                                <input class="form-check-input me-2" type="checkbox">
-                                <span>Select All</span>
-                            </div>
-                            <div class="text-end">
-                                <p class="mb-1">Total (0 item): <strong>₱0</strong></p>
-                                <button class="btn btn-warning">Check Out</button>
-                            </div>
+                                <div>
+                                    <input class="form-check-input me-2" type="checkbox" id="select-all">
+                                    <label for="select-all" class="mb-0">Select All</label>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-1">Total (<span id="selected-count">0</span> item): <strong>₱<span id="total-price">0</span></strong></p>
+                                    <button class="btn btn-warning">Check Out</button>
+                                </div>
                             </div>
                         </div>
                     </div>
