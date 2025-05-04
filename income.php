@@ -25,7 +25,7 @@ ini_set('display_errors', 1);
     LEFT JOIN report_income d ON a.report_id = d.report_id
     LEFT JOIN orders e ON b.order_id = e.order_id
     LEFT JOIN expense f ON c.expense_id = f.expense_id
-    GROUP BY a.date;";
+    GROUP BY DATE(a.date);";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $reports_data = $stmt->fetchAll();
