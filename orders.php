@@ -94,9 +94,9 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2 text-primary"></i> New delivery assigned</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2 text-success"></i> Delivery in progress</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-check me-2 text-info"></i> Delivery completed</a></li>
+                        <?php foreach($activity_logs as $row):?>
+                        <li><a class="dropdown-item" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
+                        <?php endforeach; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
