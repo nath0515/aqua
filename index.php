@@ -112,6 +112,8 @@
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
+
+
             .notification-text{
                 white-space: nowrap;
                 overflow: hidden;
@@ -137,7 +139,7 @@
                
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <?php 
+                <?php 
                     $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
