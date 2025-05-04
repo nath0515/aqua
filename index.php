@@ -416,6 +416,15 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <script>
+            window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt fired'); // Add this
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'inline-block';
+        });
+        </script>
+
+        <script>
             let deferredPrompt;
 
             // Listen for the beforeinstallprompt event
@@ -465,6 +474,7 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
+        
 
         <?php 
             // Fetch Sales Data
