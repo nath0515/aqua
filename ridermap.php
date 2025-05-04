@@ -353,6 +353,9 @@
         function updateStartLocation(position) {
             currentStartCoord = [position.coords.latitude, position.coords.longitude];
 
+            // ✅ Send location to server
+            sendLocationToServer(position.coords.latitude, position.coords.longitude);
+
             if (!currentStartMarker) {
                 currentStartMarker = L.marker(currentStartCoord).addTo(map).bindPopup("You").openPopup();
             } else {
@@ -441,6 +444,16 @@
         } else {
             alert("Geolocation not supported.");
         }
+        </script>
+        <script>
+            function sendLocationToServer(lat, lon) {
+                $.post("update_rider_location.php", {
+                    latitude: lat,
+                    longitude: lon
+                }).fail(function(xhr, status, error) {
+                    console.error("Failed to send location:", error);
+                });
+            }
         </script>
     </body>
 </html>
