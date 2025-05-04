@@ -62,6 +62,11 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>     
     
     <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+        <li class="nav-item me-2">
+            <a class="nav-link" href="cart.php">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </li>
         <li class="nav-item dropdown me-1">
             <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-bell"></i>

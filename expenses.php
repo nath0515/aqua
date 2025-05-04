@@ -297,6 +297,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Edit Order Modal -->
+        <div class="modal fade" id="addexpensetype" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+            
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-plus-circle"></i> Add Expense</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="addexpensetype.php" method="POST" enctype="multipart/form-data">
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="commet" class="form-label">Expense Type Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-receipt"></i></span>
+                                    <input type="text" name="expensetype" class="form-control" placeholder="Expense Type" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Add Expense</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
