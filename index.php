@@ -416,19 +416,11 @@
         <script src="js/datatables-simple-demo.js"></script>
 
         <script>
-            window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('beforeinstallprompt fired'); // Add this
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'inline-block';
-        });
-        </script>
-
-        <script>
             let deferredPrompt;
 
             // Listen for the beforeinstallprompt event
             window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('beforeinstallprompt fired'); // Add this
                 e.preventDefault(); // Prevent automatic prompt
                 deferredPrompt = e; // Save the event for later
                 document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
