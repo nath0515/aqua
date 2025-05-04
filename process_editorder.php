@@ -15,12 +15,20 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
+            //
+            $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':message', $message);
+            $stmt->bindParam(':date', $date);
+            $stmt->bindParam(':destination', $destination);
+            $stmt->execute();
+
             header('Location: deliveryhistory.php?editstatus=success');
             exit();
 
         }
         catch (PDOException $e) {
-            header("Location: stock.php?editstatus=error");
+            header("Location: deliveryhistory.php?editstatus=error");
             exit();
         }
     }
