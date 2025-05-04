@@ -78,9 +78,10 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <?php 
-                    $sql = "SELECT * FROM activity_logs";
+                    $sql = "SELECT * FROM activity_logs LIMIT 3";
                     $stmt = $conn->prepare($sql);
-                    $stmt-?>
+                    $stmt->execute();
+                    $activity_logs = $stmt->fetchAll();
                 ?>
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,7 +98,7 @@
                         <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2 text-success"></i> Delivery in progress</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-check me-2 text-info"></i> Delivery completed</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-center text-muted small" href="#">View all notifications</a></li>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
 
