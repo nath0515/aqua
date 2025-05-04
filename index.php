@@ -137,7 +137,7 @@
                
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                <?php 
+            <?php 
                     $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
@@ -167,13 +167,14 @@
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         <?php 
                         $sql = "SELECT status FROM store_status WHERE ss_id = 1";
@@ -196,9 +197,7 @@
                             <div class="spinner"></div>
                         </div>
                         <li><hr class="dropdown-divider" /></li>
-                        
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        
                     </ul>
                 </li>
             </ul>
