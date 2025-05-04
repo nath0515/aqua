@@ -80,6 +80,11 @@
                 text-overflow: ellipsis;
                 display: block;
                 max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
             }
         </style>
     </head>
