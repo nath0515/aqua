@@ -83,6 +83,15 @@
                     $stmt->execute();
                     $activity_logs = $stmt->fetchAll();
                 ?>
+                <style>
+                    .notifcation-text{
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: block;
+                        max-width: 200px;
+                    }
+                </style>
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
@@ -95,7 +104,7 @@
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item" style="max-width: 200px" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
+                        <li><a class="dropdown-item notification-text" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
                         <?php endforeach; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
