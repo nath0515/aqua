@@ -24,7 +24,7 @@
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetch available order statuses (statuses 3 and 4)
-    $sql = "SELECT * FROM orderstatus WHERE status_id = 3 OR status_id = 4";
+    $sql = "SELECT * FROM orderstatus WHERE status_id IN (3, 4, 6)";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -14,12 +14,13 @@ ini_set('display_errors', 1);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.date, SUM(b.amount) AS total_sales, SUM(c.amount) AS total_expense, SUM(d.income) AS total_income FROM reports a
+    $sql = "SELECT a.date, SUM(e.amount) AS total_sales, SUM(f.amount) AS total_expense, SUM(d.income) AS total_income FROM reports a
     JOIN report_content b ON a.report_id = b.report_id
     JOIN report_expense c ON a.report_id = c.report_id
     JOIN report_income d ON a.report_id = d.report_id
     JOIN orders e ON b.order_id = e.order_id
-    JOIN expense f ON  c.expense_id = f.expense_id";
+    JOIN expense f ON  c.expense_id = f.expense_id
+    GROUP BY a.date";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $reports_data = $stmt->fetchAll();
