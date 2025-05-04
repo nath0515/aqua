@@ -15,7 +15,18 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
-            //
+            $sql = "SELECT firstname, lastname FROM orders JOIN users ON orders.rider = users.user_id WHERE orders.order_id = :order_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+            $rider_data = $stmt->fetch();
+            $firstname = $rider_data['firstname'];
+            $lastname = $rider_data['lastname'];
+
+            
+            $message = "ORDER #{$order_id} - Successfully delivered by Rider: {$firstname} {$lastname}.";
+            $now = date('Y-m-d H:i:s');
+
             $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':message', $message);

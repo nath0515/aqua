@@ -141,6 +141,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>Order ID:#</th>
                                             <th>Date</th>
                                             <th>Amount (₱)</th>
                                             <th>Full Name</th>
@@ -154,6 +155,7 @@
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
                                             <tr>
+                                                <td><?php echo $row['order_id'];?></td>
                                                 <td><?php echo $row['date'];?></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['customer_firstname']." ".$row['customer_lastname'];?></td>
