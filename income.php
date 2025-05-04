@@ -17,7 +17,10 @@
     JOIN report_expense c ON a.report_id = c.report_id
     JOIN report_income d ON a.report_id = d.report_id
     JOIN orders e ON b.order_id = e.order_id
-    JOIN expense f ON  ";
+    JOIN expense f ON  c.expense_id = f.expense_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $reports_data = $stmt->fetchAll();
    
 ?>
 <!DOCTYPE html>
