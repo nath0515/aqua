@@ -12,7 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.date, ";
+    $sql = "SELECT a.date, SUM(b.amount) ";
    
 ?>
 <!DOCTYPE html>
