@@ -181,14 +181,7 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; AquaDrop 2023</div>
-                </div>
-            </div>
-        </footer>
+        
     </div>
 </div>
 
