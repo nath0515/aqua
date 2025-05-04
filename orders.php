@@ -23,6 +23,8 @@
         JOIN payment_method e ON a.payment_id = e.payment_id
         WHERE DATE(date) = :date
         ORDER BY date DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':date', $date);
     }
     else{
         $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
@@ -33,8 +35,8 @@
     LEFT JOIN user_details d ON a.rider = d.user_id
     JOIN payment_method e ON a.payment_id = e.payment_id
     ORDER BY date DESC";
-    }
     $stmt = $conn->prepare($sql);
+    }
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
