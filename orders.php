@@ -24,7 +24,7 @@
         WHERE DATE(date) = :date
         ORDER BY date DESC";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':date', $dateNow);
     }
     else{
         $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
