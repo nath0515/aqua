@@ -11,7 +11,7 @@ $with_container = $_POST['has_container'] ?? 0;
 $container_quantity = $_POST['container_quantity'] ?? 0;
 
 try {
-    $stmt = $pdo->prepare("
+    $stmt = $conn->prepare("
         INSERT INTO cart (product_id, user_id, quantity, with_container, container_quantity)
         VALUES (:product_id, :user_id, :quantity, :with_container, :container_quantity)
     ");
