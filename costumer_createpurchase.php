@@ -249,7 +249,7 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById("quantity").addEventListener("input", function () {
-                            let quantity = parseInt(this.value, 10);
+                            let quantity = this.value;
                             if (quantity >= 10) {
                                 document.getElementById("unitprice").value = data.data.water_price_promo;
                             } else {
