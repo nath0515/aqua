@@ -18,7 +18,7 @@
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM cart WHERE user_id = :user_id";
+    $sql = "SELECT b.product_name FROM cart aJOIN products ON  WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -374,7 +374,7 @@
                                     showConfirmButton: false
                                 }).then(() => {
                                     // Redirect after alert
-                                    window.location.href = 'your_target_page.php'; // change this to your actual page
+                                    window.location.href = 'costumerorder.php'; // change this to your actual page
                                 });
 
                                 // Optional: Clear or reset form fields here
