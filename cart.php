@@ -22,7 +22,7 @@ error_reporting(E_ALL);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, a.quantity, a.container_quantity FROM cart a 
+    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, b.container_price, a.quantity, a.container_quantity FROM cart a 
     JOIN products b ON a.product_id = b.product_id 
     WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -139,8 +139,13 @@ error_reporting(E_ALL);
                                     <p class="mb-1 text-muted small">With Container: <?php if($row['with_container'] == 0){echo 'None';}else{echo $row['container_quantity'];}?></p>
                                     </div>
                                     <?php
-                                        $quantity = $row['quantity'];
-                                        $price = $quantity >= 10 ? $quantity * $row['water_price_promo'] : $quantity * $row['water_price'];
+                                        $price = $quantity >= 10 
+                                        ? $quantity * $row['water_price_promo'] 
+                                        : $quantity * $row['water_price'];
+                                    
+                                    if ($with_container == 1) {
+                                        $price += $container_quantity * $row['container_price'];
+                                    }
                                     ?>
                                     <div class="text-end me-3">
                                     <p class="mb-2 fw-bold price" data-price="<?php echo $price;?>">₱<?php echo $price;?></p>
@@ -152,7 +157,9 @@ error_reporting(E_ALL);
                                     </div>
 
                                     <div>
-                                    <button class="btn btn-link text-danger btn-sm">Delete</button>
+                                    <button class="btn btn-link text-danger btn-sm" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                     </div>
                                 </div>
                             </div>
