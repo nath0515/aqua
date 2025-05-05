@@ -351,6 +351,8 @@
                             container_quantity: containerQuantity
                         };
 
+                        console.log("Sending payload:", payload);
+
                         let formBody = Object.keys(payload).map(key => {
                             return encodeURIComponent(key) + '=' + encodeURIComponent(payload[key]);
                         }).join('&');
