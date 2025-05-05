@@ -265,7 +265,7 @@
                 .catch(error => console.error('Error:', error));
             }
             
-            function addRow(){
+            function addToCart(){
                 const unitPriceInput = document.getElementById('unitprice');
                 const quantityInput = document.getElementById('quantity');
                 const containerQuantityInput = document.getElementById('containerQuantityInput');
@@ -335,52 +335,65 @@
                             return;
                         }
 
-                        let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
-                        let rows = table.getElementsByTagName("tr");
                         let waterPrice = parseFloat(data.data.water_price);
-                        let updated = false;
                         let checkbox = document.getElementById("hasContainer");
 
-                        if (!updated) {
-                            let newRow = table.insertRow();
-                            let cell1 = newRow.insertCell(0);
-                            let cell2 = newRow.insertCell(1);
-                            let cell3 = newRow.insertCell(2);
-                            let cell4 = newRow.insertCell(3);
-                            let cell5 = newRow.insertCell(4);
-                            let cell6 = newRow.insertCell(5);
-                            let cell7 = newRow.insertCell(6);
-                            let cell8 = newRow.insertCell(7);
-                            
+                        let payload = {
+                            product_id: productId,
+                            quantity: quantity,
+                            unit_price: unitprice,
+                            has_container: checkbox.checked ? 1 : 0,
+                            container_quantity: containerQuantity,
+                            container_price: containerPrice,
+                            total_price: totalPrice
+                        };
 
-                            cell1.innerHTML = data.data.product_name;
-                            cell2.innerHTML = "₱" + waterPrice.toFixed(2);
-                            cell3.innerHTML = quantity;
-                            cell4.innerHTML = checkbox.checked ? 'Yes' : 'No';
-                            cell5.innerHTML = containerQuantity;
-                            cell6.innerHTML = "₱" + containerPrice.toFixed(2);
-                            cell7.innerHTML = "₱" + totalPrice.toFixed(2);
-                            cell8.innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
+                        let formBody = Object.keys(payload).map(key => {
+                            return encodeURIComponent(key) + '=' + encodeURIComponent(payload[key]);
+                        }).join('&');
+                        fetch("process_addtocart.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: formBody
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Added to Cart!',
+                                    text: result.message || 'Product successfully added to cart.'
+                                });
 
-                            //cell.style.display = "none";
-                            //
-                        }
-
-                        unitPriceInput.value = '';
-                        quantityInput.value = '';
-                        containerQuantityInput.value = '';
-                        containerPriceInput.value = '';
-                        totalPriceInput.value = '';
-                        productIdInput.value = '';
-
-                        //updateTotalPrice();
+                                // Optional: Clear or reset form fields here
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: result.message || 'Something went wrong.'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An error occurred while adding the item to the cart.'
+                            });
+                        });
+                        
                     })
                     .catch(error => console.error("Error:", error));
 
             }
+
+
             document.getElementById("purchaseForm").addEventListener("submit", function(event) {
                 event.preventDefault();
-                addRow();
+                addToCart();
             });
 
             function deleteRow(button) {
