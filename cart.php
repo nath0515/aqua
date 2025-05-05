@@ -140,6 +140,7 @@ error_reporting(E_ALL);
                                     </div>
                                     <?php
                                         $quantity = $row['quantity'];
+                                        $with_container = $row['with_container'];
                                         $price = $quantity >= 10 
                                         ? $quantity * $row['water_price_promo'] 
                                         : $quantity * $row['water_price'];
