@@ -251,13 +251,17 @@
                         let quantity = document.getElementById('quantity').value;
                         if (quantity >= 10) {
                                 document.getElementById("unitprice").value = data.data.water_price_promo;
+                                document.getElementById('totalprice').value = (parseFloat(quantity) * parseFloat(data.data.water_price_promo)).toFixed(2);
+
                             } else {
                                 document.getElementById("unitprice").value = data.data.water_price;
+                                document.getElementById('totalprice').value = (parseFloat(quantity) * parseFloat(data.data.water_price)).toFixed(2);
+
                             }
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
 
-                        document.getElementById('totalprice').value = parseFloat(quantity) * parseFloat(data.data.water_price);
+                        
                     } else {
                         console.error("Product not found");
                     }
