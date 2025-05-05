@@ -250,7 +250,7 @@
                     if (data.success) {
                         document.getElementById("quantity").addEventListener("input", function () {
                             let quantity = parseInt(this.value, 10);
-                            if (!isNaN(quantity) && quantity >= 10) {
+                            if (quantity >= 10) {
                                 document.getElementById("unitprice").value = data.data.water_price_promo;
                             } else {
                                 document.getElementById("unitprice").value = data.data.water_price;
