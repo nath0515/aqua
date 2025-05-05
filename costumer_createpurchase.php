@@ -347,11 +347,8 @@
                         let payload = {
                             product_id: productId,
                             quantity: quantity,
-                            unit_price: unitprice,
                             has_container: checkbox.checked ? 1 : 0,
-                            container_quantity: containerQuantity,
-                            container_price: containerPrice,
-                            total_price: totalPrice
+                            container_quantity: containerQuantity
                         };
 
                         let formBody = Object.keys(payload).map(key => {
