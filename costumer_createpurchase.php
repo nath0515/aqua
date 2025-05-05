@@ -279,7 +279,7 @@
                 let containerQuantity = Number(containerQuantityInput.value);
                 let containerPrice = Number(containerPriceInput.value);
                 let totalPrice = Number(totalPriceInput.value);
-                let productId = <?php echo $_GET['id'];?>
+                let productId = <?php echo $_GET['id'];?>;
                 let available = availableInput.value;
                 let hasContainer = document.getElementById("hasContainer").checked;
                 console.log(hasContainer);
