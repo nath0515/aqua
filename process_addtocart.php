@@ -10,12 +10,6 @@ $quantity = $_POST['quantity'] ?? null;
 $with_container = $_POST['has_container'] ?? 0;
 $container_quantity = $_POST['container_quantity'] ?? 0;
 
-// Validation (basic)
-if (!$product_id || !$quantity || !$with_container || !$container_quantity) {
-    echo json_encode(['success' => false, 'message' => 'Missing required fields']);
-    exit;
-}
-
 try {
     $stmt = $pdo->prepare("
         INSERT INTO cart (product_id, user_id, quantity, with_container, container_quantity)
