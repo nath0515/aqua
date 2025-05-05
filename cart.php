@@ -44,6 +44,15 @@ error_reporting(E_ALL);
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <style>
+        .btn-delete:hover {
+            color: #fff !important;
+            background-color: #dc3545 !important; /* Bootstrap's 'danger' red */
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+</style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -141,6 +150,7 @@ error_reporting(E_ALL);
                                     <?php
                                         $quantity = $row['quantity'];
                                         $with_container = $row['with_container'];
+                                        $container_quantity = $row['container_quantity'];
                                         $price = $quantity >= 10 
                                         ? $quantity * $row['water_price_promo'] 
                                         : $quantity * $row['water_price'];
@@ -159,7 +169,7 @@ error_reporting(E_ALL);
                                     </div>
 
                                     <div>
-                                    <button class="btn btn-link text-danger btn-sm" title="Delete">
+                                    <button class="btn btn-link text-danger btn-sm btn-delete">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                     </div>
