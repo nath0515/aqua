@@ -22,7 +22,7 @@ error_reporting(E_ALL);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, a.quantity FROM cart a 
+    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, a.quantity, a.container_quantity FROM cart a 
     JOIN products b ON a.product_id = b.product_id 
     WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -136,7 +136,7 @@ error_reporting(E_ALL);
 
                                     <div class="flex-grow-1">
                                     <h6 class="mb-1"><?php echo $row['product_name'];?></h6>
-                                    <p class="mb-1 text-muted small">With Container: <?php if($row['with_container'] == 0){echo 'None';}else{echo 'Yes';}?></p>
+                                    <p class="mb-1 text-muted small">With Container: <?php if($row['with_container'] == 0){echo 'None';}else{echo $row['container_quantity'];}?></p>
                                     </div>
                                     <?php
                                         $quantity = $row['quantity'];
