@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
     require 'session.php';
     require 'db.php';
 
@@ -25,6 +26,7 @@ error_reporting(E_ALL);
     JOIN products b ON a.product_id = b.product_id 
     WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
