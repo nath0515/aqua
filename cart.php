@@ -22,7 +22,7 @@ error_reporting(E_ALL);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT b.product_name, a.with_container, b.water_price, b.water_price_promo, a.quantity FROM cart a 
+    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, a.quantity FROM cart a 
     JOIN products b ON a.product_id = b.product_id 
     WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -132,7 +132,7 @@ error_reporting(E_ALL);
                                 <div class="card-body d-flex align-items-center">
                                     <input class="form-check-input me-3 product-checkbox" type="checkbox">
 
-                                    <img src="https://via.placeholder.com/80" class="me-3" alt="Product" style="width: 80px; height: auto;">
+                                    <img src="<?php echo $row['product_photo'];?>" class="me-3" alt="Product" style="width: 80px; height: auto;">
 
                                     <div class="flex-grow-1">
                                     <h6 class="mb-1"><?php echo $row['product_name'];?></h6>
