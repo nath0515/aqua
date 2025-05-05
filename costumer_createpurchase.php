@@ -262,7 +262,7 @@
                 })
                 .catch(error => console.error('Error:', error));
 
-                updateTotalPrice();
+                document.getElementById('totalPrice').value = quantity * document.getElementById('unitprice');
             }
             
             function addToCart(){
