@@ -256,13 +256,15 @@
                             }
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
+
+                        document.getElementById('totalprice').value = parseFloat(quantity) * parseFloat(data.data.water_price);
                     } else {
                         console.error("Product not found");
                     }
                 })
                 .catch(error => console.error('Error:', error));
 
-                document.getElementById('totalprice').value = quantity * parseFloat(document.getElementById('unitprice').value || 0);
+                
             }
             
             function addToCart(){
