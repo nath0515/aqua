@@ -261,6 +261,8 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+
+                updateTotalPrice();
             }
             
             function addToCart(){
