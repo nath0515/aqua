@@ -139,6 +139,7 @@ error_reporting(E_ALL);
                                     <p class="mb-1 text-muted small">With Container: <?php if($row['with_container'] == 0){echo 'None';}else{echo $row['container_quantity'];}?></p>
                                     </div>
                                     <?php
+                                        $quantity = $row['quantity'];
                                         $price = $quantity >= 10 
                                         ? $quantity * $row['water_price_promo'] 
                                         : $quantity * $row['water_price'];
