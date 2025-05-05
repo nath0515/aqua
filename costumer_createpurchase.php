@@ -364,17 +364,19 @@
                             body: formBody
                         })
                         .then(response => response.json())
-                        if (result.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Added to Cart!',
-                                text: result.message || 'Product successfully added to cart.',
-                                timer: 1500,
-                                showConfirmButton: false
-                            }).then(() => {
-                                // Redirect after alert
-                                window.location.href = 'costumerorder.php'; // change this to your actual page
-                            });
+                        .then(result => {
+                            if (result.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Added to Cart!',
+                                    text: result.message || 'Product successfully added to cart.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    // Redirect after alert
+                                    window.location.href = 'your_target_page.php'; // change this to your actual page
+                                });
+
                                 // Optional: Clear or reset form fields here
                             } else {
                                 Swal.fire({
