@@ -232,9 +232,9 @@
                                     $badgeClass = $status_rider ? 'bg-success' : 'bg-secondary';
                                     $statusText = $status_rider ? 'On Duty' : 'Off Duty';
                                     ?>
-                                    <p class="mb-0">Status: 
+                                    <a class="mb-0" href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">Status: 
                                         <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
                             </div>
