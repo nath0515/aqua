@@ -3,6 +3,12 @@ require ('db.php');
 require ('session.php');
 
 $user_id = $_SESSION['user_id'];
+$role_id = $_SESSION['role_id'];
+    if($role_id == 1){
+        header("Location: index.php");
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+    }
 
 $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
