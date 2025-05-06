@@ -20,16 +20,15 @@ try {
         $sql = "UPDATE rider_status SET time_in_status = :time_status, status = :status WHERE user_id = :user_id AND DATE(date) = :date";
         $status = 1;
     } elseif ($action == 'time_out') {
-        $status = 0; // Example status for time-out
+        $sql = "UPDATE rider_status SET time_out_status = :time_status, status = :status WHERE user_id = :user_id AND DATE(date) = :date";
+        $status = 0;
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
         exit;
     }
 
-    // Update the rider status based on action
-    $sql = "UPDATE rider_status SET time_in_status = :status WHERE user_id = :user_id AND DATE(date) = CURDATE()";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([':status' => $status, ':user_id' => $user_id]);
+    $stmt->execute([':time_status' => 1, ':status' => $status, ':user_id' ]);
 
     // Check if the update was successful
     if ($stmt->rowCount() > 0) {
