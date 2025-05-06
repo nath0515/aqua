@@ -265,7 +265,7 @@
     fetchOrders();
 
     // Set up the interval to fetch orders every 10 seconds
-    setInterval(fetchOrders, 10000);
+    setInterval(fetchOrders, 3000);
 });
 
         </script>
