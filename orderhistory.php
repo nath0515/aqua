@@ -244,7 +244,7 @@
                 <td>${order.contact_number}</td>
                 <td>${order.address}</td>
                 <td>${order.status_name}</td>
-                <td>${order.rider}</td>
+                <td>${order.rider_firstname} ${order.rider_lastname}</td>
                 <td>
                     <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
                         <i class="bi bi-eye"></i> View

@@ -12,11 +12,12 @@ if (!$user_id) {
 }
 
 try {
-    $sql = "SELECT a.order_id, a.date, a.amount, a.status_id, c.status_name, a.rider,
+    $sql = "SELECT a.order_id, a.date, a.amount, a.status_id, c.status_name, d.firstname as rider_firstname, d.lastname as rider_lastname,
                 b.firstname, b.lastname, b.contact_number, b.address
             FROM orders a
             JOIN user_details b ON a.user_id = b.user_id
             JOIN orderstatus c ON a.status_id = c.status_id
+            JOIN user_details d ON a.rider = d.user_id
             WHERE a.user_id = :user_id
             ORDER BY a.date DESC";
     $stmt = $conn->prepare($sql);
