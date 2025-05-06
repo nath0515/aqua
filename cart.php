@@ -311,46 +311,69 @@ error_reporting(E_ALL);
             }
 
             Swal.fire({
-                title: 'Are you sure?',
-                text: 'Do you want to proceed with the checkout?',
-                icon: 'question',
+                title: "Are you sure you want to checkout?",
+                text: "You won't be able to undo this action.",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, checkout',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: "Yes, Checkout!",
+                cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Proceed with checkout
-                    fetch('process_checkout.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ items: selectedItems, payment_id: paymentId })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Checkout Successful!',
-                                text: 'Your order has been placed successfully.'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Checkout Failed',
-                                text: data.message || 'Something went wrong during checkout.'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    if(paymentMethod == 2){
                         Swal.fire({
-                            icon: 'error',
-                            title: 'An Error Occurred',
-                            text: 'Please try again later.'
+                            title: 'Scan to Pay via GCash',
+                            text: 'Please scan the QR code below to complete your payment.',
+                            imageUrl: 'assets/img/gcash.jpg',
+                            imageWidth: 200,
+                            imageHeight: 200,
+                            imageAlt: 'GCash QR Code',
+                            confirmButtonText: 'Done'
+                        }).then((qrResult) => {
+                            if (qrResult.isConfirmed) {
+                                // Proceed with order after GCash scan
+                                fetch("process_receipt.php", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        receipt: receiptData,
+                                        total_price: totalPrice,
+                                        payment_method: paymentMethod
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire("Success!", "Purchase submitted successfully!", "success")
+                                            .then(() => window.location.href = "orders.php");
+                                    } else {
+                                        Swal.fire("Error!", data.error, "error");
+                                    }
+                                })
+                                .catch(error => console.error("Error:", error));
+                            }
                         });
-                    });
+                    }
+                    else{
+                        fetch("process_receipt.php", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                receipt: receiptData,
+                                total_price: totalPrice,
+                                payment_method: paymentMethod
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire("Success!", "Purchase submitted successfully!", "success")
+                                    .then(() => window.location.href = "orders.php");
+                            } else {
+                                Swal.fire("Error!", data.error, "error");
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                    }
                 }
             });
         });
