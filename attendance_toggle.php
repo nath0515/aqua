@@ -36,7 +36,7 @@ if (!$row) {
 
 if ($status == 1) {
     // Clock Out
-    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 0, date = :now WHERE user_id = :user_id AND DATE(date) = :date");
+    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 0, time_out = :now WHERE user_id = :user_id AND DATE(date) = :date");
     $updateStatus->bindParam(':now', $now);
     $updateStatus->bindParam(':user_id', $user_id);
     $updateStatus->bindParam(':date', $today);
@@ -60,7 +60,7 @@ if ($status == 1) {
     }
 
     // Clock In
-    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, date = :now WHERE user_id = :user_id AND DATE(date) = :date");
+    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, time_in = :now WHERE user_id = :user_id AND DATE(date) = :date");
     $updateStatus->bindParam(':now', $now);
     $updateStatus->bindParam(':user_id', $user_id);
     $updateStatus->bindParam(':date', $today);
