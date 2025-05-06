@@ -345,6 +345,7 @@
         checkbox.addEventListener('change', function () {
             const attendanceId = this.dataset.id;
             const type = this.dataset.type;
+            const checkboxElement = this;
 
             fetch('update_attendance.php', {
                 method: 'POST',
@@ -357,16 +358,17 @@
             .then(data => {
                 if (data.status === 'success') {
                     alert(data.message);
-                    // Optionally: reload page or update UI
+
+                    // Disable checkbox after successful update
+                    checkboxElement.disabled = true;
                 } else {
                     alert('Error: ' + data.message);
-                    // Revert the toggle switch
-                    this.checked = !this.checked;
+                    checkboxElement.checked = !checkboxElement.checked;
                 }
             })
             .catch(error => {
                 alert('Fetch error: ' + error);
-                this.checked = !this.checked;
+                checkboxElement.checked = !checkboxElement.checked;
             });
         });
     });
