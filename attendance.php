@@ -40,7 +40,7 @@
         exit();
     }
     
-    $stmt = $conn->prepare("SELECT * FROM rider_status WHERE user_id = :user_id");
+    $stmt = $conn->prepare("SELECT * FROM rider_status WHERE user_id = :user_id ORDER BY date DESC");
     $stmt->execute([':user_id' => $user_id]);
     $rider_status_data = $stmt->fetchAll();
 ?>
@@ -70,7 +70,7 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <li class="nav-item dropdown me-1">
-                    <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             3
@@ -84,7 +84,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -191,12 +191,12 @@
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="time_in_switch" <?= $row['time_in_status'] == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
+                                                        <input class="form-check-input time_in_switch" type="checkbox" data-riderstatus_id="<?php echo $row['riderstatus_id'];?>" <?= $row['time_in_status'] == 1 ? 'checked disabled' : '' ?>> <span class="timestamp"><?= htmlspecialchars($row['time_in']) ?></span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="time_out_switch" <?= $row['time_out_status'] == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_out']) ?>
+                                                        <input class="form-check-input time_out_switch" type="checkbox" data-riderstatus_id="<?php echo $row['riderstatus_id'];?>" <?= $row['time_out_status'] == 1 ? 'checked disabled' : '' ?>> <span class="timestamp"><?= htmlspecialchars($row['time_out']) ?></span>
                                                     </div>
                                                 </td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
@@ -276,15 +276,18 @@
         </script>
 
         <script>
-            const userId = <?php echo json_encode($user_id); ?>;
+        const userId = <?php echo json_encode($user_id); ?>;
 
-            // Time In Switch
-            document.getElementById('time_in_switch').addEventListener('change', function() {
+        // Time In Switch
+        document.querySelectorAll('.time_in_switch').forEach(function(switchElem) {
+            switchElem.addEventListener('change', function() {
                 if (this.checked) {
+                    const riderstatusId = this.getAttribute('data-riderstatus_id');
+
                     fetch('process_ridertimein.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user_id: userId, action: 'time_in' })
+                        body: JSON.stringify({ user_id: userId, riderstatus_id: riderstatusId, action: 'time_in' })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -295,6 +298,8 @@
                                 text: 'You are now marked as time-in.'
                             });
                             this.disabled = true; // lock after success
+                            const timestampSpan = this.parentElement.querySelector('.timestamp');
+                            timestampSpan.textContent = <?php echo $now;?>;
                             
                         } else {
                             Swal.fire({
@@ -316,14 +321,18 @@
                     });
                 }
             });
+        });
 
-            // Time Out Switch
-            document.getElementById('time_out_switch').addEventListener('change', function() {
+        // Time Out Switch
+        document.querySelectorAll('.time_out_switch').forEach(function(switchElem) {
+            switchElem.addEventListener('change', function() {
                 if (this.checked) {
+                    const riderstatusId = this.getAttribute('data-riderstatus_id');
+
                     fetch('process_ridertimein.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user_id: userId, action: 'time_out' })
+                        body: JSON.stringify({ user_id: userId, riderstatus_id: riderstatusId, action: 'time_out' })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -334,6 +343,8 @@
                                 text: 'You are now marked as time-out.'
                             });
                             this.disabled = true; // lock after success
+                            const timestampSpan = this.parentElement.querySelector('.timestamp');
+                            timestampSpan.textContent = <?php echo $now;?>;
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -354,7 +365,9 @@
                     });
                 }
             });
+        });
         </script>
+
 
 
         <!-- PWA: Service Worker Registration -->
