@@ -295,10 +295,6 @@
                                 text: 'You are now marked as time-in.'
                             });
                             this.disabled = true; // lock after success
-                            const textNode = this.nextSibling;
-                            if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-                                textNode.nodeValue = ' ' + <?php echo $now; ?>;
-                            }
                             
                         } else {
                             Swal.fire({
