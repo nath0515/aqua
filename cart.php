@@ -275,36 +275,36 @@ error_reporting(E_ALL);
                 }
 
                 fetch('process_checkout.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ items: selectedItems })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Checkout Successful!',
-            text: 'Your order has been placed successfully.'
-        }).then(() => {
-            window.location.reload();
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Checkout Failed',
-            text: data.message || 'Something went wrong during checkout.'
-        });
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-    Swal.fire({
-        icon: 'error',
-        title: 'An Error Occurred',
-        text: 'Please try again later.'
-    });
-});
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: selectedItems })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Checkout Successful!',
+                            text: 'Your order has been placed successfully.'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Checkout Failed',
+                            text: data.message || 'Something went wrong during checkout.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'An Error Occurred',
+                        text: 'Please try again later.'
+                    });
+                });
 
             });
 
