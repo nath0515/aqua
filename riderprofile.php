@@ -41,7 +41,12 @@
                 <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
             </a>
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <li class="nav-item dropdown me-1">
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="cart.php">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

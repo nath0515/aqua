@@ -29,9 +29,10 @@
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
+    $sql = "SELECT status FROM rider_status WHERE user_id = :user_id AND DATE(date) = :date";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':date', $today);
     $stmt->execute();
     $rider_status = $stmt->fetchColumn();
     if($rider_status == 1){
