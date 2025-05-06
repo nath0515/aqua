@@ -72,8 +72,6 @@
     // Calculate SMA based on the last 7 days
     $sma = calculateSMA($quantities, 7);
     
-    echo "Predicted Load for Today: $sma";
-    
     ?>
 <!DOCTYPE html>
 <html lang="en">
