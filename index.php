@@ -49,28 +49,25 @@
     $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
     $unread_count = $unread_result['unread_count'];
 
-    function calculateSMA($quantities, $days) {
-        if (count($quantities) < $days) return null;
-        return round(array_sum(array_slice($quantities, -$days)) / $days);
-    }
-    
-    /// Get today's date (in PHP server timezone)
-$dateToday = date('Y-m-d');
+    $dateToday = date('Y-m-d');
+$sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
+$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($dateToday)));
 
-// Fetch the last 7 full days of order quantities (excluding today)
+// Prepare a date map with zeros
+$dateMap = [];
+for ($i = 7; $i >= 1; $i--) {
+    $day = date('Y-m-d', strtotime("-$i days", strtotime($dateToday)));
+    $dateMap[$day] = 0;
+}
+
+// Fetch order quantities over the last 7 days
 $sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
         FROM orderitems
         JOIN orders ON orderitems.order_id = orders.order_id
         WHERE DATE(orders.date) BETWEEN DATE(:seven_days_ago) AND DATE(:yesterday)
-        GROUP BY order_date
-        ORDER BY order_date ASC";
+        GROUP BY order_date";
 
 $stmt = $conn->prepare($sql);
-
-// Calculate PHP date ranges
-$sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
-$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($dateToday)));
-
 $stmt->execute([
     ':seven_days_ago' => $sevenDaysAgo,
     ':yesterday' => $yesterday
@@ -78,17 +75,14 @@ $stmt->execute([
 
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Calculate total and count
-$totalQuantity = 0;
-$dayCount = 0;
-
+// Fill in quantities into the date map
 foreach ($data as $row) {
-    $totalQuantity += (int)$row['total_quantity'];
-    $dayCount++;
+    $dateMap[$row['order_date']] = (int)$row['total_quantity'];
 }
 
-// Calculate simple moving average (SMA)
-$sma = ($dayCount > 0) ? round($totalQuantity / $dayCount) : null;
+// Calculate SMA
+$totalQuantity = array_sum($dateMap);
+$sma = round($totalQuantity / 7);
     
     ?>
 <!DOCTYPE html>
