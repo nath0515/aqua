@@ -119,7 +119,6 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="assigneddelivery.php">Assigned Deliveries</a>
                                     <a class="nav-link" href="deliveryhistory.php">Delivered History</a>
                                     <a class="nav-link" href="ridermap.php">Maps</a>
                                 </nav>
