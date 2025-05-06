@@ -190,6 +190,7 @@
                                                                                 }
                                                                             ?>
                                                                             <button 
+                                                                                id="editOrderBtn"
                                                                                 class="badge <?= $badgeClass ?> border-0 text-start"
                                                                                 style="cursor: pointer;"
                                                                                 data-id="<?= $row['order_id']; ?>"
@@ -200,15 +201,6 @@
                                                                                 <?= $status ?>
                                                                             </button>
                                                                         </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button class="btn btn-outline-primary btn-sm" 
-                                                                            id="editOrderBtn"
-                                                                            data-id="<?php echo $row['order_id']; ?>"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#editorder">
-                                                                                <i class="bi bi-pencil"></i> Edit
-                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
