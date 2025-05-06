@@ -81,6 +81,9 @@ try {
         ]);
     }
 
+    $sql = "DELETE FROM cart WHERE cart_id = :cart_id";
+    foreach()
+
     $conn->commit();
 
     echo json_encode(['success' => true, 'message' => 'Order placed successfully']);
