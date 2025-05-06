@@ -526,7 +526,7 @@
                         Swal.fire({
                             title: 'Scan to Pay via GCash',
                             text: 'Please scan the QR code below to complete your payment.',
-                            imageUrl: 'assets/img/gcash-qr.jpg',
+                            imageUrl: 'assets/img/gcash.jpg',
                             imageWidth: 200,
                             imageHeight: 200,
                             imageAlt: 'GCash QR Code',
