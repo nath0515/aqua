@@ -180,16 +180,17 @@
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
-                                                <?= ($row['time_in']) ? date('h:i A', strtotime($row['time_in']));: '—' ?><br>
-                                                <?php if ($status_rider === 0): ?>
-                                                    <button 
-                                                        class="btn btn-success btn-sm mt-1"
-                                                        onclick="toggleTimeIn(event)"
-                                                    >Time In</button>
-                                                <?php endif; ?>
+                                                    <?= ($row['time_in']) ? date('h:i A', strtotime($row['time_in'])) : '—' ?><br>
+                                                    <?php if ($status_rider === 0): ?>
+                                                        <button 
+                                                            class="btn btn-success btn-sm mt-1"
+                                                            onclick="toggleTimeIn(event)"
+                                                        >Time In</button>
+                                                    <?php endif; ?>
                                                 </td>
+
                                                 <td>
-                                                    <?= $row['time_out'] ? date('h:i A', strtotime($row['time_in'])); : '—' ?><br>
+                                                    <?= ($row['time_out']) ? date('h:i A', strtotime($row['time_out'])) : '—' ?><br>
                                                     <?php if ($status_rider === 1): ?>
                                                         <button 
                                                             class="btn btn-danger btn-sm mt-1"
