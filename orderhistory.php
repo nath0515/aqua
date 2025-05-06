@@ -229,13 +229,67 @@
             });
         </script>
         <script>
-            setInterval(() => {
-                fetch('get_order_status.php?order_id=123')  // Replace 123 with dynamic ID
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('statusText').innerText = data.status_name;
-                    });
-            }, 5000);
+            document.addEventListener("DOMContentLoaded", function() {
+    const userId = <?php echo $user_id; ?>; // Make sure the user_id is available in JS
+    
+    function fetchOrders() {
+        fetch('process_usercheckorders.php', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateOrdersTable(data.orders);
+            } else {
+                console.error("Failed to fetch orders:", data.message);
+            }
+        })
+        .catch(error => console.error("Error fetching orders:", error));
+    }
+
+    // Function to update the order table
+    function updateOrdersTable(orders) {
+        orders.forEach(order => {
+            const row = document.querySelector(`#order-${order.order_id}`);
+            const statusCell = row.querySelector('.status');
+            
+            if (row) {
+                // Update the status of the existing row
+                statusCell.textContent = order.status_name;
+            } else {
+                // Add a new row if it doesn't exist
+                const newRow = document.createElement('tr');
+                newRow.id = `order-${order.order_id}`;
+                
+                newRow.innerHTML = `
+                    <td>${order.date}</td>
+                    <td>₱${order.amount}</td>
+                    <td>${order.firstname} ${order.lastname}</td>
+                    <td>${order.contact_number}</td>
+                    <td>${order.address}</td>
+                    <td class="status">${order.status_name}</td>
+                    <td>${order.rider}</td>
+                    <td>
+                        <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                `;
+                
+                // Append the new row to the table body
+                document.querySelector('#datatablesSimple tbody').appendChild(newRow);
+            }
+        });
+    }
+
+    // Periodically fetch orders every 10 seconds (for example)
+    setInterval(fetchOrders, 10000);
+
+    // Initial fetch to populate the orders
+    fetchOrders();
+});
+
         </script>
     </body>
 </html>
