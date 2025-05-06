@@ -4,6 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
+    $now = date('Y-m-d H:i:s');
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -294,6 +295,11 @@
                                 text: 'You are now marked as time-in.'
                             });
                             this.disabled = true; // lock after success
+                            const textNode = this.nextSibling;
+                            if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+                                textNode.nodeValue = ' ' + <?php echo $now; ?>;
+                            }
+                            
                         } else {
                             Swal.fire({
                                 icon: 'error',
