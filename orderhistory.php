@@ -237,6 +237,9 @@
         // Add the new rows to the table
         orders.forEach(order => {
             const row = document.createElement('tr');
+            const riderName = (order.rider_firstname && order.rider_lastname) 
+                ? `${order.rider_firstname} ${order.rider_lastname}` 
+                : 'None';
             row.innerHTML = `
                 <td>${order.date}</td>
                 <td>₱${order.amount}</td>
@@ -244,7 +247,7 @@
                 <td>${order.contact_number}</td>
                 <td>${order.address}</td>
                 <td>${order.status_name}</td>
-                <td>${order.rider_firstname} ${order.rider_lastname}</td>
+                <td>${riderName}</td>
                 <td>
                     <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
                         <i class="bi bi-eye"></i> View
