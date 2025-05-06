@@ -238,7 +238,6 @@
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
-                                                <td><?php echo $row['status_name'];?></td>
                                                 <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                     <?php
                                                         $status = htmlspecialchars($row['status_name']);
@@ -263,6 +262,7 @@
                                                         <?= $status ?>
                                                     </span>
                                                 </div>
+                                                <td><?php echo $row['rider'];?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
