@@ -179,8 +179,8 @@
                                         <?php foreach ($attendance_data as $row): ?>
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
-                                                <td><?= htmlspecialchars($row['time_in']) ?></td>
-                                                <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
+                                                <td class="time-column"><?= htmlspecialchars($row['time_in']) ?></td>
+                                                <td class="time-column"><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -265,5 +265,13 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
+        <script>
+        document.getElementById('toggleTimeColumns').addEventListener('click', function() {
+            const timeColumns = document.querySelectorAll('.time-column');
+            timeColumns.forEach(function(cell) {
+                cell.style.display = (cell.style.display === 'none' || cell.style.display === '') ? 'table-cell' : 'none';
+            });
+        });
+    </script>
     </body>
 </html>
