@@ -233,7 +233,7 @@
                                         <?php foreach($order_data as $row):?>
                                             <tr>
                                                 <td>₱<?php echo $row['order_id'];?></td>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
