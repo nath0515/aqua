@@ -28,6 +28,10 @@
     $salary_per_day = 500;
     $total_days = count($attendance_data);
     $total_salary = $total_days * $salary_per_day;
+
+    $stmt = $conn->prepare("SELECT status FROM rider_status WHERE user_id = :user_id");
+    $stmt->execute([':user_id' => $user_id]);
+    $status = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -174,7 +178,10 @@
                                         <?php foreach ($attendance_data as $row): ?>
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
-                                                <td><?= htmlspecialchars($row['time_in']) ?></td>
+                                                <td>
+                                                    <input class="form-check-input" type="checkbox" id="lockableSwitch">
+                                                    <?= htmlspecialchars($row['time_in']) ?>
+                                                </td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
