@@ -234,7 +234,7 @@ ini_set('display_errors', 1);
                                     <tbody>
                                         <?php foreach($reports_data as $row):?>
                                             <tr>
-                                                <td><?php echo $row['date'];?></td>
+                                                <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
                                                 <td>₱<?php echo $row['total_sales'];?></td>
                                                 <td>₱<?php echo $row['total_expense'];?></td>
                                                 <td>₱<?php echo $row['total_income'];?></td>
