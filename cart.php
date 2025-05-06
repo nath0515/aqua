@@ -193,7 +193,7 @@ error_reporting(E_ALL);
                                 </div>
                                 <div class="row align-items-end">
                                 <!-- Payment Method -->
-                                <div class="col-md-6">
+                                <div class="col-md-6 me-3">
                                     <div class="form-group form-group-default">
                                         <label>Payment Method</label>
                                         <select name="payment_id" id="payment_id" class="form-select">
