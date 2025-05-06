@@ -522,48 +522,64 @@
                 cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch("process_receipt.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            receipt: receiptData,
-                            total_price: totalPrice,
-                            payment_method: paymentMethod
+                    if(paymentMethod == 2){
+                        Swal.fire({
+                            title: 'Scan to Pay via GCash',
+                            text: 'Please scan the QR code below to complete your payment.',
+                            imageUrl: 'assets/img/gcash-qr.png',
+                            imageWidth: 200,
+                            imageHeight: 200,
+                            imageAlt: 'GCash QR Code',
+                            confirmButtonText: 'Done'
+                        }).then((qrResult) => {
+                            if (qrResult.isConfirmed) {
+                                // Proceed with order after GCash scan
+                                fetch("process_receipt.php", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        receipt: receiptData,
+                                        total_price: totalPrice,
+                                        payment_method: paymentMethod
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire("Success!", "Purchase submitted successfully!", "success")
+                                            .then(() => window.location.href = "orders.php");
+                                    } else {
+                                        Swal.fire("Error!", data.error, "error");
+                                    }
+                                })
+                                .catch(error => console.error("Error:", error));
+                            }
+                        });
+                    }
+                    else{
+                        fetch("process_receipt.php", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                receipt: receiptData,
+                                total_price: totalPrice,
+                                payment_method: paymentMethod
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire("Success!", "Purchase submitted successfully!", "success")
-                                .then(() => window.location.href = "orders.php");
-                        } else {
-                            Swal.fire("Error!", data.error, "error");
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire("Success!", "Purchase submitted successfully!", "success")
+                                    .then(() => window.location.href = "orders.php");
+                            } else {
+                                Swal.fire("Error!", data.error, "error");
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                    }
                 }
             });
         }
-
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('payment_id').addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex].text.trim().toLowerCase();
-
-            if (selectedOption === 'gcash') {
-                Swal.fire({
-                    title: 'Scan to Pay via GCash',
-                    text: 'Please scan the QR code below to complete your payment.',
-                    imageUrl: 'assets/img/gcash-qr.jpg',
-                    imageWidth: 200,
-                    imageHeight: 200,
-                    imageAlt: 'GCash QR Code',
-                    confirmButtonText: 'Done'
-                });
-            }
-        });
-    });
     </script>
     </body>
 </html>
