@@ -38,9 +38,10 @@
         header('Location: attendance.php');
         exit();
     }
-    $stmt = $conn->prepare("SELECT time_in FROM rider_status WHERE user_id = :user_id");
+    
+    $stmt = $conn->prepare("SELECT * FROM rider_status WHERE user_id = :user_id");
     $stmt->execute([':user_id' => $user_id]);
-    $time_in = $stmt->fetchColumn();
+    $rider_status_data = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -184,15 +185,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($attendance_data as $row): ?>
+                                        <?php foreach ($rider_status_data as $row): ?>
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch" <?= $time_in == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
+                                                        <input class="form-check-input" type="checkbox" id="time_in_switch" <?= $row['time_in_status'] == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
                                                     </div>
                                                 </td>
-                                                <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="time_out_switch" <?= $row['time_out_status'] == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_out']) ?>
+                                                    </div>
+                                                </td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
                                         <?php endforeach; ?>

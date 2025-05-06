@@ -174,7 +174,9 @@ $sma = round($totalQuantity / 7);
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item notification-text" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
+                        <li><a class="dropdown-item notification-text" href="#" onclick="markAsReadAndRedirect(<?= $row['notification_id']; ?>, '<?= $row['destination']; ?>')">
+                            <?= $row['message']; ?>
+                        </a></li>
                         <hr>
                         <?php endforeach; ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
@@ -706,6 +708,14 @@ $sma = round($totalQuantity / 7);
 
                 return false;
             }
+        </script>
+        <script>
+            function markAsReadAndRedirect(id, url) {
+            fetch('mark_notification_read.php?id=' + id)
+                .then(() => {
+                    window.location.href = url;
+                });
+        }
         </script>
     </body>
 </html>
