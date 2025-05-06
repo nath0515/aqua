@@ -279,7 +279,7 @@
         const userId = <?php echo json_encode($user_id); ?>;
 
         // Time In Switch
-        document.querySelectorAll('.time_in_switch').forEach(function(switchElem) {
+        document.querySelectorAll('.time_in_switch:not(:disabled)').forEach(function(switchElem) {
             switchElem.addEventListener('change', function() {
                 if (this.checked) {
                     const riderstatusId = this.getAttribute('data-riderstatus_id');
@@ -295,11 +295,15 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Time In Enabled',
-                                text: 'You are now marked as time-in.'
+                                text: 'You are now marked as time-in.',
+                                timer: 1500,  // auto-close after 1.5 seconds
+                                showConfirmButton: false
+                            }).then(() => {
+                                this.disabled = true; // lock after success
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 500); // short delay before reload
                             });
-                            this.disabled = true; // lock after success
-                            window.location.reload();
-                            
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -323,7 +327,7 @@
         });
 
         // Time Out Switch
-        document.querySelectorAll('.time_out_switch').forEach(function(switchElem) {
+        document.querySelectorAll('.time_out_switch:not(:disabled)').forEach(function(switchElem) {
             switchElem.addEventListener('change', function() {
                 if (this.checked) {
                     const riderstatusId = this.getAttribute('data-riderstatus_id');
@@ -339,10 +343,15 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Time Out Enabled',
-                                text: 'You are now marked as time-out.'
+                                text: 'You are now marked as time-out.',
+                                timer: 1500,  // auto-close after 1.5 seconds
+                                showConfirmButton: false
+                            }).then(() => {
+                                this.disabled = true; // lock after success
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 500); // short delay before reload
                             });
-                            this.disabled = true; // lock after success
-                            window.location.reload();
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -365,6 +374,7 @@
             });
         });
         </script>
+
 
 
 

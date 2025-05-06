@@ -547,21 +547,23 @@
 
     </script>
     <script>
-    document.getElementById('payment_id').addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex].text.trim().toLowerCase();
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('payment_id').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex].text.trim().toLowerCase();
 
-        if (selectedOption === 'gcash') {
-            Swal.fire({
-                title: 'Scan to Pay via GCash',
-                text: 'Please scan the QR code below to complete your payment.',
-                imageUrl: 'assets/img/gcash-qr.png',
-                imageWidth: 200,
-                imageHeight: 200,
-                imageAlt: 'GCash QR Code',
-                confirmButtonText: 'Done'
-            });
-        }
+            if (selectedOption === 'gcash') {
+                Swal.fire({
+                    title: 'Scan to Pay via GCash',
+                    text: 'Please scan the QR code below to complete your payment.',
+                    imageUrl: 'assets/img/gcash-qr.jpg',
+                    imageWidth: 200,
+                    imageHeight: 200,
+                    imageAlt: 'GCash QR Code',
+                    confirmButtonText: 'Done'
+                });
+            }
+        });
     });
-</script>
+    </script>
     </body>
 </html>
