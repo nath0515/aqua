@@ -4,7 +4,6 @@
 
     $user_id = $_SESSION['user_id'];
 
-    // Fetch user details
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
@@ -12,31 +11,29 @@
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    $order_id = 0;
 
-    // Fetch orders assigned to the logged-in rider (user_id is the rider's user_id)
-    $sql = "SELECT 
-            a.order_id, a.date, a.amount, 
-            b.firstname AS customer_firstname, b.lastname AS customer_lastname, 
-            b.address, b.contact_number, 
-            c.status_name, 
-            r.firstname AS rider_firstname, r.lastname AS rider_lastname 
-        FROM orders a
-        JOIN user_details b ON a.user_id = b.user_id
-        JOIN orderstatus c ON a.status_id = c.status_id 
-        JOIN user_details r ON a.rider = r.user_id
-        WHERE a.status_id = 4 AND a.rider = :user_id";  // Filter by rider's user_id (status_id = 4)
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id);  // Bind user_id here
-    $stmt->execute();
-    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if(isset($_GET['id'])){
+        $order_id = $_GET['id'];
 
-    // Fetch available order statuses
-    $sql = "SELECT * FROM orderstatus";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
+        b.product_name, b.water_price, b.water_price_promo, b.container_price, 
+        c.date, c.amount, c.rider, 
+        d.firstname, d.lastname, d.address, d.contact_number,
+        e.status_name
+        FROM orderitems a
+        JOIN products b ON a.product_id = b.product_id
+        JOIN orders c ON a.order_id = c.order_id
+        JOIN user_details d ON c.user_id = d.user_id
+        JOIN orderstatus e ON c.status_id = e.status_id
+        WHERE a.order_id = :order_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->execute();
+        $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -62,7 +59,7 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-             <li class="nav-item dropdown me-1">
+            <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -81,9 +78,8 @@
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
-                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         <?php 
                         $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
                         $stmt = $conn->prepare($sql);
@@ -97,9 +93,6 @@
                             <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                         </a>
                         </li>
-                        <div id="loadingOverlay">
-                            <div class="spinner"></div>
-                        </div>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -109,6 +102,7 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menu</div>
@@ -133,97 +127,82 @@
                             </a>
                         </div>
                     </div>
+                    </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
                         <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
-                    </div>  
+                    </div>
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Delivery History</h1>
+                        <h1 class="mt-4">Orders</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Delivery Management</li>
-                            <li class="breadcrumb-item active">Delivery History</li>
+                            <li class="breadcrumb-item active">Order Management</li>
+                            <li class="breadcrumb-item active"><a href="orders.php">Order</a></li>
+                            <li class="breadcrumb-item active">View Orders</li>
                         </ol>
-                        <form action="expenses.php" method="GET">
-                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
-                                <div>
-                                    <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
-                                </div>
-                                <div>
-                                    <label class="form-label d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
-                                </div>
-                            </div>
-                        </form>
+                        <div class="card mb-4">
+                            
+                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Sales
+                                Orders
                             </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
+                            <div class="card-body table-responsive">
+                                <?php 
+                                $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bindParam(':order_id', $order_id);
+                                $stmt->execute();
+                                $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
+                                ?>
+                                <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
+                                <table class="table table-bordered p-1">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Date</th>
-                                            <th>Amount (₱)</th>
-                                            <th>Full Name</th>
-                                            <th>Contact #</th>
-                                            <th>Address</th>
-                                            <th>Status</th>
-                                            <th>Rider</th>
-                                            <th>Action</th>
+                                            <th>Item Name</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Has Container</th>
+                                            <th>Container Quantity</th>
+                                            <th>Container Price</th>
+                                            <th>Total Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
                                             <tr>
-                                                <td><?php echo $row['order_id'];?></td>
-                                                <td><?php echo $row['date'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td><?php echo "".$row['customer_firstname']." ".$row['customer_lastname'];?></td>
-                                                <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
-                                                <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
-                                                    <?php
-                                                        $status = htmlspecialchars($row['status_name']);
-                                                        $badgeClass = 'bg-secondary'; // Default for unknown status
-
-                                                        // Assign colors to each status
-                                                        if ($status === 'Pending') {
-                                                            $badgeClass = 'bg-light'; // Light grey for pending
-                                                        } elseif ($status === 'Accepted') {
-                                                            $badgeClass = 'bg-primary'; // Blue for accepted
-                                                        } elseif ($status === 'Delivering') {
-                                                            $badgeClass = 'bg-warning text-dark'; // Yellow with dark text for delivering
-                                                        } elseif ($status === 'Delivered') {
-                                                            $badgeClass = 'bg-success'; // Green for delivered
-                                                        } elseif ($status === 'Completed') {
-                                                            $badgeClass = 'bg-info'; // Light blue for completed
-                                                        } elseif ($status === 'Cancel') {
-                                                            $badgeClass = 'bg-danger'; // Red for cancelled
+                                                <td><?php echo $row['product_name'];?></td>
+                                                <td>₱
+                                                    <?php 
+                                                        if($row['quantity'] >= 10){
+                                                            echo $row['water_price_promo'];
                                                         }
+                                                        else{
+                                                            echo $row['water_price'];
+                                                        }
+                                                
                                                     ?>
-                                                    <span class="badge <?= $badgeClass ?>">
-                                                        <?= $status ?>
-                                                    </span>
-                                                </div>
                                                 </td>
-                                                <td><?php echo htmlspecialchars($row['rider_firstname'] . ' ' . $row['rider_lastname']); ?></td>
+                                                <td><?php echo $row['quantity'];?></td>
                                                 <td>
-                                                    <a href="rider_orderdetails.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
+                                                    <?php 
+                                                        if($row['with_container'] == 1){
+                                                            echo 'Yes';
+                                                        }
+                                                        else{
+                                                            echo 'No';
+                                                        }
+                                                        
+                                                    ?>
                                                 </td>
+                                                <td><?php echo $row['container_quantity'];?></td>
+                                                <td>₱<?php echo $row['container_price'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
@@ -241,14 +220,56 @@
                 </footer>
             </div>
         </div>
+
+        <!-- Edit Order Modal -->
+        <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+            
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label for="stock" class="form-label">Status</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                        <select name="status_id" id="editStatusId" class="form-select">
+                                            <?php foreach($status_data as $row):?>
+                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Order Items -->
+                                <div class="mb-3" id="orderItemsContainer">
+                                </div>
+
+                            
+                        </div>
+            
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>                                        
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
@@ -301,6 +322,7 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
+
         <script>
             $(document).ready(function() {
                 $("#editOrderBtn").click(function() {

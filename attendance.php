@@ -3,6 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $today = date('Y-m-d');
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -29,9 +30,13 @@
     $total_days = count($attendance_data);
     $total_salary = $total_days * $salary_per_day;
 
-    $stmt = $conn->prepare("SELECT status FROM rider_status WHERE user_id = :user_id");
+    $stmt = $conn->prepare("SELECT * FROM rider_status WHERE DATE(date) = :date AND user_id = :user_id");
+    $stmt->execute([':date' => $today, ':user_id' => $user_id]);
+    
+
+    $stmt = $conn->prepare("SELECT time_in FROM rider_status WHERE user_id = :user_id");
     $stmt->execute([':user_id' => $user_id]);
-    $status = $stmt->fetchColumn();
+    $time_in = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -180,7 +185,7 @@
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch" <?= $status == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
+                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch" <?= $time_in == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
                                                     </div>
                                                 </td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
@@ -258,6 +263,47 @@
                 deferredPrompt = null;
                 document.getElementById('installBtn').style.display = 'none';
             });
+        </script>
+
+        <script>
+        const userId = <?php echo json_encode($user_id); ?>;
+
+        document.getElementById('lockableSwitch').addEventListener('change', function() {
+            if (this.checked) {
+                fetch('process_ridertimein.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Availability Enabled',
+                            text: 'You are now marked as available.'
+                        });
+                        this.disabled = true; // lock after success
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'Something went wrong.'
+                        });
+                        this.checked = false; // revert toggle
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Network Error',
+                        text: 'Could not reach the server.'
+                    });
+                    this.checked = false; // revert toggle
+                });
+            }
+        });
         </script>
 
         <!-- PWA: Service Worker Registration -->
