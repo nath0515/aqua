@@ -254,7 +254,7 @@
                                         title: 'Profile updated successfully!',
                                         confirmButtonText: 'OK'
                                     }).then(() => {
-                                        window.location.href = 'profile.php';
+                                        window.location.href = 'riderprofile.php';
                                     });
                                 } else {
                                     Swal.fire({

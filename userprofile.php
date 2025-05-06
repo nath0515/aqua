@@ -243,7 +243,7 @@
                                         title: 'Profile updated successfully!',
                                         confirmButtonText: 'OK'
                                     }).then(() => {
-                                        window.location.href = 'profile.php';
+                                        window.location.href = 'userprofile.php';
                                     });
                                 } else {
                                     Swal.fire({
