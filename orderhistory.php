@@ -254,9 +254,9 @@
             tbody.appendChild(row);
         });
 
-        // Re-initialize Simple DataTable after updating the rows
+        // If Simple DataTable is initialized, refresh it to ensure the new rows are included
         if (table) {
-            table.update();
+            table.refresh();  // This ensures that Simple DataTable reinitializes after updates
         }
     }
 
