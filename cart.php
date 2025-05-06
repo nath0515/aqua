@@ -356,6 +356,66 @@ error_reporting(E_ALL);
         });
         </script>
 
+        <script>
+            document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const card = this.closest('.card');
+                const checkbox = card.querySelector('.product-checkbox');
+                const cartId = checkbox.getAttribute('data-cart-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you want to remove this item from the cart?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, remove it',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('process_removefromcart.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ cart_id: cartId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the card from the DOM
+                                card.remove();
+
+                                // Update the totals
+                                //updateCartTotals();
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Removed!',
+                                    text: 'The item has been removed from your cart.'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Failed to remove item.'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'An error occurred',
+                                text: 'Please try again later.'
+                            });
+                        });
+                    }
+                });
+            });
+        });
+
+        </script>
+
         
     </body>
 </html>
