@@ -186,6 +186,17 @@ error_reporting(E_ALL);
                                     <input class="form-check-input me-2" type="checkbox" id="select-all">
                                     <label for="select-all" class="mb-0">Select All</label>
                                 </div>
+                                <div class="col-md-4 mt-3">
+                                    <div class="form-group form-group-default">
+                                        <label>Payment Method</label>
+                                        <select name="payment_id" id="payment_id" class="form-select">
+                                            <option value="0">Select Payment Method</option>
+                                            <?php foreach($payment_data as $row):?>
+                                                <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="text-end">
                                     <p class="mb-1">Total (<span id="selected-count">0</span> item): <strong>₱<span id="total-price">0</span></strong></p>
                                     <button class="btn btn-warning">Check Out</button>
