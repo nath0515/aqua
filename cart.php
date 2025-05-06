@@ -167,9 +167,8 @@ error_reporting(E_ALL);
                                     <div class="text-end me-3">
                                     <p class="mb-2 fw-bold price" data-price="<?php echo $price;?>">₱<?php echo $price;?></p>
                                     <div class="input-group input-group-sm w-auto">
-                                        <button class="btn btn-outline-secondary">-</button>
-                                        <input type="text" class="form-control text-center" value="1" style="width: 40px;">
-                                        <button class="btn btn-outline-secondary">+</button>
+
+                                        <p class="mb-1 text-muted small">Quantity: <?php echo $quantity; ?></p>
                                     </div>
                                     </div>
 
