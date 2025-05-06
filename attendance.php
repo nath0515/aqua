@@ -298,8 +298,7 @@
                                 text: 'You are now marked as time-in.'
                             });
                             this.disabled = true; // lock after success
-                            const timestampSpan = this.parentElement.querySelector('.timestamp');
-                            timestampSpan.textContent = <?php echo $now;?>;
+                            window.location.reload();
                             
                         } else {
                             Swal.fire({
@@ -343,8 +342,7 @@
                                 text: 'You are now marked as time-out.'
                             });
                             this.disabled = true; // lock after success
-                            const timestampSpan = this.parentElement.querySelector('.timestamp');
-                            timestampSpan.textContent = <?php echo $now;?>;
+                            window.location.reload();
                         } else {
                             Swal.fire({
                                 icon: 'error',
