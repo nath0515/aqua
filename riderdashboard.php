@@ -190,9 +190,16 @@
                                                                                     $badgeClass = 'bg-danger';
                                                                                 }
                                                                             ?>
-                                                                            <span class="badge <?= $badgeClass ?>">
+                                                                            <button 
+                                                                                class="badge <?= $badgeClass ?> border-0 text-start"
+                                                                                style="cursor: pointer;"
+                                                                                data-id="<?= $row['order_id']; ?>"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editorder"
+                                                                                title="Click to edit status"
+                                                                            >
                                                                                 <?= $status ?>
-                                                                            </span>
+                                                                            </button>
                                                                         </div>
                                                                     </td>
                                                                     <td>
