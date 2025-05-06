@@ -190,14 +190,20 @@
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input time_in_switch" type="checkbox" data-riderstatus_id="<?php echo $row['riderstatus_id'];?>" <?= $row['time_in_status'] == 1 ? 'checked disabled' : '' ?>> <span class="timestamp"><?= htmlspecialchars($row['time_in']) ?></span>
-                                                    </div>
+                                                <?php
+                                                    $timeInDisplay = ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00') 
+                                                        ? 'Not yet timed in' 
+                                                        : htmlspecialchars($row['time_in']);
+                                                    ?>
+                                                <?= $timeInDisplay ?>
                                                 </td>
                                                 <td>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input time_out_switch" type="checkbox" data-riderstatus_id="<?php echo $row['riderstatus_id'];?>" <?= $row['time_out_status'] == 1 ? 'checked disabled' : '' ?>> <span class="timestamp"><?= htmlspecialchars($row['time_out']) ?></span>
-                                                    </div>
+                                                <?php
+                                                    $timeOutDisplay = ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00') 
+                                                        ? 'Not yet timed out' 
+                                                        : htmlspecialchars($row['time_out']);
+                                                ?>
+                                                <?= $timeOutDisplay ?>
                                                 </td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
@@ -274,110 +280,6 @@
                 document.getElementById('installBtn').style.display = 'none';
             });
         </script>
-
-        <script>
-        const userId = <?php echo json_encode($user_id); ?>;
-
-        // Time In Switch
-        document.querySelectorAll('.time_in_switch:not(:disabled)').forEach(function(switchElem) {
-            switchElem.addEventListener('change', function() {
-                if (this.checked) {
-                    const riderstatusId = this.getAttribute('data-riderstatus_id');
-
-                    fetch('process_ridertimein.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user_id: userId, riderstatus_id: riderstatusId, action: 'time_in' })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Time In Enabled',
-                                text: 'You are now marked as time-in.',
-                                timer: 1500,  // auto-close after 1.5 seconds
-                                showConfirmButton: false
-                            }).then(() => {
-                                this.disabled = true; // lock after success
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 500); // short delay before reload
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: data.message || 'Something went wrong.'
-                            });
-                            this.checked = false; // revert toggle
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Network Error',
-                            text: 'Could not reach the server.'
-                        });
-                        this.checked = false; // revert toggle
-                    });
-                }
-            });
-        });
-
-        // Time Out Switch
-        document.querySelectorAll('.time_out_switch:not(:disabled)').forEach(function(switchElem) {
-            switchElem.addEventListener('change', function() {
-                if (this.checked) {
-                    const riderstatusId = this.getAttribute('data-riderstatus_id');
-
-                    fetch('process_ridertimein.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user_id: userId, riderstatus_id: riderstatusId, action: 'time_out' })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Time Out Enabled',
-                                text: 'You are now marked as time-out.',
-                                timer: 1500,  // auto-close after 1.5 seconds
-                                showConfirmButton: false
-                            }).then(() => {
-                                this.disabled = true; // lock after success
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 500); // short delay before reload
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: data.message || 'Something went wrong.'
-                            });
-                            this.checked = false; // revert toggle
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Network Error',
-                            text: 'Could not reach the server.'
-                        });
-                        this.checked = false; // revert toggle
-                    });
-                }
-            });
-        });
-        </script>
-
-
-
-
         <!-- PWA: Service Worker Registration -->
         <script>
             if ('serviceWorker' in navigator) {
