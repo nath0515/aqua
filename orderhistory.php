@@ -211,7 +211,7 @@
 
     // Function to fetch orders from the backend
     function fetchOrders() {
-        fetch('fetch_orders.php', {
+        fetch('process_usercheckorders.php', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
