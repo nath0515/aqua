@@ -1,6 +1,6 @@
 <?php
 require 'db.php';
-
+require 'session.php';
 header('Content-Type: application/json');
 
 try {
@@ -16,9 +16,9 @@ try {
 
     // Determine which status to update
     if ($action == 'time_in') {
-        $status = 1; // Example status for time-in
+        $sql = "UPDATE rider_status SET time_in_status = :time_status WHERE user_id = :user_id"
     } elseif ($action == 'time_out') {
-        $status = 2; // Example status for time-out
+        $status = 0; // Example status for time-out
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
         exit;

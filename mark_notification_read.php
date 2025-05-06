@@ -1,10 +1,12 @@
 <?php
 require 'db.php';
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $sql = "UPDATE activiti_logs SET read_status = 1 WHERE activitylogs_id = :id";
+require 'session.php'
+
+if (isset($_GET['user_id'])) {
+    $id = intval($_GET['user_id']);
+    $sql = "UPDATE activiti_logs SET read_status = 1 WHERE activitylogs_id = :user_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':user_id', $id);
     $stmt->execute();
 }
 ?>
