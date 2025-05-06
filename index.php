@@ -8,6 +8,8 @@
     $role_id = $_SESSION['role_id'];
     if($role_id == 2){
         header("Location: home.php");
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
     }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
