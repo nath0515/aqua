@@ -237,9 +237,9 @@
                                     $badgeClass = $status_rider ? 'bg-success' : 'bg-secondary';
                                     $statusText = $status_rider ? 'On Duty' : 'Off Duty';
                                     ?>
-                                    <p class="mb-0">Status: 
+                                    <a class="mb-0">Status: 
                                         <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
                             </div>
