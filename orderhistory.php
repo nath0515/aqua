@@ -138,22 +138,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row):?>
-                                            <tr>
-                                                <td><?php echo $row['date'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
-                                                <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
-                                                <td><?php echo $row['status_name'];?></td>
-                                                <td><?php echo $row['rider'];?></td>
-                                                <td>
-                                                    <a href="costumer_orderdetails.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach;?>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -222,7 +207,7 @@
             document.addEventListener("DOMContentLoaded", function() {
                 // This function will fetch orders from the backend every 10 seconds
                 function fetchOrders() {
-                    fetch('process_usercheckorders.php', {
+                    fetch('fetch_orders.php', {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' }
                     })
@@ -240,6 +225,12 @@
                 // Function to update the order table
                 function updateOrdersTable(orders) {
                     const tbody = document.querySelector('#datatablesSimple tbody');
+                    
+                    if (!tbody) {
+                        console.error("Could not find tbody element");
+                        return;
+                    }
+
                     tbody.innerHTML = ''; // Clear the table before appending new data
 
                     orders.forEach(order => {
@@ -272,6 +263,7 @@
                 // Set up the interval to fetch orders every 10 seconds
                 setInterval(fetchOrders, 10000);
             });
+
         </script>
     </body>
 </html>
