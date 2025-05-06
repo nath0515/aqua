@@ -356,7 +356,7 @@ error_reporting(E_ALL);
         });
 
         function processCheckout(items, paymentId) {
-            fetch("process_receipt.php", {
+            fetch("process_checkout.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
