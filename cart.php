@@ -319,7 +319,7 @@ error_reporting(E_ALL);
                 cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if(paymentMethod == 2){
+                    if(paymentId == 2){
                         Swal.fire({
                             title: 'Scan to Pay via GCash',
                             text: 'Please scan the QR code below to complete your payment.',
@@ -337,7 +337,7 @@ error_reporting(E_ALL);
                                     body: JSON.stringify({
                                         receipt: receiptData,
                                         total_price: totalPrice,
-                                        payment_method: paymentMethod
+                                        payment_method: paymentId
                                     })
                                 })
                                 .then(response => response.json())
@@ -360,7 +360,7 @@ error_reporting(E_ALL);
                             body: JSON.stringify({
                                 receipt: receiptData,
                                 total_price: totalPrice,
-                                payment_method: paymentMethod
+                                payment_method: paymentId
                             })
                         })
                         .then(response => response.json())
@@ -376,7 +376,7 @@ error_reporting(E_ALL);
                     }
                 }
             });
-        });
+        }
         </script>
 
         <script>
