@@ -275,45 +275,85 @@
         </script>
 
         <script>
-        const userId = <?php echo json_encode($user_id); ?>;
+            const userId = <?php echo json_encode($user_id); ?>;
 
-        document.getElementById('lockableSwitch').addEventListener('change', function() {
-            if (this.checked) {
-                fetch('process_ridertimein.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Availability Enabled',
-                            text: 'You are now marked as available.'
-                        });
-                        this.disabled = true; // lock after success
-                    } else {
+            // Time In Switch
+            document.getElementById('time_in_switch').addEventListener('change', function() {
+                if (this.checked) {
+                    fetch('process_ridertimein.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: userId, action: 'time_in' })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Time In Enabled',
+                                text: 'You are now marked as time-in.'
+                            });
+                            this.disabled = true; // lock after success
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Something went wrong.'
+                            });
+                            this.checked = false; // revert toggle
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: data.message || 'Something went wrong.'
+                            title: 'Network Error',
+                            text: 'Could not reach the server.'
                         });
                         this.checked = false; // revert toggle
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Network Error',
-                        text: 'Could not reach the server.'
                     });
-                    this.checked = false; // revert toggle
-                });
-            }
-        });
+                }
+            });
+
+            // Time Out Switch
+            document.getElementById('time_out_switch').addEventListener('change', function() {
+                if (this.checked) {
+                    fetch('process_ridertimein.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: userId, action: 'time_out' })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Time Out Enabled',
+                                text: 'You are now marked as time-out.'
+                            });
+                            this.disabled = true; // lock after success
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Something went wrong.'
+                            });
+                            this.checked = false; // revert toggle
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Network Error',
+                            text: 'Could not reach the server.'
+                        });
+                        this.checked = false; // revert toggle
+                    });
+                }
+            });
         </script>
+
 
         <!-- PWA: Service Worker Registration -->
         <script>

@@ -174,7 +174,7 @@ $sma = round($totalQuantity / 7);
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item notification-text" href="#" onclick="markAsReadAndRedirect(<?= $row['notification_id']; ?>, '<?= $row['destination']; ?>')">
+                        <li><a class="dropdown-item notification-text" href="#" onclick="markAsReadAndRedirect(<?= $row['activitylogs_id']; ?>, '<?= $row['destination']; ?>')">
                             <?= $row['message']; ?>
                         </a></li>
                         <hr>
