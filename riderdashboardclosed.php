@@ -188,17 +188,12 @@
                                                                                     $badgeClass = 'bg-danger';
                                                                                 }
                                                                             ?>
-                                                                            <button 
-                                                                                id="editOrderBtn"
-                                                                                class="badge <?= $badgeClass ?> border-0 text-start"
-                                                                                style="cursor: pointer;"
-                                                                                data-id="<?= $row['order_id']; ?>"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#editorder"
-                                                                                title="Click to edit status"
+                                                                            <span 
+                                                                                class="badge <?= $badgeClass ?>"
+                                                                                title="Order status: <?= $status ?>"
                                                                             >
                                                                                 <?= $status ?>
-                                                                            </button>
+                                                                            </span>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
