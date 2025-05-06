@@ -28,9 +28,8 @@ try {
     }
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([':time_status' => 1, ':status' => $status, ':user_id' ]);
+    $stmt->execute([':time_status' => 1, ':status' => $status, ':user_id' => $user_id]);
 
-    // Check if the update was successful
     if ($stmt->rowCount() > 0) {
         echo json_encode(['success' => true]);
     } else {
