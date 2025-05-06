@@ -142,7 +142,8 @@ error_reporting(E_ALL);
                                     <input class="form-check-input me-3 product-checkbox" type="checkbox" 
                                     data-id="<?php echo $row['product_id']; ?>" 
                                     data-quantity="<?php echo $row['quantity']; ?>"
-                                    data-with-container="<?php echo $row[]?>"
+                                    data-with-container="<?php echo $row['with_container'];?>"
+                                    data-container-quantity="<?php echo $row['container_quantity'];?>"
                                     >
 
                                     <img src="<?php echo $row['product_photo'];?>" class="me-3" alt="Product" style="width: 80px; height: auto;">
@@ -249,6 +250,63 @@ error_reporting(E_ALL);
             updateTotal();
             });
         });
+
+        </script>
+
+        <script>
+            document.querySelector('.btn-warning').addEventListener('click', function() {
+                const selectedItems = [];
+                document.querySelectorAll('.product-checkbox:checked').forEach(cb => {
+                    selectedItems.push({
+                        product_id: cb.getAttribute('data-id'),
+                        quantity: cb.getAttribute('data-quantity'),
+                        with_container: cb.getAttribute('data-with-container'),
+                        container_quantity: cb.getAttribute('data-container-quantity')
+                    });
+                });
+
+                if (selectedItems.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No items selected',
+                        text: 'Please select at least one item to proceed to checkout.'
+                    });
+                    return;
+                }
+
+                fetch('process_checkout.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: selectedItems })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Checkout Successful!',
+            text: 'Your order has been placed successfully.'
+        }).then(() => {
+            window.location.reload();
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Checkout Failed',
+            text: data.message || 'Something went wrong during checkout.'
+        });
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+        icon: 'error',
+        title: 'An Error Occurred',
+        text: 'Please try again later.'
+    });
+});
+
+            });
 
         </script>
 
