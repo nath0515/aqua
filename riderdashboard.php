@@ -116,7 +116,7 @@
                                     <a class="nav-link" href="ridermap.php">Maps</a>
                                 </nav>
                             </div>
-                            <a class="nav-link" href="home.php">
+                            <a class="nav-link" href="attendance.php">
                             <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></i></div>
                             Attendance
                             </a>

@@ -22,7 +22,7 @@ error_reporting(E_ALL);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, b.container_price, a.quantity, a.container_quantity FROM cart a 
+    $sql = "SELECT a.product_id, b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, b.container_price, a.quantity, a.container_quantity FROM cart a 
     JOIN products b ON a.product_id = b.product_id 
     WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
