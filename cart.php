@@ -29,6 +29,11 @@ error_reporting(E_ALL);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT * FROM payment_method";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -186,21 +191,28 @@ error_reporting(E_ALL);
                                     <input class="form-check-input me-2" type="checkbox" id="select-all">
                                     <label for="select-all" class="mb-0">Select All</label>
                                 </div>
-                                <div class="col-md-4 ms-5">
+                                <div class="row align-items-end">
+                                <!-- Payment Method -->
+                                <div class="col-md-6">
                                     <div class="form-group form-group-default">
                                         <label>Payment Method</label>
                                         <select name="payment_id" id="payment_id" class="form-select">
                                             <option value="0">Select Payment Method</option>
-                                            <?php foreach($payment_data as $row):?>
+                                            <?php foreach($payment_data as $row): ?>
                                                 <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
-                                            <?php endforeach;?>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="text-end">
-                                    <p class="mb-1">Total (<span id="selected-count">0</span> item): <strong>₱<span id="total-price">0</span></strong></p>
+
+                                <!-- Checkout Section -->
+                                <div class="col-md-6 text-end">
+                                    <p class="mb-1">Total (<span id="selected-count">0</span> item): 
+                                        <strong>₱<span id="total-price">0</span></strong>
+                                    </p>
                                     <button class="btn btn-warning">Check Out</button>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
