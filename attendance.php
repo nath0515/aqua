@@ -179,7 +179,9 @@
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
-                                                    <input class="form-check-input" type="checkbox" id="lockableSwitch">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch">
+                                                    </div>
                                                     <?= htmlspecialchars($row['time_in']) ?>
                                                 </td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
