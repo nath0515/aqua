@@ -284,103 +284,102 @@ error_reporting(E_ALL);
         </script>
 
         <script>
-            document.querySelector('.btn-warning').addEventListener('click', function() {
-                const selectedItems = [];
-                let totalPrice = 0;
+        document.querySelector('.btn-warning').addEventListener('click', function() {
+            const selectedItems = [];
+            let totalPrice = 0;
 
-                document.querySelectorAll('.product-checkbox:checked').forEach(cb => {
-                    const parentCard = cb.closest('.product-item');
-                    const priceElem = parentCard.querySelector('.price');
-                    const price = parseFloat(priceElem.getAttribute('data-price')) || 0;
+            document.querySelectorAll('.product-checkbox:checked').forEach(cb => {
+                const parentCard = cb.closest('.product-item');
+                const priceElem = parentCard.querySelector('.price');
+                const price = parseFloat(priceElem.getAttribute('data-price')) || 0;
 
-                    const item = {
-                        cart_id: cb.getAttribute('data-cart-id'),
-                        product_id: cb.getAttribute('data-id'),
-                        quantity: cb.getAttribute('data-quantity'),
-                        with_container: cb.getAttribute('data-with-container'),
-                        container_quantity: cb.getAttribute('data-container-quantity'),
-                        price: price
-                    };
+                const item = {
+                    cart_id: parseInt(cb.getAttribute('data-cart-id')),
+                    product_id: parseInt(cb.getAttribute('data-id')),
+                    quantity: parseInt(cb.getAttribute('data-quantity')),
+                    with_container: parseInt(cb.getAttribute('data-with-container')),
+                    container_quantity: parseInt(cb.getAttribute('data-container-quantity'))
+                };
 
-                    selectedItems.push(item);
-                    totalPrice += price;
-                });
-
-                if (selectedItems.length === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'No items selected',
-                        text: 'Please select at least one item to proceed to checkout.'
-                    });
-                    return;
-                }
-
-                const paymentId = document.getElementById('payment_id').value;
-
-                if (paymentId === '0') {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Select Payment Method',
-                        text: 'Please choose a valid payment method before checkout.'
-                    });
-                    return;
-                }
-
-                Swal.fire({
-                    title: "Are you sure you want to checkout?",
-                    text: "You won't be able to undo this action.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes, Checkout!",
-                    cancelButtonText: "Cancel"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (paymentId == '2') {
-                            Swal.fire({
-                                title: 'Scan to Pay via GCash',
-                                text: 'Please scan the QR code below to complete your payment.',
-                                imageUrl: 'assets/img/gcash.jpg',
-                                imageWidth: 200,
-                                imageHeight: 200,
-                                imageAlt: 'GCash QR Code',
-                                confirmButtonText: 'Done'
-                            }).then((qrResult) => {
-                                if (qrResult.isConfirmed) {
-                                    processCheckout(selectedItems, totalPrice, paymentId);
-                                }
-                            });
-                        } else {
-                            processCheckout(selectedItems, totalPrice, paymentId);
-                        }
-                    }
-                });
+                selectedItems.push(item);
+                totalPrice += price;
             });
 
-            function processCheckout(receiptData, totalPrice, paymentId) {
-                fetch("process_receipt.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        receipt: receiptData,
-                        total_price: totalPrice,
-                        payment_method: paymentId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire("Success!", "Purchase submitted successfully!", "success")
-                            .then(() => window.location.href = "orders.php");
-                    } else {
-                        Swal.fire("Error!", data.error, "error");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    Swal.fire("Error!", "An unexpected error occurred.", "error");
+            if (selectedItems.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No items selected',
+                    text: 'Please select at least one item to proceed to checkout.'
                 });
+                return;
             }
+
+            const paymentId = parseInt(document.getElementById('payment_id').value);
+
+            if (paymentId === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Payment Method',
+                    text: 'Please choose a valid payment method before checkout.'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure you want to checkout?",
+                text: "You won't be able to undo this action.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Checkout!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (paymentId === 2) {
+                        Swal.fire({
+                            title: 'Scan to Pay via GCash',
+                            text: 'Please scan the QR code below to complete your payment.',
+                            imageUrl: 'assets/img/gcash.jpg',
+                            imageWidth: 200,
+                            imageHeight: 200,
+                            imageAlt: 'GCash QR Code',
+                            confirmButtonText: 'Done'
+                        }).then((qrResult) => {
+                            if (qrResult.isConfirmed) {
+                                processCheckout(selectedItems, paymentId);
+                            }
+                        });
+                    } else {
+                        processCheckout(selectedItems, paymentId);
+                    }
+                }
+            });
+        });
+
+        function processCheckout(items, paymentId) {
+            fetch("process_receipt.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: items,
+                    payment_id: paymentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire("Success!", data.message, "success")
+                        .then(() => window.location.href = "orders.php");
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                Swal.fire("Error!", "An unexpected error occurred.", "error");
+            });
+        }
         </script>
+
 
 
         <script>
