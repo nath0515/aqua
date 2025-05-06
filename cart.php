@@ -139,7 +139,11 @@ error_reporting(E_ALL);
                             <?php foreach($cart_data as $row):?>
                             <div class="card mb-3 shadow-sm product-item">
                                 <div class="card-body d-flex align-items-center">
-                                    <input class="form-check-input me-3 product-checkbox" type="checkbox">
+                                    <input class="form-check-input me-3 product-checkbox" type="checkbox" 
+                                    data-id="<?php echo $row['product_id']; ?>" 
+                                    data-quantity="<?php echo $row['quantity']; ?>"
+                                    data-with-container="<?php echo $row[]?>"
+                                    >
 
                                     <img src="<?php echo $row['product_photo'];?>" class="me-3" alt="Product" style="width: 80px; height: auto;">
 
