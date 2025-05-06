@@ -32,8 +32,12 @@
 
     $stmt = $conn->prepare("SELECT * FROM rider_status WHERE DATE(date) = :date AND user_id = :user_id");
     $stmt->execute([':date' => $today, ':user_id' => $user_id]);
-    
-
+    if ($stmt->rowCount() == 0) {
+        $stmt = $conn->prepare("INSERT INTO rider_status (user_id, status, time_in, time_out, date) VALUES (:user_id, 0, 0, 0, :date)");
+        $stmt->execute([':user_id' => $user_id, ':date' => $today]);
+        header('Location: attendance.php');
+        exit();
+    }
     $stmt = $conn->prepare("SELECT time_in FROM rider_status WHERE user_id = :user_id");
     $stmt->execute([':user_id' => $user_id]);
     $time_in = $stmt->fetchColumn();
