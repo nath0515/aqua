@@ -205,10 +205,11 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-    // Initialize DataTables after the page is loaded
-    const table = $('#datatablesSimple').DataTable();
+    // Initialize Simple DataTable for the orders table
+    const datatablesSimple = document.getElementById('datatablesSimple');
+    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
 
-    // Function to fetch orders
+    // Function to fetch orders from the backend
     function fetchOrders() {
         fetch('fetch_orders.php', {
             method: 'GET',
@@ -225,30 +226,38 @@
         .catch(error => console.error("Error fetching orders:", error));
     }
 
-    // Function to update the order table using DataTables API
+    // Function to update the Simple DataTable with new order data
     function updateOrdersTable(orders) {
-        const dataTableBody = table.clear(); // Clear the DataTable body
+        // Clear the existing rows in the table
+        const tbody = datatablesSimple.querySelector('tbody');
+        if (tbody) {
+            tbody.innerHTML = ''; // Clear existing rows
+        }
 
+        // Add the new rows to the table
         orders.forEach(order => {
-            const newRow = [
-                order.date,
-                `₱${order.amount}`,
-                `${order.firstname} ${order.lastname}`,
-                order.contact_number,
-                order.address,
-                order.status_name,
-                order.rider,
-                `<a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                    <i class="bi bi-eye"></i> View
-                </a>`
-            ];
-            
-            // Add the row to the DataTable
-            dataTableBody.row.add(newRow);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.date}</td>
+                <td>₱${order.amount}</td>
+                <td>${order.firstname} ${order.lastname}</td>
+                <td>${order.contact_number}</td>
+                <td>${order.address}</td>
+                <td>${order.status_name}</td>
+                <td>${order.rider}</td>
+                <td>
+                    <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
+                        <i class="bi bi-eye"></i> View
+                    </a>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
 
-        // Draw the table to update it with the new data
-        dataTableBody.draw();
+        // Re-initialize Simple DataTable after updating the rows
+        if (table) {
+            table.update();
+        }
     }
 
     // Fetch orders initially when the page loads
