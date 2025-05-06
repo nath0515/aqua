@@ -54,23 +54,41 @@
         return round(array_sum(array_slice($quantities, -$days)) / $days);
     }
     
-    // Fetch the last 7 full days of order quantities (excluding today)
-    $sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
-            FROM orderitems
-            JOIN orders ON orderitems.order_id = orders.order_id
-            WHERE DATE(orders.date) >= CURDATE() - INTERVAL 8 DAY
-              AND DATE(orders.date) < CURDATE()
-            GROUP BY order_date
-            ORDER BY order_date ASC";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Extract daily totals
-    $quantities = array_column($data, 'total_quantity');
-    
-    // Calculate SMA based on the last 7 days
-    $sma = calculateSMA($quantities, 7);
+    /// Get today's date (in PHP server timezone)
+$dateToday = date('Y-m-d');
+
+// Fetch the last 7 full days of order quantities (excluding today)
+$sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
+        FROM orderitems
+        JOIN orders ON orderitems.order_id = orders.order_id
+        WHERE DATE(orders.date) BETWEEN DATE(:seven_days_ago) AND DATE(:yesterday)
+        GROUP BY order_date
+        ORDER BY order_date ASC";
+
+$stmt = $conn->prepare($sql);
+
+// Calculate PHP date ranges
+$sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
+$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($dateToday)));
+
+$stmt->execute([
+    ':seven_days_ago' => $sevenDaysAgo,
+    ':yesterday' => $yesterday
+]);
+
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Calculate total and count
+$totalQuantity = 0;
+$dayCount = 0;
+
+foreach ($data as $row) {
+    $totalQuantity += (int)$row['total_quantity'];
+    $dayCount++;
+}
+
+// Calculate simple moving average (SMA)
+$sma = ($dayCount > 0) ? round($totalQuantity / $dayCount) : null;
     
     ?>
 <!DOCTYPE html>
