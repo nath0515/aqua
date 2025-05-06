@@ -180,9 +180,8 @@
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch">
+                                                        <input class="form-check-input" type="checkbox" id="lockableSwitch" <?= $status == 1 ? 'checked disabled' : '' ?>> <?= htmlspecialchars($row['time_in']) ?>
                                                     </div>
-                                                    <?= htmlspecialchars($row['time_in']) ?>
                                                 </td>
                                                 <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
