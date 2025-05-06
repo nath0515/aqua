@@ -18,16 +18,6 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider
-        FROM orders a
-        JOIN user_details b ON a.user_id = b.user_id
-        JOIN orderstatus c ON a.status_id = c.status_id 
-        WHERE a.user_id = :user_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id); 
-        $stmt->execute();
-        $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         $sql = "SELECT * FROM orderstatus";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -230,66 +220,58 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-    const userId = <?php echo $user_id; ?>; // Make sure the user_id is available in JS
-    
-    function fetchOrders() {
-        fetch('process_usercheckorders.php', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateOrdersTable(data.orders);
-            } else {
-                console.error("Failed to fetch orders:", data.message);
-            }
-        })
-        .catch(error => console.error("Error fetching orders:", error));
-    }
+                // This function will fetch orders from the backend every 10 seconds
+                function fetchOrders() {
+                    fetch('process_usercheckorders.php', {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateOrdersTable(data.orders);
+                        } else {
+                            console.error("Failed to fetch orders:", data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error fetching orders:", error));
+                }
 
-    // Function to update the order table
-    function updateOrdersTable(orders) {
-        orders.forEach(order => {
-            const row = document.querySelector(`#order-${order.order_id}`);
-            const statusCell = row.querySelector('.status');
-            
-            if (row) {
-                // Update the status of the existing row
-                statusCell.textContent = order.status_name;
-            } else {
-                // Add a new row if it doesn't exist
-                const newRow = document.createElement('tr');
-                newRow.id = `order-${order.order_id}`;
-                
-                newRow.innerHTML = `
-                    <td>${order.date}</td>
-                    <td>₱${order.amount}</td>
-                    <td>${order.firstname} ${order.lastname}</td>
-                    <td>${order.contact_number}</td>
-                    <td>${order.address}</td>
-                    <td class="status">${order.status_name}</td>
-                    <td>${order.rider}</td>
-                    <td>
-                        <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                            <i class="bi bi-eye"></i> View
-                        </a>
-                    </td>
-                `;
-                
-                // Append the new row to the table body
-                document.querySelector('#datatablesSimple tbody').appendChild(newRow);
-            }
-        });
-    }
+                // Function to update the order table
+                function updateOrdersTable(orders) {
+                    const tbody = document.querySelector('#datatablesSimple tbody');
+                    tbody.innerHTML = ''; // Clear the table before appending new data
 
-    // Periodically fetch orders every 10 seconds (for example)
-    setInterval(fetchOrders, 10000);
+                    orders.forEach(order => {
+                        const newRow = document.createElement('tr');
+                        newRow.id = `order-${order.order_id}`;
 
-    // Initial fetch to populate the orders
-    fetchOrders();
-});
+                        newRow.innerHTML = `
+                            <td>${order.date}</td>
+                            <td>₱${order.amount}</td>
+                            <td>${order.firstname} ${order.lastname}</td>
+                            <td>${order.contact_number}</td>
+                            <td>${order.address}</td>
+                            <td class="status">${order.status_name}</td>
+                            <td>${order.rider}</td>
+                            <td>
+                                <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        `;
 
+                        // Append the new row to the table body
+                        tbody.appendChild(newRow);
+                    });
+                }
+
+                // Fetch orders initially when the page loads
+                fetchOrders();
+
+                // Set up the interval to fetch orders every 10 seconds
+                setInterval(fetchOrders, 10000);
+            });
         </script>
     </body>
 </html>
