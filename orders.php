@@ -270,7 +270,7 @@
 
                                                         // Assign colors to each status
                                                         if ($status === 'Pending') {
-                                                            $badgeClass = 'bg-light'; // Light grey for pending
+                                                            $badgeClass = 'bg-warning text-dark'; // Light grey for pending
                                                         } elseif ($status === 'Accepted') {
                                                             $badgeClass = 'bg-primary'; // Blue for accepted
                                                         } elseif ($status === 'Delivering') {
