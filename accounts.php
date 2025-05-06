@@ -3,6 +3,12 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $role_id = $_SESSION['role_id'];
+    if($role_id == 2){
+        header("Location: home.php");
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+    }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -65,7 +71,7 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <?php 
+                <?php 
                     $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
                     $stmt = $conn->prepare($sql);
                     $stmt->execute();
