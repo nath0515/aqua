@@ -155,7 +155,7 @@
                                     <div class="mb-3">
                                         <label for="unitprice" class="form-label">Unit Price</label>
                                         <div class="input-group">
-                                            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                                            <span class="input-group-text">₱</span>
                                             <input type="number" class="form-control" id="unitprice" readonly>
                                         </div>
                                     </div>
@@ -164,7 +164,7 @@
                                         <div class="col-6">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="hasContainer" onchange="togglePriceInput()">
-                                                <label class="form-check-label" for="hasContainer">Has Container</label>
+                                                <label class="form-check-label" for="hasContainer">With Container</label>
                                             </div>
                                         </div>
                                         <div class="col-6 text-end" id="sameQuantityDiv" style="display: none;">
