@@ -186,7 +186,7 @@ error_reporting(E_ALL);
                                     <input class="form-check-input me-2" type="checkbox" id="select-all">
                                     <label for="select-all" class="mb-0">Select All</label>
                                 </div>
-                                <div class="col-md-4 mt-3">
+                                <div class="col-md-4 ms-5">
                                     <div class="form-group form-group-default">
                                         <label>Payment Method</label>
                                         <select name="payment_id" id="payment_id" class="form-select">
