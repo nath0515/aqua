@@ -106,7 +106,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         
                         <?php 

@@ -47,7 +47,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -84,7 +84,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="sales.php">Sales</a>
                                     <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="#">Stock</a>
+                                    <a class="nav-link" href="stock.php">Stock</a>
                                 </nav>
                             </div>
                         </div>
