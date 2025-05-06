@@ -133,7 +133,7 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
+                    <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menu</div>
                             <a class="nav-link" href="index.php">
@@ -177,11 +177,10 @@
                             </div>
                         </div>
                     </div>
-                </nav>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
-                </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
+                    </div>
                 </nav>
             </div>
         <div id="layoutSidenav_content">
