@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 
 try {
     $data = json_decode(file_get_contents('php://input'), true);
+    $today = date('Y-m-d');
 
     if (!isset($data['user_id']) || !isset($data['action'])) {
         echo json_encode(['success' => false, 'message' => 'Missing user_id or action']);
@@ -16,7 +17,8 @@ try {
 
     // Determine which status to update
     if ($action == 'time_in') {
-        $sql = "UPDATE rider_status SET time_in_status = :time_status WHERE user_id = :user_id"
+        $sql = "UPDATE rider_status SET time_in_status = :time_status, status = :status WHERE user_id = :user_id AND DATE(date) = :date";
+        $status = 1;
     } elseif ($action == 'time_out') {
         $status = 0; // Example status for time-out
     } else {

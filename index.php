@@ -158,7 +158,7 @@ $sma = round($totalQuantity / 7);
                 ?>
                 
                 <li class="nav-item dropdown me-3">
-                    <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link position-relative mt-3" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
                             <?php if ($unread_count > 0): ?>
