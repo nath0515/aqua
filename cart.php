@@ -295,11 +295,21 @@ error_reporting(E_ALL);
                     });
                     return;
                 }
+                const paymentId = document.getElementById('payment_id').value;
+
+                if (paymentId === '0') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Select Payment Method',
+                        text: 'Please choose a valid payment method before checkout.'
+                    });
+                    return;
+                }
 
                 fetch('process_checkout.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ items: selectedItems })
+                    body: JSON.stringify({ items: selectedItems, payment_id: paymentId })
                 })
                 .then(response => response.json())
                 .then(data => {
