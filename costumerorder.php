@@ -21,6 +21,16 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $store_status = $stmt->fetchColumn();
+
+    $storeClosed = false;
+    if ($store_status == 0) {
+        $storeClosed = true; // set flag, don't echo script here
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -325,5 +335,19 @@
                 });
             <?php endif; ?>
     </script>    
+    <?php if (isset($storeClosed) && $storeClosed): ?>
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'The Shop is Closed',
+            text: 'Please wait for the opening time.',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            timer: 3000
+        }).then(() => {
+            window.location.href = 'home.php';
+        });
+    </script>
+<?php endif; ?>
     </body>
 </html>
