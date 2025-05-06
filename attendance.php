@@ -179,25 +179,8 @@
                                         <?php foreach ($attendance_data as $row): ?>
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
-                                                <td>
-                                                    <?= ($row['time_in']) ? date('h:i A', strtotime($row['time_in'])) : '—' ?><br>
-                                                    <?php if ($status_rider === 0): ?>
-                                                        <button 
-                                                            class="btn btn-success btn-sm mt-1"
-                                                            onclick="toggleTimeIn(event)"
-                                                        >Time In</button>
-                                                    <?php endif; ?>
-                                                </td>
-
-                                                <td>
-                                                    <?= ($row['time_out']) ? date('h:i A', strtotime($row['time_out'])) : '—' ?><br>
-                                                    <?php if ($status_rider === 1): ?>
-                                                        <button 
-                                                            class="btn btn-danger btn-sm mt-1"
-                                                            onclick="toggleTimeOut(event)"
-                                                        >Time Out</button>
-                                                    <?php endif; ?>
-                                                </td>
+                                                <td><?= htmlspecialchars($row['time_in']) ?></td>
+                                                <td><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -281,39 +264,6 @@
                     .then(reg => console.log('✅ Service Worker registered:', reg))
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
-        </script>
-        <script>
-        function toggleTimeIn(event) {
-            event.preventDefault();
-            if (!confirm('Time In now?')) return;
-
-            fetch('toggle_status.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'ajax=1&action=time_in'
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) location.reload();
-                else alert(data.message || 'Time In failed.');
-            });
-        }
-
-        function toggleTimeOut(event) {
-            event.preventDefault();
-            if (!confirm('Time Out now?')) return;
-
-            fetch('toggle_status.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'ajax=1&action=time_out'
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) location.reload();
-                else alert(data.message || 'Time Out failed.');
-            });
-        }
         </script>
     </body>
 </html>
