@@ -43,6 +43,69 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+        /* Toggle switch styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            background-color: #ccc;
+            border-radius: 34px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: .4s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+
+        .table-success {
+            background-color: #d4edda;
+        }
+    </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -170,14 +233,8 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>  
-                                            <th>
-                                                Time-In 
-                                                <button id="toggleTimeIn" class="btn btn-sm btn-info">Toggle Time-In</button>
-                                            </th>
-                                            <th>
-                                                Time-Out 
-                                                <button id="toggleTimeOut" class="btn btn-sm btn-info">Toggle Time-Out</button>
-                                            </th>
+                                            <th>Time-In</th>
+                                            <th>Time-Out</th>
                                             <th>Daily Salary</th>
                                         </tr>
                                     </thead>
@@ -185,8 +242,20 @@
                                         <?php foreach ($attendance_data as $row): ?>
                                             <tr>
                                                 <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
-                                                <td class="time-column"><?= htmlspecialchars($row['time_in']) ?></td>
-                                                <td class="time-column"><?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?></td>
+                                                <td class="time-column">
+                                                    <?= htmlspecialchars($row['time_in']) ?>
+                                                    <label class="switch">
+                                                        <input type="checkbox" class="toggle-attendance" data-type="in" data-id="<?= $row['id'] ?>" <?= $row['time_in'] ? 'checked' : '' ?>>
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </td>
+                                                <td class="time-column">
+                                                    <?= $row['time_out'] ? htmlspecialchars($row['time_out']) : '—' ?>
+                                                    <label class="switch">
+                                                        <input type="checkbox" class="toggle-attendance" data-type="out" data-id="<?= $row['id'] ?>" <?= $row['time_out'] ? 'checked' : '' ?>>
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </td>
                                                 <td>₱<?= number_format($salary_per_day, 2) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -272,19 +341,27 @@
             }
         </script>
         <script>
-        // Toggle Time-In column visibility
-        document.getElementById('toggleTimeIn').addEventListener('click', function() {
-            const timeInColumns = document.querySelectorAll('.time-in-column');
-            timeInColumns.forEach(function(cell) {
-                cell.style.display = (cell.style.display === 'none' || cell.style.display === '') ? 'table-cell' : 'none';
-            });
-        });
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.toggle-attendance').forEach(function (toggle) {
+                toggle.addEventListener('change', function () {
+                    const id = this.dataset.id;
+                    const type = this.dataset.type;
+                    const status = this.checked ? 1 : 0;
 
-        // Toggle Time-Out column visibility
-        document.getElementById('toggleTimeOut').addEventListener('click', function() {
-            const timeOutColumns = document.querySelectorAll('.time-out-column');
-            timeOutColumns.forEach(function(cell) {
-                cell.style.display = (cell.style.display === 'none' || cell.style.display === '') ? 'table-cell' : 'none';
+                    fetch('update_attendance.php', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        body: `id=${id}&type=${type}&status=${status}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log("Server response:", data);
+                        location.reload(); // optional: refresh to update time display
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+                });
             });
         });
     </script>
