@@ -205,64 +205,58 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                // This function will fetch orders from the backend every 10 seconds
-                function fetchOrders() {
-                    fetch('process_usercheckorders.php', {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            updateOrdersTable(data.orders);
-                        } else {
-                            console.error("Failed to fetch orders:", data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error fetching orders:", error));
-                }
+    // Initialize DataTables after the page is loaded
+    const table = $('#datatablesSimple').DataTable();
 
-                // Function to update the order table
-                function updateOrdersTable(orders) {
-                    const tbody = document.querySelector('#datatablesSimple tbody');
-                    
-                    if (!tbody) {
-                        console.error("Could not find tbody element");
-                        return;
-                    }
+    // Function to fetch orders
+    function fetchOrders() {
+        fetch('fetch_orders.php', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateOrdersTable(data.orders);
+            } else {
+                console.error("Failed to fetch orders:", data.message);
+            }
+        })
+        .catch(error => console.error("Error fetching orders:", error));
+    }
 
-                    tbody.innerHTML = ''; // Clear the table before appending new data
+    // Function to update the order table using DataTables API
+    function updateOrdersTable(orders) {
+        const dataTableBody = table.clear(); // Clear the DataTable body
 
-                    orders.forEach(order => {
-                        const newRow = document.createElement('tr');
-                        newRow.id = `order-${order.order_id}`;
+        orders.forEach(order => {
+            const newRow = [
+                order.date,
+                `₱${order.amount}`,
+                `${order.firstname} ${order.lastname}`,
+                order.contact_number,
+                order.address,
+                order.status_name,
+                order.rider,
+                `<a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
+                    <i class="bi bi-eye"></i> View
+                </a>`
+            ];
+            
+            // Add the row to the DataTable
+            dataTableBody.row.add(newRow);
+        });
 
-                        newRow.innerHTML = `
-                            <td>${order.date}</td>
-                            <td>₱${order.amount}</td>
-                            <td>${order.firstname} ${order.lastname}</td>
-                            <td>${order.contact_number}</td>
-                            <td>${order.address}</td>
-                            <td class="status">${order.status_name}</td>
-                            <td>${order.rider}</td>
-                            <td>
-                                <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
-                            </td>
-                        `;
+        // Draw the table to update it with the new data
+        dataTableBody.draw();
+    }
 
-                        // Append the new row to the table body
-                        tbody.appendChild(newRow);
-                    });
-                }
+    // Fetch orders initially when the page loads
+    fetchOrders();
 
-                // Fetch orders initially when the page loads
-                fetchOrders();
-
-                // Set up the interval to fetch orders every 10 seconds
-                setInterval(fetchOrders, 10000);
-            });
+    // Set up the interval to fetch orders every 10 seconds
+    setInterval(fetchOrders, 10000);
+});
 
         </script>
     </body>
