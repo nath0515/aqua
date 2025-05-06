@@ -162,7 +162,7 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="hasContainer" onchange="togglePriceInput()">
                                                 <label class="form-check-label" for="hasContainer">
-                                                    Has Container
+                                                    With Container
                                                 </label>
                                             </div>
                                         </div>                    
