@@ -28,6 +28,16 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rider_status = $stmt->fetchColumn();
+    if($rider_status == 1){
+        header('Location: riderdashboard.php');
+        exit();
+    }
 ?> 
 
 <!DOCTYPE html>
