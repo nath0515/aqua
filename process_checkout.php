@@ -81,8 +81,10 @@ try {
         ]);
     }
 
-    $sql = "DELETE FROM cart WHERE cart_id = :cart_id";
-    foreach()
+    $stmt = $conn->prepare("DELETE FROM cart WHERE cart_id = :cart_id");
+    foreach($data['items'] as $item){
+        $stmt->execute();
+    }
 
     $conn->commit();
 
