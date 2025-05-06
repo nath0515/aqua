@@ -170,8 +170,14 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>  
-                                            <th>Time-In</th>
-                                            <th>Time-Out</th>
+                                            <th>
+                                                Time-In 
+                                                <button id="toggleTimeIn" class="btn btn-sm btn-info">Toggle Time-In</button>
+                                            </th>
+                                            <th>
+                                                Time-Out 
+                                                <button id="toggleTimeOut" class="btn btn-sm btn-info">Toggle Time-Out</button>
+                                            </th>
                                             <th>Daily Salary</th>
                                         </tr>
                                     </thead>
@@ -266,9 +272,18 @@
             }
         </script>
         <script>
-        document.getElementById('toggleTimeColumns').addEventListener('click', function() {
-            const timeColumns = document.querySelectorAll('.time-column');
-            timeColumns.forEach(function(cell) {
+        // Toggle Time-In column visibility
+        document.getElementById('toggleTimeIn').addEventListener('click', function() {
+            const timeInColumns = document.querySelectorAll('.time-in-column');
+            timeInColumns.forEach(function(cell) {
+                cell.style.display = (cell.style.display === 'none' || cell.style.display === '') ? 'table-cell' : 'none';
+            });
+        });
+
+        // Toggle Time-Out column visibility
+        document.getElementById('toggleTimeOut').addEventListener('click', function() {
+            const timeOutColumns = document.querySelectorAll('.time-out-column');
+            timeOutColumns.forEach(function(cell) {
                 cell.style.display = (cell.style.display === 'none' || cell.style.display === '') ? 'table-cell' : 'none';
             });
         });
