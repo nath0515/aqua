@@ -165,7 +165,6 @@
                                                                 <th scope="col">Contact</th>
                                                                 <th scope="col">Amount</th>
                                                                 <th scope="col">Status</th>
-                                                                <th scope="col">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -201,15 +200,6 @@
                                                                                 <?= $status ?>
                                                                             </button>
                                                                         </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button class="btn btn-outline-primary btn-sm" 
-                                                                            id="editOrderBtn"
-                                                                            data-id="<?php echo $row['order_id']; ?>"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#editorder">
-                                                                                <i class="bi bi-pencil"></i> Edit
-                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
