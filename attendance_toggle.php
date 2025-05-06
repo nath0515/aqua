@@ -63,7 +63,7 @@ if ($status == 1) {
     $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, date = :now WHERE user_id = :user_id AND DATE(date) = :date");
     $updateStatus->bindParam(':now', $now);
     $updateStatus->bindParam(':user_id', $user_id);
-    $updateStatus->bindParam(':date', $);
+    $updateStatus->bindParam(':date', $today);
     $updateStatus->execute();
 
     $insertIn = $conn->prepare("INSERT INTO attendance (user_id, in_time) VALUES (:user_id, :in_time)");
