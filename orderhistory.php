@@ -207,7 +207,7 @@
             document.addEventListener("DOMContentLoaded", function() {
                 // This function will fetch orders from the backend every 10 seconds
                 function fetchOrders() {
-                    fetch('fetch_orders.php', {
+                    fetch('process_usercheckorders.php', {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' }
                     })
