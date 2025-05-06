@@ -2,34 +2,71 @@
 require 'db.php';
 require 'session.php';
 
-header('Content-Type: application/json');
-
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
+    header('Location: login.php');
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
-$id = $_POST['id'] ?? null;
-$type = $_POST['type'] ?? null;
 $now = date('Y-m-d H:i:s');
+$today = date('Y-m-d');
 
-if (!$id || !in_array($type, ['in', 'out'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
-    exit();
-}
-
-$field = $type === 'in' ? 'time_in' : 'time_out';
-
-$stmt = $conn->prepare("UPDATE attendance SET $field = :now WHERE id = :id AND user_id = :user_id AND $field IS NULL");
-$stmt->bindParam(':now', $now);
-$stmt->bindParam(':id', $id);
+// Get current status
+$stmt = $conn->prepare("SELECT status, last_toggle FROM rider_status WHERE user_id = :user_id");
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($stmt->rowCount() > 0) {
-    echo json_encode(['status' => 'success', 'message' => ucfirst($type) . ' time recorded']);
+if (!$row) {
+    // Insert new status record if missing
+    $insertStatus = $conn->prepare("INSERT INTO rider_status (user_id, status, last_toggle) VALUES (:user_id, 0, :now)");
+    $insertStatus->bindParam(':user_id', $user_id);
+    $insertStatus->bindParam(':now', $now);
+    $insertStatus->execute();
+
+    $status = 0;
+    $lastToggle = $now;
 } else {
-    echo json_encode(['status' => 'error', 'message' => ucfirst($type) . ' already set or invalid record']);
+    $status = $row['status'];
+    $lastToggle = $row['last_toggle'];
 }
+
+if ($status == 1) {
+    // Clock Out
+    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 0, last_toggle = :now WHERE user_id = :user_id");
+    $updateStatus->bindParam(':now', $now);
+    $updateStatus->bindParam(':user_id', $user_id);
+    $updateStatus->execute();
+
+    $updateOut = $conn->prepare("UPDATE attendance SET out_time = :out_time WHERE user_id = :user_id AND out_time IS NULL");
+    $updateOut->bindParam(':out_time', $now);
+    $updateOut->bindParam(':user_id', $user_id);
+    $updateOut->execute();
+} else {
+    // Prevent multiple clock-ins after clocking out
+    $checkAttendance = $conn->prepare("SELECT * FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today AND out_time IS NOT NULL");
+    $checkAttendance->bindParam(':user_id', $user_id);
+    $checkAttendance->bindParam(':today', $today);
+    $checkAttendance->execute();
+    $alreadyOut = $checkAttendance->fetch(PDO::FETCH_ASSOC);
+
+    if ($alreadyOut) {
+        echo "You have already clocked out today. Cannot clock in again.";
+        exit();
+    }
+
+    // Clock In
+    $updateStatus = $conn->prepare("UPDATE rider_status SET status = 1, last_toggle = :now WHERE user_id = :user_id");
+    $updateStatus->bindParam(':now', $now);
+    $updateStatus->bindParam(':user_id', $user_id);
+    $updateStatus->execute();
+
+    $insertIn = $conn->prepare("INSERT INTO attendance (user_id, in_time) VALUES (:user_id, :in_time)");
+    $insertIn->bindParam(':user_id', $user_id);
+    $insertIn->bindParam(':in_time', $now);
+    $insertIn->execute();
+}
+
+header('Location: riderdashboard.php');
+exit();
 ?>
