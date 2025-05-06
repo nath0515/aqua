@@ -89,9 +89,10 @@
                         <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <?php 
-                        $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
+                        $sql = "SELECT status FROM rider_status WHERE user_id = :user_id AND DATE(date) = :date";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(':user_id', $user_id);
+                        $stmt->bindParam(':date', $today);
                         $stmt->execute();
                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         $status_rider = $row ? $row['status'] : 0;
