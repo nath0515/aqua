@@ -4,6 +4,12 @@
 
     $user_id = $_SESSION['user_id'];
     $today = date('Y-m-d');
+    $role_id = $_SESSION['role_id'];
+    if($role_id == 1){
+        header("Location: index.php");
+    }else if ($role_id == 2){
+        header("Location: home.php");
+    }
 
     // Fetch user details
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
