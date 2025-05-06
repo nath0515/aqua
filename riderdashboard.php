@@ -35,7 +35,7 @@
     $stmt->execute();
     $rider_status = $stmt->fetchColumn();
     if($rider_status == 0){
-        header('Location: riderdashboard.php');
+        header('Location: riderdashboardclosed.php');
         exit();
     }
 ?> 
