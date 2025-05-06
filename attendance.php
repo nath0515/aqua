@@ -341,29 +341,35 @@
             }
         </script>
         <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('.toggle-attendance').forEach(function (toggle) {
-                toggle.addEventListener('change', function () {
-                    const id = this.dataset.id;
-                    const type = this.dataset.type;
-                    const status = this.checked ? 1 : 0;
+        document.querySelectorAll('.toggle-attendance').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const attendanceId = this.dataset.id;
+            const type = this.dataset.type;
 
-                    fetch('update_attendance.php', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                        body: `id=${id}&type=${type}&status=${status}`
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log("Server response:", data);
-                        location.reload(); // optional: refresh to update time display
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-                });
+            fetch('update_attendance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${attendanceId}&type=${type}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Optionally: reload page or update UI
+                } else {
+                    alert('Error: ' + data.message);
+                    // Revert the toggle switch
+                    this.checked = !this.checked;
+                }
+            })
+            .catch(error => {
+                alert('Fetch error: ' + error);
+                this.checked = !this.checked;
             });
         });
+    });
     </script>
     </body>
 </html>
