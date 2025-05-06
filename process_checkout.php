@@ -34,7 +34,7 @@ try {
 
         $sql = "SELECT water_price, water_price_promo, container_price FROM products WHERE product_id = :product_id";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':product_id', $sql);
+        $stmt->bindParam(':product_id', $product_id);
         $stmt->execute();
         $prices = $stmt->fetch();
 
