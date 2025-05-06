@@ -237,9 +237,7 @@
         // Add the new rows to the table
         orders.forEach(order => {
             const row = document.createElement('tr');
-            const riderName = (order.rider_firstname && order.rider_lastname) 
-                ? `${order.rider_firstname} ${order.rider_lastname}` 
-                : 'None';
+            const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
             row.innerHTML = `
                 <td>${order.date}</td>
                 <td>₱${order.amount}</td>
