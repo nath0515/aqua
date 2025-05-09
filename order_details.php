@@ -38,13 +38,15 @@
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 
-    $sql = "SELECT date FROM orders WHERE order_id = order_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':order_id', $order_id);
-    $stmt->execute();
-    $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT date FROM orders WHERE order_id = order_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
+        $stmt->execute();
+        $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
+    
     
 ?>
 <!DOCTYPE html>
@@ -192,6 +194,7 @@
                                     <i class="fas fa-table me-1"></i>
                                     Orders
                                 </div>
+                                <h5 class="text-end mb-3"><?php echo $date_data['date']; ?></h5>
                                 <div class="card-body table-responsive">
                                     <?php 
                                     $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
@@ -200,7 +203,6 @@
                                     $stmt->execute();
                                     $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                     ?>
-                                    <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
                                     <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
                                     <table class="table table-bordered p-1">
                                         <thead>
