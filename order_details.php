@@ -449,7 +449,7 @@ error_reporting(E_ALL);
                         heightLeft -= pageHeight;
                     }
 
-                    const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
+                    const filename = `Report_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`;
                     pdf.save(filename);
                 });
             });
