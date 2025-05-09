@@ -25,7 +25,7 @@
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.water_price_promo, b.container_price, 
-        c.date, c.amount, c.rider, c.date,
+        c.date, c.amount, c.rider,
         d.firstname, d.lastname, d.address, d.contact_number,
         e.status_name
         FROM orderitems a
@@ -39,6 +39,12 @@
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    $sql = "SELECT date FROM orders WHERE order_id = order_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id);
+    $stmt->execute();
+    $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
     
 ?>
 <!DOCTYPE html>
@@ -180,68 +186,75 @@
                         <div class="card mb-4">
                             
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Orders
-                            </div>
-                            <div class="card-body table-responsive">
-                                <?php 
-                                $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
-                                $stmt = $conn->prepare($sql);
-                                $stmt->bindParam(':order_id', $order_id);
-                                $stmt->execute();
-                                $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
-                                ?>
-                                <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></h5>
-                                <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
-                                <table class="table table-bordered p-1">
-                                    <thead>
-                                        <tr>
-                                            <th>Item Name</th>
-                                            <th>Unit Price</th>
-                                            <th>Quantity</th>
-                                            <th>Has Container</th>
-                                            <th>Container Quantity</th>
-                                            <th>Container Price</th>
-                                            <th>Total Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($order_data as $row):?>
+                        <div id="reportContent">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Orders
+                                </div>
+                                <div class="card-body table-responsive">
+                                    <?php 
+                                    $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->bindParam(':order_id', $order_id);
+                                    $stmt->execute();
+                                    $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    ?>
+                                    <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
+                                    <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
+                                    <table class="table table-bordered p-1">
+                                        <thead>
                                             <tr>
-                                                <td><?php echo $row['product_name'];?></td>
-                                                <td>₱
-                                                    <?php 
-                                                        if($row['quantity'] >= 10){
-                                                            echo $row['water_price_promo'];
-                                                        }
-                                                        else{
-                                                            echo $row['water_price'];
-                                                        }
-                                                
-                                                    ?>
-                                                </td>
-                                                <td><?php echo $row['quantity'];?></td>
-                                                <td>
-                                                    <?php 
-                                                        if($row['with_container'] == 1){
-                                                            echo 'Yes';
-                                                        }
-                                                        else{
-                                                            echo 'No';
-                                                        }
-                                                        
-                                                    ?>
-                                                </td>
-                                                <td><?php echo $row['container_quantity'];?></td>
-                                                <td>₱<?php echo $row['container_price'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <th>Item Name</th>
+                                                <th>Unit Price</th>
+                                                <th>Quantity</th>
+                                                <th>Has Container</th>
+                                                <th>Container Quantity</th>
+                                                <th>Container Price</th>
+                                                <th>Total Price</th>
                                             </tr>
-                                        <?php endforeach;?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($order_data as $row):?>
+                                                <tr>
+                                                    <td><?php echo $row['product_name'];?></td>
+                                                    <td>₱
+                                                        <?php 
+                                                            if($row['quantity'] >= 10){
+                                                                echo $row['water_price_promo'];
+                                                            }
+                                                            else{
+                                                                echo $row['water_price'];
+                                                            }
+                                                    
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo $row['quantity'];?></td>
+                                                    <td>
+                                                        <?php 
+                                                            if($row['with_container'] == 1){
+                                                                echo 'Yes';
+                                                            }
+                                                            else{
+                                                                echo 'No';
+                                                            }
+                                                            
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo $row['container_quantity'];?></td>
+                                                    <td>₱<?php echo $row['container_price'];?></td>
+                                                    <td>₱<?php echo $row['amount'];?></td>
+                                                </tr>
+                                            <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                        <button id="downloadPDF" class="btn btn-danger">
+                            <i class="fas fa-file-pdf"></i> Download Report as PDF
+                        </button>
                         </div>
                     </div>
                 </main>
@@ -305,6 +318,8 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>                                        
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
         <script>
             let deferredPrompt;
@@ -394,6 +409,39 @@
                             alert("Failed to fetch product details.");
                         }
                     });
+                });
+            });
+        </script>
+        <script>
+            document.getElementById("downloadPDF").addEventListener("click", function () {
+                const { jsPDF } = window.jspdf;
+
+                const report = document.getElementById("reportContent");
+
+                html2canvas(report, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = pageWidth;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                    let heightLeft = imgHeight;
+                    let position = 0;
+
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
+                    pdf.save(filename);
                 });
             });
         </script>

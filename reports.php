@@ -168,9 +168,9 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
+                    <div id="reportContent">
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
-                    <div id="reportContent">
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
