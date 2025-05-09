@@ -11,7 +11,7 @@
         header("Location: riderdashboard.php");
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,date FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -25,7 +25,7 @@
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.water_price_promo, b.container_price, 
-        c.date, c.amount, c.rider, 
+        c.date, c.amount, c.rider, c.date,
         d.firstname, d.lastname, d.address, d.contact_number,
         e.status_name
         FROM orderitems a
