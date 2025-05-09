@@ -170,94 +170,100 @@
                 <main>
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Sales
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th> Date</th>
-                                        <th> Product Name</th>
-                                        <th> Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($order_data as $row):?>
+                    <div id="reportContent">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Sales
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                            <td><?php echo $row['product_name'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
+                                            <th> Date</th>
+                                            <th> Product Name</th>
+                                            <th> Amount</th>
                                         </tr>
-                                    <?php endforeach;?>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($order_data as $row):?>
+                                            <tr>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['product_name'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Expenses
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple1">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Purpose</th>
+                                            <th>Amount (₱)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($expense_data as $row):?>
+                                            <tr>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['expensetype_name'];?></td>
+                                                <td>₱<?php echo $row['amount'];?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_expense, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Income
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple2">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Sales</th>
+                                            <th>Less : Expenses</th>
+                                            <th>Net Income</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><?php echo number_format($total_amount, 2); ?></td>
+                                            <td><?php echo number_format($total_expense, 2); ?></td>
+                                            <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_income, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Expenses
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple1">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Purpose</th>
-                                        <th>Amount (₱)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($expense_data as $row):?>
-                                        <tr>
-                                            <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                            <td><?php echo $row['expensetype_name'];?></td>
-                                            <td>₱<?php echo $row['amount'];?></td>
-                                        </tr>
-                                    <?php endforeach;?>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_expense, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Income
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple2">
-                                <thead>
-                                    <tr>
-                                        <th>Total Sales</th>
-                                        <th>Less : Expenses</th>
-                                        <th>Net Income</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><?php echo number_format($total_amount, 2); ?></td>
-                                        <td><?php echo number_format($total_expense, 2); ?></td>
-                                        <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_income, 2); ?></strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div style="margin-bottom: 20px;">
+                        <button id="downloadPDF" class="btn btn-danger">
+                            <i class="fas fa-file-pdf"></i> Download Report as PDF
+                        </button>
                     </div>
                 </main>    
             </div>
@@ -268,6 +274,8 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -330,6 +338,39 @@
             }
         });
 
+        </script>
+        <script>
+            document.getElementById("downloadPDF").addEventListener("click", function () {
+                const { jsPDF } = window.jspdf;
+
+                const report = document.getElementById("reportContent");
+
+                html2canvas(report, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = pageWidth;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                    let heightLeft = imgHeight;
+                    let position = 0;
+
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
+                    pdf.save(filename);
+                });
+            });
         </script>
     </body>
 </html>
