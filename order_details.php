@@ -3,6 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $dateNow = date('Y-m-d');
     $role_id = $_SESSION['role_id'];
     if($role_id == 2){
         header("Location: home.php");
@@ -10,7 +11,7 @@
         header("Location: riderdashboard.php");
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,date FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -192,6 +193,7 @@
                                 $stmt->execute();
                                 $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                 ?>
+                                <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></h5>
                                 <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
                                 <table class="table table-bordered p-1">
                                     <thead>
