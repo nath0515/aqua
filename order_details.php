@@ -201,7 +201,7 @@ error_reporting(E_ALL);
                                     <i class="fas fa-table me-1"></i>
                                     Orders
                                 </div>
-                                <h5 class="text-end mb-3"><?php echo $date_data['date']; ?></h5>
+                                <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
                                 <div class="card-body table-responsive">
                                     <?php 
                                     $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
