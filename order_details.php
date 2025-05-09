@@ -264,7 +264,7 @@ error_reporting(E_ALL);
                         </div>
                         <div style="margin-bottom: 20px;">
                         <button id="downloadPDF" class="btn btn-danger">
-                            <i class="fas fa-file-pdf"></i> Download Report as PDF
+                            <i class="fas fa-file-pdf"></i> Download Receipt as PDF
                         </button>
                         </div>
                     </div>
