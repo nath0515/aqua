@@ -3,6 +3,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
     require 'session.php';
     require 'db.php';
 
@@ -45,7 +46,7 @@ error_reporting(E_ALL);
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT date FROM orders WHERE order_id = order_id";
+        $sql = "SELECT date FROM orders WHERE order_id = :order_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
