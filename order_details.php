@@ -201,7 +201,6 @@ error_reporting(E_ALL);
                                     <i class="fas fa-table me-1"></i>
                                     Orders
                                 </div>
-                                <h5 class="text-end mb-3"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
                                 <div class="card-body table-responsive">
                                     <?php 
                                     $sql = "SELECT amount FROM orders WHERE order_id = :order_id";
@@ -210,7 +209,10 @@ error_reporting(E_ALL);
                                     $stmt->execute();
                                     $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                     ?>
-                                    <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
+                                        <h5 class="mb-0">Total Price: ₱ <?php echo $total_data['amount']?></h5>
+                                    </div>
                                     <table class="table table-bordered p-1">
                                         <thead>
                                             <tr>
