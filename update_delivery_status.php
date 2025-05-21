@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Optional: Verify that this order belongs to the logged-in rider's delivery batch
     $sql = "UPDATE orders 
-            SET status_id = 4, updated_at = :date
+            SET status_id = 4, date = :date
             WHERE order_id = :order_id";
 
     $stmt = $conn->prepare($sql);
