@@ -202,27 +202,40 @@
                         </button>
                         
 
-                       <div 
-                        class="card bg-primary text-white mb-4 editProductBtn" 
-                        style="cursor: pointer;" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#edititem"
-                        data-id="<?php echo $row['product_id']; ?>"
-                        >
-                        <div class="card-header" style="font-size: 20px">
-                            <?php echo $row['product_name']; ?>
+                        <div class="row">
+                            <?php foreach ($products_data as $row): ?>
+                                <div class="col-xl-3 col-md-6">
+                                    <div 
+                                        class="card bg-primary text-white mb-4 editProductCard" 
+                                        style="cursor: pointer;" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#edititem"
+                                        data-id="<?php echo $row['product_id']; ?>"
+                                        data-name="<?php echo htmlspecialchars($row['product_name']); ?>"
+                                        data-price="<?php echo $row['water_price']; ?>"
+                                        data-stock="<?php echo $row['stock']; ?>"
+                                        data-photo="<?php echo $row['product_photo']; ?>"
+                                    >
+                                        <div class="card-header" style="font-size: 20px;">
+                                            <?php echo $row['product_name']; ?>
+                                        </div>
+                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
+                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                        </div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <span>
+                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
+                                                Stock: <?php echo $row['stock']; ?>
+                                            </span>
+                                            <div class="small text-white">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
-                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                        </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between">
-                            <span>
-                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                Stock: <?php echo $row['stock']; ?>
-                            </span>
-                            <i class="bi bi-pencil-square text-white"></i>
-                        </div>
-                        </div>
+
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
