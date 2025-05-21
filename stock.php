@@ -202,40 +202,27 @@
                         </button>
                         
 
-                        <div class="row">
-                            <?php foreach ($products_data as $row): ?>
-                                <div class="col-xl-3 col-md-6">
-                                    <div 
-                                        class="card bg-primary text-white mb-4 editProductCard" 
-                                        style="cursor: pointer;" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#edititem"
-                                        data-id="<?php echo $row['product_id']; ?>"
-                                        data-name="<?php echo htmlspecialchars($row['product_name']); ?>"
-                                        data-price="<?php echo $row['water_price']; ?>"
-                                        data-stock="<?php echo $row['stock']; ?>"
-                                        data-photo="<?php echo $row['product_photo']; ?>"
-                                    >
-                                        <div class="card-header" style="font-size: 20px;">
-                                            <?php echo $row['product_name']; ?>
-                                        </div>
-                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
-                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                                        </div>
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <span>
-                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                Stock: <?php echo $row['stock']; ?>
-                                            </span>
-                                            <div class="small text-white">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                       <div 
+                        class="card bg-primary text-white mb-4 editProductBtn" 
+                        style="cursor: pointer;" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#edititem"
+                        data-id="<?php echo $row['product_id']; ?>"
+                        >
+                        <div class="card-header" style="font-size: 20px">
+                            <?php echo $row['product_name']; ?>
                         </div>
-
+                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
+                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <span>
+                                Water Price: ₱<?php echo $row['water_price']; ?><br>
+                                Stock: <?php echo $row['stock']; ?>
+                            </span>
+                            <i class="bi bi-pencil-square text-white"></i>
+                        </div>
+                        </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -628,41 +615,34 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const cards = document.querySelectorAll('.editProductCard');
+            $(document).ready(function() {
+                $(".editProductBtn").click(function() {
+                    var productId = $(this).data("id");
 
-                cards.forEach(card => {
-                    card.addEventListener('click', function () {
-                        const productId = this.dataset.id;
-
-                        fetch('get_product.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'id=' + encodeURIComponent(productId)
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.getElementById('edit_product_id').value = data.product.product_id;
-                                document.getElementById('edit_product_name').value = data.product.product_name;
-                                document.getElementById('edit_water_price').value = data.product.water_price;
-                                document.getElementById('edit_stock').value = data.product.stock;
-                                document.getElementById('edit_product_photo').src = data.product.product_photo;
+                    $.ajax({
+                        url: "process_getproductdata.php",
+                        type: "POST",
+                        data: { product_id: productId },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                $("#editProductId").val(productId);
+                                $("#editProductName").val(response.data.product_name);
+                                $("#editWaterPrice").val(response.data.water_price);
+                                $("#editContainerPrice").val(response.data.container_price);
+                                $("#editStock").val(response.data.stock);
+                                $("#editProductImagePreview").attr("src", response.data.product_photo);
                             } else {
-                                alert('Product not found.');
+                                alert("Error fetching product data.");
                             }
-                        })
-                        .catch(error => {
-                            console.error('AJAX error:', error);
-                            alert('Something went wrong while fetching product data.');
-                        });
+                        },
+                        error: function() {
+                            alert("Failed to fetch product details.");
+                        }
                     });
                 });
             });
-            </script>
-
+        </script>
             
     </body>
 </html>
