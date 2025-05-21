@@ -286,15 +286,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Container Price -->
-                                <div class="mb-3">
-                                    <label for="containerPrice" class="form-label">Container Price (₱)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="containerPrice" name="container_price" step="0.01" required>
-                                    </div>
-                                </div>
-
                                 <!-- Stock -->
                                 <div class="mb-3">
                                     <label for="stock" class="form-label">Stock</label>
@@ -324,7 +315,7 @@
             
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add Stock</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="process_addstock.php" method="POST" enctype="multipart/form-data">
