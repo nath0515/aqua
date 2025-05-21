@@ -392,44 +392,66 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    endCoordinates.splice(currentDestinationIndex, 1);
-                    currentDestinationIndex = -1;
+                    // ✅ AJAX request to update delivery status
+                    $.ajax({
+                        url: 'update_delivery_status.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove current destination from map & list
+                                endCoordinates.splice(currentDestinationIndex, 1);
+                                currentDestinationIndex = -1;
 
-                    if (destinationMarker) {
-                        map.removeLayer(destinationMarker);
-                        destinationMarker = null;
-                    }
+                                if (destinationMarker) {
+                                    map.removeLayer(destinationMarker);
+                                    destinationMarker = null;
+                                }
 
-                    if (currentRouteLine) {
-                        map.removeLayer(currentRouteLine);
-                        currentRouteLine = null;
-                    }
+                                if (currentRouteLine) {
+                                    map.removeLayer(currentRouteLine);
+                                    currentRouteLine = null;
+                                }
 
-                    if (endCoordinates.length === 0) {
-                        Swal.fire({
-                            title: 'All deliveries completed!',
-                            icon: 'success',
-                            confirmButtonText: 'Return to Shop'
-                        }).then(() => {
-                            const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+                                if (endCoordinates.length === 0) {
+                                    Swal.fire({
+                                        title: 'All deliveries completed!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Return to Shop'
+                                    }).then(() => {
+                                        const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
 
-                            L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
-                            fetchRoute(currentStartCoord, shopLatLng);
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Delivery completed!',
-                            icon: 'success',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+                                        L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                                        fetchRoute(currentStartCoord, shopLatLng);
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Delivery completed!',
+                                        icon: 'success',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
 
-                        // Recalculate and go to next destination
-                        updateStartLocation({ coords: { latitude: currentStartCoord[0], longitude: currentStartCoord[1] } });
-                    }
+                                    // Recalculate for next stop
+                                    updateStartLocation({
+                                        coords: {
+                                            latitude: currentStartCoord[0],
+                                            longitude: currentStartCoord[1]
+                                        }
+                                    });
+                                }
+                            } else {
+                                Swal.fire("Error", response.error || "Failed to update status", "error");
+                            }
+                        },
+                        error: function() {
+                            Swal.fire("Error", "Could not connect to server", "error");
+                        }
+                    });
                 }
             });
         }
+
 
         // Button listener
         document.getElementById("completeBtn").addEventListener("click", completeDelivery);
