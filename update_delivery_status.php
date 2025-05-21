@@ -1,8 +1,6 @@
 <?php
 require 'session.php';
 require 'db.php';
-header('Content-Type: application/json');
-
 
 $response = ['success' => false];
 
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update order status
     $sql = "UPDATE orders 
-            SET status_id = 4, updated_at = :date
+            SET status_id = 4, date = :date
             WHERE order_id = :order_id AND user_id = :user_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':date', $now);
