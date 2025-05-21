@@ -83,17 +83,23 @@
             $mail->isHTML(true);
             $mail->Subject = 'Email Verification';
             $mail->Body = "
-                        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
-                            <h2 style='color: #343a40;'>Hi,</h2>
-                            <p>Click the link below to verify your email address:</p>
-                            <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
-                            style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
-                                    text-decoration: none; border-radius: 5px;'>
-                            Verify Email
-                            </a>
-                            <p style='margin-top: 20px;'>Thank you.</p>
-                        </div>
-                        ";
+                <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #343a40;'>
+                    <h2 style='color: #343a40;'>Hi,</h2>
+                    <p>Thank you for signing up! Please click the button below to verify your email address:</p>
+                    
+                    <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
+                    style='display: inline-block; padding: 12px 24px; color: #ffffff; background-color: #0d6efd; 
+                            text-decoration: none; border-radius: 5px; font-weight: bold;'>
+                        Verify Email
+                    </a>
+                    
+                    <p style='margin-top: 20px;'>If you did not sign up for this account, you can ignore this email.</p>
+                    
+                    <p style='margin-top: 30px;'>Best regards,<br>
+                    <strong>AquaDrop Team</strong><br>
+                    <small><a href='http://aqua-drop.shop' style='color: #0d6efd; text-decoration: none;'>www.aqua-drop.shop</a></small></p>
+                </div>
+            ";
             $mail->send();
             return true;
         } catch (Exception $e) {
