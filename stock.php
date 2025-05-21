@@ -216,7 +216,6 @@
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                        Container Price: ₱<?php echo $row['container_price']; ?><br>
                                         Stock: <?php echo $row['stock']; ?>
                                         <div class="small text-white">
                                             <a href="#" 
