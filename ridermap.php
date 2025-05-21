@@ -415,6 +415,7 @@
                         data: formData,
                         contentType: false,
                         processData: false,
+                        dataType: 'json',
                         success: function(response) {
                             if (response.success) {
                                 endCoordinates.splice(currentDestinationIndex, 1);
