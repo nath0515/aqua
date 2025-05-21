@@ -1,6 +1,8 @@
 <?php
 require 'session.php';
 require 'db.php';
+header('Content-Type: application/json');
+
 
 $response = ['success' => false];
 
