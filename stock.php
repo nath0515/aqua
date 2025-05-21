@@ -211,10 +211,6 @@
                                         data-bs-toggle="modal" 
                                         data-bs-target="#edititem"
                                         data-id="<?php echo $row['product_id']; ?>"
-                                        data-name="<?php echo htmlspecialchars($row['product_name']); ?>"
-                                        data-price="<?php echo $row['water_price']; ?>"
-                                        data-stock="<?php echo $row['stock']; ?>"
-                                        data-photo="<?php echo $row['product_photo']; ?>"
                                     >
                                         <div class="card-header" style="font-size: 20px;">
                                             <?php echo $row['product_name']; ?>
@@ -235,7 +231,6 @@
                                 </div>
                             <?php endforeach; ?>
                         </div>
-
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -628,29 +623,29 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $(".editProductBtn").click(function() {
-                    var productId = $(this).data("id");
+            $(document).ready(function () {
+                $('.editProductCard').on('click', function () {
+                    var productId = $(this).data('id');
 
                     $.ajax({
-                        url: "process_getproductdata.php",
-                        type: "POST",
+                        url: 'process_getproductdata.php',
+                        method: 'POST',
                         data: { product_id: productId },
-                        dataType: "json",
-                        success: function(response) {
+                        dataType: 'json',
+                        success: function (response) {
                             if (response.success) {
-                                $("#editProductId").val(productId);
-                                $("#editProductName").val(response.data.product_name);
-                                $("#editWaterPrice").val(response.data.water_price);
-                                $("#editContainerPrice").val(response.data.container_price);
-                                $("#editStock").val(response.data.stock);
-                                $("#editProductImagePreview").attr("src", response.data.product_photo);
+                                $('#editProductId').val(productId);
+                                $('#editProductName').val(response.data.product_name);
+                                $('#editWaterPrice').val(response.data.water_price);
+                                $('#editContainerPrice').val(response.data.container_price);
+                                $('#editStock').val(response.data.stock);
+                                $('#editProductImagePreview').attr('src', response.data.product_photo);
                             } else {
-                                alert("Error fetching product data.");
+                                alert('Product not found.');
                             }
                         },
-                        error: function() {
-                            alert("Failed to fetch product details.");
+                        error: function () {
+                            alert('Failed to load product details.');
                         }
                     });
                 });
