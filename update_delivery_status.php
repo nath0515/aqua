@@ -6,7 +6,6 @@ $response = ['success' => false];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $order_id = $_POST['order_id'];
-    $user_id = $_SESSION['user_id'];
     $now = date('Y-m-d H:i:s');
 
     // Handle file upload if present
@@ -28,11 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update order status
     $sql = "UPDATE orders 
             SET status_id = 4, date = :date
-            WHERE order_id = :order_id AND user_id = :user_id";
+            WHERE order_id = :order_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':date', $now);
     $stmt->bindParam(':order_id', $order_id);
-    $stmt->bindParam(':user_id', $user_id);
 
     if ($stmt->execute()) {
         // Optional: Save file path to `proof_file` column if you have one
