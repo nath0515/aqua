@@ -386,66 +386,86 @@
 
             Swal.fire({
                 title: 'Complete this delivery?',
-                text: "This will mark the current stop as delivered.",
+                html: `
+                    <p>Please upload proof of delivery (photo, signature, etc.):</p>
+                    <input type="file" id="deliveryProofFile" class="swal2-input" accept="image/*,.pdf">
+                `,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, complete it!',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: 'Upload & Complete',
+                preConfirm: () => {
+                    const fileInput = document.getElementById('deliveryProofFile');
+                    const file = fileInput.files[0];
+                    if (!file) {
+                        Swal.showValidationMessage('Please select a file');
+                        return false;
+                    }
+                    return file;
+                }
             }).then((result) => {
-                if (result.isConfirmed) {
-                    $.post("update_delivery_status.php", { order_id: orderId }, function(response) {
-                        if (response.success) {
-                            endCoordinates.splice(currentDestinationIndex, 1);
-                            currentDestinationIndex = -1;
+                if (result.isConfirmed && result.value) {
+                    const file = result.value;
+                    const formData = new FormData();
+                    formData.append('order_id', orderId);
+                    formData.append('file', file);
 
-                            if (destinationMarker) {
-                                map.removeLayer(destinationMarker);
-                                destinationMarker = null;
-                            }
+                    $.ajax({
+                        url: 'update_delivery_status.php',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.success) {
+                                endCoordinates.splice(currentDestinationIndex, 1);
+                                currentDestinationIndex = -1;
 
-                            if (currentRouteLine) {
-                                map.removeLayer(currentRouteLine);
-                                currentRouteLine = null;
-                            }
+                                if (destinationMarker) {
+                                    map.removeLayer(destinationMarker);
+                                    destinationMarker = null;
+                                }
 
-                            if (endCoordinates.length === 0) {
-                                Swal.fire({
-                                    title: 'All deliveries completed!',
-                                    icon: 'success',
-                                    confirmButtonText: 'Return to Shop'
-                                }).then(() => {
-                                    const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+                                if (currentRouteLine) {
+                                    map.removeLayer(currentRouteLine);
+                                    currentRouteLine = null;
+                                }
 
-                                    L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
-                                    fetchRoute(currentStartCoord, shopLatLng);
-                                });
+                                if (endCoordinates.length === 0) {
+                                    Swal.fire({
+                                        title: 'All deliveries completed!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Return to Shop'
+                                    }).then(() => {
+                                        const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+                                        L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                                        fetchRoute(currentStartCoord, shopLatLng);
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Delivery completed!',
+                                        icon: 'success',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+
+                                    updateStartLocation({
+                                        coords: {
+                                            latitude: currentStartCoord[0],
+                                            longitude: currentStartCoord[1]
+                                        }
+                                    });
+                                }
                             } else {
-                                Swal.fire({
-                                    title: 'Delivery completed!',
-                                    icon: 'success',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-
-                                updateStartLocation({
-                                    coords: {
-                                        latitude: currentStartCoord[0],
-                                        longitude: currentStartCoord[1]
-                                    }
-                                });
+                                Swal.fire('Error', response.error || 'Failed to update.', 'error');
                             }
-                        } else {
-                            Swal.fire('Error', response.error || 'Failed to update.', 'error');
+                        },
+                        error: function() {
+                            Swal.fire('Error', 'AJAX upload failed.', 'error');
                         }
-                    }, 'json').fail(function() {
-                        Swal.fire('Error', 'AJAX request failed.', 'error');
                     });
                 }
             });
         }
-
-
-
 
         // Button listener
         document.getElementById("completeBtn").addEventListener("click", completeDelivery);

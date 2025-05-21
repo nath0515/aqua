@@ -2,31 +2,54 @@
 require 'session.php';
 require 'db.php';
 
-$now = date('Y-m-d H:i:s');
+$response = ['success' => false];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $order_id = $_POST['order_id'] ?? null;
+    $order_id = $_POST['order_id'];
+    $user_id = $_SESSION['user_id'];
+    $now = date('Y-m-d H:i:s');
 
-    if (!$order_id) {
-        echo json_encode(['success' => false, 'error' => 'Missing order_id']);
-        exit;
+    // Handle file upload if present
+    $uploadDir = 'uploads/';
+    $filePath = null;
+
+    if (!empty($_FILES['file']['name'])) {
+        $fileName = basename($_FILES['file']['name']);
+        $targetFile = $uploadDir . time() . "_" . $fileName;
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
+            $filePath = $targetFile; // Save this to DB if needed
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Failed to upload file.']);
+            exit;
+        }
     }
 
-    // Optional: Verify that this order belongs to the logged-in rider's delivery batch
+    // Update order status
     $sql = "UPDATE orders 
-            SET status_id = 4, date = :date
-            WHERE order_id = :order_id";
-
+            SET status_id = 4, updated_at = :date
+            WHERE order_id = :order_id AND user_id = :user_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':order_id', $order_id);
     $stmt->bindParam(':date', $now);
+    $stmt->bindParam(':order_id', $order_id);
+    $stmt->bindParam(':user_id', $user_id);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+        // Optional: Save file path to `proof_file` column if you have one
+        if ($filePath) {
+            $proofSql = "UPDATE orders SET proof_file = :proof WHERE order_id = :order_id";
+            $proofStmt = $conn->prepare($proofSql);
+            $proofStmt->bindParam(':proof', $filePath);
+            $proofStmt->bindParam(':order_id', $order_id);
+            $proofStmt->execute();
+        }
+
+        $response['success'] = true;
     } else {
-        echo json_encode(['success' => false, 'error' => 'Failed to update order.']);
+        $response['error'] = 'Database update failed.';
     }
 } else {
-    echo json_encode(['success' => false, 'error' => 'Invalid request.']);
+    $response['error'] = 'Invalid request method.';
 }
-?>
+
+echo json_encode($response);
