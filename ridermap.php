@@ -393,7 +393,7 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post("update_order_status.php", { order_id: orderId }, function(response) {
+                    $.post("update_delivery_status.php", { order_id: orderId }, function(response) {
                         if (response.success) {
                             endCoordinates.splice(currentDestinationIndex, 1);
                             currentDestinationIndex = -1;
