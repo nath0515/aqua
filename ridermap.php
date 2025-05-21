@@ -26,27 +26,27 @@
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row) {
-    $startCoordinates = [
-        'lat' => $row['latitude'],
-        'lon' => $row['longitude']
-    ];
-}
-
-// Get end locations (customer destinations)
-    $endCoordinatesArray = [];
-    $sql = "SELECT latitude, longitude FROM orders 
-            JOIN user_details ON orders.user_id = user_details.user_id
-            WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND status_id = 3";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($rows as $row) {
-        $endCoordinatesArray[] = [
+        $startCoordinates = [
             'lat' => $row['latitude'],
             'lon' => $row['longitude']
-    ];
-}
+        ];
+    }
+
+    $endCoordinatesArray = [];
+        $sql = "SELECT orders.order_id, latitude, longitude FROM orders 
+                JOIN user_details ON orders.user_id = user_details.user_id
+                WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND status_id = 3";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($rows as $row) {
+            $endCoordinatesArray[] = [
+                'order_id' => $row['order_id'],
+                'lat' => $row['latitude'],
+                'lon' => $row['longitude']
+            ];
+        }
 
 ?>
 <!DOCTYPE html>
@@ -379,9 +379,10 @@
             }
         }
 
-        // SweetAlert-enhanced delivery completion
         function completeDelivery() {
             if (currentDestinationIndex === -1) return;
+
+            const orderId = endCoordinates[currentDestinationIndex].order_id;
 
             Swal.fire({
                 title: 'Complete this delivery?',
@@ -392,65 +393,58 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // ✅ AJAX request to update delivery status
-                    $.ajax({
-                        url: 'update_delivery_status.php',
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                // Remove current destination from map & list
-                                endCoordinates.splice(currentDestinationIndex, 1);
-                                currentDestinationIndex = -1;
+                    $.post("update_order_status.php", { order_id: orderId }, function(response) {
+                        if (response.success) {
+                            endCoordinates.splice(currentDestinationIndex, 1);
+                            currentDestinationIndex = -1;
 
-                                if (destinationMarker) {
-                                    map.removeLayer(destinationMarker);
-                                    destinationMarker = null;
-                                }
-
-                                if (currentRouteLine) {
-                                    map.removeLayer(currentRouteLine);
-                                    currentRouteLine = null;
-                                }
-
-                                if (endCoordinates.length === 0) {
-                                    Swal.fire({
-                                        title: 'All deliveries completed!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Return to Shop'
-                                    }).then(() => {
-                                        const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
-
-                                        L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
-                                        fetchRoute(currentStartCoord, shopLatLng);
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Delivery completed!',
-                                        icon: 'success',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    });
-
-                                    // Recalculate for next stop
-                                    updateStartLocation({
-                                        coords: {
-                                            latitude: currentStartCoord[0],
-                                            longitude: currentStartCoord[1]
-                                        }
-                                    });
-                                }
-                            } else {
-                                Swal.fire("Error", response.error || "Failed to update status", "error");
+                            if (destinationMarker) {
+                                map.removeLayer(destinationMarker);
+                                destinationMarker = null;
                             }
-                        },
-                        error: function() {
-                            Swal.fire("Error", "Could not connect to server", "error");
+
+                            if (currentRouteLine) {
+                                map.removeLayer(currentRouteLine);
+                                currentRouteLine = null;
+                            }
+
+                            if (endCoordinates.length === 0) {
+                                Swal.fire({
+                                    title: 'All deliveries completed!',
+                                    icon: 'success',
+                                    confirmButtonText: 'Return to Shop'
+                                }).then(() => {
+                                    const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+
+                                    L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                                    fetchRoute(currentStartCoord, shopLatLng);
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Delivery completed!',
+                                    icon: 'success',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                updateStartLocation({
+                                    coords: {
+                                        latitude: currentStartCoord[0],
+                                        longitude: currentStartCoord[1]
+                                    }
+                                });
+                            }
+                        } else {
+                            Swal.fire('Error', response.error || 'Failed to update.', 'error');
                         }
+                    }, 'json').fail(function() {
+                        Swal.fire('Error', 'AJAX request failed.', 'error');
                     });
                 }
             });
         }
+
+
 
 
         // Button listener
