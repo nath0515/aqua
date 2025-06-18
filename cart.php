@@ -345,7 +345,8 @@ error_reporting(E_ALL);
                             imageWidth: 200,
                             imageHeight: 200,
                             imageAlt: 'GCash QR Code',
-                            confirmButtonText: 'Done'
+                            confirmButtonText: 'Done',
+                            cancelButtonText: 'Cancel'
                         }).then((qrResult) => {
                             if (qrResult.isConfirmed) {
                                 processCheckout(selectedItems, paymentId);
@@ -359,13 +360,21 @@ error_reporting(E_ALL);
         });
 
         function processCheckout(items, paymentId) {
+            const proofFile = document.getElementById("proofpayment").files[0];
+
+            if (!proofFile) {
+                Swal.fire("Error!", "Please upload a proof of payment.", "warning");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("proof_file", proofFile);
+            formData.append("items", JSON.stringify(items));
+            formData.append("payment_id", paymentId);
+
             fetch("process_checkout.php", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items: items,
-                    payment_id: paymentId
-                })
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -381,6 +390,7 @@ error_reporting(E_ALL);
                 Swal.fire("Error!", "An unexpected error occurred.", "error");
             });
         }
+
         </script>
 
 
