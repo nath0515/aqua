@@ -37,6 +37,13 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+            .hover-shadow:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
+        }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -110,14 +117,13 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <main>  
+                <main>
                     <div class="container-fluid px-4">
                         <h2 class="mt-4">📍 Saved Delivery Addresses</h2>
 
                         <div class="row">
                             <?php
-                            // Fetch saved locations
-                            $loc_stmt = $conn->prepare("SELECT label, latitude, longitude FROM user_locations WHERE user_id = :user_id");
+                            $loc_stmt = $conn->prepare("SELECT location_id, label, latitude, longitude FROM user_locations WHERE user_id = :user_id");
                             $loc_stmt->execute([':user_id' => $user_id]);
                             $user_locations = $loc_stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
@@ -125,15 +131,17 @@
                             <?php if (!empty($user_locations)): ?>
                                 <?php foreach ($user_locations as $loc): ?>
                                     <div class="col-md-4 mb-4">
-                                        <div class="card shadow border-left-primary">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-primary">
-                                                    <?php echo htmlspecialchars($loc['label']); ?>
-                                                </h5>
-                                                <p class="card-text mb-1"><strong>Latitude:</strong> <?php echo $loc['latitude']; ?></p>
-                                                <p class="card-text"><strong>Longitude:</strong> <?php echo $loc['longitude']; ?></p>
+                                        <a href="edit_location.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
+                                            <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
+                                                <div class="card-body text-dark">
+                                                    <h5 class="card-title text-primary">
+                                                        <?php echo htmlspecialchars($loc['label']); ?> <i class="bi bi-pencil-square"></i>
+                                                    </h5>
+                                                    <p class="card-text mb-1"><strong>Latitude:</strong> <?php echo $loc['latitude']; ?></p>
+                                                    <p class="card-text"><strong>Longitude:</strong> <?php echo $loc['longitude']; ?></p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
