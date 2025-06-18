@@ -272,7 +272,7 @@ error_reporting(E_ALL);
                                                 </div>
                                             </div>
                                         <?php endif; ?>
-                                        <?php if($proof_file['payment_id'] == 2) && $proof_file['proofofpayment']:?>
+                                        <?php if($proof_file['payment_id'] == 2 && $proof_file['proofofpayment']):?>
                                             <div class="col">
                                                 <div class="text-center mb-3">
                                                     <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
