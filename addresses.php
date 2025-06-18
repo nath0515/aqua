@@ -123,7 +123,7 @@
 
                         <div class="row">
                             <?php
-                            $loc_stmt = $conn->prepare("SELECT location_id, label, latitude, longitude FROM user_locations WHERE user_id = :user_id");
+                            $loc_stmt = $conn->prepare("SELECT location_id, label, latitude, longitude, address FROM user_locations WHERE user_id = :user_id");
                             $loc_stmt->execute([':user_id' => $user_id]);
                             $user_locations = $loc_stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
@@ -137,6 +137,7 @@
                                                     <h5 class="card-title text-primary">
                                                         <?php echo htmlspecialchars($loc['label']); ?> <i class="bi bi-pencil-square"></i>
                                                     </h5>
+                                                    <p class="card-text mb-1"><strong>Address:</strong> <?php echo $loc['address']; ?></p>
                                                     <p class="card-text mb-1"><strong>Latitude:</strong> <?php echo $loc['latitude']; ?></p>
                                                     <p class="card-text"><strong>Longitude:</strong> <?php echo $loc['longitude']; ?></p>
                                                 </div>
