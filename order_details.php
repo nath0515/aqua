@@ -32,7 +32,7 @@ error_reporting(E_ALL);
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.water_price_promo, b.container_price, 
-        c.date, c.amount, c.rider, c.proof_file,
+        c.date, c.amount, c.rider,
         d.firstname, d.lastname, d.address, d.contact_number,
         e.status_name
         FROM orderitems a
@@ -45,6 +45,10 @@ error_reporting(E_ALL);
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt = $conn->prepare("SELECT proof_file FROM orders WHERE order_id = :order_id");
+        $stmt->execute(":order_id" => $order_id);
+        $proof_file = $stmt->fetchColumn();
 
         $sql = "SELECT date FROM orders WHERE order_id = :order_id";
         $stmt = $conn->prepare($sql);
@@ -260,7 +264,7 @@ error_reporting(E_ALL);
                                         </tbody>
                                     </table>
                                     <div class="text-center mb-3">
-                                        <img src="<?php echo $order_data['proof_file'] ?>" alt="Order Image" style="max-width: 200px;">
+                                        <img src="<?php echo $proof_file ?>" alt="Order Image" style="max-width: 200px;">
                                     </div>
                                 </div>
                             </div>
