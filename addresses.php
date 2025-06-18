@@ -110,8 +110,39 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <main>
-                    
+                <main>  
+                    <div class="container-fluid px-4">
+                        <h2 class="mt-4">📍 Saved Delivery Addresses</h2>
+
+                        <div class="row">
+                            <?php
+                            // Fetch saved locations
+                            $loc_stmt = $conn->prepare("SELECT label, latitude, longitude FROM user_locations WHERE user_id = :user_id");
+                            $loc_stmt->execute([':user_id' => $user_id]);
+                            $user_locations = $loc_stmt->fetchAll(PDO::FETCH_ASSOC);
+                            ?>
+
+                            <?php if (!empty($user_locations)): ?>
+                                <?php foreach ($user_locations as $loc): ?>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card shadow border-left-primary">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-primary">
+                                                    <?php echo htmlspecialchars($loc['label']); ?>
+                                                </h5>
+                                                <p class="card-text mb-1"><strong>Latitude:</strong> <?php echo $loc['latitude']; ?></p>
+                                                <p class="card-text"><strong>Longitude:</strong> <?php echo $loc['longitude']; ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="col-12">
+                                    <div class="alert alert-info">You have no saved delivery addresses.</div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -131,111 +162,7 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-    // Initialize Simple DataTable for the orders table
-    const datatablesSimple = document.getElementById('datatablesSimple');
-    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
-
-    // Function to fetch orders from the backend
-    function fetchOrders() {
-        fetch('process_usercheckorders.php', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateOrdersTable(data.orders);
-            } else {
-                console.error("Failed to fetch orders:", data.message);
-            }
-        })
-        .catch(error => console.error("Error fetching orders:", error));
-    }
-
-    // Function to update the Simple DataTable with new order data
-    function updateOrdersTable(orders) {
-        // Clear the existing rows in the table
-        const tbody = datatablesSimple.querySelector('tbody');
-        if (tbody) {
-            tbody.innerHTML = ''; // Clear existing rows
-        }
-
-        // Add the new rows to the table
-        orders.forEach(order => {
-            const row = document.createElement('tr');
-            const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
-            row.innerHTML = `
-                <td>${order.date}</td>
-                <td>₱${order.amount}</td>
-                <td>${order.firstname} ${order.lastname}</td>
-                <td>${order.contact_number}</td>
-                <td>${order.address}</td>
-                <td>${order.status_name}</td>
-                <td>${riderName}</td>
-                <td>
-                    <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                        <i class="bi bi-eye"></i> View
-                    </a>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-
-        // Re-initialize Simple DataTable after updating the rows
-        if (table) {
-            table.update();
-        }
-    }
-
-    // Fetch orders initially when the page loads
-    fetchOrders();
-
-    // Set up the interval to fetch orders every 10 seconds
-    setInterval(fetchOrders, 3000);
-});
-
-        </script>
+    
+        
     </body>
 </html>
