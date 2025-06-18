@@ -94,7 +94,7 @@
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item notification-text" href="<?php echo $row['destination']; ?>"><?php echo $row['message'];?></a></li>
+                        <li><a class="dropdown-item notification-text" href="process_readnotification.php?"><?php echo $row['message'];?></a></li>
                         <hr>
                         <?php endforeach; ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
@@ -221,6 +221,7 @@
                                         <div class="card-footer d-flex align-items-center justify-content-between">
                                             <span>
                                                 Water Price: ₱<?php echo $row['water_price']; ?><br>
+                                                Container Price: ₱<?php echo $row['Container_price']; ?><br>
                                                 Stock: <?php echo $row['stock']; ?>
                                             </span>
                                             <div class="small text-white">
