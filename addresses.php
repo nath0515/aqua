@@ -131,7 +131,7 @@
                             <?php if (!empty($user_locations)): ?>
                                 <?php foreach ($user_locations as $loc): ?>
                                     <div class="col-md-4 mb-4">
-                                        <a href="edit_location.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
+                                        <a href="mapuser.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
                                             <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
                                                 <div class="card-body text-dark">
                                                     <h5 class="card-title text-primary">
