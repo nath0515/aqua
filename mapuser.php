@@ -151,10 +151,15 @@
                 <main>
                 <h2>📍 Pin Your Location</h2>
                     <div id="map"></div>
+                    <div class="mt-3">
+                        <label for="locationLabel" class="form-label">🏷️ Add a Label for this Location</label>
+                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" />
+                    </div>
+
                     <div class="button-group">
-                        <button id="confirmLocationBtn">✅ Confirm Location</button>
-                        <button id="saveLocationBtn" disabled>💾 Save Location</button>
-                        <button id="editLocationBtn" style="display: none;">✏️ Edit Location</button>
+                        <button id="confirmLocationBtn" class="btn btn-success">✅ Confirm Location</button>
+                        <button id="saveLocationBtn" class="btn btn-primary" disabled>💾 Save Location</button>
+                        <button id="editLocationBtn" class="btn btn-warning" style="display: none;">✏️ Edit Location</button>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
