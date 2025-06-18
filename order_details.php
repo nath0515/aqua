@@ -267,7 +267,7 @@ error_reporting(E_ALL);
                                         <?php if($proof_file['proof_file']):?>
                                             <div class="col">
                                                 <div class="text-center mb-3">
-                                                    <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px;">
+                                                    <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
                                                     <p class="mt-2 mb-0 text-muted">Proof of Delivery</p>
                                                 </div>
                                             </div>
@@ -275,7 +275,7 @@ error_reporting(E_ALL);
                                         <?php if($proof_file['payment_id'] == 2):?>
                                             <div class="col">
                                                 <div class="text-center mb-3">
-                                                    <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px;">
+                                                    <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
                                                     <p class="mt-2 mb-0 text-muted">Proof of Payment</p>
                                                 </div>
                                             </div>
