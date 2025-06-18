@@ -3,6 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $location_id = $_GET['location_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -12,9 +13,12 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
+    $stmt->execute(['location_id' => $location_id]);
+    $user_location = $stmt->fetch();
 
-    $savedLat = isset($user_data['latitude']) ? floatval($user_data['latitude']) : null;
-    $savedLng = isset($user_data['longitude']) ? floatval($user_data['longitude']) : null;
+    $savedLat = isset($user_location['latitude']) ? floatval($user_location['latitude']) : null;
+    $savedLng = isset($user_location['longitude']) ? floatval($user_location['longitude']) : null;
 
     // Check if both coordinates are missing or invalid (e.g., 0 or null)
     if (!$savedLat && !$savedLng) {
