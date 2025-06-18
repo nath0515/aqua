@@ -346,12 +346,10 @@
         Swal.fire({
             icon: 'warning',
             title: 'The Shop is Closed',
-            text: 'Please wait for the opening time.',
+            text: 'The shop is currently closed. You can still place your order now — it will be prepared and delivered once the shop opens.',
             allowOutsideClick: false,
             showConfirmButton: false,
-            timer: 3000
-        }).then(() => {
-            window.location.href = 'home.php';
+            timer: 6000
         });
     </script>
 <?php endif; ?>
