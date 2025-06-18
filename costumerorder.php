@@ -347,9 +347,7 @@
             icon: 'warning',
             title: 'The Shop is Closed',
             text: 'The shop is currently closed. You can still place your order now — it will be prepared and delivered once the shop opens.',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            timer: 6000
+            allowOutsideClick: false
         });
     </script>
 <?php endif; ?>

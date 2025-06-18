@@ -337,7 +337,10 @@ error_reporting(E_ALL);
                     if (paymentId === 2) {
                         Swal.fire({
                             title: 'Scan to Pay via GCash',
-                            text: 'Please scan the QR code below to complete your payment.',
+                            html: `
+                                <p>Please upload proof of payment (photo, receipt.):</p>
+                                <input type="file" id="proofpayment" class="swal2-input" accept="image/*,.pdf">
+                            `,
                             imageUrl: 'assets/img/gcash.jpg',
                             imageWidth: 200,
                             imageHeight: 200,
