@@ -259,9 +259,13 @@ error_reporting(E_ALL);
                                             <?php endforeach;?>
                                         </tbody>
                                     </table>
+                                    <div class="text-center mb-3">
+                                        <img src="path_to_your_image.jpg" alt="Order Image" style="max-width: 200px;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div style="margin-bottom: 20px;">
                         <button id="downloadPDF" class="btn btn-danger">
                             <i class="fas fa-file-pdf"></i> Download Receipt as PDF
