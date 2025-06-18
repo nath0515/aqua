@@ -47,7 +47,7 @@ error_reporting(E_ALL);
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $stmt = $conn->prepare("SELECT proof_file FROM orders WHERE order_id = :order_id");
-        $stmt->execute(":order_id" => $order_id);
+        $stmt->execute([':order_id' => $order_id]);
         $proof_file = $stmt->fetchColumn();
 
         $sql = "SELECT date FROM orders WHERE order_id = :order_id";
