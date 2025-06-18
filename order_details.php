@@ -46,9 +46,9 @@ error_reporting(E_ALL);
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare("SELECT proof_file FROM orders WHERE order_id = :order_id");
+        $stmt = $conn->prepare("SELECT proof_file, proofofpayment FROM orders WHERE order_id = :order_id");
         $stmt->execute([':order_id' => $order_id]);
-        $proof_file = $stmt->fetchColumn();
+        $proof_file = $stmt->fetch();
 
         $sql = "SELECT date FROM orders WHERE order_id = :order_id";
         $stmt = $conn->prepare($sql);
@@ -264,8 +264,12 @@ error_reporting(E_ALL);
                                         </tbody>
                                     </table>
                                     <div class="text-center mb-3">
-                                        <img src="<?php echo $proof_file ?>" alt="Order Image" style="max-width: 200px;">
+                                        <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px;">
                                         <p class="mt-2 mb-0 text-muted">Proof of Delivery</p>
+                                    </div>
+                                    <div class="text-center mb-3">
+                                        <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px;">
+                                        <p class="mt-2 mb-0 text-muted">Proof of Payment</p>
                                     </div>
                                 </div>
                             </div>
