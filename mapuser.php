@@ -153,11 +153,11 @@
                     <div id="map"></div>
                     <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add a Label for this Location</label>
-                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" />
+                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" value="<?php echo $user_location['label']?>" />
                     </div>
                     <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
-                        <input type="text" id="address" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" />
+                        <input type="text" id="address" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" value="<?php echo $user_location['address']?>"/>
                     </div>
 
                     <div class="button-group">
