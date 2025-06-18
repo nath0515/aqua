@@ -151,7 +151,7 @@
                 <main>
                 <h2>📍 Pin Your Location</h2>
                     <div id="map"></div>
-                    <div class="mt-3 w-50">
+                    <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add a Label for this Location</label>
                         <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" />
                     </div>
