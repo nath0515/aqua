@@ -265,6 +265,7 @@ error_reporting(E_ALL);
                                     </table>
                                     <div class="text-center mb-3">
                                         <img src="<?php echo $proof_file ?>" alt="Order Image" style="max-width: 200px;">
+                                        <p class="mt-2 mb-0 text-muted">Proof of Delivery</p>
                                     </div>
                                 </div>
                             </div>
