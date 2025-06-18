@@ -6,14 +6,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['lat']) && isset($_POST['lng'])) {
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
-        $user_id = $_SESSION['user_id'];
+        $location_id = $_POST['id'];
+        $label = $_POST['label'];
+        $address = $_POST['address'];
 
         try {
-            $sql = "UPDATE user_details SET latitude = :lat, longitude = :lng WHERE user_id = :user_id";
+            $sql = "UPDATE user_locations SET latitude = :lat, longitude = :lng, label = :label, address = :address WHERE location_id = :location_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':lat', $lat);
             $stmt->bindParam(':lng', $lng);
-            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':label', $label);
+            $stmt->bindParam(':address', $address);
+            $stmt->bindParam(':location_id', $location_id);
             $stmt->execute();
 
             echo "success";

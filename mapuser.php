@@ -157,7 +157,7 @@
                     </div>
                     <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
-                        <input type="text" id="addressLabel" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" />
+                        <input type="text" id="address" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" />
                     </div>
 
                     <div class="button-group">
@@ -271,13 +271,16 @@
         });
 
         document.getElementById("saveLocationBtn").addEventListener("click", function () {
+            let locationLabel = document.getElementById("locationLabel").value;
+            let address = document.getElementById("address").value;
+            let locationId = <?php echo $location_id?>;
             if (selectedLat && selectedLng) {
                 fetch("save_location.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: `lat=${selectedLat}&lng=${selectedLng}`
+                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&id=${locationId}`
                 })
                 .then(response => response.text())
                 .then(result => {
