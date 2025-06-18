@@ -157,7 +157,7 @@
                     </div>
                     <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
-                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" />
+                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" />
                     </div>
 
                     <div class="button-group">
