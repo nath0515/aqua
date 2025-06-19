@@ -18,10 +18,11 @@ if (!is_numeric($lat) || !is_numeric($lon)) {
     exit;
 }
 
-$stmt = $conn->prepare("UPDATE user_details SET current_latitude = ?, current_longitude = ? WHERE user_id = ?");
-$stmt->bind_param("ddi", $lat, $lon, $user_id);
+$stmt = $conn->prepare("UPDATE user_details SET latitude = :lat, longitude = :lon WHERE user_id = :user_id");
+$stmt->bindParam(":lat", $lat);
+$stmt->bindParam(":lon", $lon);
+$stmt->bindParam(":user_id", $user_id);
 $stmt->execute();
-$stmt->close();
 
 echo "OK";
 ?>

@@ -497,7 +497,9 @@
             function sendLocationToServer(lat, lon) {
                 $.post("update_rider_location.php", {
                     latitude: lat,
-                    longitude: lon
+                    longitude: lon,
+                    user_id: <?php echo $_SESSION['user_id']?>
+                    
                 }).fail(function(xhr, status, error) {
                     console.error("Failed to send location:", error);
                 });
