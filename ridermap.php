@@ -281,6 +281,18 @@
             });
         </script>
         <script>
+
+        function sendLocationToServer(lat, lon) {
+            $.post("update_rider_location.php", {
+                latitude: lat,
+                longitude: lon,
+                user_id: <?php echo $_SESSION['user_id']?>
+                
+            }).fail(function(xhr, status, error) {
+                console.error("Failed to send location:", error);
+            });
+        }
+        
         var map = L.map('map').setView([14.1916, 121.1378], 14);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -494,16 +506,7 @@
         }
         </script>
         <script>
-            function sendLocationToServer(lat, lon) {
-                $.post("update_rider_location.php", {
-                    latitude: lat,
-                    longitude: lon,
-                    user_id: <?php echo $_SESSION['user_id']?>
-                    
-                }).fail(function(xhr, status, error) {
-                    console.error("Failed to send location:", error);
-                });
-            }
+            
         </script>
     </body>
 </html>
