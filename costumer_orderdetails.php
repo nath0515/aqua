@@ -206,7 +206,7 @@
                                     </tbody>
                                 </table>
                                 <div class="text-end mt-3">
-                                    <a href="usertracker.php" class="btn btn-primary">Track Your Order</a>
+                                    <a href="usertracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">Track Your Order</a>
                                 </div>
                             </div>
                         </div>

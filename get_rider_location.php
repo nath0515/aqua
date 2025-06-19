@@ -1,15 +1,14 @@
 <?php
 require 'db.php';
 
-if (!isset($_GET['rider_id'])) {
+if (!isset($_GET['rider'])) {
     echo json_encode(['success' => false, 'message' => 'Missing rider ID']);
     exit;
 }
 
-$rider_id = intval($_GET['rider_id']);
+$rider_id = intval($_GET['rider']);
 
 $sql = "SELECT latitude, longitude FROM user_details
-JOIN 
 WHERE rider_id = :rider_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':rider_id', $rider_id);

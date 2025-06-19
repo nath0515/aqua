@@ -3,17 +3,24 @@ require 'session.php';
 require 'db.php';
 
 $user_id = $_SESSION['user_id'];
-$order_id = $_GET['id'];
+if(isset($_GET['id'])){
+    $order_id = $_GET['id'];
+}
+else{
+    header("Location: orders.php");
+}
+
 
 // Fetch user's destination coordinates (optional, for user marker)
-$sql = "SELECT ud.latitude, ud.longitude
+$sql = "SELECT ud.latitude, ud.longitude, o.rider
         FROM orders o
         JOIN user_details ud ON o.user_id = ud.user_id 
         WHERE o.order_id = :order_id AND o.status_id = 3 LIMIT 1";
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':order_id', $order_id);
 $stmt->execute();
 $destination = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -49,7 +56,7 @@ $destination = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         function fetchRiderLocation() {
-            fetch('get_rider_location.php')
+            fetch('get_rider_location.php?rider=<?php echo $destination['rider']?>')
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
