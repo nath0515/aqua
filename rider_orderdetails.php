@@ -38,6 +38,10 @@
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
         $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt = $conn->prepare("SELECT proof_file, proofofpayment, payment_id FROM orders WHERE order_id = :order_id");
+        $stmt->execute([':order_id' => $order_id]);
+        $proof_file = $stmt->fetch();
     }
     
 ?>
@@ -214,6 +218,24 @@
                                         <?php endforeach;?>
                                     </tbody>
                                 </table>
+                                <div class="row">
+                                    <?php if($proof_file['proof_file']):?>
+                                        <div class="col">
+                                            <div class="text-center mb-3">
+                                                <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <p class="mt-2 mb-0 text-muted">Proof of Delivery</p>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if($proof_file['payment_id'] == 2 && $proof_file['proofofpayment']):?>
+                                        <div class="col">
+                                            <div class="text-center mb-3">
+                                                <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <p class="mt-2 mb-0 text-muted">Proof of Payment</p>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>   
                             </div>
                         </div>
                     </div>
