@@ -9,7 +9,7 @@ if (!isset($_GET['rider'])) {
 $rider_id = intval($_GET['rider']);
 
 $sql = "SELECT latitude, longitude FROM user_details
-WHERE rider_id = :rider_id";
+WHERE user_id = :rider_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':rider_id', $rider_id);
 $stmt->execute();
