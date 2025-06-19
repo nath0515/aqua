@@ -280,11 +280,7 @@ error_reporting(E_ALL);
                                                 </div>
                                             </div>
                                         <?php endif; ?>
-                                    </div>
-                                    
-                                    
-                                    
-                                    
+                                    </div>   
                                 </div>
                             </div>
                         </div>
