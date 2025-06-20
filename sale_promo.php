@@ -25,7 +25,6 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -238,6 +237,11 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
+                                            <?php 
+                                                $sql = "SELECT quantity FROM orderitems WHERE order_id = :order_id";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute(['order_id' => order_id]);    
+                                            ?>
                                             <tr>
                                                 <td><?php echo $row['order_id'];?></td>
                                                 <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>

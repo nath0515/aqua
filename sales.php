@@ -214,7 +214,7 @@
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
                                 <div class="text-end mt-3">
-                                    <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">Track Your Order</a>
+                                    <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
                                 </div>
                             </div>
                         </form>
