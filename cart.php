@@ -223,15 +223,12 @@ error_reporting(E_ALL);
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6 text-end">
-                                    <button class="btn btn-success">Reserve</button>
-                                </div>
-
                                 <!-- Checkout Section -->
                                 <div class="col-md-6 text-end">
                                     <p class="mb-1">Total (<span id="selected-count">0</span> item): 
                                         <strong>₱<span id="total-price">0</span></strong>
                                     </p>
+                                    <button class="btn btn-success">Reserve</button>
                                     <button class="btn btn-warning">Check Out</button>
                                 </div>
                             </div>
