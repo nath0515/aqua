@@ -197,7 +197,7 @@
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Analytics</li>
-                            <li class="breadcrumb-item active"><a href="sales.php">Sales</li>
+                            <li class="breadcrumb-item active"><a href="sales.php">Sales</a></li>
                             <li class="breadcrumb-item active">Promo Sales</li>
                         </ol>
                         <form action="expenses.php" method="GET">
@@ -245,7 +245,9 @@
                                                 $quantity = $stmt->fetch();
 
                                                 foreach($quantity as $row1){
-                                                    
+                                                    if($row1['quantity'] >= 10){
+                                                        
+                                                    }
                                                 }
                                             ?>
                                             <tr>
