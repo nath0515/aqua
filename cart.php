@@ -223,6 +223,9 @@ error_reporting(E_ALL);
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-6 text-end">
+                                    <button class="btn btn-success">Reserve</button>
+                                </div>
 
                                 <!-- Checkout Section -->
                                 <div class="col-md-6 text-end">
