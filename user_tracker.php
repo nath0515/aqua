@@ -9,6 +9,13 @@
     }else if ($role_id == 3){
         header("Location: riderdashboard.php");
     }
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    JOIN user_details ud ON u.user_id = ud.user_id
+    WHERE u.user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $sql = "SELECT ud.latitude, ud.longitude, o.rider
         FROM orders o
