@@ -2,8 +2,14 @@
     require 'session.php';
     require 'db.php';
 
-    $user_id = $_SESSION['user_id'];
     $role_id = $_SESSION['role_id'];
+    $user_id = $_SESSION['user_id'];
+    if(isset($_GET['id'])){
+        $order_id = $_GET['id'];
+    }
+    else{
+        header("Location: orders.php");
+    }
     if($role_id == 1){
         header("Location: index.php");
     }else if ($role_id == 3){
