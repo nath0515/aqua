@@ -371,7 +371,18 @@
             sendLocationToServer(position.coords.latitude, position.coords.longitude);
 
             if (!currentStartMarker) {
-                currentStartMarker = L.marker(currentStartCoord).addTo(map).bindPopup("You").openPopup();
+                const riderIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/2967/2967350.png', // You can replace this with your preferred image
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+
+            if (!currentStartMarker) {
+                currentStartMarker = L.marker(currentStartCoord, { icon: riderIcon }).addTo(map).bindPopup("You (Rider)").openPopup();
+            } else {
+                currentStartMarker.setLatLng(currentStartCoord).setIcon(riderIcon);
+            }
             } else {
                 currentStartMarker.setLatLng(currentStartCoord);
             }
