@@ -373,7 +373,7 @@
             if (!currentStartMarker) {
                 const riderIcon = L.icon({
                 iconUrl: 'https://cdn-icons-png.flaticon.com/512/11431/11431942.png', // You can replace this with your preferred image
-                iconSize: [40, 40],
+                iconSize: [20, 20],
                 iconAnchor: [20, 40],
                 popupAnchor: [0, -40]
             });
