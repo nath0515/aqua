@@ -10,18 +10,14 @@
         header("Location: riderdashboard.php");
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
-    JOIN user_details ud ON u.user_id = ud.user_id
-    WHERE u.user_id = :user_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $sql = "SELECT * FROM orderstatus";
+    $sql = "SELECT ud.latitude, ud.longitude, o.rider
+        FROM orders o
+        JOIN user_details ud ON o.user_id = ud.user_id  
+        WHERE o.order_id = :order_id AND o.status_id = 3 LIMIT 1";
         $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
-        $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $destination = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +33,12 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <title>Track My Delivery</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <style>
+            #map { height: 500px; width: 100%; margin-top: 20px; }
+    </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -204,62 +206,69 @@
             });
         </script>
         <script>
-            let table;
+            document.addEventListener("DOMContentLoaded", function() {
+    // Initialize Simple DataTable for the orders table
+    const datatablesSimple = document.getElementById('datatablesSimple');
+    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
 
-            document.addEventListener("DOMContentLoaded", function () {
-            const datatablesSimple = document.getElementById('datatablesSimple');
-
-            if (datatablesSimple) {
-                table = new simpleDatatables.DataTable(datatablesSimple, {
-                perPage: 10 // ✅ Show 5 rows per page
-                });
+    // Function to fetch orders from the backend
+    function fetchOrders() {
+        fetch('process_usercheckorders.php', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateOrdersTable(data.orders);
+            } else {
+                console.error("Failed to fetch orders:", data.message);
             }
+        })
+        .catch(error => console.error("Error fetching orders:", error));
+    }
 
-            function fetchOrders() {
-                fetch('process_usercheckorders.php')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                    updateOrdersTable(data.orders);
-                    }
-                });
-            }
+    // Function to update the Simple DataTable with new order data
+    function updateOrdersTable(orders) {
+        // Clear the existing rows in the table
+        const tbody = datatablesSimple.querySelector('tbody');
+        if (tbody) {
+            tbody.innerHTML = ''; // Clear existing rows
+        }
 
-            function updateOrdersTable(orders) {
-                const tbody = datatablesSimple.querySelector('tbody');
-                tbody.innerHTML = '';
-
-                orders.forEach(order => {
-                const row = document.createElement('tr');
-                const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
-                row.innerHTML = `
-                    <td>${order.date}</td>
-                    <td>₱${order.amount}</td>
-                    <td>${order.firstname} ${order.lastname}</td>
-                    <td>${order.contact_number}</td>
-                    <td>${order.address}</td>
-                    <td>${order.status_name}</td>
-                    <td>${riderName}</td>
-                    <td>
+        // Add the new rows to the table
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
+            row.innerHTML = `
+                <td>${order.date}</td>
+                <td>₱${order.amount}</td>
+                <td>${order.firstname} ${order.lastname}</td>
+                <td>${order.contact_number}</td>
+                <td>${order.address}</td>
+                <td>${order.status_name}</td>
+                <td>${riderName}</td>
+                <td>
                     <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
                         <i class="bi bi-eye"></i> View
                     </a>
-                    </td>`;
-                tbody.appendChild(row);
-                });
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
 
-                if (table) {
-                table.destroy(); // Re-initialize to refresh pagination
-                table = new simpleDatatables.DataTable(datatablesSimple, {
-                    perPage: 5
-                });
-                }
-            }
+        // Re-initialize Simple DataTable after updating the rows
+        if (table) {
+            table.update();
+        }
+    }
 
-            fetchOrders();
-            setInterval(fetchOrders, 3000);
-            });
+    // Fetch orders initially when the page loads
+    fetchOrders();
 
+    // Set up the interval to fetch orders every 10 seconds
+    setInterval(fetchOrders, 3000);
+});
 
         </script>
     </body>
