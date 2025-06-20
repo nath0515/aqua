@@ -200,38 +200,40 @@ error_reporting(E_ALL);
                                     <label for="select-all" class="mb-0">Select All</label>
                                 </div>
                                 <div class="row align-items-end">
-                                <!-- Payment Method -->
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-default">
-                                        <label>Address</label>
-                                        <select name="payment_id" id="payment_id" class="form-select">
-                                            <option value="0">Select Address</option>
-                                            <?php foreach($payment_data as $row): ?>
-                                                <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                    <!-- Payment Method -->
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Address</label>
+                                            <select name="payment_id" id="payment_id" class="form-select">
+                                                <option value="0">Select Address</option>
+                                                <?php foreach($payment_data as $row): ?>
+                                                    <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Payment Method</label>
+                                            <select name="payment_id" id="payment_id" class="form-select">
+                                                <option value="0">Select Payment Method</option>
+                                                <?php foreach($payment_data as $row): ?>
+                                                    <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-default">
-                                        <label>Payment Method</label>
-                                        <select name="payment_id" id="payment_id" class="form-select">
-                                            <option value="0">Select Payment Method</option>
-                                            <?php foreach($payment_data as $row): ?>
-                                                <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                <div class="row align-items-end">
+                                    <!-- Checkout Section -->
+                                    <div class="col-md-6 text-end">
+                                        <p class="mb-1">Total (<span id="selected-count">0</span> item): 
+                                            <strong>₱<span id="total-price">0</span></strong>
+                                        </p>
+                                        <button class="btn btn-success">Reserve</button>
+                                        <button class="btn btn-warning">Check Out</button>
                                     </div>
                                 </div>
-                                <!-- Checkout Section -->
-                                <div class="col-md-6 text-end">
-                                    <p class="mb-1">Total (<span id="selected-count">0</span> item): 
-                                        <strong>₱<span id="total-price">0</span></strong>
-                                    </p>
-                                    <button class="btn btn-success">Reserve</button>
-                                    <button class="btn btn-warning">Check Out</button>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
