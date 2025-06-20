@@ -193,11 +193,12 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Sales</h1>
+                        <h1 class="mt-4">Promo Sales</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Analytics</li>
-                            <li class="breadcrumb-item active">Sales</li>
+                            <li class="breadcrumb-item active"><a href="sales.php">Sales</li>
+                            <li class="breadcrumb-item active">Promo Sales</li>
                         </ol>
                         <form action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
@@ -240,7 +241,12 @@
                                             <?php 
                                                 $sql = "SELECT quantity FROM orderitems WHERE order_id = :order_id";
                                                 $stmt = $conn->prepare($sql);
-                                                $stmt->execute(['order_id' => order_id]);    
+                                                $stmt->execute(['order_id' => $row['order_id']]);
+                                                $quantity = $stmt->fetch();
+
+                                                foreach($quantity as $row1){
+                                                    
+                                                }
                                             ?>
                                             <tr>
                                                 <td><?php echo $row['order_id'];?></td>
