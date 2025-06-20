@@ -113,47 +113,10 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Order History</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="home.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Order History</li>
-                        </ol>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Order History
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Amount (₱)</th>
-                                            <th>Full Name</th>
-                                            <th>Contact #</th>
-                                            <th>Address</th>
-                                            <th>Status</th>
-                                            <th>Rider</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            
-                        </div>
-                    </div>
-                </footer>
+                    <h2 style="text-align:center;">Live Delivery Tracking</h2>
+                        <div id="map"></div>
+
+                    
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -166,110 +129,88 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
+            var map = L.map('map').setView([14.1916, 121.1378], 13);
 
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
 
-                                $("#editStatusId").val(response.data.status_id);
+            var riderMarker = null;
+            var destinationMarker = null;
+            var routeLine = null;
 
+            const userDestination = <?php echo json_encode($destination); ?>;
 
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-    // Initialize Simple DataTable for the orders table
-    const datatablesSimple = document.getElementById('datatablesSimple');
-    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
-
-    // Function to fetch orders from the backend
-    function fetchOrders() {
-        fetch('process_usercheckorders.php', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateOrdersTable(data.orders);
-            } else {
-                console.error("Failed to fetch orders:", data.message);
+            if (userDestination && userDestination.latitude && userDestination.longitude) {
+                destinationMarker = L.marker(
+                    [userDestination.latitude, userDestination.longitude],
+                    { title: "Your Delivery Address" }
+                ).addTo(map).bindPopup("Your Delivery Address").openPopup();
             }
-        })
-        .catch(error => console.error("Error fetching orders:", error));
-    }
 
-    // Function to update the Simple DataTable with new order data
-    function updateOrdersTable(orders) {
-        // Clear the existing rows in the table
-        const tbody = datatablesSimple.querySelector('tbody');
-        if (tbody) {
-            tbody.innerHTML = ''; // Clear existing rows
-        }
+            function fetchRiderLocation() {
+                fetch('get_rider_location.php?rider=<?php echo $destination['rider']?>')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            const lat = parseFloat(data.data.latitude);
+                            const lon = parseFloat(data.data.longitude);
 
-        // Add the new rows to the table
-        orders.forEach(order => {
-            const row = document.createElement('tr');
-            const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
-            row.innerHTML = `
-                <td>${order.date}</td>
-                <td>₱${order.amount}</td>
-                <td>${order.firstname} ${order.lastname}</td>
-                <td>${order.contact_number}</td>
-                <td>${order.address}</td>
-                <td>${order.status_name}</td>
-                <td>${riderName}</td>
-                <td>
-                    <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                        <i class="bi bi-eye"></i> View
-                    </a>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
+                            // Update or create rider marker
+                            if (!riderMarker) {
+                                riderMarker = L.marker([lat, lon], {
+                                    icon: L.icon({
+                                        iconUrl: 'https://cdn-icons-png.flaticon.com/512/11431/11431942.png',
+                                        iconSize: [35, 35],
+                                        iconAnchor: [17, 34],
+                                        popupAnchor: [0, -30]
+                                    })
+                                }).addTo(map).bindPopup("Your Rider").openPopup();
+                            } else {
+                                riderMarker.setLatLng([lat, lon]);
+                            }
 
-        // Re-initialize Simple DataTable after updating the rows
-        if (table) {
-            table.update();
-        }
-    }
+                            // Draw route from rider to destination
+                            if (userDestination && userDestination.latitude && userDestination.longitude) {
+                                drawRoute([lon, lat], [userDestination.longitude, userDestination.latitude]);
+                            }
+                        } else {
+                            console.warn("No rider location found.");
+                            if (routeLine) {
+                                map.removeLayer(routeLine);
+                                routeLine = null;
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error fetching rider location:", err);
+                    });
+            }
 
-    // Fetch orders initially when the page loads
-    fetchOrders();
+            function drawRoute(start, end) {
+                const apiKey = '5b3ce3597851110001cf62482a9443360351456aad8e8b2d7e75c259'; // OpenRouteService demo key
 
-    // Set up the interval to fetch orders every 10 seconds
-    setInterval(fetchOrders, 3000);
-});
+                const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start[0]},${start[1]}&end=${end[0]},${end[1]}`;
 
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const coords = data.features[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+
+                        if (routeLine) {
+                            map.removeLayer(routeLine);
+                        }
+
+                        routeLine = L.polyline(coords, { color: 'blue', weight: 4 }).addTo(map);
+                        map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching route:', error);
+                    });
+            }
+
+            fetchRiderLocation();
+            setInterval(fetchRiderLocation, 5000);
         </script>
     </body>
 </html>
