@@ -25,6 +25,7 @@
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -212,9 +213,6 @@
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary">Filter</button>
-                                </div>
-                                <div class="text-end mt-3">
-                                    <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">Track Your Order</a>
                                 </div>
                             </div>
                         </form>

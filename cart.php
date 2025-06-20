@@ -41,6 +41,11 @@ error_reporting(E_ALL);
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT * FROM user_locations WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([':user_id' => $user_id]);
+    $user_locations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -206,8 +211,8 @@ error_reporting(E_ALL);
                                             <label>Address</label>
                                             <select name="payment_id" id="payment_id" class="form-select">
                                                 <option value="0">Select Address</option>
-                                                <?php foreach($payment_data as $row): ?>
-                                                    <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                                <?php foreach($user_locations as $row): ?>
+                                                    <option value="<?php echo $row['location_id']?>"><?php echo $row['label']?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
