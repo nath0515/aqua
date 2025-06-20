@@ -241,8 +241,8 @@
                                             <?php 
                                                 $sql = "SELECT quantity FROM orderitems WHERE order_id = :order_id";
                                                 $stmt = $conn->prepare($sql);
-                                                $stmt->execute(['order_id' => $row['order_id']]);
-                                                $quantity = $stmt->fetch();
+                                                $stmt->execute([':order_id' => $row['order_id']]);
+                                                $quantity = $stmt->fetchAll();
 
                                                 foreach($quantity as $row1):
                                             ?>
