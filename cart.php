@@ -224,7 +224,7 @@ error_reporting(E_ALL);
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row align-items-end">
+                                <div class="row">
                                     <!-- Checkout Section -->
                                     <div class="col-md-6 text-end">
                                         <p class="mb-1">Total (<span id="selected-count">0</span> item): 
