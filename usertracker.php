@@ -68,7 +68,7 @@ $destination = $stmt->fetch(PDO::FETCH_ASSOC);
                     if (!riderMarker) {
                         riderMarker = L.marker([lat, lon], {
                             icon: L.icon({
-                                iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+                                iconUrl: 'https://cdn-icons-png.flaticon.com/512/11431/11431942.png',
                                 iconSize: [35, 35],
                                 iconAnchor: [17, 34],
                                 popupAnchor: [0, -30]
