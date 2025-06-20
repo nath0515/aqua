@@ -244,50 +244,49 @@
                                                 $stmt->execute(['order_id' => $row['order_id']]);
                                                 $quantity = $stmt->fetch();
 
-                                                foreach($quantity as $row1){
-                                                    if($row1['quantity'] >= 10){
-                                                        
-                                                    }
-                                                }
+                                                foreach($quantity as $row1):
                                             ?>
-                                            <tr>
-                                                <td><?php echo $row['order_id'];?></td>
-                                                <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
-                                                <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
-                                                <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
-                                                <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
-                                                    <?php
-                                                        $status = htmlspecialchars($row['status_name']);
-                                                        $badgeClass = 'bg-secondary'; // Default for unknown status
+                                                <?php if($row1['quantity'] >= 10):?>
+                                                    <tr>
+                                                        <td><?php echo $row['order_id'];?></td>
+                                                        <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
+                                                        <td>₱<?php echo $row['amount'];?></td>
+                                                        <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
+                                                        <td><?php echo $row['contact_number'];?></td>
+                                                        <td><?php echo $row['address'];?></td>
+                                                        <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
+                                                            <?php
+                                                                $status = htmlspecialchars($row['status_name']);
+                                                                $badgeClass = 'bg-secondary'; // Default for unknown status
 
-                                                        // Assign colors to each status
-                                                        if ($status === 'Pending') {
-                                                            $badgeClass = 'bg-light'; // Light grey for pending
-                                                        } elseif ($status === 'Accepted') {
-                                                            $badgeClass = 'bg-primary'; // Blue for accepted
-                                                        } elseif ($status === 'Delivering') {
-                                                            $badgeClass = 'bg-warning text-dark'; // Yellow with dark text for delivering
-                                                        } elseif ($status === 'Delivered') {
-                                                            $badgeClass = 'bg-success'; // Green for delivered
-                                                        } elseif ($status === 'Completed') {
-                                                            $badgeClass = 'bg-info'; // Light blue for completed
-                                                        } elseif ($status === 'Cancel') {
-                                                            $badgeClass = 'bg-danger'; // Red for cancelled
-                                                        }
-                                                    ?>
-                                                    <span class="badge <?= $badgeClass ?>">
-                                                        <?= $status ?>
-                                                    </span>
-                                                </div>
-                                                <td><?php echo $row['rider'];?></td>
-                                                <td>
-                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                                // Assign colors to each status
+                                                                if ($status === 'Pending') {
+                                                                    $badgeClass = 'bg-light'; // Light grey for pending
+                                                                } elseif ($status === 'Accepted') {
+                                                                    $badgeClass = 'bg-primary'; // Blue for accepted
+                                                                } elseif ($status === 'Delivering') {
+                                                                    $badgeClass = 'bg-warning text-dark'; // Yellow with dark text for delivering
+                                                                } elseif ($status === 'Delivered') {
+                                                                    $badgeClass = 'bg-success'; // Green for delivered
+                                                                } elseif ($status === 'Completed') {
+                                                                    $badgeClass = 'bg-info'; // Light blue for completed
+                                                                } elseif ($status === 'Cancel') {
+                                                                    $badgeClass = 'bg-danger'; // Red for cancelled
+                                                                }
+                                                            ?>
+                                                            <span class="badge <?= $badgeClass ?>">
+                                                                <?= $status ?>
+                                                            </span>
+                                                        </div>
+                                                        <td><?php echo $row['rider'];?></td>
+                                                        <td>
+                                                            <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
+                                                                <i class="bi bi-eye"></i> View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
                                         <?php endforeach;?>
                                     </tbody>
                                 </table>
