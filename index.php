@@ -129,7 +129,7 @@ $sma = round($totalQuantity / 7);
 
             .notification-text{
                 white-space: nowrap;
-                overflow: hidden;
+                overflow: hidden;D
                 text-overflow: ellipsis;
                 display: block;
                 max-width: 200px;

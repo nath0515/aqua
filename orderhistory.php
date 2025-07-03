@@ -208,6 +208,9 @@
     // Initialize Simple DataTable for the orders table
     const datatablesSimple = document.getElementById('datatablesSimple');
     const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
+    table = new simpleDatatables.DataTable("#datatablesSimple", {
+        perPage: 10
+    });
 
     // Function to fetch orders from the backend
     function fetchOrders() {
