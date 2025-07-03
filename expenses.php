@@ -266,10 +266,6 @@
                                 <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
                             </div>
                         </div>
-                        <div>
-                            <label class="form-label d-block">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
