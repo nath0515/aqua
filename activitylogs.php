@@ -41,6 +41,36 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+                <?php 
+                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $activity_logs = $stmt->fetchAll();
+                ?>
+                
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                            <?php if ($unread_count > 0): ?>
+                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                    <?php echo $unread_count; ?>
+                                    <span class="visually-hidden">unread notifications</span>
+                                </span>
+                            <?php endif; ?>
+                            <span class="visually-hidden">unread notifications</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <?php foreach($activity_logs as $row):?>
+                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
+                        <hr>
+                        <?php endforeach; ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
