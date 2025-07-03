@@ -267,32 +267,33 @@
                                     <label class="form-label d-block">Quick Filter</label>
                                     <div class="dropdown">
                                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                            <?= $filter_range_val ? ucfirst($filter_range_val) : 'Select Range' ?>
+                                            <?php
+                                            $labels = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            echo $labels[$filter_range_val] ?? 'Select Range';
+                                            ?>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item <?= $filter_range_val === 'today' ? 'active' : '' ?>" href="#" data-value="today">Today</a></li>
-                                            <li><a class="dropdown-item <?= $filter_range_val === 'week' ? 'active' : '' ?>" href="#" data-value="week">This Week</a></li>
-                                            <li><a class="dropdown-item <?= $filter_range_val === 'month' ? 'active' : '' ?>" href="#" data-value="month">This Month</a></li>
-                                            <li><a class="dropdown-item <?= $filter_range_val === 'year' ? 'active' : '' ?>" href="#" data-value="year">This Year</a></li>
+                                            <?php
+                                            $ranges = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            foreach ($ranges as $key => $label): ?>
+                                                <li>
+                                                    <a class="dropdown-item <?= ($filter_range_val === $key) ? 'active bg-primary text-white' : '' ?>" href="#" data-value="<?= $key ?>">
+                                                        <?= $label ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
                                         </ul>
+
                                         <!-- Hidden input for dropdown value -->
                                         <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
                                     </div>
                                 </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
+                                </div>
                             </div>
                         </form>
-
-                        <!-- JavaScript to handle dropdown selection -->
-                        <script>
-                            document.querySelectorAll('.dropdown-item').forEach(item => {
-                                item.addEventListener('click', function (e) {
-                                    e.preventDefault();
-                                    const value = this.getAttribute('data-value');
-                                    document.getElementById('filter_range_input').value = value;
-                                    document.getElementById('filterForm').submit();
-                                });
-                            });
-                        </script>
 
                         <div class="card mb-4">
                             <div class="card-header">
@@ -499,15 +500,22 @@
             <?php endif; ?>
         </script>
         <?php endif; ?>
+        <!-- JavaScript to handle dropdown selection -->
         <script>
-            document.querySelectorAll('.dropdown-item').forEach(item => {
-                item.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const value = this.getAttribute('data-value');
-                    document.getElementById('filter_range_input').value = value;
-                    document.getElementById('filterForm').submit();
-                });
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const value = this.getAttribute('data-value');
+
+                // Clear manual date inputs
+                document.getElementById('start_date').value = '';
+                document.getElementById('end_date').value = '';
+
+                // Set and submit quick filter
+                document.getElementById('filter_range_input').value = value;
+                document.getElementById('filterForm').submit();
             });
+        });
         </script>
     </body>
 </html>
