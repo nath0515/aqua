@@ -207,7 +207,10 @@
             document.addEventListener("DOMContentLoaded", function() {
     // Initialize Simple DataTable for the orders table
     const datatablesSimple = document.getElementById('datatablesSimple');
-    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple) : null;
+    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple, {
+            perPage: 10,
+            perPageSelect: [5, 10, 25, 50, 100]
+    }) : null;
 
     // Function to fetch orders from the backend
     function fetchOrders() {
