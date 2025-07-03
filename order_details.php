@@ -451,7 +451,7 @@ error_reporting(E_ALL);
         </script>
         <script>
             document.getElementById("downloadPDF").addEventListener("click", function () {
-                document.getElementById("processedBy").innerHTML = "Processed By: <?php echo $user_data['firstname'].' '$user_data['lastname']?>";
+                document.getElementById("processedBy").innerHTML = "Processed By: <?php echo $user_data['firstname'].' '.$user_data['lastname']?>";
                 const { jsPDF } = window.jspdf;
 
                 const report = document.getElementById("reportContent");
