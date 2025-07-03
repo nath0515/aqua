@@ -18,51 +18,57 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
-        $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
+    $start_date_val = $_GET['start_date'] ?? '';
+    $end_date_val = $_GET['end_date'] ?? '';
+    $filter_range_val = $_GET['filter_range'] ?? '';
 
-        if (validateDate($start_date) && validateDate($end_date)) {
-            $start_datetime = $start_date . ' 00:00:00';
-            $end_datetime = $end_date . ' 23:59:59';
-
-            $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id WHERE date BETWEEN :start_date AND :end_date";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
-            $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
-            $stmt->execute();
-
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        }if (isset($_GET['filter_range']) && $_GET['filter_range'] !== '') {
-            $range = $_GET['filter_range'];
-            switch ($range) {
-                case 'today':
-                    $start_date_val = $end_date_val = date('Y-m-d');
-                    break;
-                case 'week':
-                    $start_date_val = date('Y-m-d', strtotime('monday this week'));
-                    $end_date_val = date('Y-m-d', strtotime('sunday this week'));
-                    break;
-                case 'month':
-                    $start_date_val = date('Y-m-01');
-                    $end_date_val = date('Y-m-t');
-                    break;
-                case 'year':
-                    $start_date_val = date('Y-01-01');
-                    $end_date_val = date('Y-12-31');
-                    break;
-            }
+    // Step 1: Handle quick filter first (this sets start/end values)
+    if ($filter_range_val !== '') {
+        switch ($filter_range_val) {
+            case 'today':
+                $start_date_val = $end_date_val = date('Y-m-d');
+                break;
+            case 'week':
+                $start_date_val = date('Y-m-d', strtotime('monday this week'));
+                $end_date_val = date('Y-m-d', strtotime('sunday this week'));
+                break;
+            case 'month':
+                $start_date_val = date('Y-m-01');
+                $end_date_val = date('Y-m-t');
+                break;
+            case 'year':
+                $start_date_val = date('Y-01-01');
+                $end_date_val = date('Y-12-31');
+                break;
         }
     }
-    else{
-        $sql = "SELECT date,expensetype_name,comment,amount FROM expense e1 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id ";
+
+    // Step 2: If start & end dates are valid, run filter
+    if (validateDate($start_date_val) && validateDate($end_date_val)) {
+        $start_datetime = $start_date_val . ' 00:00:00';
+        $end_datetime = $end_date_val . ' 23:59:59';
+
+        $sql = "SELECT date, expensetype_name, comment, amount 
+                FROM expense e1 
+                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id 
+                WHERE date BETWEEN :start_date AND :end_date";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
+        $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        // Default: show all
+        $sql = "SELECT date, expensetype_name, comment, amount 
+                FROM expense e1 
+                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
+
 
     function validateDate($date) {
         $d = DateTime::createFromFormat('Y-m-d', $date);
@@ -238,11 +244,6 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
-                        <?php
-                            $start_date_val = $_GET['start_date'] ?? '';
-                            $end_date_val = $_GET['end_date'] ?? '';
-                            $filter_range_val = $_GET['filter_range'] ?? '';
-                        ?>
                         <form id="filterForm" action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <!-- Manual date filters -->

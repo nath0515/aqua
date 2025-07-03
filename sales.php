@@ -202,41 +202,25 @@ ini_set('display_errors', 1);
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Sales</li>
                         </ol>
-                        <?php
-                            $start_date_val = $_GET['start_date'] ?? '';
-                            $end_date_val = $_GET['end_date'] ?? '';
-                            $filter_range_val = $_GET['filter_range'] ?? '';
-                            ?>
-
-                            <form action="expenses.php" method="GET">
-                                <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
-                                    <div>
-                                        <label for="start_date" class="form-label">Start Date</label>
-                                        <input type="date" id="start_date" name="start_date" value="<?= htmlspecialchars($start_date_val) ?>" class="form-control">
-                                    </div>
-                                    <div>
-                                        <label for="end_date" class="form-label">End Date</label>
-                                        <input type="date" id="end_date" name="end_date" value="<?= htmlspecialchars($end_date_val) ?>" class="form-control">
-                                    </div>
-                                    <div>
-                                        <label for="filter_range" class="form-label">Quick Filter</label>
-                                        <select name="filter_range" id="filter_range" class="form-select">
-                                            <option value="">-- Select --</option>
-                                            <option value="today" <?= $filter_range_val === 'today' ? 'selected' : '' ?>>Today</option>
-                                            <option value="week" <?= $filter_range_val === 'week' ? 'selected' : '' ?>>This Week</option>
-                                            <option value="month" <?= $filter_range_val === 'month' ? 'selected' : '' ?>>This Month</option>
-                                            <option value="year" <?= $filter_range_val === 'year' ? 'selected' : '' ?>>This Year</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label d-block">&nbsp;</label>
-                                        <button type="submit" class="btn btn-primary">Filter</button>
-                                    </div>
-                                    <div class="text-end mt-3">
-                                        <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
-                                    </div>
+                        <form action="sales.php" method="GET">
+                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <div>
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
                                 </div>
-                            </form>
+                                <div>
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
+                                </div>
+                            </div>
+                        </form>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
