@@ -282,6 +282,10 @@ ini_set('display_errors', 1);
                                         <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range) ?>">
                                     </div>
                                 </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
+                                </div>
                                 <div class="text-end mt-3">
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
                                 </div>
