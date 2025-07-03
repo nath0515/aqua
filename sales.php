@@ -20,8 +20,33 @@ ini_set('display_errors', 1);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $filter_range = $_GET['filter_range'] ?? null;
     $start_date = $_GET['start_date'] ?? null;
     $end_date = $_GET['end_date'] ?? null;
+
+    if ($filter_range) {
+        // Determine dates based on quick filter
+        $today = date('Y-m-d');
+        
+        switch ($filter_range) {
+            case 'today':
+                $start_date = $today;
+                $end_date = $today;
+                break;
+            case 'week':
+                $start_date = date('Y-m-d', strtotime('monday this week'));
+                $end_date = date('Y-m-d', strtotime('sunday this week'));
+                break;
+            case 'month':
+                $start_date = date('Y-m-01');
+                $end_date = date('Y-m-t');
+                break;
+            case 'year':
+                $start_date = date('Y-01-01');
+                $end_date = date('Y-12-31');
+                break;
+        }
+    }
 
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, CONCAT(r.firstname, ' ', r.lastname) as rider FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
