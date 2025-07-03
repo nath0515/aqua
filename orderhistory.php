@@ -259,6 +259,9 @@
                 function renderPagination(total, page, perPage) {
                     const totalPages = Math.ceil(total / perPage);
                     let html = '';
+                    const maxVisible = 5; // max page buttons visible
+                    const start = Math.max(1, page - Math.floor(maxVisible / 2));
+                    const end = Math.min(totalPages, start + maxVisible - 1);
 
                     if (totalPages <= 1) {
                         paginationContainer.innerHTML = '';
@@ -269,8 +272,22 @@
                         html += `<button class="btn btn-sm btn-outline-primary me-1" data-page="${page - 1}">Previous</button>`;
                     }
 
-                    for (let i = 1; i <= totalPages; i++) {
+                    if (start > 1) {
+                        html += `<button class="btn btn-sm btn-outline-primary me-1" data-page="1">1</button>`;
+                        if (start > 2) {
+                            html += `<span class="me-1">...</span>`;
+                        }
+                    }
+
+                    for (let i = start; i <= end; i++) {
                         html += `<button class="btn btn-sm ${i === page ? 'btn-primary' : 'btn-outline-primary'} me-1" data-page="${i}">${i}</button>`;
+                    }
+
+                    if (end < totalPages) {
+                        if (end < totalPages - 1) {
+                            html += `<span class="me-1">...</span>`;
+                        }
+                        html += `<button class="btn btn-sm btn-outline-primary me-1" data-page="${totalPages}">${totalPages}</button>`;
                     }
 
                     if (page < totalPages) {
@@ -279,10 +296,12 @@
 
                     paginationContainer.innerHTML = html;
 
-                    paginationContainer.querySelectorAll('button').forEach(button => {
+                    // Add event listeners
+                    paginationContainer.querySelectorAll('button[data-page]').forEach(button => {
                         button.addEventListener('click', () => {
-                            currentPage = parseInt(button.getAttribute('data-page'));
-                            fetchOrders(currentPage);
+                            const newPage = parseInt(button.getAttribute('data-page'));
+                            currentPage = newPage;
+                            fetchOrders(newPage);
                         });
                     });
                 }
