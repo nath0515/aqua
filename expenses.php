@@ -35,6 +35,25 @@
 
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        }if (isset($_GET['filter_range']) && $_GET['filter_range'] !== '') {
+            $range = $_GET['filter_range'];
+            switch ($range) {
+                case 'today':
+                    $start_date_val = $end_date_val = date('Y-m-d');
+                    break;
+                case 'week':
+                    $start_date_val = date('Y-m-d', strtotime('monday this week'));
+                    $end_date_val = date('Y-m-d', strtotime('sunday this week'));
+                    break;
+                case 'month':
+                    $start_date_val = date('Y-m-01');
+                    $end_date_val = date('Y-m-t');
+                    break;
+                case 'year':
+                    $start_date_val = date('Y-01-01');
+                    $end_date_val = date('Y-12-31');
+                    break;
+            }
         }
     }
     else{
@@ -224,48 +243,56 @@
                             $end_date_val = $_GET['end_date'] ?? '';
                             $filter_range_val = $_GET['filter_range'] ?? '';
                         ?>
-                        <div class="d-flex mb-3">
-                            <button class="btn btn-success btn-round me-2" data-bs-toggle="modal" data-bs-target="#addexpense">
-                                <i class="fa fa-plus"></i>
-                                Add Expense
-                            </button> 
-                            <button class="btn btn-success btn-round" data-bs-toggle="modal" data-bs-target="#addexpensetype">
-                                <i class="fa fa-plus"></i>
-                                Add Expense Type
-                            </button>
-                        </div>                      
-                        <form action="expenses.php" method="GET">
+                        <form id="filterForm" action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <!-- Manual date filters -->
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                    <input type="date" id="start_date" name="start_date" value="<?= htmlspecialchars($start_date_val) ?>" class="form-control">
                                 </div>
                                 <div>
                                     <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                    <input type="date" id="end_date" name="end_date" value="<?= htmlspecialchars($end_date_val) ?>" class="form-control">
                                 </div>
+
+                                <!-- Submit button -->
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
+
+                                <!-- Quick filter dropdown -->
+                                <div>
+                                    <label class="form-label d-block">Quick Filter</label>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <?= $filter_range_val ? ucfirst($filter_range_val) : 'Select Range' ?>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item <?= $filter_range_val === 'today' ? 'active' : '' ?>" href="#" data-value="today">Today</a></li>
+                                            <li><a class="dropdown-item <?= $filter_range_val === 'week' ? 'active' : '' ?>" href="#" data-value="week">This Week</a></li>
+                                            <li><a class="dropdown-item <?= $filter_range_val === 'month' ? 'active' : '' ?>" href="#" data-value="month">This Month</a></li>
+                                            <li><a class="dropdown-item <?= $filter_range_val === 'year' ? 'active' : '' ?>" href="#" data-value="year">This Year</a></li>
+                                        </ul>
+                                        <!-- Hidden input for dropdown value -->
+                                        <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
+                                    </div>
+                                </div>
                             </div>
                         </form>
-                        <div>
-                            <label class="form-label d-block">Quick Filter</label>
-                            <div class="dropdown">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    <?= $filter_range_val ? ucfirst($filter_range_val) : 'Select Range' ?>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item <?= $filter_range_val === 'today' ? 'active' : '' ?>" href="#" data-value="today">Today</a></li>
-                                    <li><a class="dropdown-item <?= $filter_range_val === 'week' ? 'active' : '' ?>" href="#" data-value="week">This Week</a></li>
-                                    <li><a class="dropdown-item <?= $filter_range_val === 'month' ? 'active' : '' ?>" href="#" data-value="month">This Month</a></li>
-                                    <li><a class="dropdown-item <?= $filter_range_val === 'year' ? 'active' : '' ?>" href="#" data-value="year">This Year</a></li>
-                                </ul>
-                                <!-- Hidden input to store filter value -->
-                                <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
-                            </div>
-                        </div>
+
+                        <!-- JavaScript to handle dropdown selection -->
+                        <script>
+                            document.querySelectorAll('.dropdown-item').forEach(item => {
+                                item.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    const value = this.getAttribute('data-value');
+                                    document.getElementById('filter_range_input').value = value;
+                                    document.getElementById('filterForm').submit();
+                                });
+                            });
+                        </script>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
