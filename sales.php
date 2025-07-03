@@ -231,6 +231,32 @@ ini_set('display_errors', 1);
                                     <label class="form-label d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
+                                <!-- Quick filter dropdown -->
+                                <div>
+                                    <label class="form-label d-block">Quick Filter</label>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <?php
+                                            $labels = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            echo $labels[$filter_range_val] ?? 'Select Range';
+                                            ?>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <?php
+                                            $ranges = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            foreach ($ranges as $key => $label): ?>
+                                                <li>
+                                                    <a class="dropdown-item <?= ($filter_range_val === $key) ? 'active bg-primary text-white' : '' ?>" href="#" data-value="<?= $key ?>">
+                                                        <?= $label ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+
+                                        <!-- Hidden input for dropdown value -->
+                                        <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
+                                    </div>
+                                </div>
                                 <div class="text-end mt-3">
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
                                 </div>
