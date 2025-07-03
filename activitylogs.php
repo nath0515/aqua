@@ -97,14 +97,13 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
+                    <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
+                        <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
+                    </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
                         <?php foreach($logs as $row): ?>
-                            <?php 
-                                // Simple condition: highlight logs that contain "error"
-                                $highlight = stripos($row['message'], 'error') !== false ? 'bg-warning text-dark p-2 rounded' : ''; 
-                            ?>
-                            <a class="text-dark" href="<?php echo $row['destination']; ?>">
-                                <div class="mx-4 <?php echo $highlight; ?>">
+                            <a class="text-dark text-decoration-none" href="<?php echo $row['destination']; ?>">
+                                <div class="mx-4 mb-3 p-3 bg-light border rounded shadow-sm">
                                     <?php echo $row['message']; ?>
                                     <br>
                                     <small class="text-muted">
@@ -112,7 +111,6 @@
                                     </small>
                                 </div>
                             </a> 
-                            <hr>
                         <?php endforeach; ?> 
                     </div>
                 </main>
