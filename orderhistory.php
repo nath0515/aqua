@@ -254,6 +254,14 @@
                         `;
                         tbody.appendChild(row);
                     });
+                    if (table) {
+                        table.destroy();
+                    }
+
+                    table = new simpleDatatables.DataTable(datatablesSimple, {
+                        perPage: 10,
+                        perPageSelect: [5, 10, 25, 50, 100]
+                    });
                 }
 
                 function renderPagination(total, page, perPage) {
