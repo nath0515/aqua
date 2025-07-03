@@ -52,7 +52,7 @@
             $stmt->bindParam(':user_id', $user_id);
             $stmt->execute();
 
-            $message = "Rider account created: {$firstname} {$lastname} has successfully registered.";
+            $message = "Admin account created: {$firstname} {$lastname} has successfully registered.";
             $destination = "accounts.php";
             
             $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
