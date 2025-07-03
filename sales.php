@@ -31,9 +31,12 @@ ini_set('display_errors', 1);
     $params = [];
 
     if ($start_date && $end_date) {
+        $start_date_time = $start_date . ' 00:00:00';
+        $end_date_time = $end_date . ' 23:59:59';
+        
         $sql .= " AND a.date BETWEEN :start_date AND :end_date";
-        $params[':start_date'] = $start_date;
-        $params[':end_date'] = $end_date;
+        $params[':start_date'] = $start_date_time;
+        $params[':end_date'] = $end_date_time;
     }
 
     $stmt = $conn->prepare($sql);
