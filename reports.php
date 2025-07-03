@@ -70,6 +70,12 @@
     $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
     $date_data = $stmt->fetchColumn();
+
+    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $unread_count = $unread_result['unread_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +90,45 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+            #loadingOverlay {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                background: rgba(255, 255, 255, 0.8);
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+            .spinner {
+                border: 6px solid #f3f3f3;
+                border-top: 6px solid #0077b6;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 0.8s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+
+            .notification-text{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+            }
+    </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -95,6 +140,36 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+                <?php 
+                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $activity_logs = $stmt->fetchAll();
+                ?>
+                
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                            <?php if ($unread_count > 0): ?>
+                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                    <?php echo $unread_count; ?>
+                                    <span class="visually-hidden">unread notifications</span>
+                                </span>
+                            <?php endif; ?>
+                            <span class="visually-hidden">unread notifications</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <?php foreach($activity_logs as $row):?>
+                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
+                        <hr>
+                        <?php endforeach; ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
@@ -156,6 +231,18 @@
                                 <a class="nav-link" href="sales.php">Sales</a>
                                 <a class="nav-link" href="expenses.php">Expenses</a>
                                     <a class="nav-link" href="stock.php">Stock</a>
+                                    <a class="nav-link" href="report.php">Report</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Account Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="accounts.php">Accounts</a>
+                                    <a class="nav-link" href="rideraccount.php">Add Rider</a>
                                 </nav>
                             </div>
                         </div>
