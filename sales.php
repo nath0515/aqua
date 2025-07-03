@@ -274,7 +274,7 @@ ini_set('display_errors', 1);
                                                         <?= $status ?>
                                                     </span>
                                                 </div>
-                                                <td><?php echo $row['rider'];?></td>
+                                                <td><?php echo !empty($row['rider']) ? $row['rider'] : 'Unassigned';?></td>
                                                 <td>
                                                     <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
                                                         <i class="bi bi-eye"></i> View
