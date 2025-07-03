@@ -30,6 +30,45 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+            #loadingOverlay {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                background: rgba(255, 255, 255, 0.8);
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+            .spinner {
+                border: 6px solid #f3f3f3;
+                border-top: 6px solid #0077b6;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 0.8s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+
+            .notification-text{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+            }
+    </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
