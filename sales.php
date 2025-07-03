@@ -463,5 +463,22 @@ ini_set('display_errors', 1);
                 });
             });
         </script>
+        <!-- JavaScript to handle dropdown selection -->
+        <script>
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const value = this.getAttribute('data-value');
+
+                // Clear manual date inputs
+                document.getElementById('start_date').value = '';
+                document.getElementById('end_date').value = '';
+
+                // Set and submit quick filter
+                document.getElementById('filter_range_input').value = value;
+                document.getElementById('filterForm').submit();
+            });
+        });
+        </script>
     </body>
 </html>
