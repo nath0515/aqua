@@ -12,7 +12,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT  message, date, destination, read_status FROM activity_logs ORDER BY date DESC";
+    $sql = "SELECT message, date, destination, read_status FROM activity_logs ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -189,7 +189,7 @@
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
                         <?php foreach($logs as $row): ?>
-                            <a class="text-dark text-decoration-none" href="<?php echo $row['destination']; ?>">
+                            <a class="text-dark text-decoration-none" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>">
                                 <div class="mx-4 mb-3 p-3 <?php if ($row['read_status'] == 0) echo 'bg-light border rounded shadow-sm'; ?>">
                                     <?php echo $row['message']; ?>
                                     <br>
