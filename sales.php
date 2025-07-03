@@ -284,7 +284,7 @@ ini_set('display_errors', 1);
                                 </div>
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
-                                    <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
+                                    <a href="sales.php" class="btn btn-outline-danger">Clear Filters</a>
                                 </div>
                                 <div class="text-end mt-3">
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
