@@ -97,22 +97,24 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
-                        <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
-                    </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
                         <?php foreach($logs as $row): ?>
-                        <a class="text-dark" href="<?php echo $row['destination'];?>">
-                            <div class="mx-4">
+                            <?php 
+                                // Simple condition: highlight logs that contain "error"
+                                $highlight = stripos($row['message'], 'error') !== false ? 'bg-warning text-dark p-2 rounded' : ''; 
+                            ?>
+                            <a class="text-dark" href="<?php echo $row['destination']; ?>">
+                                <div class="mx-4 <?php echo $highlight; ?>">
                                     <?php echo $row['message']; ?>
-                                <br>
-                                <small class="text-muted"><i><?php echo date('g:i a F j', strtotime($row['date'])); ?></i></small>
-                            </div>
-                        </a> 
-                        <hr>
+                                    <br>
+                                    <small class="text-muted">
+                                        <i><?php echo date('g:i a F j', strtotime($row['date'])); ?></i>
+                                    </small>
+                                </div>
+                            </a> 
+                            <hr>
                         <?php endforeach; ?> 
                     </div>
-                   
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -124,49 +126,7 @@
             </div>
         </div>
 
-        <!-- Edit Order Modal -->
-        <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-            
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                                <!-- Status -->
-                                <div class="mb-3">
-                                    <label for="stock" class="form-label">Status</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
-                                        <select name="status_id" id="editStatusId" class="form-select">
-                                            <?php foreach($status_data as $row):?>
-                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
-                                            <?php endforeach;?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <input type="text" name="order_id" id="editOrderId" hidden>
 
-                                <!-- Order Items -->
-                                <div class="mb-3" id="orderItemsContainer">
-                                </div>
-
-                            
-                        </div>
-            
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
