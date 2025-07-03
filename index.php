@@ -376,7 +376,6 @@ $sma = round($totalQuantity / 7);
                                 </div>
                             </div>
                             <div class="col-xl-4">
-                                <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
                                         Predicted Production for Today
