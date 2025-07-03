@@ -263,7 +263,7 @@ ini_set('display_errors', 1);
                                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                             <?php
                                             $labels = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
-                                            echo $labels[$filter_range_val] ?? 'Select Range';
+                                            echo $labels[$filter_range] ?? 'Select Range';
                                             ?>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -271,7 +271,7 @@ ini_set('display_errors', 1);
                                             $ranges = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
                                             foreach ($ranges as $key => $label): ?>
                                                 <li>
-                                                    <a class="dropdown-item <?= ($filter_range_val === $key) ? 'active bg-primary text-white' : '' ?>" href="#" data-value="<?= $key ?>">
+                                                    <a class="dropdown-item <?= ($filter_range === $key) ? 'active bg-primary text-white' : '' ?>" href="#" data-value="<?= $key ?>">
                                                         <?= $label ?>
                                                     </a>
                                                 </li>
