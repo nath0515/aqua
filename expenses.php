@@ -219,6 +219,11 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
+                        <?php
+                            $start_date_val = $_GET['start_date'] ?? '';
+                            $end_date_val = $_GET['end_date'] ?? '';
+                            $filter_range_val = $_GET['filter_range'] ?? '';
+                        ?>
                         <div class="d-flex mb-3">
                             <button class="btn btn-success btn-round me-2" data-bs-toggle="modal" data-bs-target="#addexpense">
                                 <i class="fa fa-plus"></i>
@@ -245,6 +250,26 @@
                                 </div>
                             </div>
                         </form>
+                        <div>
+                            <label class="form-label d-block">Quick Filter</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <?= $filter_range_val ? ucfirst($filter_range_val) : 'Select Range' ?>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item <?= $filter_range_val === 'today' ? 'active' : '' ?>" href="#" data-value="today">Today</a></li>
+                                    <li><a class="dropdown-item <?= $filter_range_val === 'week' ? 'active' : '' ?>" href="#" data-value="week">This Week</a></li>
+                                    <li><a class="dropdown-item <?= $filter_range_val === 'month' ? 'active' : '' ?>" href="#" data-value="month">This Month</a></li>
+                                    <li><a class="dropdown-item <?= $filter_range_val === 'year' ? 'active' : '' ?>" href="#" data-value="year">This Year</a></li>
+                                </ul>
+                                <!-- Hidden input to store filter value -->
+                                <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -450,5 +475,15 @@
             <?php endif; ?>
         </script>
         <?php endif; ?>
+        <script>
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const value = this.getAttribute('data-value');
+                    document.getElementById('filter_range_input').value = value;
+                    document.getElementById('filterForm').submit();
+                });
+            });
+        </script>
     </body>
 </html>
