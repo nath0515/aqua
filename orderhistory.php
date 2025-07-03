@@ -141,6 +141,8 @@
                                         
                                     </tbody>
                                 </table>
+                                <div id="pagination" class="mt-3"></div>
+
                             </div>
                         </div>
                     </div>
@@ -205,72 +207,89 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-    // Initialize Simple DataTable for the orders table
-    const datatablesSimple = document.getElementById('datatablesSimple');
-    const table = datatablesSimple ? new simpleDatatables.DataTable(datatablesSimple, {
-            perPage: 10,
-            perPageSelect: [5, 10, 25, 50, 100]
-    }) : null;
+                const datatablesSimple = document.getElementById('datatablesSimple');
+                const paginationContainer = document.getElementById('pagination');
+                let currentPage = 1;
+                const perPage = 10;
 
-    // Function to fetch orders from the backend
-    function fetchOrders() {
-        fetch('process_usercheckorders.php', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateOrdersTable(data.orders);
-            } else {
-                console.error("Failed to fetch orders:", data.message);
-            }
-        })
-        .catch(error => console.error("Error fetching orders:", error));
-    }
+                function fetchOrders(page = 1) {
+                    fetch(`process_usercheckorders.php?page=${page}&perPage=${perPage}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateOrdersTable(data.orders);
+                            renderPagination(data.total, data.page, data.perPage);
+                        } else {
+                            console.error("Failed to fetch orders:", data.message);
+                        }
+                    })
+                    .catch(error => console.error("Error fetching orders:", error));
+                }
 
-    // Function to update the Simple DataTable with new order data
-    function updateOrdersTable(orders) {
-        // Clear the existing rows in the table
-        const tbody = datatablesSimple.querySelector('tbody');
-        if (tbody) {
-            tbody.innerHTML = ''; // Clear existing rows
-        }
+                function updateOrdersTable(orders) {
+                    const tbody = datatablesSimple.querySelector('tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                    }
 
-        // Add the new rows to the table
-        orders.forEach(order => {
-            const row = document.createElement('tr');
-            const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
-            row.innerHTML = `
-                <td>${order.date}</td>
-                <td>₱${order.amount}</td>
-                <td>${order.firstname} ${order.lastname}</td>
-                <td>${order.contact_number}</td>
-                <td>${order.address}</td>
-                <td>${order.status_name}</td>
-                <td>${riderName}</td>
-                <td>
-                    <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
-                        <i class="bi bi-eye"></i> View
-                    </a>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
+                    orders.forEach(order => {
+                        const row = document.createElement('tr');
+                        const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
+                        row.innerHTML = `
+                            <td>${order.date}</td>
+                            <td>₱${order.amount}</td>
+                            <td>${order.firstname} ${order.lastname}</td>
+                            <td>${order.contact_number}</td>
+                            <td>${order.address}</td>
+                            <td>${order.status_name}</td>
+                            <td>${riderName}</td>
+                            <td>
+                                <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
 
-        // Re-initialize Simple DataTable after updating the rows
-        if (table) {
-            table.update();
-        }
-    }
+                function renderPagination(total, page, perPage) {
+                    const totalPages = Math.ceil(total / perPage);
+                    let html = '';
 
-    // Fetch orders initially when the page loads
-    fetchOrders();
+                    if (totalPages <= 1) {
+                        paginationContainer.innerHTML = '';
+                        return;
+                    }
 
-    // Set up the interval to fetch orders every 10 seconds
-    setInterval(fetchOrders, 3000);
-});
+                    if (page > 1) {
+                        html += `<button class="btn btn-sm btn-outline-primary me-1" data-page="${page - 1}">Previous</button>`;
+                    }
 
+                    for (let i = 1; i <= totalPages; i++) {
+                        html += `<button class="btn btn-sm ${i === page ? 'btn-primary' : 'btn-outline-primary'} me-1" data-page="${i}">${i}</button>`;
+                    }
+
+                    if (page < totalPages) {
+                        html += `<button class="btn btn-sm btn-outline-primary" data-page="${page + 1}">Next</button>`;
+                    }
+
+                    paginationContainer.innerHTML = html;
+
+                    paginationContainer.querySelectorAll('button').forEach(button => {
+                        button.addEventListener('click', () => {
+                            currentPage = parseInt(button.getAttribute('data-page'));
+                            fetchOrders(currentPage);
+                        });
+                    });
+                }
+
+                // Load first page
+                fetchOrders(currentPage);
+            });
         </script>
     </body>
 </html>
