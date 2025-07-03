@@ -242,7 +242,7 @@ ini_set('display_errors', 1);
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Sales</li>
                         </ol>
-                        <form action="sales.php" method="GET">
+                        <form id="filterForm" action="sales.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
@@ -279,7 +279,7 @@ ini_set('display_errors', 1);
                                         </ul>
 
                                         <!-- Hidden input for dropdown value -->
-                                        <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range_val) ?>">
+                                        <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range) ?>">
                                     </div>
                                 </div>
                                 <div class="text-end mt-3">
