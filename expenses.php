@@ -51,7 +51,8 @@
         $sql = "SELECT date, expensetype_name, comment, amount 
                 FROM expense e1 
                 JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id 
-                WHERE date BETWEEN :start_date AND :end_date";
+                WHERE date BETWEEN :start_date AND :end_date
+                ORDER BY date DESC";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
@@ -63,7 +64,8 @@
         // Default: show all
         $sql = "SELECT date, expensetype_name, comment, amount 
                 FROM expense e1 
-                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id";
+                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id
+                ORDER BY date DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
