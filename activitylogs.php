@@ -16,6 +16,12 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $unread_count = $unread_result['unread_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
