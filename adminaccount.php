@@ -195,11 +195,11 @@
                         <form action="process_registeradmin.php" method="POST" onsubmit="return checkForm()" id="adminForm">
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="firstname" required>
+                                <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="lastname" required>
+                                <input type="text" class="form-control" id="lastname" name="lastname" required placeholder="Dela Cruz">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Contact Number</label>
