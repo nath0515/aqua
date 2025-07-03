@@ -51,8 +51,7 @@ ini_set('display_errors', 1);
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, CONCAT(r.firstname, ' ', r.lastname) as rider FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
     LEFT JOIN user_details r ON a.rider = r.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 5
-    ORDER BY date DESC";
+    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id = 5";
 
     $params = [];
 
