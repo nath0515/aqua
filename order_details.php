@@ -25,6 +25,7 @@ error_reporting(E_ALL);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $order_id = 0;
 
     if(isset($_GET['id'])){
@@ -280,7 +281,9 @@ error_reporting(E_ALL);
                                                 </div>
                                             </div>
                                         <?php endif; ?>
-                                    </div>   
+                                    </div>
+                                    
+                                    <p><i id="processedBy"></i></p>
                                 </div>
                             </div>
                         </div>
@@ -448,6 +451,7 @@ error_reporting(E_ALL);
         </script>
         <script>
             document.getElementById("downloadPDF").addEventListener("click", function () {
+                document.getElementById("processedBy").innerHTML = "Processed By: <?php echo $user_data['firstname'].' '$user_data['lastname']?>";
                 const { jsPDF } = window.jspdf;
 
                 const report = document.getElementById("reportContent");
@@ -477,6 +481,8 @@ error_reporting(E_ALL);
                     const filename = `Report_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`;
                     pdf.save(filename);
                 });
+
+                document.getElementById("processedBy").innerHTML = '';
             });
         </script>
     </body>
