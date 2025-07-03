@@ -1,70 +1,76 @@
 <?php
-require 'db.php'; // Make sure it connects to your database
+    require 'db.php';
+    session_start();
+    date_default_timezone_set('Asia/Manila');
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitize input
-    $firstname = trim($_POST['firstname']);
-    $lastname = trim($_POST['lastname']);
-    $contact_number = trim($_POST['contact_number']);
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    ob_start();
 
-    // Check if passwords match
-    if ($password !== $confirm_password) {
-        header("Location: adminaccount.php?status=notmatch");
-        exit();
+    $sql1 = "INSERT INTO users (email, password,username,role_id, created_at) VALUES (:email, :password,:username, 1, :created_at)";
+    $sql2 = "INSERT INTO user_details (firstname, lastname, contact_number, user_id) VALUES (:firstname, :lastname, :contact_number, :user_id)";
+    $date = date('Y-m-d H:i:s');
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $contact_number = $_POST['contact_number'];
+        $email = $_POST['email'];
+        $username=$_POST['username'];
+        $password = $_POST['password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        try {
+            //check if email exists
+            $sql = "SELECT * FROM users WHERE email = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $now = date("Y-m-d H:i:s"); 
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $data = $stmt->fetch();
+                header("Location: rideraccount.php?status=exist&email=".$email);
+                exit();
+            }
+            if ($password == $confirm_password) {
+                $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+            } else {
+                header("Location: rideraccount.php?status=notmatch&email=".$email);
+                exit();
+            }
+            $stmt = $conn->prepare($sql1);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':password', $password_hashed);
+            $stmt->bindParam(':created_at', $date);
+            $stmt->execute();
+
+            $user_id = $conn->lastInsertId();
+
+            $stmt = $conn->prepare($sql2);
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':contact_number', $contact_number);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+
+            $message = "Rider account created: {$firstname} {$lastname} has successfully registered.";
+            $destination = "accounts.php";
+            
+            $sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, :destination)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':message', $message);
+            $stmt->bindParam(':date', $now);
+            $stmt->bindParam(':destination', $destination);
+            $stmt->execute();
+
+            header("Location: accounts.php?status=success");
+            exit();
+
+            
+        } catch (PDOException $e) {
+            header("Location: adminaccount.php?status=error");
+            exit();
+        }
     }
 
-    // Check if email or username already exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email OR username = :username");
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
-
-    if ($stmt->rowCount() > 0) {
-        header("Location: adminaccount.php?status=exist");
-        exit();
-    }
-
-    // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    try {
-        $conn->beginTransaction();
-
-        // Insert into users
-        $stmt1 = $conn->prepare("INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, 1)");
-        $stmt1->bindParam(':username', $username);
-        $stmt1->bindParam(':email', $email);
-        $stmt1->bindParam(':password', $hashedPassword);
-        $stmt1->execute();
-
-        $user_id = $conn->lastInsertId();
-
-        // Insert into user_details
-        $stmt2 = $conn->prepare("INSERT INTO user_details (user_id, firstname, lastname, contact_number) VALUES (:user_id, :firstname, :lastname, :contact_number)");
-        $stmt2->bindParam(':user_id', $user_id);
-        $stmt2->bindParam(':firstname', $firstname);
-        $stmt2->bindParam(':lastname', $lastname);
-        $stmt2->bindParam(':contact_number', $contact_number);
-        $stmt2->execute();
-
-        $conn->commit();
-        header("Location: adminaccount.php?status=success");
-        exit();
-
-    } catch (Exception $e) {
-        $conn->rollBack();
-        error_log("Admin registration failed: " . $e->getMessage());
-        header("Location: adminaccount.php?status=error");
-        exit();
-    }
-
-} else {
-    // Prevent direct access
-    header("Location: adminaccount.php");
-    exit();
-}
+    ob_end_flush();
 ?>
