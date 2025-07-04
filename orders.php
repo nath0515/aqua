@@ -12,18 +12,18 @@
         header("Location: riderdashboard.php");
     }
 
+    $sql = "SELECT * FROM orders a WHERE 1";
+
     $filter_range = $_GET['filter_range'] ?? null;
     $start_date = $_GET['start_date'] ?? null;
     $end_date = $_GET['end_date'] ?? null;
 
     if ($filter_range) {
-        // Determine dates based on quick filter
         $today = date('Y-m-d');
-        
+
         switch ($filter_range) {
             case 'today':
-                $start_date = $today;
-                $end_date = $today;
+                $start_date = $end_date = $today;
                 break;
             case 'week':
                 $start_date = date('Y-m-d', strtotime('monday this week'));
@@ -40,19 +40,25 @@
         }
     }
 
-     $params = [];
+    $params = [];
 
     if ($start_date && $end_date) {
+        if (!strtotime($start_date) || !strtotime($end_date)) {
+            throw new Exception("Invalid date format");
+        }
+
         $start_date_time = $start_date . ' 00:00:00';
         $end_date_time = $end_date . ' 23:59:59';
-        
+
         $sql .= " AND a.date BETWEEN :start_date AND :end_date";
         $params[':start_date'] = $start_date_time;
         $params[':end_date'] = $end_date_time;
     }
+
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
