@@ -12,6 +12,42 @@
         header("Location: riderdashboard.php");
     }
 
+    $filter_range = $_GET['filter_range'] ?? null;
+    $start_date = $_GET['start_date'] ?? null;
+    $end_date = $_GET['end_date'] ?? null;
+
+    if ($filter_range) {
+        // Determine dates based on quick filter
+        $today = date('Y-m-d');
+        
+        switch ($filter_range) {
+            case 'today':
+                $start_date = $today;
+                $end_date = $today;
+                break;
+            case 'week':
+                $start_date = date('Y-m-d', strtotime('monday this week'));
+                $end_date = date('Y-m-d', strtotime('sunday this week'));
+                break;
+            case 'month':
+                $start_date = date('Y-m-01');
+                $end_date = date('Y-m-t');
+                break;
+            case 'year':
+                $start_date = date('Y-01-01');
+                $end_date = date('Y-12-31');
+                break;
+        }
+    }
+    if ($start_date && $end_date) {
+        $start_date_time = $start_date . ' 00:00:00';
+        $end_date_time = $end_date . ' 23:59:59';
+        
+        $sql .= " AND a.date BETWEEN :start_date AND :end_date";
+        $params[':start_date'] = $start_date_time;
+        $params[':end_date'] = $end_date_time;
+    }
+
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
@@ -541,5 +577,21 @@
                 <?php endif; ?>    
             </script>
         <?php endif; ?>
+        <script>
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const value = this.getAttribute('data-value');
+
+                // Clear manual date inputs
+                document.getElementById('start_date').value = '';
+                document.getElementById('end_date').value = '';
+
+                // Set and submit quick filter
+                document.getElementById('filter_range_input').value = value;
+                document.getElementById('filterForm').submit();
+            });
+        });
+        </script>
     </body>
 </html>
