@@ -39,6 +39,9 @@
                 break;
         }
     }
+
+     $params = [];
+
     if ($start_date && $end_date) {
         $start_date_time = $start_date . ' 00:00:00';
         $end_date_time = $end_date . ' 23:59:59';
@@ -47,6 +50,9 @@
         $params[':start_date'] = $start_date_time;
         $params[':end_date'] = $end_date_time;
     }
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($params);
+    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
