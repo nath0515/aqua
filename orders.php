@@ -237,6 +237,55 @@
                             <i class="fa fa-plus"></i>
                             Add Order
                         </a>
+                        <form id="filterForm" action="sales.php" method="GET">
+                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                <div>
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                                <!-- Quick filter dropdown -->
+                                <div>
+                                    <label class="form-label d-block">Quick Filter</label>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <?php
+                                            $labels = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            echo $labels[$filter_range] ?? 'Select Range';
+                                            ?>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <?php
+                                            $ranges = ['today' => 'Today', 'week' => 'This Week', 'month' => 'This Month', 'year' => 'This Year'];
+                                            foreach ($ranges as $key => $label): ?>
+                                                <li>
+                                                    <a class="dropdown-item <?= ($filter_range === $key) ? 'active bg-primary text-white' : '' ?>" href="#" data-value="<?= $key ?>">
+                                                        <?= $label ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+
+                                        <!-- Hidden input for dropdown value -->
+                                        <input type="hidden" name="filter_range" id="filter_range_input" value="<?= htmlspecialchars($filter_range) ?>">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <a href="sales.php" class="btn btn-outline-danger">Clear Filters</a>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
+                                </div>
+                            </div>
+                        </form>
                         <div class="card mb-4">
                             
                         </div>
