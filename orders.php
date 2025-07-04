@@ -273,7 +273,7 @@
                             <i class="fa fa-plus"></i>
                             Add Order
                         </a>
-                        <form id="filterForm" action="sales.php" method="GET">
+                        <form id="filterForm" action="orders.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
