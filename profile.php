@@ -4,7 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -130,56 +130,63 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow border-0">
                             <div class="card-header bg-primary text-white text-center">
-                                <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
+                                <h3><i class="bi bi-person-circle"></i> My Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form id="profileForm" action="update_profile.php" method="POST">
-                                    <!-- Full Name (Read-only) -->
+                                <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
+                                    <div class="mb-3 text-center">
+                                        <img src="uploads/profile_pictures/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
+                                            alt="Profile Picture" 
+                                            id="profilePreview"
+                                            class="img-thumbnail rounded-circle" 
+                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                    </div>
+
+                                    <div class="mb-3 d-none" id="profilePicGroup">
+                                        <label for="profile_pic" class="form-label">Change Profile Picture</label>
+                                        <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
+                                    </div>
+
                                     <div class="mb-3" id="fullnameGroup">
-                                        <label for="fullname" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="fullname" 
-                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>" 
+                                        <label for="fullname">Full Name</label>
+                                        <input type="text" class="form-control" id="fullname"
+                                            value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>"
                                             readonly>
                                     </div>
 
-                                    <!-- First Name (Hidden initially) -->
                                     <div class="mb-3 d-none" id="firstnameGroup">
-                                        <label for="firstname" class="form-label">First Name</label>
+                                        <label for="firstname">First Name</label>
                                         <input type="text" class="form-control" id="firstname" name="firstname" required>
                                     </div>
 
-                                    <!-- Last Name (Hidden initially) -->
                                     <div class="mb-3 d-none" id="lastnameGroup">
-                                        <label for="lastname" class="form-label">Last Name</label>
+                                        <label for="lastname">Last Name</label>
                                         <input type="text" class="form-control" id="lastname" name="lastname" required>
                                     </div>
 
-                                    <!-- Contact -->
                                     <div class="mb-3">
-                                        <label for="contact_number" class="form-label">Contact Number</label>
+                                        <label for="contact_number">Contact Number</label>
                                         <input type="tel" class="form-control" id="contact_number" name="contact_number"
-                                            required pattern="[0-9]{11}" maxlength="11"
+                                            pattern="[0-9]{11}" maxlength="11"
                                             value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)" readonly>
+                                            readonly>
                                     </div>
 
-                                    <!-- Email -->
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" required
-                                            pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
-                                            value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly>
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            value="<?php echo htmlspecialchars($user_data['email']); ?>"
+                                            readonly>
                                     </div>
 
-                                    <!-- Address -->
                                     <div class="mb-3">
-                                        <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" name="address" id="address" rows="2" required readonly><?php echo htmlspecialchars($user_data['address']); ?></textarea>
+                                        <label for="address">Address</label>
+                                        <textarea class="form-control" id="address" name="address" rows="2" readonly><?php echo htmlspecialchars($user_data['address']); ?></textarea>
                                     </div>
 
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
-                                        <button type="submit" class="btn btn-success d-none me-3" id="updateBtn">Update Profile</button>
+                                        <button type="submit" class="btn btn-success d-none me-2" id="updateBtn">Update</button>
                                         <button type="button" class="btn btn-secondary d-none" id="cancelBtn" onclick="cancelEdit()">Cancel</button>
                                     </div>
                                 </form>
