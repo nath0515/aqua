@@ -208,99 +208,106 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-            function checkForm() {
-                const contact = document.getElementById("contact_number").value;
-                if (!/^09\d{9}$/.test(contact)) {
-                    document.getElementById("contactError").style.display = 'block';
-                    return false;
-                }
-                return true;
+    function checkForm() {
+        const contact = document.getElementById("contact_number").value;
+        if (!/^09\d{9}$/.test(contact)) {
+            document.getElementById("contactError").style.display = 'block';
+            return false;
+        }
+        return true;
+    }
+
+    function enableEdit() {
+        const fullName = document.getElementById("fullname").value.trim();
+        const parts = fullName.split(" ");
+        const first = parts.slice(0, -1).join(" ") || "";
+        const last = parts.slice(-1).join(" ") || "";
+
+        document.getElementById("fullnameGroup").classList.add("d-none");
+        document.getElementById("firstnameGroup").classList.remove("d-none");
+        document.getElementById("lastnameGroup").classList.remove("d-none");
+
+        document.getElementById("firstname").value = first;
+        document.getElementById("lastname").value = last;
+
+        ["email", "contact_number", "address"].forEach(id =>
+            document.getElementById(id).removeAttribute("readonly"));
+
+        // ✅ Show profile picture upload input when editing
+        document.getElementById("profilePicGroup").classList.remove("d-none");
+
+        document.getElementById("editBtn").classList.add("d-none");
+        document.getElementById("updateBtn").classList.remove("d-none");
+        document.getElementById("cancelBtn").classList.remove("d-none");
+    }
+
+        function cancelEdit() {
+            location.reload();
+        }
+
+        // ✅ Live preview of selected image
+        document.getElementById("profile_pic")?.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById("profilePreview").src = URL.createObjectURL(file);
             }
+        });
 
-            function enableEdit() {
-                const fullName = document.getElementById("fullname").value.trim();
-                const parts = fullName.split(" ");
-                const first = parts.slice(0, -1).join(" ") || "";
-                const last = parts.slice(-1).join(" ") || "";
+        // ✅ Handle form submission with image upload
+        $('#profileForm').submit(function (e) {
+            e.preventDefault();
 
-                document.getElementById("fullnameGroup").classList.add("d-none");
-                document.getElementById("firstnameGroup").classList.remove("d-none");
-                document.getElementById("lastnameGroup").classList.remove("d-none");
+            if (!checkForm()) return;
 
-                document.getElementById("firstname").value = first;
-                document.getElementById("lastname").value = last;
+            const formData = new FormData(this); // Collect full form including file input
 
-                ["email", "contact_number", "address"].forEach(id =>
-                    document.getElementById(id).removeAttribute("readonly"));
-
-                document.getElementById("editBtn").classList.add("d-none");
-                document.getElementById("updateBtn").classList.remove("d-none");
-                document.getElementById("cancelBtn").classList.remove("d-none");
-            }
-
-            function cancelEdit() {
-                location.reload();
-            }
-
-            // Handle AJAX form submission
-            $('#profileForm').submit(function(e) {
-                e.preventDefault();
-                
-                if (!checkForm()) return;
-
-                let formData = {
-                    firstname: $('#firstname').val(),
-                    lastname: $('#lastname').val(),
-                    email: $('#email').val(),
-                    contact_number: $('#contact_number').val(),
-                    address: $('#address').val()
-                };
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Do you want to update your profile?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes, update it!",
-                    cancelButtonText: "Cancel"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'update_profile.php',
-                            type: 'POST',
-                            data: formData,
-                            success: function(response) {
-                                const data = JSON.parse(response);
-                                if (data.status === 'success') {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Profile updated successfully!',
-                                        confirmButtonText: 'OK'
-                                    }).then(() => {
-                                        window.location.href = 'profile.php';
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Update failed!',
-                                        text: data.error,
-                                        confirmButtonText: 'OK'
-                                    });
-                                }
-                            },
-                            error: function(xhr, status, error) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to update your profile?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, update it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'update_profile.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            const data = JSON.parse(response);
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Profile updated successfully!',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = 'profile.php';
+                                });
+                            } else {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Something went wrong!',
-                                    text: 'Please try again later.',
+                                    title: 'Update failed!',
+                                    text: data.error || 'Unknown error.',
                                     confirmButtonText: 'OK'
                                 });
                             }
-                        });
-                    }
-                });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Something went wrong!',
+                                text: 'Please try again later.',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                }
             });
-        </script>
+        });
+    </script>
     </body>
 </html>
 
