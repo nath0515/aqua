@@ -106,7 +106,7 @@
                                 <h3 class="mb-0"><i class="bi bi-person-circle"></i>  My Profile</h3>
                             </div>
                             <div class="card-body">
-                                <form id="profileForm" action="update_profile.php" method="POST">
+                                <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
                                     <div class="mb-3 text-center">
                                         <img src="uploads/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
                                             alt="Profile Picture" 
@@ -140,7 +140,7 @@
 
                                     <!-- Contact -->
                                     <div class="mb-3">
-                                        <label for="contact_number" class="form-label">Contact Numbers</label>
+                                        <label for="contact_number" class="form-label">Contact Number</label>
                                         <input type="tel" class="form-control" id="contact_number" name="contact_number"
                                             required pattern="[0-9]{11}" maxlength="11"
                                             value="<?php echo htmlspecialchars($user_data['contact_number']); ?>"
