@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // File upload handling
     $profile_pic = null;
-    $upload_dir = 'uploads/profile_pictures/';
+    $upload_dir = 'uploads/';
     $upload_path = '';
 
     if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
