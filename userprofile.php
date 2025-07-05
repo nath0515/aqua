@@ -4,7 +4,7 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -107,6 +107,17 @@
                             </div>
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST">
+                                    <div class="mb-3 text-center">
+                                        <img src="uploads/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
+                                            alt="Profile Picture" 
+                                            id="profilePreview"
+                                            class="img-thumbnail rounded-circle" 
+                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                    </div>
+                                    <div class="mb-3 d-none" id="profilePicGroup">
+                                        <label for="profile_pic" class="form-label">Change Profile Picture</label>
+                                        <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
+                                    </div>
                                     <!-- Full Name (Read-only) -->
                                     <div class="mb-3" id="fullnameGroup">
                                         <label for="fullname" class="form-label">Full Name</label>
@@ -174,53 +185,58 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-            function checkForm() {
-                const contact = document.getElementById("contact_number").value;
-                if (!/^09\d{9}$/.test(contact)) {
-                    document.getElementById("contactError").style.display = 'block';
-                    return false;
-                }
-                return true;
+        function checkForm() {
+            const contact = document.getElementById("contact_number").value;
+            if (!/^09\d{9}$/.test(contact)) {
+                document.getElementById("contactError").style.display = 'block';
+                return false;
             }
+            return true;
+        }
 
-            function enableEdit() {
-                const fullName = document.getElementById("fullname").value.trim();
-                const parts = fullName.split(" ");
-                const first = parts.slice(0, -1).join(" ") || "";
-                const last = parts.slice(-1).join(" ") || "";
+        function enableEdit() {
+            const fullName = document.getElementById("fullname").value.trim();
+            const parts = fullName.split(" ");
+            const first = parts.slice(0, -1).join(" ") || "";
+            const last = parts.slice(-1).join(" ") || "";
 
-                document.getElementById("fullnameGroup").classList.add("d-none");
-                document.getElementById("firstnameGroup").classList.remove("d-none");
-                document.getElementById("lastnameGroup").classList.remove("d-none");
+            document.getElementById("fullnameGroup").classList.add("d-none");
+            document.getElementById("firstnameGroup").classList.remove("d-none");
+            document.getElementById("lastnameGroup").classList.remove("d-none");
 
-                document.getElementById("firstname").value = first;
-                document.getElementById("lastname").value = last;
+            document.getElementById("firstname").value = first;
+            document.getElementById("lastname").value = last;
 
-                ["email", "contact_number", "address"].forEach(id =>
-                    document.getElementById(id).removeAttribute("readonly"));
+            ["email", "contact_number", "address"].forEach(id =>
+                document.getElementById(id).removeAttribute("readonly"));
 
-                document.getElementById("editBtn").classList.add("d-none");
-                document.getElementById("updateBtn").classList.remove("d-none");
-                document.getElementById("cancelBtn").classList.remove("d-none");
-            }
+            // ✅ Show profile picture upload input when editing
+            document.getElementById("profilePicGroup").classList.remove("d-none");
+
+            document.getElementById("editBtn").classList.add("d-none");
+            document.getElementById("updateBtn").classList.remove("d-none");
+            document.getElementById("cancelBtn").classList.remove("d-none");
+        }
 
             function cancelEdit() {
                 location.reload();
             }
 
-            // Handle AJAX form submission
-            $('#profileForm').submit(function(e) {
+            // ✅ Live preview of selected image
+            document.getElementById("profile_pic")?.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    document.getElementById("profilePreview").src = URL.createObjectURL(file);
+                }
+            });
+
+            // ✅ Handle form submission with image upload
+            $('#profileForm').submit(function (e) {
                 e.preventDefault();
-                
+
                 if (!checkForm()) return;
 
-                let formData = {
-                    firstname: $('#firstname').val(),
-                    lastname: $('#lastname').val(),
-                    email: $('#email').val(),
-                    contact_number: $('#contact_number').val(),
-                    address: $('#address').val()
-                };
+                const formData = new FormData(this); // Collect full form including file input
 
                 Swal.fire({
                     title: "Are you sure?",
@@ -235,7 +251,9 @@
                             url: 'update_profile.php',
                             type: 'POST',
                             data: formData,
-                            success: function(response) {
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
                                 const data = JSON.parse(response);
                                 if (data.status === 'success') {
                                     Swal.fire({
@@ -243,18 +261,18 @@
                                         title: 'Profile updated successfully!',
                                         confirmButtonText: 'OK'
                                     }).then(() => {
-                                        window.location.href = 'userprofile.php';
+                                        window.location.href = 'profile.php';
                                     });
                                 } else {
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Update failed!',
-                                        text: data.error,
+                                        text: data.error || 'Unknown error.',
                                         confirmButtonText: 'OK'
                                     });
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function () {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Something went wrong!',
