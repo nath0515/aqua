@@ -135,7 +135,7 @@
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
                                     <div class="mb-3 text-center">
-                                        <img src="uploads/profile_pictures/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
+                                        <img src="uploads/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
                                             alt="Profile Picture" 
                                             id="profilePreview"
                                             class="img-thumbnail rounded-circle" 
