@@ -159,16 +159,44 @@
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
                         <div class="row">
                             <div class="col-3">
-                                <select name="" id=""></select>
+                                <select name="region">
+                                    <?php 
+                                        $stmt = $conn->prepare("SELECT * FROM table_region WHERE region_id = 6");
+                                        $stmt->execute();
+                                        $region = $stmt->fetch();
+                                    ?>
+                                    <option value="<?php echo $region['region_id']?>"><?php echo $region['region_name']?></option>
+                                </select>
                             </div>
                             <div class="col-3">
-         2                       
+                                <select name="province">
+                                    <?php 
+                                        $stmt = $conn->prepare("SELECT * FROM table_province WHERE province_id = 20");
+                                        $stmt->execute();
+                                        $province = $stmt->fetch();
+                                    ?>
+                                    <option value="<?php echo $province['province_id']?>"><?php echo $province['province_name']?></option>
+                                </select>
                             </div>
                             <div class="col-3">
-                                3
+                                <select name="municipality">
+                                    <?php 
+                                        $stmt = $conn->prepare("SELECT * FROM table_municipality WHERE municipality_id = 431");
+                                        $stmt->execute();
+                                        $municipality = $stmt->fetch();
+                                    ?>
+                                    <option value="<?php echo $municipality['municipality_id']?>"><?php echo $municipality['municipality_name']?></option>
+                                </select>
                             </div>
                             <div class="col-3">
-                                4
+                                <select name="barangay_id">
+                                    <?php 
+                                        $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431");
+                                        $stmt->execute();
+                                        $barangay = $stmt->fetch();
+                                    ?>
+                                    <option value="<?php echo $barangay['barangay_id']?>"><?php echo $barangay['barangay_name']?></option>
+                                </select>
                             </div>
                         </div>
                     </div>

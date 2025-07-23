@@ -142,7 +142,6 @@
                                     </tbody>
                                 </table>
                                 <div id="pagination" class="mt-3 text-end"></div>
-
                             </div>
                         </div>
                     </div>
@@ -244,7 +243,12 @@
                             <td>${order.firstname} ${order.lastname}</td>
                             <td>${order.contact_number}</td>
                             <td>${order.address}</td>
-                            <td>${order.status_name}</td>
+                           <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
+                                    <span class="badge ${getStatusBadgeClass(order.status_name)}">
+                                    ${order.status_name}
+                                    </span>
+                                </div>
+                            </td>
                             <td>${riderName}</td>
                             <td>
                                 <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
