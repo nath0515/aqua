@@ -199,6 +199,10 @@
                 icon: 'success',
                 title: 'Link Sent',
                 text: 'Password reset link is sent to your email. Please check your email inbox.',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.php'; 
+                }
             });
         </script>
     <?php elseif (isset($_GET['fstatus']) && $_GET['fstatus'] == 'error'): ?>
