@@ -131,11 +131,12 @@
                             <?php if (!empty($user_locations)): ?>
                                 <?php foreach ($user_locations as $loc): ?>
                                     <div class="col-md-4 mb-4 position-relative" id="location-card-<?php echo $loc['location_id']; ?>">
-                                        <a href="mapuser.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
-                                            <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
-                                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
-                                                    onclick="confirmDelete(<?php echo $loc['location_id']; ?>)"> <i class="fas fa-times"></i>
-                                                </button>
+                                        
+                                        <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
+                                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
+                                                onclick="confirmDelete(<?php echo $loc['location_id']; ?>)"> <i class="fas fa-times"></i>
+                                            </button>
+                                            <a href="mapuser.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
                                                 <div class="card-body text-dark">
                                                     <h5 class="card-title text-primary">
                                                         <?php echo htmlspecialchars($loc['label']); ?> <i class="bi bi-pencil-square"></i>
@@ -144,8 +145,8 @@
                                                     <p class="card-text mb-1"><strong>Latitude:</strong> <?php echo $loc['latitude']; ?></p>
                                                     <p class="card-text"><strong>Longitude:</strong> <?php echo $loc['longitude']; ?></p>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
