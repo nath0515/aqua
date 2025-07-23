@@ -179,11 +179,6 @@
                                             readonly>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="address">Address</label>
-                                        <textarea class="form-control" id="address" name="address" rows="2" readonly><?php echo htmlspecialchars($user_data['address']); ?></textarea>
-                                    </div>
-
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
                                         <button type="submit" class="btn btn-success d-none me-2" id="updateBtn">Update</button>

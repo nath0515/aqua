@@ -154,13 +154,7 @@
                                             pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
                                             value="<?php echo htmlspecialchars($user_data['email']); ?>" readonly>
                                     </div>
-
-                                    <!-- Address -->
-                                    <div class="mb-3">
-                                        <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" name="address" id="address" rows="2" required readonly><?php echo htmlspecialchars($user_data['address']); ?></textarea>
-                                    </div>
-
+                
                                     <div class="d-flex justify-content-end">
                                         <button type="button" class="btn btn-warning me-2" id="editBtn" onclick="enableEdit()">Edit</button>
                                         <button type="submit" class="btn btn-success d-none me-3" id="updateBtn">Update Profile</button>
