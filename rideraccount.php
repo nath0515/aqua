@@ -192,7 +192,7 @@
                                 <h4 class="mb-0">🚴 Rider Registration</h4>
                             </div>
                             <div class="card-body">
-                                <form action="process_registerrider.php" method="POST" onsubmit="return checkForm()">
+                                <form action="process_registerrider.php" method="POST" enctype="multipart/form-data">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">First Name</label>
                                         <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan Dela Cruz">
@@ -212,6 +212,19 @@
                                         <div class="invalid-feedback" id="contactError">
                                             Please enter a valid 11-digit contact number starting with 09.
                                         </div>
+                                    </div>
+
+                                    <div class="mb-3" id="licensePicGroup">
+                                        <label for="driver_license_pic" class="form-label">Driver's License</label>
+                                        <input type="file" class="form-control" name="driver_license_pic" id="driver_license_pic" accept="image/*">
+                                    </div>
+
+                                    <div class="mb-3 text-center">
+                                        <img src="uploads/<?php echo htmlspecialchars($user_data['driver_license_pic'] ?? 'default_license.png'); ?>" 
+                                            alt="Driver's License Preview"
+                                            id="licensePreview"
+                                            class="img-thumbnail" 
+                                            style="width: 200px; height: auto; object-fit: contain;">
                                     </div>
 
                                     <div class="mb-3">
@@ -363,6 +376,7 @@
                 // Check if it's exactly 11 digits and starts with "09"
                 const isValid = /^[0]{1}[9]{1}[0-9]{9}$/.test(contactValue);
 
+
                 if (!isValid) {
                     e.preventDefault(); // Stop form submission
                     contactField.classList.add("is-invalid");
@@ -370,6 +384,16 @@
                 } else {
                     contactField.classList.remove("is-invalid");
                     contactError.style.display = "none";
+                }
+            });
+        </script>
+
+        <script>
+            // Live preview for uploaded driver's license
+            document.getElementById("driver_license_pic")?.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    document.getElementById("licensePreview").src = URL.createObjectURL(file);
                 }
             });
         </script>
