@@ -386,15 +386,19 @@ error_reporting(E_ALL);
         });
 
         function processCheckout(items, paymentId, locationId) {
-            const proofFile = document.getElementById("proofpayment").files[0];
-
-            if (!proofFile) {
-                Swal.fire("Error!", "Please upload a proof of payment.", "warning");
-                return;
-            }
 
             const formData = new FormData();
-            formData.append("proof_file", proofFile);
+
+            if (paymentId === 2) {
+                const proofFile = document.getElementById("proofpayment").files[0];
+
+                if (!proofFile) {
+                    Swal.fire("Error!", "Please upload a proof of payment.", "warning");
+                    return;
+                }
+
+                formData.append("proof_file", proofFile);
+            }
             formData.append("items", JSON.stringify(items));
             formData.append("payment_id", paymentId);
             formData.append("location_id", locationId);
