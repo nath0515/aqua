@@ -198,7 +198,7 @@ error_reporting(E_ALL);
                                 </select>
                             </div>
                             <div class="col-3">
-                                <input type="text" class="form-control" name="address" value="<?php echo $user_location['address']?>" placeholder="Street/House Number" required>
+                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user_location['address']?>" placeholder="Street/House Number" required>
                             </div>
                         </div>
                     </div>
