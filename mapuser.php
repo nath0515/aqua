@@ -193,8 +193,9 @@
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431");
                                         $stmt->execute();
-                                        $barangay = $stmt->fetch();
+                                        $barangay = $stmt->fetchAll();
                                     ?>
+                                    <?php f?>
                                     <option value="<?php echo $barangay['barangay_id']?>"><?php echo $barangay['barangay_name']?></option>
                                 </select>
                             </div>

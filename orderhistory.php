@@ -309,7 +309,25 @@
                         });
                     });
                 }
-
+                function getStatusBadgeClass(status) {
+                    switch (status) {
+                        case 'Pending':
+                            return 'bg-warning text-dark';
+                        case 'Accepted':
+                            return 'bg-primary';
+                        case 'Delivering':
+                            return 'bg-warning text-dark';
+                        case 'Delivered':
+                            return 'bg-success';
+                        case 'Completed':
+                            return 'bg-info';
+                        case 'Cancel':
+                        case 'Cancelled':
+                            return 'bg-danger';
+                        default:
+                            return 'bg-secondary';
+                    }
+                }
                 // Load first page
                 fetchOrders(currentPage);
             });
