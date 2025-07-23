@@ -5,7 +5,7 @@
     $user_id = $_SESSION['user_id'];
     $location_id = $_GET['location_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address, contact_number FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,barangay_id, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -159,16 +159,6 @@
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
                         <div class="row">
                             <div class="col-3">
-                                <select name="region" class="form-select">
-                                    <?php 
-                                        $stmt = $conn->prepare("SELECT * FROM table_region WHERE region_id = 6");
-                                        $stmt->execute();
-                                        $region = $stmt->fetch();
-                                    ?>
-                                    <option value="<?php echo $region['region_id']?>"><?php echo $region['region_name']?></option>
-                                </select>
-                            </div>
-                            <div class="col-3">
                                 <select name="province" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_province WHERE province_id = 20");
@@ -201,6 +191,9 @@
                                     <?php endforeach;?>
                                     
                                 </select>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" name="address" placeholder="Street/House Number" required>
                             </div>
                         </div>
                     </div>
@@ -317,7 +310,7 @@
 
         document.getElementById("saveLocationBtn").addEventListener("click", function () {
             let locationLabel = document.getElementById("locationLabel").value;
-            let address = document.getElementById("address").value;
+            let barangay_id = document.getElementById("barangay_id").value;
             let locationId = <?php echo $location_id?>;
             if (selectedLat && selectedLng) {
                 fetch("save_location.php", {
