@@ -231,7 +231,7 @@
             document.getElementById("firstname").value = first;
             document.getElementById("lastname").value = last;
 
-            ["email", "contact_number", "address"].forEach(id =>
+            ["email", "contact_number"].forEach(id =>
                 document.getElementById(id).removeAttribute("readonly"));
 
             // ✅ Show profile picture upload input when editing
