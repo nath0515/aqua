@@ -159,7 +159,7 @@
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
                         <div class="row">
                             <div class="col-3">
-                                <select name="region">
+                                <select name="region" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_region WHERE region_id = 6");
                                         $stmt->execute();
@@ -169,7 +169,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select name="province">
+                                <select name="province" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_province WHERE province_id = 20");
                                         $stmt->execute();
@@ -179,7 +179,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select name="municipality">
+                                <select name="municipality" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_municipality WHERE municipality_id = 431");
                                         $stmt->execute();
@@ -189,14 +189,17 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select name="barangay_id">
+                                <select name="barangay_id" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431");
                                         $stmt->execute();
                                         $barangay = $stmt->fetchAll();
                                     ?>
-                                    <?php f?>
-                                    <option value="<?php echo $barangay['barangay_id']?>"><?php echo $barangay['barangay_name']?></option>
+                                    <option value="">Select Barangay</option>
+                                    <?php foreach($barangay as $row):?>
+                                        <option value="<?php echo $row['barangay_id']?>"><?php echo $row['barangay_name']?></option>
+                                    <?php endforeach;?>
+                                    
                                 </select>
                             </div>
                         </div>
