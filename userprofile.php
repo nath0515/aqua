@@ -240,8 +240,8 @@
                     text: "Contact Number is not valid",
                     icon: "warning",
                     confirmButtonText: "Ok"
-                })
-                };
+                });
+                }
 
                 const formData = new FormData(this); // Collect full form including file input
 
