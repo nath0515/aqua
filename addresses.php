@@ -120,7 +120,7 @@
                 <main>
                     <div class="container-fluid px-4">
                         <div class="d-flex justify-content mb-3 mt-3">
-                            <a href="mapuser.php" class="btn btn-success">
+                            <a href="add_location.php" class="btn btn-success">
                                 <i class="fas fa-plus"></i> Add Location
                             </a>
                         </div>
