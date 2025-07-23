@@ -317,7 +317,6 @@
             let locationLabel = document.getElementById("locationLabel").value;
             let address = document.getElementById("address").value;
             let barangay_id = document.getElementById("barangay_id").value;
-            let locationId = <?php echo $location_id?>;
             if (selectedLat && selectedLng) {
                 fetch("save_location.php", {
                     method: "POST",
