@@ -4,7 +4,7 @@ require 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $locationId = $_POST['id'];
 
-    $stmt = $conn->prepare("DELETE FROM locations WHERE location_id = :id");
+    $stmt = $conn->prepare("DELETE FROM user_locations WHERE location_id = :id");
     $stmt->bindParam(':id', $locationId, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
