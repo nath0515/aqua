@@ -13,7 +13,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if(isset()){
+    if(isset($location_id)){
         $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
         $stmt->execute(['location_id' => $location_id]);
         $user_location = $stmt->fetch();
