@@ -182,7 +182,7 @@ error_reporting(E_ALL);
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select name="barangay_id" class="form-select">
+                                <select name="barangay_id" id="barangay_id" class="form-select">
                                     <?php 
                                         $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431");
                                         $stmt->execute();
@@ -315,6 +315,7 @@ error_reporting(E_ALL);
 
         document.getElementById("saveLocationBtn").addEventListener("click", function () {
             let locationLabel = document.getElementById("locationLabel").value;
+            let address = document.getElementById("address").value;
             let barangay_id = document.getElementById("barangay_id").value;
             let locationId = <?php echo $location_id?>;
             if (selectedLat && selectedLng) {
@@ -323,7 +324,7 @@ error_reporting(E_ALL);
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&id=${locationId}`
+                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&id=${locationId}&barangay_id=${barangay_id}`
                 })
                 .then(response => response.text())
                 .then(result => {
