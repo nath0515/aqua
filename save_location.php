@@ -9,13 +9,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $location_id = $_POST['id'];
         $label = $_POST['label'];
         $barangay_id = $_POST['barangay_id'];
+        $address = $_POST['address'];
 
         try {
-            $sql = "UPDATE user_locations SET latitude = :lat, longitude = :lng, label = :label, barangay_id = :barangay_id WHERE location_id = :location_id";
+            $sql = "UPDATE user_locations SET latitude = :lat, longitude = :lng, label = :label, barangay_id = :barangay_id, address = :address WHERE location_id = :location_id";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':lat', $lat);
             $stmt->bindParam(':lng', $lng);
             $stmt->bindParam(':label', $label);
+            $stmt->bindParam(':barangay_id', $barangay_id);
             $stmt->bindParam(':address', $address);
             $stmt->bindParam(':location_id', $location_id);
             $stmt->execute();

@@ -189,14 +189,16 @@ error_reporting(E_ALL);
                                         $barangay = $stmt->fetchAll();
                                     ?>
                                     <option value="">Select Barangay</option>
-                                    <?php foreach($barangay as $row):?>
-                                        <option value="<?php echo $row['barangay_id']?>"><?php echo $row['barangay_name']?></option>
-                                    <?php endforeach;?>
+                                    <?php foreach($barangay as $row): ?>
+                                        <option value="<?php echo $row['barangay_id']; ?>" <?php if ($user_location['barangay_id'] == $row['barangay_id']) echo 'selected'; ?>>
+                                            <?php echo $row['barangay_name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                     
                                 </select>
                             </div>
                             <div class="col-3">
-                                <input type="text" class="form-control" name="address" placeholder="Street/House Number" required>
+                                <input type="text" class="form-control" name="address" value="<?php echo $user_location['address']?>" placeholder="Street/House Number" required>
                             </div>
                         </div>
                     </div>
