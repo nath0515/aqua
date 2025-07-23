@@ -28,23 +28,30 @@ if (!is_array($data_items) || $payment_id <= 0) {
 
 // Handle file upload
 $proof_path = null;
-if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
-    $ext = pathinfo($_FILES['proof_file']['name'], PATHINFO_EXTENSION);
-    $filename = uniqid("proof_", true) . '.' . $ext;
-    $upload_dir = __DIR__ . '/uploads/proofs/';
-    $target_path = $upload_dir . $filename;
 
-    if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0755, true);
-    }
+if ($payment_id === 2) {
+    if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($_FILES['proof_file']['name'], PATHINFO_EXTENSION);
+        $filename = uniqid("proof_", true) . '.' . $ext;
+        $upload_dir = __DIR__ . '/uploads/proofs/';
+        $target_path = $upload_dir . $filename;
 
-    if (move_uploaded_file($_FILES['proof_file']['tmp_name'], $target_path)) {
-        $proof_path = 'uploads/proofs/' . $filename;
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        if (move_uploaded_file($_FILES['proof_file']['tmp_name'], $target_path)) {
+            $proof_path = 'uploads/proofs/' . $filename;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to upload proof of payment']);
+            exit;
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to upload proof of payment']);
+        echo json_encode(['success' => false, 'message' => 'Proof of payment is required for this method.']);
         exit;
     }
 }
+
 
 try {
     $total_amount = 0;
