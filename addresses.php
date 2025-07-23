@@ -135,7 +135,6 @@
                                             <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
                                                 <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
                                                     onclick="confirmDelete(<?php echo $loc['location_id']; ?>)"> <i class="bi bi-x-lg"></i>
-                                                    &times;
                                                 </button>
                                                 <div class="card-body text-dark">
                                                     <h5 class="card-title text-primary">
