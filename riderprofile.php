@@ -10,7 +10,7 @@
         header("Location: home.php");
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic,drivers_liense FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -147,6 +147,15 @@
                                             value="<?php echo htmlspecialchars($user_data['firstname'] . ' ' . $user_data['lastname']); ?>" 
                                             readonly>
                                     </div>
+
+                                    <div class="mb-3 text-center">
+                                        <label class="form-label fw-bold">Driver's License</label><br>
+                                        <img src="uploads/<?php echo htmlspecialchars($user_data['driver_license_pic'] ?? 'default_license.png'); ?>" 
+                                            alt="Driver's License" 
+                                            class="img-thumbnail" 
+                                            style="width: 300px; height: auto; object-fit: contain;">
+                                    </div>
+
 
                                     <!-- First Name (Hidden initially) -->
                                     <div class="mb-3 d-none" id="firstnameGroup">
