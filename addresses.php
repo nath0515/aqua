@@ -119,7 +119,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <div class="d-flex justify-content-end mb-3">
+                        <div class="d-flex justify-content mb-3">
                             <a href="mapuser.php" class="btn btn-success">
                                 <i class="fas fa-plus"></i> Add Location
                             </a>
