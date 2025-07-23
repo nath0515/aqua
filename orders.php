@@ -263,6 +263,7 @@ error_reporting(E_ALL);
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="accounts.php">Accounts</a>
                                     <a class="nav-link" href="rideraccount.php">Add Rider</a>
+                                    <a class="nav-link" href="adminaccount.php">Add Admin</a>
                                 </nav>
                             </div>
                         </div>
