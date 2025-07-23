@@ -159,7 +159,7 @@
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
                         <div class="row">
                             <div class="col-3">
-1
+                                <select name="" id=""></select>
                             </div>
                             <div class="col-3">
          2                       
