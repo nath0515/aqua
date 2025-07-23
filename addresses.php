@@ -133,6 +133,10 @@
                                     <div class="col-md-4 mb-4">
                                         <a href="mapuser.php?location_id=<?php echo $loc['location_id']; ?>" style="text-decoration: none;">
                                             <div class="card shadow border-left-primary h-100 hover-shadow" style="transition: 0.3s;">
+                                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
+                                                    onclick="confirmDelete(<?php echo $loc['location_id']; ?>)"> <i class="bi bi-x-lg"></i>
+                                                    &times;
+                                                </button>
                                                 <div class="card-body text-dark">
                                                     <h5 class="card-title text-primary">
                                                         <?php echo htmlspecialchars($loc['label']); ?> <i class="bi bi-pencil-square"></i>
@@ -171,6 +175,14 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            function confirmDelete(locationId) {
+                if (confirm("Are you sure you want to delete this location?")) {
+                    window.location.href = "delete_location.php?id=" + locationId;
+                }
+            }
+        </script>
     
         
     </body>
