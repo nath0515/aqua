@@ -318,12 +318,12 @@
             let address = document.getElementById("address").value;
             let barangay_id = document.getElementById("barangay_id").value;
             if (selectedLat && selectedLng) {
-                fetch("save_location.php", {
+                fetch("process_createlocation.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&id=${locationId}&barangay_id=${barangay_id}`
+                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&barangay_id=${barangay_id}`
                 })
                 .then(response => response.text())
                 .then(result => {
