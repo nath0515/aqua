@@ -150,7 +150,7 @@
 
                                     <div class="mb-3 text-center">
                                         <label class="form-label fw-bold">Driver's License</label><br>
-                                        <img src="uploads/<?php echo htmlspecialchars($user_data['driver_license'] ?? 'default_license.png'); ?>" 
+                                        <img src="uploads/<?php echo htmlspecialchars($user_data['drivers_license'] ?? 'default_license.png'); ?>" 
                                             alt="Driver's License" 
                                             class="img-thumbnail" 
                                             style="width: 300px; height: auto; object-fit: contain;">
