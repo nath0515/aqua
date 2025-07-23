@@ -209,7 +209,7 @@ error_reporting(E_ALL);
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Address</label>
-                                            <select name="payment_id" id="payment_id" class="form-select">
+                                            <select name="location_id" id="location_id" class="form-select">
                                                 <option value="0">Select Address</option>
                                                 <?php foreach($user_locations as $row): ?>
                                                     <option value="<?php echo $row['location_id']?>"><?php echo $row['label']?></option>
@@ -331,6 +331,16 @@ error_reporting(E_ALL);
             }
 
             const paymentId = parseInt(document.getElementById('payment_id').value);
+            const locationId = parseInt(document.getElementById('location_id').value);
+
+            if (locationId === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Location',
+                    text: 'Please choose a location to deliver before checkout.'
+                });
+                return;
+            }
 
             if (paymentId === 0) {
                 Swal.fire({
@@ -365,17 +375,17 @@ error_reporting(E_ALL);
                             cancelButtonText: 'Cancel'
                         }).then((qrResult) => {
                             if (qrResult.isConfirmed) {
-                                processCheckout(selectedItems, paymentId);
+                                processCheckout(selectedItems, paymentId, locationId);
                             }
                         });
                     } else {
-                        processCheckout(selectedItems, paymentId);
+                        processCheckout(selectedItems, paymentId, locationId);
                     }
                 }
             });
         });
 
-        function processCheckout(items, paymentId) {
+        function processCheckout(items, paymentId, locationId) {
             const proofFile = document.getElementById("proofpayment").files[0];
 
             if (!proofFile) {
@@ -387,6 +397,7 @@ error_reporting(E_ALL);
             formData.append("proof_file", proofFile);
             formData.append("items", JSON.stringify(items));
             formData.append("payment_id", paymentId);
+            formData.append("location_id", locationId);
 
             fetch("process_checkout.php", {
                 method: "POST",

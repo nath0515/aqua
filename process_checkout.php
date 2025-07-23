@@ -12,13 +12,14 @@ if (!$user_id) {
 }
 
 // Validate input
-if (!isset($_POST['items']) || !isset($_POST['payment_id'])) {
+if (!isset($_POST['items']) || !isset($_POST['payment_id']) || !isset($_POST['location_id'])) {
     echo json_encode(['success' => false, 'message' => 'Missing data']);
     exit;
 }
 
 $data_items = json_decode($_POST['items'], true);
 $payment_id = intval($_POST['payment_id']);
+$location_id = intval($_POST['location_id']);
 
 if (!is_array($data_items) || $payment_id <= 0) {
     echo json_encode(['success' => false, 'message' => 'Invalid input']);
@@ -76,15 +77,16 @@ try {
 
     // Insert order with proof of payment
     $stmt = $conn->prepare("
-        INSERT INTO orders (date, amount, user_id, status_id, rider, payment_id, proofofpayment) 
-        VALUES (:now, :amount, :user_id, 1, 0, :payment_id, :proofofpayment)
+        INSERT INTO orders (date, amount, user_id, status_id, rider, payment_id, proofofpayment, location_id) 
+        VALUES (:now, :amount, :user_id, 1, 0, :payment_id, :proofofpayment, :location_id)
     ");
     $stmt->execute([
         ':now' => $now,
         ':amount' => $total_amount,
         ':user_id' => $user_id,
         ':payment_id' => $payment_id,
-        ':proofofpayment' => $proof_path
+        ':proofofpayment' => $proof_path,
+        ':location_id' => $location_id
     ]);
     $order_id = $conn->lastInsertId();
 

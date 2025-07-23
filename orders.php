@@ -80,12 +80,14 @@
         $stmt->bindParam(':date', $dateNow);
     }
     else{
-        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, e.address, f.barangay_name, b.contact_number, 
         c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
     FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
     JOIN orderstatus c ON a.status_id = c.status_id
     LEFT JOIN user_details d ON a.rider = d.user_id
+    LEFT JOIN user_locations e ON a.location_id = e.location_id
+    LEFT JOIN table_barangay f ON e.barangay_id = f.barangay_id
     JOIN payment_method e ON a.payment_id = e.payment_id
     ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
@@ -363,7 +365,7 @@
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
+                                                <td><?php echo $row['barangay_name']." ".$row['address'];?></td>
                                                 <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                     <?php
                                                         $status = htmlspecialchars($row['status_name']);
