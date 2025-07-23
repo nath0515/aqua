@@ -157,7 +157,20 @@
                     </div>
                     <div class="mt-3 w-50 ms-3">
                         <label for="locationLabel" class="form-label">🏷️ Add Address</label>
-                        <input type="text" id="address" class="form-control mb-2" placeholder="e.g. lot number,street,barangay" value="<?php echo $user_location['address']?>"/>
+                        <div class="row">
+                            <div class="col-3">
+1
+                            </div>
+                            <div class="col-3">
+         2                       
+                            </div>
+                            <div class="col-3">
+                                3
+                            </div>
+                            <div class="col-3">
+                                4
+                            </div>
+                        </div>
                     </div>
 
                     <div class="button-group">
