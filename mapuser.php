@@ -16,9 +16,12 @@ error_reporting(E_ALL);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
-    $stmt->execute(['location_id' => $location_id]);
-    $user_location = $stmt->fetch();
+    if(isset()){
+        $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
+        $stmt->execute(['location_id' => $location_id]);
+        $user_location = $stmt->fetch();
+    }
+    
 
     $savedLat = isset($user_location['latitude']) ? floatval($user_location['latitude']) : null;
     $savedLng = isset($user_location['longitude']) ? floatval($user_location['longitude']) : null;
