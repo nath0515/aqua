@@ -188,7 +188,6 @@
         function checkForm() {
             const contact = document.getElementById("contact_number").value;
             if (!/^09\d{9}$/.test(contact)) {
-                document.getElementById("contactError").style.display = 'block';
                 return false;
             }
             return true;
@@ -241,6 +240,7 @@
                     icon: "warning",
                     confirmButtonText: "Ok"
                 });
+                 return;
                 }
 
                 const formData = new FormData(this); // Collect full form including file input
