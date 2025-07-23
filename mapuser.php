@@ -1,7 +1,7 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
     require 'session.php';
     require 'db.php';
@@ -9,7 +9,7 @@ error_reporting(E_ALL);
     $user_id = $_SESSION['user_id'];
     $location_id = $_GET['location_id'];
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address FROM users u
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
     $stmt = $conn->prepare($sql);
@@ -17,7 +17,7 @@ error_reporting(E_ALL);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if(isset()){
+    if(!empty($location_id)){
         $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
         $stmt->execute(['location_id' => $location_id]);
         $user_location = $stmt->fetch();
