@@ -301,7 +301,7 @@ error_reporting(E_ALL);
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
                                 <!-- Quick filter dropdown -->
-                                <div>
+                                <div id="quickFilterDropdown">
                                     <label class="form-label d-block">Quick Filter</label>
                                     <div class="dropdown">
                                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -591,16 +591,14 @@ error_reporting(E_ALL);
             </script>
         <?php endif; ?>
         <script>
-        document.querySelectorAll('.dropdown-item').forEach(item => {
+        document.querySelectorAll('#quickFilterDropdown .dropdown-item').forEach(item => {
             item.addEventListener('click', function (e) {
                 e.preventDefault();
                 const value = this.getAttribute('data-value');
 
-                // Clear manual date inputs
                 document.getElementById('start_date').value = '';
                 document.getElementById('end_date').value = '';
 
-                // Set and submit quick filter
                 document.getElementById('filter_range_input').value = value;
                 document.getElementById('filterForm').submit();
             });
