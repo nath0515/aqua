@@ -177,12 +177,44 @@
 
         <script>
             function confirmDelete(locationId) {
-                if (confirm("Are you sure you want to delete this location?")) {
-                    window.location.href = "delete_location.php?id=" + locationId;
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This location will be permanently deleted.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'delete_location.php',
+                            type: 'POST',
+                            data: { id: locationId },
+                            success: function (response) {
+                                // Optional: handle response from PHP
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The location has been removed.',
+                                    icon: 'success',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                // Remove the card from the UI
+                                $('#location-card-' + locationId).fadeOut(500, function () {
+                                    $(this).remove();
+                                });
+                            },
+                            error: function () {
+                                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                            }
+                        });
+                    }
+                });
             }
         </script>
-    
-        
+            
     </body>
 </html>
