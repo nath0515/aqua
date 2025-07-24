@@ -633,6 +633,47 @@
                 }
             });
         }
-    </script>
+    </script><script>
+            let deferredPrompt;
+
+            // Listen for the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('beforeinstallprompt fired'); // Add this
+                e.preventDefault(); // Prevent automatic prompt
+                deferredPrompt = e; // Save the event for later
+                document.getElementById('installBtn').style.display = 'inline-block'; // Show the button
+            });
+
+            // Install button click handler
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+
+                document.getElementById('loadingOverlay').style.display = 'none';
+
+                if (outcome === 'accepted') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Installation Complete',
+                        text: 'AquaDrop has been successfully installed!',
+                        confirmButtonColor: '#0077b6'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Installation Cancelled',
+                        text: 'You can install AquaDrop anytime!',
+                        confirmButtonColor: '#0077b6'
+                    });
+                }
+
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
+            });
+        </script>
     </body>
 </html>
