@@ -21,6 +21,12 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+     $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $unread_count = $unread_result['unread_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -371,8 +377,8 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>                                        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="js/datatables-simple-demo.js"></script>                                      
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
