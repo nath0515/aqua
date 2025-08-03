@@ -390,11 +390,16 @@ if ($next_month > 12) {
         let currentToggle = '';
 
         function toggleAttendance(action) {
+            console.log('toggleAttendance called with action:', action);
             const toggle = document.getElementById(action + '-toggle');
+            console.log('Toggle element:', toggle);
             
             // Check if this action has already been performed today
             const hasLoggedIn = <?php echo ($today_attendance && $today_attendance['in_time']) ? 'true' : 'false'; ?>;
             const hasLoggedOut = <?php echo ($today_attendance && $today_attendance['out_time']) ? 'true' : 'false'; ?>;
+            
+            console.log('hasLoggedIn:', hasLoggedIn);
+            console.log('hasLoggedOut:', hasLoggedOut);
             
             if (action === 'login' && hasLoggedIn) {
                 alert('You have already logged in today.');
@@ -412,6 +417,8 @@ if ($next_month > 12) {
                 return;
             }
             
+            console.log('All checks passed, showing modal');
+            
             currentAction = action;
             currentToggle = action + '-toggle';
             
@@ -419,11 +426,16 @@ if ($next_month > 12) {
             const modalTitle = document.getElementById('modalTitle');
             const modalMessage = document.getElementById('modalMessage');
             
+            console.log('Modal element:', modal);
+            console.log('Modal title element:', modalTitle);
+            console.log('Modal message element:', modalMessage);
+            
             const actionText = action.charAt(0).toUpperCase() + action.slice(1);
             modalTitle.textContent = `Proceed with ${actionText}?`;
             modalMessage.textContent = `Are you sure you want to ${action}? This action will be recorded with the current time.`;
             
             modal.style.display = 'block';
+            console.log('Modal should be visible now');
         }
 
         function confirmAction() {
