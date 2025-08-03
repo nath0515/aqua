@@ -384,12 +384,13 @@ if ($next_month > 12) {
         </div>
     </div>
 
-    <script src="js/scripts.js"></script>
     <script>
         // Test if JavaScript is working at all
         alert('JavaScript is working!');
         console.log('Calendar JavaScript loaded!');
-        
+    </script>
+    <script src="js/scripts.js"></script>
+    <script>
         let currentAction = '';
         let currentToggle = '';
 
