@@ -1,6 +1,7 @@
-<?php 
-    require 'session.php';
-    require 'db.php';
+<?php
+// DEBUG: TESTING DEPLOYMENT - THIS SHOULD BE VISIBLE IF DEPLOYMENT WORKS
+session_start();
+require 'db.php';
     $dateNow = date("Y-m-d");
 
     $user_id = $_SESSION['user_id'];
