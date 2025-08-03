@@ -1,9 +1,8 @@
 <?php
-// Local development database configuration
 $servername = "localhost";  
-$username = "root";         
-$password = "";             
-$dbname = "aquadrop";   
+$username = "u311854902_aquadrop";         
+$password = "8=4u?LaKm062";             
+$dbname = "u311854902_aquadrop";   
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
