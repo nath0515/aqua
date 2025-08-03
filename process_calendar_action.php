@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $stmt->bindParam(':date', $date);
                 } else {
                     // Create new record
-                    $stmt = $conn->prepare("INSERT INTO attendance (user_id, in_time, status) VALUES (:user_id, :in_time, 'present')");
+                    $stmt = $conn->prepare("INSERT INTO attendance (user_id, in_time) VALUES (:user_id, :in_time)");
                     $stmt->bindParam(':user_id', $user_id);
                     $stmt->bindParam(':in_time', $current_time);
                 }
