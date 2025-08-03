@@ -2,6 +2,10 @@
 session_start();
 require 'db.php';
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Check if user is logged in and is a rider
 if (!isset($_SESSION['user_id']) || $_SESSION['role_id'] != 3) {
     header("Location: login.php");
@@ -22,23 +26,6 @@ $stmt = $conn->prepare("SELECT u.user_id, username, email, role_id, firstname, l
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Get attendance data for current month
-$stmt = $conn->prepare("SELECT DATE(in_time) as date, TIME(in_time) as login_time, TIME(out_time) as logout_time, status 
-    FROM attendance 
-    WHERE user_id = :user_id AND MONTH(in_time) = :month AND YEAR(in_time) = :year 
-    ORDER BY in_time DESC");
-$stmt->bindParam(':user_id', $user_id);
-$stmt->bindParam(':month', $current_month);
-$stmt->bindParam(':year', $current_year);
-$stmt->execute();
-$attendance_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Create attendance lookup array
-$attendance_lookup = [];
-foreach ($attendance_data as $record) {
-    $attendance_lookup[$record['date']] = $record;
-}
 
 // Generate calendar
 $first_day = mktime(0, 0, 0, $current_month, 1, $current_year);
@@ -118,9 +105,9 @@ if ($next_month > 12) {
         .calendar-day {
             background: white;
             padding: 10px;
-            min-height: 120px;
-            border: 1px solid #dee2e6;
-            position: relative;
+            min-height: 80px;
+            border-right: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
         }
         .calendar-day.empty {
             background: #f8f9fa;
@@ -129,87 +116,68 @@ if ($next_month > 12) {
             background: #e3f2fd;
             border: 2px solid #2196f3;
         }
-        .calendar-day.past {
-            background: #f5f5f5;
-            color: #999;
-        }
-        .calendar-day.future {
-            background: #f8f9fa;
-            color: #ccc;
-        }
         .day-number {
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .attendance-info {
-            font-size: 0.8em;
-            color: #666;
-        }
-        .toggle-container {
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            right: 5px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
         .toggle-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-wrap: nowrap;
-            font-size: 0.75em;
-            gap: 5px;
-        }
-        .toggle-label {
-            font-weight: bold;
-            color: #333;
-            flex-shrink: 0;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 12px;
         }
         .toggle-time {
-            color: #666;
-            font-size: 0.7em;
-            font-style: italic;
-            flex-shrink: 0;
             margin-right: auto;
+            color: #666;
+        }
+        .toggle-label {
+            flex-shrink: 0;
+            margin-right: 8px;
         }
         .toggle-switch {
+            position: relative;
             display: inline-block;
             width: 40px;
             height: 20px;
-            background: #ccc;
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-            margin: 2px;
-        }
-        .toggle-switch.active {
-            background: #28a745;
-        }
-        .toggle-switch.disabled {
-            background: #e9ecef;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-        .toggle-switch.disabled .toggle-slider {
-            background: #ccc;
-        }
-        .toggle-switch {
             flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
         .toggle-slider {
             position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 20px;
         }
-        .toggle-switch.active .toggle-slider {
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #2196f3;
+        }
+        input:checked + .toggle-slider:before {
             transform: translateX(20px);
+        }
+        .toggle-switch.disabled {
+            opacity: 0.5;
+            pointer-events: none;
         }
         .modal {
             display: none;
@@ -298,13 +266,8 @@ if ($next_month > 12) {
                         </a>
                     </div>
                 </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    <?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?>
-                </div>
             </nav>
         </div>
-
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
@@ -313,23 +276,16 @@ if ($next_month > 12) {
                         <li class="breadcrumb-item"><a href="riderdashboardclosed.php">Dashboard</a></li>
                         <li class="breadcrumb-item active">Calendar</li>
                     </ol>
-
+                    
                     <div class="calendar-container">
                         <div class="calendar-header">
                             <h2><?php echo $month_name; ?></h2>
                             <div class="calendar-nav">
-                                <a href="?month=<?php echo $prev_month; ?>&year=<?php echo $prev_year; ?>" class="btn btn-primary">
-                                    <i class="fas fa-chevron-left"></i> Previous
-                                </a>
-                                <a href="?month=<?php echo date('n'); ?>&year=<?php echo date('Y'); ?>" class="btn btn-secondary">
-                                    Today
-                                </a>
-                                <a href="?month=<?php echo $next_month; ?>&year=<?php echo $next_year; ?>" class="btn btn-primary">
-                                    Next <i class="fas fa-chevron-right"></i>
-                                </a>
+                                <a href="?month=<?php echo $prev_month; ?>&year=<?php echo $prev_year; ?>" class="btn btn-primary">Previous</a>
+                                <a href="?month=<?php echo $next_month; ?>&year=<?php echo $next_year; ?>" class="btn btn-primary">Next</a>
                             </div>
                         </div>
-
+                        
                         <div class="calendar-grid">
                             <div class="calendar-day-header">Sun</div>
                             <div class="calendar-day-header">Mon</div>
@@ -338,62 +294,45 @@ if ($next_month > 12) {
                             <div class="calendar-day-header">Thu</div>
                             <div class="calendar-day-header">Fri</div>
                             <div class="calendar-day-header">Sat</div>
-
+                            
                             <?php
                             // Empty cells for days before the first day of the month
                             for ($i = 0; $i < $first_day_of_week; $i++) {
                                 echo '<div class="calendar-day empty"></div>';
                             }
-
+                            
                             // Days of the month
                             for ($day = 1; $day <= $days_in_month; $day++) {
-                                $date = sprintf('%04d-%02d-%02d', $current_year, $current_month, $day);
-                                $is_today = ($date === $today);
-                                $is_past = ($date < $today);
-                                $is_future = ($date > $today);
+                                $current_date = date('Y-m-d', mktime(0, 0, 0, $current_month, $day, $current_year));
+                                $is_today = ($current_date === $today);
+                                $is_past = ($current_date < $today);
+                                $is_future = ($current_date > $today);
                                 
-                                $day_class = 'calendar-day';
-                                if ($is_today) $day_class .= ' today';
-                                elseif ($is_past) $day_class .= ' past';
-                                elseif ($is_future) $day_class .= ' future';
-
-                                $attendance = isset($attendance_lookup[$date]) ? $attendance_lookup[$date] : null;
-                                
-                                echo '<div class="' . $day_class . '" data-date="' . $date . '">';
+                                echo '<div class="calendar-day' . ($is_today ? ' today' : '') . '">';
                                 echo '<div class="day-number">' . $day . '</div>';
                                 
-
+                                // Only show toggles for today
                                 if ($is_today) {
-                                    $has_logged_in = $attendance && $attendance['login_time'];
-                                    $has_logged_out = $attendance && $attendance['logout_time'];
+                                    $current_time = date('g:i A');
                                     
-                                    echo '<div class="toggle-container">';
-                                    
-                                    // Login toggle row
-                                    $login_title = $has_logged_in ? 'Already logged in' : 'Click to login';
-                                    $login_time = $has_logged_in ? date('g:i A', strtotime($attendance['login_time'])) : '';
+                                    // Login toggle
                                     echo '<div class="toggle-row">';
-                                    echo '<span class="toggle-label">Log in:</span>';
-                                    if ($login_time) echo '<span class="toggle-time">' . $login_time . '</span>';
-                                    echo '<div class="toggle-switch ' . ($has_logged_in ? 'active' : '') . '" id="login-toggle" onclick="toggleAttendance(\'login\')" title="' . $login_title . '">';
-                                    echo '<div class="toggle-slider"></div>';
-                                    echo '</div>';
+                                    echo '<span class="toggle-time">' . $current_time . '</span>';
+                                    echo '<span class="toggle-label">Login</span>';
+                                    echo '<label class="toggle-switch">';
+                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')">';
+                                    echo '<span class="toggle-slider"></span>';
+                                    echo '</label>';
                                     echo '</div>';
                                     
-
-                                    
-                                    // Logout toggle row
-                                    $logout_disabled = !$has_logged_in || $has_logged_out;
-                                    $logout_title = $logout_disabled ? ($has_logged_out ? 'Already logged out' : 'Login first to logout') : 'Click to logout';
-                                    $logout_time = $has_logged_out ? date('g:i A', strtotime($attendance['logout_time'])) : '';
+                                    // Logout toggle
                                     echo '<div class="toggle-row">';
-                                    echo '<span class="toggle-label">Log out:</span>';
-                                    if ($logout_time) echo '<span class="toggle-time">' . $logout_time . '</span>';
-                                    echo '<div class="toggle-switch ' . ($has_logged_out ? 'active' : '') . ($logout_disabled ? ' disabled' : '') . '" id="logout-toggle" ' . ($logout_disabled ? '' : 'onclick="toggleAttendance(\'logout\')"') . ' title="' . $logout_title . '">';
-                                    echo '<div class="toggle-slider"></div>';
-                                    echo '</div>';
-                                    echo '</div>';
-                                    
+                                    echo '<span class="toggle-time">' . $current_time . '</span>';
+                                    echo '<span class="toggle-label">Logout</span>';
+                                    echo '<label class="toggle-switch">';
+                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')">';
+                                    echo '<span class="toggle-slider"></span>';
+                                    echo '</label>';
                                     echo '</div>';
                                 }
                                 
