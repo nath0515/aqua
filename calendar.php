@@ -336,7 +336,7 @@ if ($next_month > 12) {
                                     echo '<span class="toggle-label">Login</span>';
                                     echo '<span class="toggle-time" id="login-time"' . ($has_logged_in ? '' : ' style="display: none;"') . '>' . $login_time . '</span>';
                                     echo '<label class="toggle-switch' . ($has_logged_in ? ' disabled' : '') . '">';
-                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')"' . ($has_logged_in ? ' checked disabled' : '') . '>';
+                                    echo '<input type="checkbox" id="login-toggle" onclick="console.log(\'Login toggle clicked!\'); toggleAttendance(\'login\')"' . ($has_logged_in ? ' checked disabled' : '') . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -346,7 +346,7 @@ if ($next_month > 12) {
                                     echo '<span class="toggle-label">Logout</span>';
                                     echo '<span class="toggle-time" id="logout-time"' . ($has_logged_out ? '' : ' style="display: none;"') . '>' . $logout_time . '</span>';
                                     echo '<label class="toggle-switch' . ($has_logged_out ? ' disabled' : '') . '">';
-                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked disabled' : (!$has_logged_in ? ' disabled' : '')) . '>';
+                                    echo '<input type="checkbox" id="logout-toggle" onclick="console.log(\'Logout toggle clicked!\'); toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked disabled' : (!$has_logged_in ? ' disabled' : '')) . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -386,6 +386,8 @@ if ($next_month > 12) {
 
     <script src="js/scripts.js"></script>
     <script>
+        console.log('Calendar JavaScript loaded!');
+        
         let currentAction = '';
         let currentToggle = '';
 
