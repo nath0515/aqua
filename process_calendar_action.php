@@ -19,22 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         switch ($action) {
             case 'login':
                 // Check if already logged in today
-                $stmt = $conn->prepare("SELECT id FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :date");
+                $stmt = $conn->prepare("SELECT id FROM attendance WHERE user_id = :user_id AND DATE(time_in) = :date");
                 $stmt->bindParam(':user_id', $user_id);
                 $stmt->bindParam(':date', $date);
                 $stmt->execute();
                 
                 if ($stmt->rowCount() > 0) {
                     // Update existing record
-                    $stmt = $conn->prepare("UPDATE attendance SET in_time = :in_time WHERE user_id = :user_id AND DATE(in_time) = :date");
-                    $stmt->bindParam(':in_time', $current_time);
+                    $stmt = $conn->prepare("UPDATE attendance SET time_in = :time_in WHERE user_id = :user_id AND DATE(time_in) = :date");
+                    $stmt->bindParam(':time_in', $current_time);
                     $stmt->bindParam(':user_id', $user_id);
                     $stmt->bindParam(':date', $date);
                 } else {
                     // Create new record
-                    $stmt = $conn->prepare("INSERT INTO attendance (user_id, in_time, status, created_at) VALUES (:user_id, :in_time, 'present', :created_at)");
+                    $stmt = $conn->prepare("INSERT INTO attendance (user_id, time_in, status, created_at) VALUES (:user_id, :time_in, 'present', :created_at)");
                     $stmt->bindParam(':user_id', $user_id);
-                    $stmt->bindParam(':in_time', $current_time);
+                    $stmt->bindParam(':time_in', $current_time);
                     $stmt->bindParam(':created_at', $current_time);
                 }
                 $stmt->execute();
@@ -52,15 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
             case 'logout':
                 // Check if logged in today
-                $stmt = $conn->prepare("SELECT id FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :date");
+                $stmt = $conn->prepare("SELECT id FROM attendance WHERE user_id = :user_id AND DATE(time_in) = :date");
                 $stmt->bindParam(':user_id', $user_id);
                 $stmt->bindParam(':date', $date);
                 $stmt->execute();
                 
                 if ($stmt->rowCount() > 0) {
                     // Update logout time
-                    $stmt = $conn->prepare("UPDATE attendance SET out_time = :out_time WHERE user_id = :user_id AND DATE(in_time) = :date");
-                    $stmt->bindParam(':out_time', $current_time);
+                    $stmt = $conn->prepare("UPDATE attendance SET time_out = :time_out WHERE user_id = :user_id AND DATE(time_in) = :date");
+                    $stmt->bindParam(':time_out', $current_time);
                     $stmt->bindParam(':user_id', $user_id);
                     $stmt->bindParam(':date', $date);
                     $stmt->execute();
