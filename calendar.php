@@ -24,10 +24,10 @@ $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get attendance data for current month
-$stmt = $conn->prepare("SELECT DATE(time_in) as date, TIME(time_in) as login_time, TIME(time_out) as logout_time, status 
+$stmt = $conn->prepare("SELECT DATE(in_time) as date, TIME(in_time) as login_time, TIME(out_time) as logout_time, status 
     FROM attendance 
-    WHERE user_id = :user_id AND MONTH(time_in) = :month AND YEAR(time_in) = :year 
-    ORDER BY time_in DESC");
+    WHERE user_id = :user_id AND MONTH(in_time) = :month AND YEAR(in_time) = :year 
+    ORDER BY in_time DESC");
 $stmt->bindParam(':user_id', $user_id);
 $stmt->bindParam(':month', $current_month);
 $stmt->bindParam(':year', $current_year);
