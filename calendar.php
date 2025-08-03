@@ -313,12 +313,10 @@ if ($next_month > 12) {
                                 
                                 // Only show toggles for today
                                 if ($is_today) {
-                                    $current_time = date('g:i A');
-                                    
                                     // Login toggle
                                     echo '<div class="toggle-row">';
-                                    echo '<span class="toggle-time">' . $current_time . '</span>';
                                     echo '<span class="toggle-label">Login</span>';
+                                    echo '<span class="toggle-time" id="login-time" style="display: none;"></span>';
                                     echo '<label class="toggle-switch">';
                                     echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')">';
                                     echo '<span class="toggle-slider"></span>';
@@ -327,8 +325,8 @@ if ($next_month > 12) {
                                     
                                     // Logout toggle
                                     echo '<div class="toggle-row">';
-                                    echo '<span class="toggle-time">' . $current_time . '</span>';
                                     echo '<span class="toggle-label">Logout</span>';
+                                    echo '<span class="toggle-time" id="logout-time" style="display: none;"></span>';
                                     echo '<label class="toggle-switch">';
                                     echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')">';
                                     echo '<span class="toggle-slider"></span>';
@@ -402,10 +400,17 @@ if ($next_month > 12) {
                 if (data.success) {
                     // Update toggle state
                     const toggle = document.getElementById(currentToggle);
-                    toggle.classList.add('active');
+                    toggle.checked = true;
                     
-                    // Refresh page to show updated time
-                    location.reload();
+                    // Show the time
+                    const timeElement = document.getElementById(currentAction + '-time');
+                    if (timeElement && data.time) {
+                        timeElement.textContent = data.time;
+                        timeElement.style.display = 'inline';
+                    }
+                    
+                    // Close modal
+                    closeModal();
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -414,8 +419,6 @@ if ($next_month > 12) {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
             });
-            
-            closeModal();
         }
 
         function closeModal() {

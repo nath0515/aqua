@@ -38,13 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 $stmt->execute();
                 
-                // Log activity
-                $activity_sql = "INSERT INTO activity_logs (user_id, action, description, message, destination) VALUES (:user_id, 'login', 'Rider logged in', 'Logged in at " . date('g:i A') . "', 'calendar.php')";
-                $activity_stmt = $conn->prepare($activity_sql);
-                $activity_stmt->bindParam(':user_id', $user_id);
-                $activity_stmt->execute();
-                
-                echo json_encode(['success' => true, 'message' => 'Login recorded successfully']);
+                echo json_encode(['success' => true, 'message' => 'Login recorded successfully', 'time' => date('g:i A')]);
                 break;
                 
             case 'logout':
@@ -62,19 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $stmt->bindParam(':date', $date);
                     $stmt->execute();
                     
-                    // Log activity
-                    $activity_sql = "INSERT INTO activity_logs (user_id, action, description, message, destination) VALUES (:user_id, 'logout', 'Rider logged out', 'Logged out at " . date('g:i A') . "', 'calendar.php')";
-                    $activity_stmt = $conn->prepare($activity_sql);
-                    $activity_stmt->bindParam(':user_id', $user_id);
-                    $activity_stmt->execute();
-                    
-                    echo json_encode(['success' => true, 'message' => 'Logout recorded successfully']);
+                    echo json_encode(['success' => true, 'message' => 'Logout recorded successfully', 'time' => date('g:i A')]);
                 } else {
                     echo json_encode(['success' => false, 'message' => 'No login record found for today']);
                 }
                 break;
-                
-
                 
             default:
                 echo json_encode(['success' => false, 'message' => 'Invalid action']);
@@ -82,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } catch (PDOException $e) {
         error_log("Calendar action error: " . $e->getMessage());
-        echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
