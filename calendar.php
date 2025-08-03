@@ -186,6 +186,12 @@ if ($next_month > 12) {
             opacity: 0.5;
             pointer-events: none;
         }
+        .toggle-switch.disabled input {
+            cursor: not-allowed;
+        }
+        .toggle-switch.disabled .toggle-slider {
+            cursor: not-allowed;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -329,8 +335,8 @@ if ($next_month > 12) {
                                     echo '<div class="toggle-row">';
                                     echo '<span class="toggle-label">Login</span>';
                                     echo '<span class="toggle-time" id="login-time"' . ($has_logged_in ? '' : ' style="display: none;"') . '>' . $login_time . '</span>';
-                                    echo '<label class="toggle-switch">';
-                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')"' . ($has_logged_in ? ' checked' : '') . '>';
+                                    echo '<label class="toggle-switch' . ($has_logged_in ? ' disabled' : '') . '">';
+                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')"' . ($has_logged_in ? ' checked disabled' : '') . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -339,8 +345,8 @@ if ($next_month > 12) {
                                     echo '<div class="toggle-row">';
                                     echo '<span class="toggle-label">Logout</span>';
                                     echo '<span class="toggle-time" id="logout-time"' . ($has_logged_out ? '' : ' style="display: none;"') . '>' . $logout_time . '</span>';
-                                    echo '<label class="toggle-switch">';
-                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked' : '') . '>';
+                                    echo '<label class="toggle-switch' . ($has_logged_out ? ' disabled' : '') . '">';
+                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked disabled' : (!$has_logged_in ? ' disabled' : '')) . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -386,9 +392,23 @@ if ($next_month > 12) {
         function toggleAttendance(action) {
             const toggle = document.getElementById(action + '-toggle');
             
-            // If already logged in/out, don't allow toggling again
-            if (toggle.checked) {
-                alert('You have already ' + action + 'ed today.');
+            // Check if this action has already been performed today
+            const hasLoggedIn = <?php echo ($today_attendance && $today_attendance['in_time']) ? 'true' : 'false'; ?>;
+            const hasLoggedOut = <?php echo ($today_attendance && $today_attendance['out_time']) ? 'true' : 'false'; ?>;
+            
+            if (action === 'login' && hasLoggedIn) {
+                alert('You have already logged in today.');
+                return;
+            }
+            
+            if (action === 'logout' && hasLoggedOut) {
+                alert('You have already logged out today.');
+                return;
+            }
+            
+            // For logout, check if user has logged in first
+            if (action === 'logout' && !hasLoggedIn) {
+                alert('You must log in first before logging out.');
                 return;
             }
             
