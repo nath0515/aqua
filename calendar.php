@@ -27,6 +27,13 @@ $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Get today's attendance data
+$stmt = $conn->prepare("SELECT in_time, out_time FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':today', $today);
+$stmt->execute();
+$today_attendance = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Generate calendar
 $first_day = mktime(0, 0, 0, $current_month, 1, $current_year);
 $days_in_month = date('t', $first_day);
@@ -313,12 +320,17 @@ if ($next_month > 12) {
                                 
                                 // Only show toggles for today
                                 if ($is_today) {
+                                    $has_logged_in = $today_attendance && $today_attendance['in_time'];
+                                    $has_logged_out = $today_attendance && $today_attendance['out_time'];
+                                    $login_time = $has_logged_in ? date('g:i A', strtotime($today_attendance['in_time'])) : '';
+                                    $logout_time = $has_logged_out ? date('g:i A', strtotime($today_attendance['out_time'])) : '';
+                                    
                                     // Login toggle
                                     echo '<div class="toggle-row">';
                                     echo '<span class="toggle-label">Login</span>';
-                                    echo '<span class="toggle-time" id="login-time" style="display: none;"></span>';
+                                    echo '<span class="toggle-time" id="login-time"' . ($has_logged_in ? '' : ' style="display: none;"') . '>' . $login_time . '</span>';
                                     echo '<label class="toggle-switch">';
-                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')">';
+                                    echo '<input type="checkbox" id="login-toggle" onclick="toggleAttendance(\'login\')"' . ($has_logged_in ? ' checked' : '') . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -326,9 +338,9 @@ if ($next_month > 12) {
                                     // Logout toggle
                                     echo '<div class="toggle-row">';
                                     echo '<span class="toggle-label">Logout</span>';
-                                    echo '<span class="toggle-time" id="logout-time" style="display: none;"></span>';
+                                    echo '<span class="toggle-time" id="logout-time"' . ($has_logged_out ? '' : ' style="display: none;"') . '>' . $logout_time . '</span>';
                                     echo '<label class="toggle-switch">';
-                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')">';
+                                    echo '<input type="checkbox" id="logout-toggle" onclick="toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked' : '') . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -372,6 +384,14 @@ if ($next_month > 12) {
         let currentToggle = '';
 
         function toggleAttendance(action) {
+            const toggle = document.getElementById(action + '-toggle');
+            
+            // If already logged in/out, don't allow toggling again
+            if (toggle.checked) {
+                alert('You have already ' + action + 'ed today.');
+                return;
+            }
+            
             currentAction = action;
             currentToggle = action + '-toggle';
             
