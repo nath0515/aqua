@@ -20,17 +20,31 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Get filter parameters
+    $start_date = $_GET['start_date'] ?? '';
+    $end_date = $_GET['end_date'] ?? '';
     
-    $stmt = $conn->prepare("
+    // Build the attendance query with date filtering
+    $attendance_sql = "
         SELECT DATE(in_time) AS date, 
             TIME(in_time) AS time_in, 
             TIME(out_time) AS time_out
         FROM attendance
         WHERE user_id = :user_id
-        ORDER BY in_time DESC
-    ");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
+    ";
+    
+    $params = [':user_id' => $user_id];
+    
+    if (!empty($start_date) && !empty($end_date)) {
+        $attendance_sql .= " AND DATE(in_time) BETWEEN :start_date AND :end_date";
+        $params[':start_date'] = $start_date;
+        $params[':end_date'] = $end_date;
+    }
+    
+    $attendance_sql .= " ORDER BY in_time DESC";
+    
+    $stmt = $conn->prepare($attendance_sql);
+    $stmt->execute($params);
     $attendance_data = $stmt->fetchAll(PDO::FETCH_ASSOC);  
 
     $salary_per_day = 500; // Daily rate
@@ -179,15 +193,18 @@
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" value="<?= htmlspecialchars($start_date) ?>" required>
                                 </div>
                                 <div>
                                     <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" value="<?= htmlspecialchars($end_date) ?>" required>
                                 </div>
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary">Filter</button>
+                                    <?php if (!empty($start_date) && !empty($end_date)): ?>
+                                        <a href="attendance.php" class="btn btn-secondary">Clear Filter</a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </form>
@@ -207,37 +224,49 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($attendance_data as $row): ?>
+                                        <?php if (empty($attendance_data)): ?>
                                             <tr>
-                                                <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
-                                                <td>
-                                                <?php
-                                                    $timeInDisplay = ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00' || empty($row['time_in'])) 
-                                                        ? 'Not yet timed in' 
-                                                        : htmlspecialchars($row['time_in']);
-                                                    ?>
-                                                <?= $timeInDisplay ?>
+                                                <td colspan="4" class="text-center text-muted">
+                                                    <?php if (!empty($start_date) && !empty($end_date)): ?>
+                                                        No attendance records found for the selected date range (<?= date('M j', strtotime($start_date)) ?> - <?= date('M j, Y', strtotime($end_date)) ?>)
+                                                    <?php else: ?>
+                                                        No attendance records found
+                                                    <?php endif; ?>
                                                 </td>
-                                                <td>
-                                                <?php
-                                                    $timeOutDisplay = ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00' || empty($row['time_out'])) 
-                                                        ? 'Not yet timed out' 
-                                                        : htmlspecialchars($row['time_out']);
-                                                ?>
-                                                <?= $timeOutDisplay ?>
-                                                </td>
-                                                <?php
-                                                    $daily_salary = 0;
-                                                    if (!empty($row['time_in']) && !empty($row['time_out'])) {
-                                                        $time_in = strtotime($row['time_in']);
-                                                        $time_out = strtotime($row['time_out']);
-                                                        $hours_worked = ($time_out - $time_in) / 3600;
-                                                        $daily_salary = $hours_worked * $hourly_rate;
-                                                    }
-                                                ?>
-                                                <td>₱<?= number_format($daily_salary, 2) ?></td>
                                             </tr>
-                                        <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <?php foreach ($attendance_data as $row): ?>
+                                                <tr>
+                                                    <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
+                                                    <td>
+                                                    <?php
+                                                        $timeInDisplay = ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00' || empty($row['time_in'])) 
+                                                            ? 'Not yet timed in' 
+                                                            : htmlspecialchars($row['time_in']);
+                                                        ?>
+                                                    <?= $timeInDisplay ?>
+                                                    </td>
+                                                    <td>
+                                                    <?php
+                                                        $timeOutDisplay = ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00' || empty($row['time_out'])) 
+                                                            ? 'Not yet timed out' 
+                                                            : htmlspecialchars($row['time_out']);
+                                                    ?>
+                                                    <?= $timeOutDisplay ?>
+                                                    </td>
+                                                    <?php
+                                                        $daily_salary = 0;
+                                                        if (!empty($row['time_in']) && !empty($row['time_out'])) {
+                                                            $time_in = strtotime($row['time_in']);
+                                                            $time_out = strtotime($row['time_out']);
+                                                            $hours_worked = ($time_out - $time_in) / 3600;
+                                                            $daily_salary = $hours_worked * $hourly_rate;
+                                                        }
+                                                    ?>
+                                                    <td>₱<?= number_format($daily_salary, 2) ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                         <tr class="table-success fw-bold">
                                             <td colspan="3"></td> 
                                             <td colspan="2"></td> 
