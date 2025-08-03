@@ -386,6 +386,8 @@ if ($next_month > 12) {
 
     <script src="js/scripts.js"></script>
     <script>
+        // Test if JavaScript is working at all
+        alert('JavaScript is working!');
         console.log('Calendar JavaScript loaded!');
         
         let currentAction = '';
