@@ -23,6 +23,16 @@
     // Get filter parameters
     $start_date = $_GET['start_date'] ?? '';
     $end_date = $_GET['end_date'] ?? '';
+    $date_error = '';
+    
+    // Validate date range
+    if (!empty($start_date) && !empty($end_date)) {
+        if ($start_date > $end_date) {
+            $date_error = 'Error: Start date cannot be after end date. Please select a valid date range.';
+            $start_date = '';
+            $end_date = '';
+        }
+    }
     
     // Build the attendance query with date filtering
     $attendance_sql = "
@@ -35,7 +45,7 @@
     
     $params = [':user_id' => $user_id];
     
-    if (!empty($start_date) && !empty($end_date)) {
+    if (!empty($start_date) && !empty($end_date) && empty($date_error)) {
         $attendance_sql .= " AND DATE(in_time) BETWEEN :start_date AND :end_date";
         $params[':start_date'] = $start_date;
         $params[':end_date'] = $end_date;
@@ -189,6 +199,13 @@
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Attendance</li>
                         </ol>
+                        <?php if (!empty($date_error)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <?= htmlspecialchars($date_error) ?>
+                            </div>
+                        <?php endif; ?>
+                        
                         <form action="attendance.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
@@ -299,6 +316,47 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
+            // Date validation
+            document.addEventListener('DOMContentLoaded', function() {
+                const startDateInput = document.getElementById('start_date');
+                const endDateInput = document.getElementById('end_date');
+                const form = document.querySelector('form[action="attendance.php"]');
+                
+                function validateDates() {
+                    const startDate = startDateInput.value;
+                    const endDate = endDateInput.value;
+                    
+                    if (startDate && endDate && startDate > endDate) {
+                        alert('Error: Start date cannot be after end date. Please select a valid date range.');
+                        return false;
+                    }
+                    return true;
+                }
+                
+                form.addEventListener('submit', function(e) {
+                    if (!validateDates()) {
+                        e.preventDefault();
+                    }
+                });
+                
+                // Real-time validation
+                endDateInput.addEventListener('change', function() {
+                    if (startDateInput.value && this.value && startDateInput.value > this.value) {
+                        this.setCustomValidity('End date must be after start date');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+                
+                startDateInput.addEventListener('change', function() {
+                    if (endDateInput.value && this.value && this.value > endDateInput.value) {
+                        endDateInput.setCustomValidity('End date must be after start date');
+                    } else {
+                        endDateInput.setCustomValidity('');
+                    }
+                });
+            });
+            
             let deferredPrompt;
 
             // Listen for the beforeinstallprompt event
