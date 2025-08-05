@@ -233,10 +233,7 @@ foreach ($cart_data as $item) {
                 gap: 20px;
             }
             
-            /* Add space above cart badge on mobile */
-            .nav-link .badge {
-                top: -5px !important;
-            }
+
             
             .feature-card {
                 padding: 30px 20px;
@@ -257,7 +254,7 @@ foreach ($cart_data as $item) {
     
     <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
         <li class="nav-item me-2">
-            <a class="nav-link position-relative" href="cart.php">
+            <a class="nav-link position-relative mt-2" href="cart.php">
                 <i class="fas fa-shopping-cart"></i>
                 <?php if ($cart_count > 0): ?>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
