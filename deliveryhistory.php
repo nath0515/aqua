@@ -40,7 +40,7 @@
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id 
         JOIN user_details r ON a.rider = r.user_id
-        WHERE a.status_id = 4 AND a.rider = :user_id";  // Filter by rider's user_id (status_id = 4)
+        WHERE a.rider = :user_id AND a.status_id IN (3, 4, 5)";  // Show For Delivery (3), Delivered (4), and Cancelled (5) orders
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);  // Bind user_id here
     $stmt->execute();
@@ -61,7 +61,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Orders</title>
+        <title>Delivery History</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -181,7 +181,7 @@
                             <li class="breadcrumb-item active">Delivery Management</li>
                             <li class="breadcrumb-item active">Delivery History</li>
                         </ol>
-                        <form action="expenses.php" method="GET">
+                        <form action="deliveryhistory.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
@@ -200,7 +200,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Sales
+                                Delivery History
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
