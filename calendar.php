@@ -235,64 +235,70 @@ if ($next_month > 12) {
                 text-align: center;
             }
             
-            /* Mobile Calendar Grid - Wider cells */
+            /* Mobile Calendar Container - Make it scrollable */
+            .calendar-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin: 0 -15px;
+                padding: 0 15px;
+            }
+            
+            /* Mobile Calendar Grid - Fixed width for scrollable table */
             .calendar-grid {
-                grid-template-columns: repeat(7, 1fr);
+                grid-template-columns: repeat(7, 120px);
                 gap: 1px;
-                margin: 0 5px;
+                min-width: 840px; /* 7 columns × 120px */
+                margin: 0;
                 border-radius: 8px;
             }
             
             .calendar-day-header {
-                padding: 8px 2px;
-                font-size: 10px;
-                font-weight: bold;
+                padding: 12px 8px;
+                font-size: 12px;
+                min-width: 120px;
             }
             
             .calendar-day {
-                min-height: 100px;
-                padding: 4px 2px;
+                min-height: 120px;
+                padding: 8px 6px;
+                min-width: 120px;
             }
             
             .day-number {
-                font-size: 12px;
-                margin-bottom: 4px;
-                font-weight: bold;
+                font-size: 14px;
+                margin-bottom: 8px;
             }
             
             /* Mobile Toggle Switches - Keep same as desktop */
             .toggle-row {
-                margin: 2px 0;
-                gap: 2px;
+                margin: 4px 0;
+                gap: 4px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
             
             .toggle-label {
-                width: auto;
-                font-size: 9px;
+                width: 45px;
+                font-size: 11px;
                 white-space: nowrap;
-                flex-shrink: 0;
             }
             
             .toggle-time {
-                width: auto;
-                font-size: 9px;
+                width: 50px;
+                font-size: 11px;
                 white-space: nowrap;
-                flex-shrink: 0;
-                margin-left: 2px;
             }
             
             .toggle-switch {
-                width: 30px;
-                height: 16px;
+                width: 35px;
+                height: 18px;
                 flex-shrink: 0;
             }
             
             .toggle-slider:before {
-                height: 12px;
-                width: 12px;
+                height: 14px;
+                width: 14px;
             }
             
             /* Mobile Sidebar */
@@ -343,51 +349,31 @@ if ($next_month > 12) {
         /* Extra small devices */
         @media (max-width: 480px) {
             .calendar-day {
-                min-height: 90px;
-                padding: 3px 1px;
+                min-height: 100px;
+                padding: 6px 2px;
             }
             
             .day-number {
-                font-size: 11px;
-                margin-bottom: 3px;
-            }
-            
-            .toggle-row {
-                margin: 1px 0;
-                gap: 1px;
-            }
-            
-            .toggle-label {
-                font-size: 8px;
-            }
-            
-            .toggle-time {
-                font-size: 8px;
-                margin-left: 1px;
-            }
-            
-            .toggle-switch {
-                width: 25px;
-                height: 14px;
-            }
-            
-            .toggle-slider:before {
-                height: 10px;
-                width: 10px;
-            }
-            
-            .calendar-header h2 {
-                font-size: 18px;
-            }
-            
-            .calendar-nav a {
-                padding: 8px 12px;
                 font-size: 12px;
             }
             
-            .calendar-day-header {
-                font-size: 9px;
-                padding: 6px 1px;
+            .toggle-label {
+                width: 45px;
+                font-size: 10px;
+            }
+            
+            .toggle-time {
+                width: 50px;
+                font-size: 10px;
+            }
+            
+            .calendar-header h2 {
+                font-size: 20px;
+            }
+            
+            .calendar-nav a {
+                padding: 10px 15px;
+                font-size: 14px;
             }
         }
         .toggle-switch {
