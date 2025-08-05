@@ -125,10 +125,13 @@ if ($next_month > 12) {
         }
         .calendar-day {
             background: white;
-            padding: 10px;
-            min-height: 80px;
+            padding: 8px;
+            height: 120px;
+            width: calc(100% / 7);
             border-right: 1px solid #dee2e6;
             border-bottom: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
         }
         .calendar-day.empty {
             background: #f8f9fa;
@@ -139,7 +142,8 @@ if ($next_month > 12) {
         }
         .day-number {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
         .toggle-row {
             display: flex;
@@ -156,24 +160,34 @@ if ($next_month > 12) {
         }
         .toggle-time {
             color: #666;
-            width: 70px;
+            width: 60px;
             text-align: left;
-            margin-right: 10px;
+            margin-right: 5px;
             flex-shrink: 0;
         }
         
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
+            .calendar-day {
+                height: 100px;
+                padding: 6px;
+            }
             .toggle-label {
-                width: 45px;
-                font-size: 11px;
+                width: 40px;
+                font-size: 10px;
             }
             .toggle-time {
-                width: 60px;
-                font-size: 11px;
+                width: 50px;
+                font-size: 10px;
+                margin-right: 3px;
             }
             .toggle-row {
-                font-size: 11px;
+                font-size: 10px;
+                margin: 3px 0;
+            }
+            .day-number {
+                font-size: 12px;
+                margin-bottom: 6px;
             }
         }
         .toggle-switch {
