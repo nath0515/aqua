@@ -81,7 +81,7 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <li class="nav-item me-2">
-                    <a class="nav-link position-relative" href="cart.php">
+                    <a class="nav-link position-relative mt-2" href="cart.php">
                         <i class="fas fa-shopping-cart"></i>
                         <?php if ($cart_count > 0): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
