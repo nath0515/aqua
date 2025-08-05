@@ -233,6 +233,11 @@ foreach ($cart_data as $item) {
                 gap: 20px;
             }
             
+            /* Add space above cart badge on mobile */
+            .nav-link .badge {
+                top: -5px !important;
+            }
+            
             .feature-card {
                 padding: 30px 20px;
             }
