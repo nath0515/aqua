@@ -235,53 +235,64 @@ if ($next_month > 12) {
                 text-align: center;
             }
             
-            /* Mobile Calendar Grid */
+            /* Mobile Calendar Grid - Wider cells */
             .calendar-grid {
                 grid-template-columns: repeat(7, 1fr);
-                gap: 2px;
-                margin: 0 10px;
+                gap: 1px;
+                margin: 0 5px;
                 border-radius: 8px;
             }
             
             .calendar-day-header {
-                padding: 12px 8px;
-                font-size: 12px;
+                padding: 8px 2px;
+                font-size: 10px;
+                font-weight: bold;
             }
             
             .calendar-day {
-                min-height: 120px;
-                padding: 8px 4px;
+                min-height: 100px;
+                padding: 4px 2px;
             }
             
             .day-number {
-                font-size: 14px;
-                margin-bottom: 8px;
+                font-size: 12px;
+                margin-bottom: 4px;
+                font-weight: bold;
             }
             
             /* Mobile Toggle Switches - Keep same as desktop */
             .toggle-row {
-                margin: 4px 0;
-                gap: 4px;
+                margin: 2px 0;
+                gap: 2px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
             
             .toggle-label {
-                width: 45px;
-                font-size: 11px;
+                width: auto;
+                font-size: 9px;
+                white-space: nowrap;
+                flex-shrink: 0;
             }
             
             .toggle-time {
-                width: 50px;
-                font-size: 11px;
+                width: auto;
+                font-size: 9px;
+                white-space: nowrap;
+                flex-shrink: 0;
+                margin-left: 2px;
             }
             
             .toggle-switch {
-                width: 35px;
-                height: 18px;
+                width: 30px;
+                height: 16px;
+                flex-shrink: 0;
             }
             
             .toggle-slider:before {
-                height: 14px;
-                width: 14px;
+                height: 12px;
+                width: 12px;
             }
             
             /* Mobile Sidebar */
@@ -332,31 +343,51 @@ if ($next_month > 12) {
         /* Extra small devices */
         @media (max-width: 480px) {
             .calendar-day {
-                min-height: 100px;
-                padding: 6px 2px;
+                min-height: 90px;
+                padding: 3px 1px;
             }
             
             .day-number {
-                font-size: 12px;
+                font-size: 11px;
+                margin-bottom: 3px;
+            }
+            
+            .toggle-row {
+                margin: 1px 0;
+                gap: 1px;
             }
             
             .toggle-label {
-                width: 45px;
-                font-size: 10px;
+                font-size: 8px;
             }
             
             .toggle-time {
-                width: 50px;
-                font-size: 10px;
+                font-size: 8px;
+                margin-left: 1px;
+            }
+            
+            .toggle-switch {
+                width: 25px;
+                height: 14px;
+            }
+            
+            .toggle-slider:before {
+                height: 10px;
+                width: 10px;
             }
             
             .calendar-header h2 {
-                font-size: 20px;
+                font-size: 18px;
             }
             
             .calendar-nav a {
-                padding: 10px 15px;
-                font-size: 14px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .calendar-day-header {
+                font-size: 9px;
+                padding: 6px 1px;
             }
         }
         .toggle-switch {
