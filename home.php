@@ -31,9 +31,6 @@ $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $cart_count = 0;
 foreach ($cart_data as $item) {
     $cart_count += $item['quantity'];
-    if ($item['with_container']) {
-        $cart_count += $item['container_quantity'];
-    }
 }
 
 ?>

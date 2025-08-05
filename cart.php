@@ -37,13 +37,10 @@ error_reporting(E_ALL);
     $stmt->execute();
     $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Calculate total items in cart
+    // Calculate total items in cart (only product quantity, not containers)
     $cart_count = 0;
     foreach ($cart_data as $item) {
         $cart_count += $item['quantity'];
-        if ($item['with_container']) {
-            $cart_count += $item['container_quantity'];
-        }
     }
 
     $sql = "SELECT * FROM payment_method";
