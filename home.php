@@ -41,22 +41,164 @@ foreach ($cart_data as $item) {
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Home</title>
+    <title>AquaDrop - Premium Water Delivery Service</title>
     
     <!-- Styles -->
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="manifest" href="/manifest.json"> <!-- ✅ Correct path to manifest -->
+    <link rel="manifest" href="/manifest.json">
     <style>
+        /* Professional Business Styling */
+        .hero-section {
+            background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-cta {
+            background: #ff6b35;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .hero-cta:hover {
+            background: #e55a2b;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .features-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 60px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0077b6, #005a8b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            color: #6c757d;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .cta-section {
+            background: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #0077b6, #005a8b);
+            color: white;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(0, 119, 182, 0.3);
+        }
+        
+        .cta-button:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 119, 182, 0.4);
+        }
+        
+        .app-showcase {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .app-image {
+            max-width: 300px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 20px auto;
+        }
+        
         #loadingOverlay {
             display: none;
             position: fixed;
             z-index: 9999;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             top: 0; left: 0;
             width: 100%; height: 100%;
             justify-content: center;
             align-items: center;
         }
+        
         .spinner {
             border: 6px solid #f3f3f3;
             border-top: 6px solid #0077b6;
@@ -65,9 +207,34 @@ foreach ($cart_data as $item) {
             height: 50px;
             animation: spin 0.8s linear infinite;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
         }
     </style>
 
@@ -79,7 +246,6 @@ foreach ($cart_data as $item) {
 
 <!-- Top Navbar -->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
-
     <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>     
     
@@ -156,60 +322,81 @@ foreach ($cart_data as $item) {
     </div>
 
     <div id="layoutSidenav_content">
-        <!-- Header image -->
-        <div class="text-center mt-3">
-            <img src="assets/img/homepage.png" alt="Header Image" class="img-fluid" style="max-width: 100%; height: auto;">
-        </div>
-
-        <div class="text-center mt-3">
-            <img src="assets/img/homedlapp.png" alt="Header Image" class="img-fluid" style="max-width: 80%; height: auto; border-radius: 10px;">
-        </div>
-
-        <!-- Main content -->
-        <main class="text-center my-4">
-            <button id="installBtn" class="btn btn-primary" style="display: none;">Install AquaDrop</button>
-            <div id="loadingOverlay">
-                <div class="spinner"></div>
-            </div>
-        </main>
-        <section style="font-family: Arial, sans-serif; padding: 40px; background-color: #f8f8f8;">
-            <div style="max-width: 900px; margin: auto; text-align: center;">
-                <h2 style="color: #0077b6; font-size: 2.5em; margin-bottom: 10px;">Why Choose AquaDrop?</h2>
-                <p style="font-size: 1.1em; color: #555;">
-                Order and track deliveries easily through the AquaDrop app now serving your barangay! We're committed to fast, reliable service right where you live.
-                </p>
-            </div>
-
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 40px; gap: 30px;">
-
-                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <h3 style="color: #0077b6;">🌟 Hassle-Free Ordering</h3>
-                <p>Use our web and mobile-based system to place orders and track them with ease all in one place.</p>
-                </div>
-
-                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <h3 style="color: #0077b6;">💧 Quality and Reliability</h3>
-                <p>Enjoy peace of mind with clean, high-quality water delivered reliably by AquaDrop with care and consistency you can trust.</p>
-                </div>
-
-                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <h3 style="color: #0077b6;">🔬 Verified Products</h3>
-                <p>All our water is carefully processed and handled with strict quality and safety standards so you always get clean, safe, and trustworthy service.</p>
-                </div>
-
-                <div style="flex: 1 1 250px; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <h3 style="color: #0077b6;">💳 Easy Payments</h3>
-                <p>Simplify your payments with GCash for fast and secure transactions, or choose the ease of Cash on Delivery (COD) for added convenience.</p>
-                </div>
-
-            </div>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="costumerorder.php" style="background-color: #ff7f50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-size: 1.1em;">Order Now</a>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Premium Water Delivery</h1>
+                <p class="hero-subtitle">Clean, safe, and reliable water delivered right to your doorstep. Experience the convenience of modern water delivery service.</p>
+                <a href="costumerorder.php" class="hero-cta">Start Ordering Now</a>
             </div>
         </section>
 
-        
+        <!-- App Showcase -->
+        <section class="app-showcase">
+            <div class="container">
+                <h2 class="section-title">Download Our App</h2>
+                <p class="text-muted mb-4">Get the full AquaDrop experience with our mobile app</p>
+                <img src="assets/img/homedlapp.png" alt="AquaDrop Mobile App" class="app-image">
+                <div class="mt-4">
+                    <button id="installBtn" class="btn btn-primary btn-lg" style="display: none;">
+                        <i class="fas fa-download me-2"></i>Install AquaDrop
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">Why Choose AquaDrop?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Hassle-Free Ordering</h3>
+                        <p class="feature-description">Use our web and mobile-based system to place orders and track them with ease all in one place.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h3 class="feature-title">Quality & Reliability</h3>
+                        <p class="feature-description">Enjoy peace of mind with clean, high-quality water delivered reliably with care and consistency you can trust.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Verified Products</h3>
+                        <p class="feature-description">All our water is carefully processed and handled with strict quality and safety standards for your peace of mind.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3 class="feature-title">Easy Payments</h3>
+                        <p class="feature-description">Simplify your payments with GCash for fast and secure transactions, or choose Cash on Delivery for convenience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2 class="section-title">Ready to Get Started?</h2>
+                <p class="text-muted mb-4">Join thousands of satisfied customers who trust AquaDrop for their water delivery needs.</p>
+                <a href="costumerorder.php" class="cta-button">Order Now</a>
+            </div>
+        </section>
+
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
     </div>
 </div>
 
@@ -260,7 +447,6 @@ foreach ($cart_data as $item) {
         document.getElementById('installBtn').style.display = 'none';
     });
 </script>
-
 
 </body>
 </html>
