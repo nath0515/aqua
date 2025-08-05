@@ -135,7 +135,7 @@ try {
     }
     
     $notification_message = "New order #$order_id received from $customer_name - ₱" . number_format($total_amount, 2);
-    $notification_sql = "INSERT INTO activity_logs (message, date, destination, read_status) VALUES (:message, :date, 'admin', 0)";
+    $notification_sql = "INSERT INTO activity_logs (message, date, destination, read_status) VALUES (:message, :date, 'orders.php', 0)";
     $notification_stmt = $conn->prepare($notification_sql);
     $notification_stmt->execute([
         ':message' => $notification_message,
