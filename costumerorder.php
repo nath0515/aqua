@@ -167,7 +167,13 @@
                                         </div>
 
                                         <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                            <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                            <?php if (!empty($row['product_photo']) && file_exists($row['product_photo'])): ?>
+                                                <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                            <?php else: ?>
+                                                <div class="d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: #f8f9fa; border-radius: 8px;">
+                                                    <i class="fas fa-water text-primary" style="font-size: 40px;"></i>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
 
                                         <div class="card-footer d-flex align-items-center justify-content-between">

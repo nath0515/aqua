@@ -176,7 +176,13 @@ error_reporting(E_ALL);
                                     data-container-quantity="<?php echo $row['container_quantity'];?>"
                                     >
 
-                                    <img src="<?php echo $row['product_photo'];?>" class="me-3" alt="Product" style="width: 80px; height: auto;">
+                                    <?php if (!empty($row['product_photo']) && file_exists($row['product_photo'])): ?>
+                                        <img src="<?php echo $row['product_photo'];?>" class="me-3" alt="Product" style="width: 80px; height: auto;">
+                                    <?php else: ?>
+                                        <div class="d-flex align-items-center justify-content-center me-3" style="width: 80px; height: 80px; background-color: #f8f9fa; border-radius: 8px;">
+                                            <i class="fas fa-water text-primary" style="font-size: 30px;"></i>
+                                        </div>
+                                    <?php endif; ?>
 
                                     <div class="flex-grow-1">
                                     <h6 class="mb-1"><?php echo $row['product_name'];?></h6>
