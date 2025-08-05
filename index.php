@@ -4,13 +4,25 @@ session_start();
 require 'db.php';
     $dateNow = date("Y-m-d");
 
-    $user_id = $_SESSION['user_id'];
+    // Check if user is logged in
+    if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_id'])) {
+        header("Location: login.php");
+        exit();
+    }
     
+    $user_id = $_SESSION['user_id'];
     $role_id = $_SESSION['role_id'];
+    
+    // Only admin (role_id == 1) can access this page
     if($role_id == 2){
         header("Location: home.php");
+        exit();
     }else if ($role_id == 3){
         header("Location: riderdashboard.php");
+        exit();
+    }else if ($role_id != 1){
+        header("Location: login.php");
+        exit();
     }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
