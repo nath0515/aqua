@@ -53,6 +53,25 @@
     foreach ($cart_data as $item) {
         $cart_count += $item['quantity'];
     }
+
+    // Get order status and check if it's completed
+    $order_status = '';
+    $can_rate = false;
+    $existing_rating = null;
+    
+    if(isset($_GET['id']) && !empty($order_data)) {
+        $order_status = $order_data[0]['status_name'];
+        $can_rate = ($order_status === 'Delivered' || $order_status === 'Completed');
+        
+        // Check if already rated
+        if($can_rate) {
+            $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':order_id', $_GET['id']);
+            $stmt->execute();
+            $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+    }
     
 ?>
 <!DOCTYPE html>
@@ -69,6 +88,43 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            /* Star Rating Styles */
+            .star-rating {
+                display: inline-flex;
+                flex-direction: row-reverse;
+                gap: 2px;
+            }
+            
+            .star-rating input {
+                display: none;
+            }
+            
+            .star-rating label {
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: #ddd;
+                transition: color 0.2s ease;
+            }
+            
+            .star-rating label:hover,
+            .star-rating label:hover ~ label,
+            .star-rating input:checked ~ label {
+                color: #ffc107;
+            }
+            
+            .stars {
+                font-size: 1.2rem;
+            }
+            
+            .stars .fas.fa-star.text-warning {
+                color: #ffc107 !important;
+            }
+            
+            .stars .fas.fa-star.text-muted {
+                color: #6c757d !important;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -234,6 +290,82 @@
                                 <div class="text-end mt-3">
                                     <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">Track Your Order</a>
                                 </div>
+
+                                <!-- Rating Section -->
+                                <?php if($can_rate): ?>
+                                    <div class="card mt-4">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0"><i class="fas fa-star me-2"></i>Rate Your Order</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <?php if($existing_rating): ?>
+                                                <!-- Show existing rating -->
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h6>Order Rating:</h6>
+                                                        <div class="stars">
+                                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                                <i class="fas fa-star <?php echo $i <= $existing_rating['order_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
+                                                            <?php endfor; ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6>Rider Rating:</h6>
+                                                        <div class="stars">
+                                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                                <i class="fas fa-star <?php echo $i <= $existing_rating['rider_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
+                                                            <?php endfor; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php if(!empty($existing_rating['review_text'])): ?>
+                                                    <div class="mt-3">
+                                                        <h6>Your Review:</h6>
+                                                        <p class="text-muted"><?php echo htmlspecialchars($existing_rating['review_text']); ?></p>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <!-- Rating form -->
+                                                <form id="ratingForm">
+                                                    <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
+                                                    
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Rate your order experience:</label>
+                                                            <div class="star-rating">
+                                                                <input type="radio" name="order_rating" value="5" id="order5"><label for="order5"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="order_rating" value="4" id="order4"><label for="order4"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="order_rating" value="3" id="order3"><label for="order3"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="order_rating" value="2" id="order2"><label for="order2"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="order_rating" value="1" id="order1"><label for="order1"><i class="fas fa-star"></i></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Rate your rider:</label>
+                                                            <div class="star-rating">
+                                                                <input type="radio" name="rider_rating" value="5" id="rider5"><label for="rider5"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="rider_rating" value="4" id="rider4"><label for="rider4"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="rider_rating" value="3" id="rider3"><label for="rider3"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="rider_rating" value="2" id="rider2"><label for="rider2"><i class="fas fa-star"></i></label>
+                                                                <input type="radio" name="rider_rating" value="1" id="rider1"><label for="rider1"><i class="fas fa-star"></i></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mb-3">
+                                                        <label for="review_text" class="form-label">Additional comments (optional):</label>
+                                                        <textarea class="form-control" id="review_text" name="review_text" rows="3" maxlength="500" placeholder="Share your experience..."></textarea>
+                                                        <div class="form-text">Maximum 500 characters</div>
+                                                    </div>
+                                                    
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fas fa-paper-plane me-2"></i>Submit Rating
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -385,6 +517,49 @@
                         },
                         error: function() {
                             alert("Failed to fetch product details.");
+                        }
+                    });
+                });
+
+                // Handle rating form submission
+                $("#ratingForm").submit(function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    
+                    $.ajax({
+                        url: "process_order_rating.php",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Rating Submitted!',
+                                    text: response.message,
+                                    confirmButtonColor: '#0077b6'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                    confirmButtonColor: '#0077b6'
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to submit rating. Please try again.',
+                                confirmButtonColor: '#0077b6'
+                            });
                         }
                     });
                 });

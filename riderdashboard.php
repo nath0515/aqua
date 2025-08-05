@@ -142,6 +142,10 @@
                             <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></i></div>
                             Attendance
                             </a>
+                            <a class="nav-link" href="rider_ratings.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                            My Ratings
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
