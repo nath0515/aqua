@@ -22,6 +22,19 @@
             $stmt->bindParam(':rider', $rider);
             $stmt->execute();
 
+            // Get order details for notifications
+            $order_sql = "SELECT o.user_id, o.amount, ud.firstname, ud.lastname, os.status_name 
+                         FROM orders o 
+                         JOIN user_details ud ON o.user_id = ud.user_id 
+                         JOIN orderstatus os ON o.status_id = os.status_id 
+                         WHERE o.order_id = :order_id";
+            $order_stmt = $conn->prepare($order_sql);
+            $order_stmt->bindParam(':order_id', $order_id);
+            $order_stmt->execute();
+            $order_data = $order_stmt->fetch();
+            
+            $now = date('Y-m-d H:i:s');
+            
             // Create notification for assigned rider
             if ($rider > 0) {
                 $rider_sql = "SELECT firstname, lastname FROM user_details WHERE user_id = :rider_id";
@@ -33,7 +46,6 @@
                 if ($rider_data) {
                     $rider_name = $rider_data['firstname'] . ' ' . $rider_data['lastname'];
                     $notification_message = "New delivery assigned: Order #$order_id - Please check your delivery history";
-                    $now = date('Y-m-d H:i:s');
                     
                     $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider')";
                     $notification_stmt = $conn->prepare($notification_sql);
@@ -42,6 +54,23 @@
                         ':date' => $now
                     ]);
                 }
+            }
+            
+            // Create notification for customer about order status change
+            if ($order_data) {
+                $customer_name = $order_data['firstname'] . ' ' . $order_data['lastname'];
+                $status_name = $order_data['status_name'];
+                $amount = number_format($order_data['amount'], 2);
+                
+                $customer_notification_message = "Order #$order_id status updated to: $status_name - Amount: ₱$amount";
+                
+                $customer_notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'customer', :user_id)";
+                $customer_notification_stmt = $conn->prepare($customer_notification_sql);
+                $customer_notification_stmt->execute([
+                    ':message' => $customer_notification_message,
+                    ':date' => $now,
+                    ':user_id' => $order_data['user_id']
+                ]);
             }
 
             header('Location: orders.php?editstatus=success');

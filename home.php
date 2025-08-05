@@ -33,6 +33,19 @@ foreach ($cart_data as $item) {
     $cart_count += $item['quantity'];
 }
 
+// Fetch notifications for customer
+$notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination = 'customer' AND user_id = :user_id AND read_status = 0";
+$notification_stmt = $conn->prepare($notification_sql);
+$notification_stmt->bindParam(':user_id', $user_id);
+$notification_stmt->execute();
+$unread_count = $notification_stmt->fetchColumn();
+
+$recent_notifications_sql = "SELECT * FROM activity_logs WHERE destination = 'customer' AND user_id = :user_id ORDER BY date DESC LIMIT 3";
+$recent_notifications_stmt = $conn->prepare($recent_notifications_sql);
+$recent_notifications_stmt->bindParam(':user_id', $user_id);
+$recent_notifications_stmt->execute();
+$recent_notifications = $recent_notifications_stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -265,18 +278,24 @@ foreach ($cart_data as $item) {
             </a>
         </li>
         <li class="nav-item dropdown me-1">
-            <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-bell"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    3
-                    <span class="visually-hidden">unread messages</span>
-                </span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                <li><a class="dropdown-item" href="#">Notification 3</a></li>
-            </ul>
+                                <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <?php if ($unread_count > 0): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo $unread_count; ?>
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                        <?php endif; ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+                        <?php if (empty($recent_notifications)): ?>
+                            <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>
+                        <?php else: ?>
+                            <?php foreach($recent_notifications as $notification): ?>
+                                <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
