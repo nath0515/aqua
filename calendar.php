@@ -209,26 +209,173 @@ if ($next_month > 12) {
         
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
+            /* Mobile Header */
+            .calendar-header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .calendar-header h2 {
+                font-size: 24px;
+                text-align: center;
+            }
+            
+            .calendar-nav {
+                width: 100%;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            
+            .calendar-nav a {
+                padding: 12px 20px;
+                font-size: 16px;
+                flex: 1;
+                text-align: center;
+            }
+            
+            /* Mobile Calendar Grid */
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 2px;
+                margin: 0 10px;
+                border-radius: 8px;
+            }
+            
+            .calendar-day-header {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+            
             .calendar-day {
-                min-height: 80px;
-                padding: 4px;
+                min-height: 120px;
+                padding: 8px 4px;
+                cursor: pointer;
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
             }
-            .toggle-label {
-                width: 35px;
-                font-size: 9px;
-            }
-            .toggle-time {
-                width: 40px;
-                font-size: 9px;
-            }
-            .toggle-row {
-                font-size: 9px;
-                margin: 2px 0;
-                gap: 3px;
-            }
+            
             .day-number {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+            
+            /* Mobile Toggle Switches */
+            .toggle-row {
+                margin: 6px 0;
+                gap: 6px;
+            }
+            
+            .toggle-label {
+                width: 50px;
                 font-size: 11px;
-                margin-bottom: 4px;
+            }
+            
+            .toggle-time {
+                width: 55px;
+                font-size: 11px;
+            }
+            
+            .toggle-switch {
+                width: 40px;
+                height: 22px;
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .toggle-slider:before {
+                height: 18px;
+                width: 18px;
+            }
+            
+            /* Mobile-specific colors */
+            .calendar-day.today {
+                background: #e3f2fd;
+                border: 3px solid #2196f3;
+            }
+            
+            .toggle-switch input:checked + .toggle-slider {
+                background-color: #4caf50;
+            }
+            
+            /* Mobile Sidebar */
+            #layoutSidenav_nav {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            #layoutSidenav_nav.show {
+                transform: translateX(0);
+            }
+            
+            .sb-topnav {
+                padding: 0 15px;
+            }
+            
+            /* Mobile Modal */
+            .modal-content {
+                margin: 20px;
+                border-radius: 15px;
+            }
+            
+            /* Touch-friendly elements */
+            .calendar-day:hover {
+                background: #f0f8ff;
+            }
+            
+            /* Floating action button for mobile */
+            .mobile-fab {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 24px;
+                box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+                z-index: 1000;
+                transition: all 0.3s ease;
+            }
+            
+            .mobile-fab:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+            }
+        }
+        
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .calendar-day {
+                min-height: 100px;
+                padding: 6px 2px;
+            }
+            
+            .day-number {
+                font-size: 12px;
+            }
+            
+            .toggle-label {
+                width: 45px;
+                font-size: 10px;
+            }
+            
+            .toggle-time {
+                width: 50px;
+                font-size: 10px;
+            }
+            
+            .calendar-header h2 {
+                font-size: 20px;
+            }
+            
+            .calendar-nav a {
+                padding: 10px 15px;
+                font-size: 14px;
             }
         }
         .toggle-switch {
@@ -536,8 +683,121 @@ if ($next_month > 12) {
         </div>
     </div>
 
+    <!-- Mobile Floating Action Button -->
+    <div class="mobile-fab d-md-none" onclick="showMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </div>
+
     <script>
         console.log('Calendar JavaScript loaded!');
+        
+        // Mobile-specific functionality
+        let startX = 0;
+        let endX = 0;
+        let isMobile = window.innerWidth <= 768;
+        
+        // Swipe navigation for mobile
+        function initSwipeNavigation() {
+            const calendar = document.querySelector('.calendar-container');
+            if (!calendar) return;
+            
+            calendar.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true });
+            
+            calendar.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            }, { passive: true });
+        }
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (endX - startX > swipeThreshold) {
+                // Swipe right - Previous month
+                const prevUrl = '<?php echo "?month=" . $prev_month . "&year=" . $prev_year; ?>';
+                window.location.href = prevUrl;
+            } else if (startX - endX > swipeThreshold) {
+                // Swipe left - Next month
+                const nextUrl = '<?php echo "?month=" . $next_month . "&year=" . $next_year; ?>';
+                window.location.href = nextUrl;
+            }
+        }
+        
+        // Mobile menu toggle
+        function showMobileMenu() {
+            const sidebar = document.getElementById('layoutSidenav_nav');
+            if (sidebar) {
+                sidebar.classList.toggle('show');
+            }
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (isMobile) {
+                const sidebar = document.getElementById('layoutSidenav_nav');
+                const fab = document.querySelector('.mobile-fab');
+                if (sidebar && !sidebar.contains(e.target) && !fab.contains(e.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+        
+        // Haptic feedback for mobile interactions
+        function hapticFeedback() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+        
+        // Enhanced toggle function with haptic feedback
+        function toggleAttendance(action) {
+            hapticFeedback();
+            console.log('toggleAttendance called with action:', action);
+            const toggle = document.getElementById(action + '-toggle');
+            console.log('Toggle element:', toggle);
+            
+            if (!toggle) {
+                console.error('Toggle element not found');
+                return;
+            }
+            
+            currentAction = action;
+            currentToggle = toggle;
+            
+            let message = '';
+            if (action === 'login') {
+                message = 'Do you want to Time In?';
+            } else if (action === 'logout') {
+                message = 'Do you want to Time Out?';
+            }
+            
+            document.getElementById('modalTitle').textContent = 'Confirm Action';
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('confirmationModal').style.display = 'block';
+        }
+        
+        // Initialize mobile features
+        document.addEventListener('DOMContentLoaded', function() {
+            initSwipeNavigation();
+            
+            // Add touch feedback to calendar days
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach(day => {
+                day.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                day.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            isMobile = window.innerWidth <= 768;
+        });
     </script>
     <script src="js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
