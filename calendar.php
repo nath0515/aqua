@@ -147,14 +147,19 @@ if ($next_month > 12) {
             align-items: center;
             margin: 5px 0;
             font-size: 12px;
+            gap: 8px;
         }
         .toggle-time {
             margin-right: auto;
             color: #666;
+            min-width: 60px;
+            text-align: right;
+            display: inline-block;
         }
         .toggle-label {
             flex-shrink: 0;
-            margin-right: 8px;
+            min-width: 40px;
+            font-weight: 500;
         }
         .toggle-switch {
             position: relative;
