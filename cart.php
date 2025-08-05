@@ -37,6 +37,15 @@ error_reporting(E_ALL);
     $stmt->execute();
     $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Calculate total items in cart
+    $cart_count = 0;
+    foreach ($cart_data as $item) {
+        $cart_count += $item['quantity'];
+        if ($item['with_container']) {
+            $cart_count += $item['container_quantity'];
+        }
+    }
+
     $sql = "SELECT * FROM payment_method";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -82,8 +91,14 @@ error_reporting(E_ALL);
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <li class="nav-item me-2">
-                    <a class="nav-link" href="cart.php">
+                    <a class="nav-link position-relative" href="cart.php">
                         <i class="fas fa-shopping-cart"></i>
+                        <?php if ($cart_count > 0): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo $cart_count; ?>
+                            <span class="visually-hidden">items in cart</span>
+                        </span>
+                        <?php endif; ?>
                     </a>
                 </li>
                 <li class="nav-item dropdown me-1">

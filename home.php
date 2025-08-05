@@ -18,6 +18,24 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Calculate total items in cart
+$sql = "SELECT a.cart_id, a.product_id, b.product_name, a.with_container, a.quantity, a.container_quantity 
+    FROM cart a 
+    JOIN products b ON a.product_id = b.product_id 
+    WHERE user_id = :user_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$cart_count = 0;
+foreach ($cart_data as $item) {
+    $cart_count += $item['quantity'];
+    if ($item['with_container']) {
+        $cart_count += $item['container_quantity'];
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -70,8 +88,14 @@ $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address
     
     <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
         <li class="nav-item me-2">
-            <a class="nav-link" href="cart.php">
+            <a class="nav-link position-relative" href="cart.php">
                 <i class="fas fa-shopping-cart"></i>
+                <?php if ($cart_count > 0): ?>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <?php echo $cart_count; ?>
+                    <span class="visually-hidden">items in cart</span>
+                </span>
+                <?php endif; ?>
             </a>
         </li>
         <li class="nav-item dropdown me-1">
