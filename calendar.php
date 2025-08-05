@@ -251,8 +251,6 @@ if ($next_month > 12) {
             .calendar-day {
                 min-height: 120px;
                 padding: 8px 4px;
-                cursor: pointer;
-                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
             }
             
             .day-number {
@@ -260,42 +258,30 @@ if ($next_month > 12) {
                 margin-bottom: 8px;
             }
             
-            /* Mobile Toggle Switches */
+            /* Mobile Toggle Switches - Keep same as desktop */
             .toggle-row {
-                margin: 6px 0;
-                gap: 6px;
+                margin: 4px 0;
+                gap: 4px;
             }
             
             .toggle-label {
-                width: 50px;
+                width: 45px;
                 font-size: 11px;
             }
             
             .toggle-time {
-                width: 55px;
+                width: 50px;
                 font-size: 11px;
             }
             
             .toggle-switch {
-                width: 40px;
-                height: 22px;
-                min-height: 44px;
-                min-width: 44px;
+                width: 35px;
+                height: 18px;
             }
             
             .toggle-slider:before {
-                height: 18px;
-                width: 18px;
-            }
-            
-            /* Mobile-specific colors */
-            .calendar-day.today {
-                background: #e3f2fd;
-                border: 3px solid #2196f3;
-            }
-            
-            .toggle-switch input:checked + .toggle-slider {
-                background-color: #4caf50;
+                height: 14px;
+                width: 14px;
             }
             
             /* Mobile Sidebar */
@@ -316,11 +302,6 @@ if ($next_month > 12) {
             .modal-content {
                 margin: 20px;
                 border-radius: 15px;
-            }
-            
-            /* Touch-friendly elements */
-            .calendar-day:hover {
-                background: #f0f8ff;
             }
             
             /* Floating action button for mobile */
@@ -692,37 +673,7 @@ if ($next_month > 12) {
         console.log('Calendar JavaScript loaded!');
         
         // Mobile-specific functionality
-        let startX = 0;
-        let endX = 0;
         let isMobile = window.innerWidth <= 768;
-        
-        // Swipe navigation for mobile
-        function initSwipeNavigation() {
-            const calendar = document.querySelector('.calendar-container');
-            if (!calendar) return;
-            
-            calendar.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
-            
-            calendar.addEventListener('touchend', (e) => {
-                endX = e.changedTouches[0].clientX;
-                handleSwipe();
-            }, { passive: true });
-        }
-        
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            if (endX - startX > swipeThreshold) {
-                // Swipe right - Previous month
-                const prevUrl = '<?php echo "?month=" . $prev_month . "&year=" . $prev_year; ?>';
-                window.location.href = prevUrl;
-            } else if (startX - endX > swipeThreshold) {
-                // Swipe left - Next month
-                const nextUrl = '<?php echo "?month=" . $next_month . "&year=" . $next_year; ?>';
-                window.location.href = nextUrl;
-            }
-        }
         
         // Mobile menu toggle
         function showMobileMenu() {
@@ -743,16 +694,8 @@ if ($next_month > 12) {
             }
         });
         
-        // Haptic feedback for mobile interactions
-        function hapticFeedback() {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(50);
-            }
-        }
-        
-        // Enhanced toggle function with haptic feedback
+        // Enhanced toggle function
         function toggleAttendance(action) {
-            hapticFeedback();
             console.log('toggleAttendance called with action:', action);
             const toggle = document.getElementById(action + '-toggle');
             console.log('Toggle element:', toggle);
@@ -776,23 +719,6 @@ if ($next_month > 12) {
             document.getElementById('modalMessage').textContent = message;
             document.getElementById('confirmationModal').style.display = 'block';
         }
-        
-        // Initialize mobile features
-        document.addEventListener('DOMContentLoaded', function() {
-            initSwipeNavigation();
-            
-            // Add touch feedback to calendar days
-            const calendarDays = document.querySelectorAll('.calendar-day');
-            calendarDays.forEach(day => {
-                day.addEventListener('touchstart', function() {
-                    this.style.transform = 'scale(0.95)';
-                });
-                
-                day.addEventListener('touchend', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-        });
         
         // Handle window resize
         window.addEventListener('resize', function() {
