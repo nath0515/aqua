@@ -34,6 +34,20 @@ $stmt->bindParam(':today', $today);
 $stmt->execute();
 $today_attendance = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Get all attendance data for the current month
+$stmt = $conn->prepare("SELECT DATE(in_time) as date, in_time, out_time FROM attendance WHERE user_id = :user_id AND MONTH(in_time) = :month AND YEAR(in_time) = :year");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->bindParam(':month', $current_month);
+$stmt->bindParam(':year', $current_year);
+$stmt->execute();
+$monthly_attendance = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Create a lookup array for quick access
+$attendance_lookup = [];
+foreach ($monthly_attendance as $record) {
+    $attendance_lookup[$record['date']] = $record;
+}
+
 // Generate calendar
 $first_day = mktime(0, 0, 0, $current_month, 1, $current_year);
 $days_in_month = date('t', $first_day);
@@ -321,11 +335,15 @@ if ($next_month > 12) {
                                 $is_past = ($current_date < $today);
                                 $is_future = ($current_date > $today);
                                 
+                                // Check if there's attendance data for this date
+                                $day_attendance = isset($attendance_lookup[$current_date]) ? $attendance_lookup[$current_date] : null;
+                                $has_attendance = $day_attendance !== null;
+                                
                                 echo '<div class="calendar-day' . ($is_today ? ' today' : '') . '">';
                                 echo '<div class="day-number">' . $day . '</div>';
                                 
-                                // Only show toggles for today
                                 if ($is_today) {
+                                    // Today - show interactive toggles
                                     $has_logged_in = $today_attendance && $today_attendance['in_time'];
                                     $has_logged_out = $today_attendance && $today_attendance['out_time'];
                                     $login_time = $has_logged_in ? date('g:i A', strtotime($today_attendance['in_time'])) : '';
@@ -350,6 +368,30 @@ if ($next_month > 12) {
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
+                                } elseif ($has_attendance && $is_past) {
+                                    // Past days with attendance - show read-only times
+                                    $login_time = $day_attendance['in_time'] ? date('g:i A', strtotime($day_attendance['in_time'])) : '';
+                                    $logout_time = $day_attendance['out_time'] ? date('g:i A', strtotime($day_attendance['out_time'])) : '';
+                                    
+                                    echo '<div class="toggle-row">';
+                                    echo '<span class="toggle-label">Login</span>';
+                                    echo '<span class="toggle-time">' . $login_time . '</span>';
+                                    echo '<label class="toggle-switch disabled">';
+                                    echo '<input type="checkbox" checked disabled>';
+                                    echo '<span class="toggle-slider"></span>';
+                                    echo '</label>';
+                                    echo '</div>';
+                                    
+                                    if ($logout_time) {
+                                        echo '<div class="toggle-row">';
+                                        echo '<span class="toggle-label">Logout</span>';
+                                        echo '<span class="toggle-time">' . $logout_time . '</span>';
+                                        echo '<label class="toggle-switch disabled">';
+                                        echo '<input type="checkbox" checked disabled>';
+                                        echo '<span class="toggle-slider"></span>';
+                                        echo '</label>';
+                                        echo '</div>';
+                                    }
                                 }
                                 
                                 echo '</div>';
