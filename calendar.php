@@ -446,12 +446,18 @@ if ($next_month > 12) {
             formData.append('action', currentAction);
             formData.append('date', '<?php echo $today; ?>');
             
+            console.log('Sending request to process_calendar_action.php');
+            
             fetch('process_calendar_action.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response received:', response);
+                return response.json();
+            })
             .then(data => {
+                console.log('Data received:', data);
                 if (data.success) {
                     // Update toggle state
                     const toggle = document.getElementById(currentToggle);
@@ -466,12 +472,15 @@ if ($next_month > 12) {
                     
                     // Close modal
                     closeModal();
+                    
+                    console.log('Action completed successfully');
                 } else {
+                    console.error('Server error:', data.message);
                     alert('Error: ' + data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Fetch error:', error);
                 alert('An error occurred. Please try again.');
             });
         }
