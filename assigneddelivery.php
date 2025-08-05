@@ -112,7 +112,7 @@
                                 </nav>
                             </div>
                             <a class="nav-link" href="home.php">
-                            <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
                             </a>
                         </div>

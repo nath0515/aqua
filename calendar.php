@@ -378,7 +378,7 @@ if ($next_month > 12) {
                             My Ratings
                         </a>
                         <a class="nav-link" href="attendance.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
                         </a>
                         <a class="nav-link active" href="calendar.php">

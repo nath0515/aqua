@@ -139,10 +139,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                             My Ratings
                             </a>
-                            <a class="nav-link" href="attendance.php">
-                            <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></i></div>
+                                                    <a class="nav-link" href="attendance.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
-                            </a>
+                        </a>
                         </div>
                     </div>
                     </div>

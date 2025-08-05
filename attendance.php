@@ -182,12 +182,12 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                             My Ratings
                             </a>
-                            <a class="nav-link active" href="attendance.php">
-                            <div class="sb-nav-link-icon"><i class="bi bi-calendar-week"></i></i></div>
+                                                    <a class="nav-link active" href="attendance.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
-                            </a>
+                        </a>
                             <a class="nav-link" href="calendar.php">
-                            <div class="sb-nav-link-icon"><i class="bi bi-calendar-month"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Calendar
                             </a>
                         </div>
