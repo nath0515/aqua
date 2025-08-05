@@ -235,21 +235,15 @@ if ($next_month > 12) {
                 text-align: center;
             }
             
-            /* Mobile Calendar Container - Make it scrollable */
-            .calendar-container {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -15px;
-                padding: 0 15px;
-            }
-            
-            /* Mobile Calendar Grid - Fixed width for scrollable table */
+            /* Mobile Calendar Grid - Make only the grid scrollable */
             .calendar-grid {
                 grid-template-columns: repeat(7, 120px);
                 gap: 1px;
                 min-width: 840px; /* 7 columns × 120px */
                 margin: 0;
                 border-radius: 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .calendar-day-header {
