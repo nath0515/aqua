@@ -150,8 +150,9 @@ if ($next_month > 12) {
         }
         .toggle-label {
             flex-shrink: 0;
-            width: 70px;
+            width: 50px;
             font-weight: 500;
+            white-space: nowrap;
         }
         .toggle-time {
             color: #666;
@@ -159,6 +160,21 @@ if ($next_month > 12) {
             text-align: left;
             margin-right: 10px;
             flex-shrink: 0;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .toggle-label {
+                width: 45px;
+                font-size: 11px;
+            }
+            .toggle-time {
+                width: 60px;
+                font-size: 11px;
+            }
+            .toggle-row {
+                font-size: 11px;
+            }
         }
         .toggle-switch {
             position: relative;
