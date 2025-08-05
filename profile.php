@@ -135,11 +135,22 @@
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
                                     <div class="mb-3 text-center">
-                                        <img src="uploads/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
-                                            alt="Profile Picture" 
-                                            id="profilePreview"
-                                            class="img-thumbnail rounded-circle" 
-                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                        <?php 
+                                        $profile_pic_path = "uploads/" . ($user_data['profile_pic'] ?? 'default.png');
+                                        if (!empty($user_data['profile_pic']) && file_exists($profile_pic_path)): 
+                                        ?>
+                                            <img src="<?php echo $profile_pic_path; ?>" 
+                                                alt="Profile Picture" 
+                                                id="profilePreview"
+                                                class="img-thumbnail rounded-circle" 
+                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
+                                                id="profilePreview"
+                                                style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
                                     <div class="mb-3 d-none" id="profilePicGroup">

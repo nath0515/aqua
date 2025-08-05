@@ -226,11 +226,22 @@
                                     </div>
 
                                     <div class="mb-3 text-center">
-                                        <img src="uploads/<?php echo htmlspecialchars($user_data['driver_license_pic'] ?? 'default_license.png'); ?>" 
-                                            alt="Driver's License Preview"
-                                            id="licensePreview"
-                                            class="img-thumbnail" 
-                                            style="width: 200px; height: auto; object-fit: contain;">
+                                        <?php 
+                                        $license_path = "uploads/" . ($user_data['driver_license_pic'] ?? 'default_license.png');
+                                        if (!empty($user_data['driver_license_pic']) && file_exists($license_path)): 
+                                        ?>
+                                            <img src="<?php echo $license_path; ?>" 
+                                                alt="Driver's License Preview"
+                                                id="licensePreview"
+                                                class="img-thumbnail" 
+                                                style="width: 200px; height: auto; object-fit: contain;">
+                                        <?php else: ?>
+                                            <div class="img-thumbnail d-flex align-items-center justify-content-center" 
+                                                id="licensePreview"
+                                                style="width: 200px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                <i class="fas fa-id-card text-primary" style="font-size: 60px;"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
                                     <div class="mb-3">

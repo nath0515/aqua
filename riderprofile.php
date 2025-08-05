@@ -135,11 +135,22 @@
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
                                     <!-- Full Name (Read-only) -->
                                     <div class="mb-3 text-center">
-                                        <img src="uploads/<?php echo htmlspecialchars($user_data['profile_pic'] ?? 'default.png'); ?>" 
-                                            alt="Profile Picture" 
-                                            id="profilePreview"
-                                            class="img-thumbnail rounded-circle" 
-                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                        <?php 
+                                        $profile_pic_path = "uploads/" . ($user_data['profile_pic'] ?? 'default.png');
+                                        if (!empty($user_data['profile_pic']) && file_exists($profile_pic_path)): 
+                                        ?>
+                                            <img src="<?php echo $profile_pic_path; ?>" 
+                                                alt="Profile Picture" 
+                                                id="profilePreview"
+                                                class="img-thumbnail rounded-circle" 
+                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
+                                                id="profilePreview"
+                                                style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="mb-3 d-none" id="profilePicGroup">
                                         <label for="profile_pic" class="form-label">Change Profile Picture</label>
@@ -154,10 +165,20 @@
 
                                     <div class="mb-3 text-center">
                                         <label class="form-label fw-bold">Driver's License</label><br>
-                                        <img src="uploads/<?php echo htmlspecialchars($user_data['drivers_license'] ?? 'default_license.png'); ?>" 
-                                            alt="Driver's License" 
-                                            class="img-thumbnail" 
-                                            style="width: 300px; height: auto; object-fit: contain;">
+                                        <?php 
+                                        $license_path = "uploads/" . ($user_data['drivers_license'] ?? 'default_license.png');
+                                        if (!empty($user_data['drivers_license']) && file_exists($license_path)): 
+                                        ?>
+                                            <img src="<?php echo $license_path; ?>" 
+                                                alt="Driver's License" 
+                                                class="img-thumbnail" 
+                                                style="width: 300px; height: auto; object-fit: contain;">
+                                        <?php else: ?>
+                                            <div class="img-thumbnail d-flex align-items-center justify-content-center" 
+                                                style="width: 300px; height: 200px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                <i class="fas fa-id-card text-primary" style="font-size: 80px;"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
 

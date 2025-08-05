@@ -225,7 +225,13 @@
                                     <?php if($proof_file['proof_file']):?>
                                         <div class="col">
                                             <div class="text-center mb-3">
-                                                <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <?php if (!empty($proof_file['proof_file']) && file_exists($proof_file['proof_file'])): ?>
+                                                    <img src="<?php echo $proof_file['proof_file'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <?php else: ?>
+                                                    <div class="d-flex align-items-center justify-content-center" style="max-width: 200px; min-height:400px; background-color: #f8f9fa; border-radius: 8px;">
+                                                        <i class="fas fa-image text-primary" style="font-size: 60px;"></i>
+                                                    </div>
+                                                <?php endif; ?>
                                                 <p class="mt-2 mb-0 text-muted">Proof of Delivery</p>
                                             </div>
                                         </div>
@@ -233,7 +239,13 @@
                                     <?php if($proof_file['payment_id'] == 2 && $proof_file['proofofpayment']):?>
                                         <div class="col">
                                             <div class="text-center mb-3">
-                                                <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <?php if (!empty($proof_file['proofofpayment']) && file_exists($proof_file['proofofpayment'])): ?>
+                                                    <img src="<?php echo $proof_file['proofofpayment'] ?>" alt="Order Image" style="max-width: 200px; min-height:400px;">
+                                                <?php else: ?>
+                                                    <div class="d-flex align-items-center justify-content-center" style="max-width: 200px; min-height:400px; background-color: #f8f9fa; border-radius: 8px;">
+                                                        <i class="fas fa-credit-card text-primary" style="font-size: 60px;"></i>
+                                                    </div>
+                                                <?php endif; ?>
                                                 <p class="mt-2 mb-0 text-muted">Proof of Payment</p>
                                             </div>
                                         </div>
