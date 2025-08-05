@@ -145,14 +145,14 @@ if ($next_month > 12) {
         }
         .calendar-day {
             background: white;
-            padding: 12px 8px;
-            height: 130px;
-            width: calc(100% / 7);
+            padding: 8px 6px;
+            aspect-ratio: 1;
             border-right: 1px solid #f1f3f4;
             border-bottom: 1px solid #f1f3f4;
             display: flex;
             flex-direction: column;
             transition: all 0.2s ease;
+            min-height: 100px;
         }
         .calendar-day:hover {
             background: #f8f9fa;
@@ -167,33 +167,31 @@ if ($next_month > 12) {
         }
         .day-number {
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 16px;
+            margin-bottom: 6px;
+            font-size: 14px;
             color: #212529;
             text-decoration: underline;
             text-decoration-color: #e9ecef;
-            text-underline-offset: 4px;
+            text-underline-offset: 2px;
         }
         .toggle-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin: 6px 0;
-            font-size: 12px;
+            margin: 4px 0;
+            font-size: 11px;
             white-space: nowrap;
-            gap: 8px;
-            padding: 4px 0;
+            gap: 4px;
         }
         .toggle-label {
             flex-shrink: 0;
-            width: 50px;
+            width: 45px;
             font-weight: 500;
             white-space: nowrap;
             color: #495057;
         }
         .toggle-time {
             color: #6c757d;
-            width: 60px;
+            width: 50px;
             text-align: left;
             flex-shrink: 0;
             font-weight: 500;
@@ -202,34 +200,33 @@ if ($next_month > 12) {
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
             .calendar-day {
-                height: 100px;
-                padding: 6px;
+                min-height: 80px;
+                padding: 4px;
             }
             .toggle-label {
-                width: 40px;
-                font-size: 10px;
+                width: 35px;
+                font-size: 9px;
             }
             .toggle-time {
-                width: 50px;
-                font-size: 10px;
+                width: 40px;
+                font-size: 9px;
             }
             .toggle-row {
-                font-size: 10px;
-                margin: 3px 0;
-                gap: 5px;
+                font-size: 9px;
+                margin: 2px 0;
+                gap: 3px;
             }
             .day-number {
-                font-size: 12px;
-                margin-bottom: 6px;
+                font-size: 11px;
+                margin-bottom: 4px;
             }
         }
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 20px;
+            width: 35px;
+            height: 18px;
             flex-shrink: 0;
-            margin-left: auto;
         }
         .toggle-switch input {
             opacity: 0;
