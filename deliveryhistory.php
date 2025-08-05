@@ -186,7 +186,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
+                                            <th>Order ID</th>
                                             <th>Date</th>
                                             <th>Amount (₱)</th>
                                             <th>Full Name</th>
