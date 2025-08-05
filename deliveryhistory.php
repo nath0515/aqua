@@ -91,18 +91,21 @@
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         <?php 
+                        // Commented out Off Duty toggle
+                        /*
                         $sql = "SELECT status FROM rider_status WHERE user_id = :user_id";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(':user_id', $user_id);
                         $stmt->execute();
                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         $status_rider = $row ? $row['status'] : 0;
+                        */
                         ?>
-                        <li>
+                        <!-- <li>
                         <a class="dropdown-item" href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
                             <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
                         </a>
-                        </li>
+                        </li> -->
                         <div id="loadingOverlay">
                             <div class="spinner"></div>
                         </div>
