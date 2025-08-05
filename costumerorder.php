@@ -23,7 +23,7 @@
         $user_data['latitude'] == 0 || $user_data['longitude'] == 0
     );
 
-    $sql = "SELECT * FROM products";
+    $sql = "SELECT * FROM products ORDER BY container_price ASC, product_name ASC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $products_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -154,14 +154,7 @@
                 border-radius: 8px;
                 text-align: center;
                 margin-top: 15px;
-                margin-bottom: 15px;
                 font-weight: 500;
-            }
-            
-            .container-price {
-                margin-top: 10px;
-                padding-top: 10px;
-                border-top: 1px solid #f1f3f4;
             }
             
             .add-to-cart-btn {
@@ -313,17 +306,17 @@
                                         <span class="price-value">₱<?php echo $row['water_price']; ?></span>
                                     </div>
                                     
-                                    <div class="stock-info">
-                                        <i class="fas fa-boxes me-2"></i>
-                                        Stock: <?php echo $row['stock']; ?> available
-                                    </div>
-                                    
                                     <?php if ($row['container_price'] > 0): ?>
-                                    <div class="price-item container-price">
+                                    <div class="price-item">
                                         <span class="price-label">Container Price:</span>
                                         <span class="price-value">₱<?php echo $row['container_price']; ?></span>
                                     </div>
                                     <?php endif; ?>
+                                    
+                                    <div class="stock-info">
+                                        <i class="fas fa-boxes me-2"></i>
+                                        Stock: <?php echo $row['stock']; ?> available
+                                    </div>
                                     
                                     <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" class="btn add-to-cart-btn">
                                         <i class="fas fa-shopping-cart me-2"></i>
