@@ -148,9 +148,11 @@ if ($next_month > 12) {
         .toggle-row {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin: 5px 0;
             font-size: 12px;
             white-space: nowrap;
+            gap: 8px;
         }
         .toggle-label {
             flex-shrink: 0;
@@ -162,7 +164,6 @@ if ($next_month > 12) {
             color: #666;
             width: 60px;
             text-align: left;
-            margin-right: 5px;
             flex-shrink: 0;
         }
         
@@ -179,11 +180,11 @@ if ($next_month > 12) {
             .toggle-time {
                 width: 50px;
                 font-size: 10px;
-                margin-right: 3px;
             }
             .toggle-row {
                 font-size: 10px;
                 margin: 3px 0;
+                gap: 5px;
             }
             .day-number {
                 font-size: 12px;
@@ -196,6 +197,7 @@ if ($next_month > 12) {
             width: 40px;
             height: 20px;
             flex-shrink: 0;
+            margin-left: auto;
         }
         .toggle-switch input {
             opacity: 0;
@@ -212,6 +214,7 @@ if ($next_month > 12) {
             background-color: #ccc;
             transition: .3s;
             border-radius: 20px;
+            z-index: 1;
         }
         .toggle-slider:before {
             position: absolute;
@@ -223,6 +226,7 @@ if ($next_month > 12) {
             background-color: white;
             transition: .3s;
             border-radius: 50%;
+            z-index: 2;
         }
         input:checked + .toggle-slider {
             background-color: #2196f3;
