@@ -122,6 +122,26 @@ try {
         $cart_stmt->execute([':cart_id' => $item['cart_id']]);
     }
 
+    // Create notification for admin about new order
+    $customer_name = '';
+    $customer_sql = "SELECT firstname, lastname FROM user_details WHERE user_id = :user_id";
+    $customer_stmt = $conn->prepare($customer_sql);
+    $customer_stmt->bindParam(':user_id', $user_id);
+    $customer_stmt->execute();
+    $customer_data = $customer_stmt->fetch();
+    
+    if ($customer_data) {
+        $customer_name = $customer_data['firstname'] . ' ' . $customer_data['lastname'];
+    }
+    
+    $notification_message = "New order #$order_id received from $customer_name - ₱" . number_format($total_amount, 2);
+    $notification_sql = "INSERT INTO activity_logs (message, date, destination, read_status) VALUES (:message, :date, 'admin', 0)";
+    $notification_stmt = $conn->prepare($notification_sql);
+    $notification_stmt->execute([
+        ':message' => $notification_message,
+        ':date' => $now
+    ]);
+
     $conn->commit();
 
     echo json_encode(['success' => true, 'message' => 'Order placed successfully']);
