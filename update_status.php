@@ -31,7 +31,7 @@ if (isset($_POST['order_id']) && isset($_POST['new_status'])) {
             $customer_notification_message = "Order #$order_id status updated to: $new_status - Amount: ₱$amount";
             $now = date('Y-m-d H:i:s');
             
-            $customer_notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'customer', :user_id)";
+            $customer_notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'costumer_orderdetails.php?id=$order_id', :user_id)";
             $customer_notification_stmt = $conn->prepare($customer_notification_sql);
             $customer_notification_stmt->execute([
                 ':message' => $customer_notification_message,

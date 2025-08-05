@@ -20,12 +20,12 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     // Fetch notifications for rider
-    $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination = 'rider' AND read_status = 0";
+    $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination LIKE 'rider_orderdetails.php%' AND read_status = 0";
     $notification_stmt = $conn->prepare($notification_sql);
     $notification_stmt->execute();
     $unread_count = $notification_stmt->fetchColumn();
 
-    $recent_notifications_sql = "SELECT * FROM activity_logs WHERE destination = 'rider' ORDER BY date DESC LIMIT 3";
+    $recent_notifications_sql = "SELECT * FROM activity_logs WHERE destination LIKE 'rider_orderdetails.php%' ORDER BY date DESC LIMIT 3";
     $recent_notifications_stmt = $conn->prepare($recent_notifications_sql);
     $recent_notifications_stmt->execute();
     $recent_notifications = $recent_notifications_stmt->fetchAll();

@@ -47,7 +47,7 @@
                     $rider_name = $rider_data['firstname'] . ' ' . $rider_data['lastname'];
                     $notification_message = "New delivery assigned: Order #$order_id - Please check your delivery history";
                     
-                    $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider')";
+                    $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider_orderdetails.php?id=$order_id')";
                     $notification_stmt = $conn->prepare($notification_sql);
                     $notification_stmt->execute([
                         ':message' => $notification_message,
@@ -64,7 +64,7 @@
                 
                 $customer_notification_message = "Order #$order_id status updated to: $status_name - Amount: ₱$amount";
                 
-                $customer_notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'customer', :user_id)";
+                $customer_notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'costumer_orderdetails.php?id=$order_id', :user_id)";
                 $customer_notification_stmt = $conn->prepare($customer_notification_sql);
                 $customer_notification_stmt->execute([
                     ':message' => $customer_notification_message,

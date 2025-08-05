@@ -12,13 +12,13 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     // Fetch notifications for customer
-    $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination = 'customer' AND user_id = :user_id AND read_status = 0";
+    $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination LIKE 'costumer_orderdetails.php%' AND user_id = :user_id AND read_status = 0";
     $notification_stmt = $conn->prepare($notification_sql);
     $notification_stmt->bindParam(':user_id', $user_id);
     $notification_stmt->execute();
     $unread_count = $notification_stmt->fetchColumn();
 
-    $recent_notifications_sql = "SELECT * FROM activity_logs WHERE destination = 'customer' AND user_id = :user_id ORDER BY date DESC LIMIT 3";
+    $recent_notifications_sql = "SELECT * FROM activity_logs WHERE destination LIKE 'costumer_orderdetails.php%' AND user_id = :user_id ORDER BY date DESC LIMIT 3";
     $recent_notifications_stmt = $conn->prepare($recent_notifications_sql);
     $recent_notifications_stmt->bindParam(':user_id', $user_id);
     $recent_notifications_stmt->execute();
