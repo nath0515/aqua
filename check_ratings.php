@@ -14,14 +14,14 @@ try {
     
     if($result['count'] > 0) {
         // Show all ratings
-        $sql = "SELECT or.*, o.order_id, o.date, 
+        $sql = "SELECT r.*, o.order_id, o.date, 
                 ud.firstname, ud.lastname,
                 rd.firstname as rider_firstname, rd.lastname as rider_lastname
-                FROM order_ratings or
-                JOIN orders o ON or.order_id = o.order_id
-                JOIN user_details ud ON or.user_id = ud.user_id
-                JOIN user_details rd ON or.rider_id = rd.user_id
-                ORDER BY or.created_at DESC";
+                FROM order_ratings r
+                JOIN orders o ON r.order_id = o.order_id
+                JOIN user_details ud ON r.user_id = ud.user_id
+                JOIN user_details rd ON r.rider_id = rd.user_id
+                ORDER BY r.created_at DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $ratings = $stmt->fetchAll(PDO::FETCH_ASSOC);
