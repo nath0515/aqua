@@ -11,17 +11,17 @@ if($role_id != 3){
     exit;
 }
 
-// Get rider's ratings
-$sql = "SELECT or.*, o.order_id, o.date, o.amount, 
-        ud.firstname, ud.lastname, ud.contact_number,
-        p.product_name
-        FROM order_ratings or
-        JOIN orders o ON or.order_id = o.order_id
-        JOIN user_details ud ON or.user_id = ud.user_id
-        JOIN orderitems oi ON o.order_id = oi.order_id
-        JOIN products p ON oi.product_id = p.product_id
-        WHERE or.rider_id = :rider_id
-        ORDER BY or.created_at DESC";
+    // Get rider's ratings
+    $sql = "SELECT r.*, o.order_id, o.date, o.amount, 
+            ud.firstname, ud.lastname, ud.contact_number,
+            p.product_name
+            FROM order_ratings r
+            JOIN orders o ON r.order_id = o.order_id
+            JOIN user_details ud ON r.user_id = ud.user_id
+            JOIN orderitems oi ON o.order_id = oi.order_id
+            JOIN products p ON oi.product_id = p.product_id
+            WHERE r.rider_id = :rider_id
+            ORDER BY r.created_at DESC";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':rider_id', $user_id);
 $stmt->execute();
