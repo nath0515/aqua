@@ -229,7 +229,7 @@ foreach ($cart_data as $item) {
             }
             
             .features-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
             
