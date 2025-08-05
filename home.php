@@ -175,17 +175,18 @@ foreach ($cart_data as $item) {
             box-shadow: 0 15px 35px rgba(0, 119, 182, 0.4);
         }
         
-        .app-showcase {
+        .app-banner {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 60px 0;
+            padding: 40px 0;
             text-align: center;
         }
         
-        .app-image {
-            max-width: 300px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            margin: 20px auto;
+        .banner-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin: 0 auto;
         }
         
         #loadingOverlay {
@@ -331,13 +332,11 @@ foreach ($cart_data as $item) {
             </div>
         </section>
 
-        <!-- App Showcase -->
-        <section class="app-showcase">
+        <!-- App Banner -->
+        <section class="app-banner">
             <div class="container">
-                <h2 class="section-title">Download Our App</h2>
-                <p class="text-muted mb-4">Get the full AquaDrop experience with our mobile app</p>
-                <img src="assets/img/homedlapp.png" alt="AquaDrop Mobile App" class="app-image">
-                <div class="mt-4">
+                <img src="assets/img/homedlapp.png" alt="AquaDrop Mobile App" class="banner-image">
+                <div class="text-center mt-4">
                     <button id="installBtn" class="btn btn-primary btn-lg" style="display: none;">
                         <i class="fas fa-download me-2"></i>Install AquaDrop
                     </button>
