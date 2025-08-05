@@ -346,7 +346,7 @@ if ($next_month > 12) {
                                     echo '<span class="toggle-label">Logout</span>';
                                     echo '<span class="toggle-time" id="logout-time"' . ($has_logged_out ? '' : ' style="display: none;"') . '>' . $logout_time . '</span>';
                                     echo '<label class="toggle-switch' . ($has_logged_out ? ' disabled' : '') . '">';
-                                    echo '<input type="checkbox" id="logout-toggle" onclick="console.log(\'Logout toggle clicked!\'); toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked disabled' : (!$has_logged_in ? ' disabled' : '')) . '>';
+                                    echo '<input type="checkbox" id="logout-toggle" onclick="console.log(\'Logout toggle clicked!\'); console.log(\'hasLoggedIn: ' . ($has_logged_in ? 'true' : 'false') . '\'); console.log(\'hasLoggedOut: ' . ($has_logged_out ? 'true' : 'false') . '\'); toggleAttendance(\'logout\')"' . ($has_logged_out ? ' checked disabled' : (!$has_logged_in ? ' disabled' : '')) . '>';
                                     echo '<span class="toggle-slider"></span>';
                                     echo '</label>';
                                     echo '</div>';
@@ -385,8 +385,6 @@ if ($next_month > 12) {
     </div>
 
     <script>
-        // Test if JavaScript is working at all
-        alert('JavaScript is working!');
         console.log('Calendar JavaScript loaded!');
     </script>
     <script src="js/scripts.js"></script>
