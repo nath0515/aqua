@@ -61,12 +61,138 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Stock</title>
+        <title>Products - AquaDrop</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+            /* Professional Product Page Styling */
+            .products-header {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                color: white;
+                padding: 40px 0;
+                margin-bottom: 40px;
+            }
+            
+            .products-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            
+            .products-subtitle {
+                font-size: 1.1rem;
+                opacity: 0.9;
+            }
+            
+            .product-card {
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+                border: 1px solid #e9ecef;
+                overflow: hidden;
+                height: 100%;
+            }
+            
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            }
+            
+            .product-header {
+                background: linear-gradient(135deg, #0077b6, #005a8b);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+            
+            .product-image {
+                padding: 30px;
+                text-align: center;
+                background: #f8f9fa;
+                min-height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .product-details {
+                padding: 25px;
+            }
+            
+            .price-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f3f4;
+            }
+            
+            .price-item:last-child {
+                border-bottom: none;
+            }
+            
+            .price-label {
+                font-weight: 500;
+                color: #6c757d;
+            }
+            
+            .price-value {
+                font-weight: 600;
+                color: #0077b6;
+            }
+            
+            .stock-info {
+                background: #e8f5e8;
+                color: #2d5a2d;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                margin-top: 15px;
+                font-weight: 500;
+            }
+            
+            .add-to-cart-btn {
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                width: 100%;
+                margin-top: 15px;
+            }
+            
+            .add-to-cart-btn:hover {
+                background: linear-gradient(135deg, #218838, #1ea085);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            }
+            
+            .products-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+                margin-top: 30px;
+            }
+            
+            @media (max-width: 768px) {
+                .products-title {
+                    font-size: 2rem;
+                }
+                
+                .products-grid {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -104,12 +230,13 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -133,7 +260,7 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="costumerorder.php">Order</a>
+                                    <a class="nav-link" href="costumerorder.php">Products</a>
                                     <a class="nav-link" href="orderhistory.php">Order History</a>
                                 </nav>
                             </div>
@@ -146,52 +273,61 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <main>
+                <!-- Products Header -->
+                <section class="products-header">
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Order</h1>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Order</li>
-                        </ol>
-                        <div class="row">
-                            <!-- Card -->
-                            <?php foreach($products_data as $row):?>
-                                <div class="col-xl-3 col-md-6 mb-4">
-                                    <div class="card bg-primary text-white position-relative h-100">
-                                        <!-- Invisible link covering the whole card -->
-                                        <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" class="stretched-link" style="z-index: 1;"></a>
+                        <h1 class="products-title">Our Products</h1>
+                        <p class="products-subtitle">Choose from our premium selection of clean, safe drinking water</p>
+                    </div>
+                </section>
 
-                                        <div class="card-header text-center" style="font-size: 20px;">
-                                            <?php echo $row['product_name']; ?>
-                                        </div>
-
-                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center" style="font-size: 25px;">
-                                            <?php if (!empty($row['product_photo']) && file_exists($row['product_photo'])): ?>
-                                                <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
-                                            <?php else: ?>
-                                                <div class="d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: #f8f9fa; border-radius: 8px;">
-                                                    <i class="fas fa-water text-primary" style="font-size: 40px;"></i>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <div>
-                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                Container Price: ₱<?php echo $row['container_price']; ?><br>
-                                                Stock: <?php echo $row['stock']; ?>
-                                            </div>
-                                            <div class="small text-white">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                <!-- Products Grid -->
+                <main class="container-fluid px-4">
+                    <div class="products-grid">
+                        <?php foreach($products_data as $row):?>
+                            <div class="product-card">
+                                <div class="product-header">
+                                    <?php echo $row['product_name']; ?>
                                 </div>
-                            <?php endforeach;?>
-                        </div>
+                                
+                                <div class="product-image">
+                                    <?php if (!empty($row['product_photo']) && file_exists($row['product_photo'])): ?>
+                                        <img src="<?php echo $row['product_photo']; ?>" width="120px" height="120px" class="rounded">
+                                    <?php else: ?>
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; background-color: #f8f9fa; border-radius: 12px;">
+                                            <i class="fas fa-water text-primary" style="font-size: 50px;"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div class="product-details">
+                                    <div class="price-item">
+                                        <span class="price-label">Water Price:</span>
+                                        <span class="price-value">₱<?php echo $row['water_price']; ?></span>
+                                    </div>
+                                    
+                                    <?php if ($row['container_price'] > 0): ?>
+                                    <div class="price-item">
+                                        <span class="price-label">Container Price:</span>
+                                        <span class="price-value">₱<?php echo $row['container_price']; ?></span>
+                                    </div>
+                                    <?php endif; ?>
+                                    
+                                    <div class="stock-info">
+                                        <i class="fas fa-boxes me-2"></i>
+                                        Stock: <?php echo $row['stock']; ?> available
+                                    </div>
+                                    
+                                    <a href="costumer_createpurchase.php?id=<?php echo $row['product_id']; ?>" class="btn add-to-cart-btn">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Add to Cart
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach;?>
                     </div>
                 </main>
+                
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -251,132 +387,5 @@
                 document.getElementById('installBtn').style.display = 'none';
             });
         </script>
-
-        <!-- PWA: Service Worker Registration -->
-        <script>
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js') // ✅ Root-level path
-                    .then(reg => console.log('✅ Service Worker registered:', reg))
-                    .catch(err => console.error('❌ Service Worker registration failed:', err));
-            }
-        </script>
-
-        <?php if(isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Your action was completed successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'error'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Unexpected error.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'filetype'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Invalid file type. Please upload a valid file.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['status']) && $_GET['status'] == 'exist'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Product name already exists.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['stock']) && $_GET['stock'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Stock added successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php elseif(isset($_GET['edit']) && $_GET['edit'] == 'success'): ?>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Item edited successfully.',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            </script>
-        <?php endif; ?>
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $(".editProductBtn").click(function() {
-                    var productId = $(this).data("id");
-
-                    $.ajax({
-                        url: "process_getproductdata.php",
-                        type: "POST",
-                        data: { product_id: productId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                $("#editProductId").val(productId);
-                                $("#editProductName").val(response.data.product_name);
-                                $("#editWaterPrice").val(response.data.water_price);
-                                $("#editContainerPrice").val(response.data.container_price);
-                                $("#editStock").val(response.data.stock);
-                                $("#editProductImagePreview").attr("src", response.data.product_photo);
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
-        <script>
-            <?php if ($needsPinning): ?>
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Location Required',
-                    text: 'Please pin your delivery location before placing an order.',
-                    confirmButtonText: 'Pin Now',
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'mapuser.php';
-                    }
-                });
-            <?php endif; ?>
-    </script>    
-    <?php if (isset($storeClosed) && $storeClosed): ?>
-    <script>
-        Swal.fire({
-            icon: 'warning',
-            title: 'The Shop is Closed',
-            text: 'The shop is currently closed. You can still place your order now — it will be prepared and delivered once the shop opens.',
-            allowOutsideClick: false
-        });
-    </script>
-<?php endif; ?>
     </body>
 </html>
