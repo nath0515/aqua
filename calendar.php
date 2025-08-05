@@ -337,15 +337,21 @@ if ($next_month > 12) {
             <li class="nav-item dropdown">
                 <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-bell fa-fw"></i>
+                    <?php if ($unread_count > 0): ?>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        3
+                        <?php echo $unread_count; ?>
                         <span class="visually-hidden">unread messages</span>
                     </span>
+                    <?php endif; ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                    <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                    <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                    <li><a class="dropdown-item" href="#">Notification 3</a></li>
+                    <?php if (empty($recent_notifications)): ?>
+                        <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>
+                    <?php else: ?>
+                        <?php foreach($recent_notifications as $notification): ?>
+                            <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </ul>
             </li>
             <li class="nav-item dropdown">
