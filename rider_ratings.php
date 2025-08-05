@@ -13,13 +13,10 @@ if($role_id != 3){
 
     // Get rider's ratings
     $sql = "SELECT r.*, o.order_id, o.date, o.amount, 
-            ud.firstname, ud.lastname, ud.contact_number,
-            p.product_name
+            ud.firstname, ud.lastname, ud.contact_number
             FROM order_ratings r
             JOIN orders o ON r.order_id = o.order_id
             JOIN user_details ud ON r.user_id = ud.user_id
-            JOIN orderitems oi ON o.order_id = oi.order_id
-            JOIN products p ON oi.product_id = p.product_id
             WHERE r.rider_id = :rider_id
             ORDER BY r.created_at DESC";
 $stmt = $conn->prepare($sql);
@@ -180,7 +177,7 @@ if($total_orders > 0) {
                                         <?php echo date('M d, Y', strtotime($rating['date'])); ?>
                                     </p>
                                     <p class="mb-2">
-                                        <strong>Product:</strong> <?php echo htmlspecialchars($rating['product_name']); ?>
+                                        <strong>Order Amount:</strong> ₱<?php echo number_format($rating['amount'], 2); ?>
                                     </p>
                                 </div>
                                 <div class="col-md-4 text-end">
