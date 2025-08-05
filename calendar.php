@@ -146,18 +146,17 @@ if ($next_month > 12) {
             align-items: center;
             margin: 5px 0;
             font-size: 12px;
-            gap: 8px;
         }
         .toggle-label {
             flex-shrink: 0;
-            min-width: 40px;
+            width: 50px;
             font-weight: 500;
         }
         .toggle-time {
             color: #666;
-            min-width: 60px;
+            width: 70px;
             text-align: left;
-            margin-right: 8px;
+            margin-right: 10px;
         }
         .toggle-switch {
             position: relative;
