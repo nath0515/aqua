@@ -158,13 +158,25 @@
                             <li class="breadcrumb-item active"><a href="orders.php">Order</a></li>
                             <li class="breadcrumb-item active">View Orders</li>
                         </ol>
+                        <!-- Order ID Header -->
                         <div class="card mb-4">
-                            
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0">
+                                        <i class="fas fa-receipt me-2"></i>
+                                        Order #<?php echo $_GET['id']; ?>
+                                    </h4>
+                                    <span class="badge bg-light text-dark fs-6">
+                                        <?php echo $order_data[0]['status_name'] ?? ''; ?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Orders
+                                Order Details
                             </div>
                             <div class="card-body table-responsive">
                                 <?php 
@@ -174,7 +186,29 @@
                                 $stmt->execute();
                                 $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                 ?>
-                                <h5 class="text-end mb-3">Total Price: ₱ <?php echo $total_data['amount']?></h5>
+                                
+                                <!-- Order Summary -->
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h6 class="text-muted mb-2">Order Information</h6>
+                                        <p class="mb-1"><strong>Order Date:</strong> <?php echo date('F d, Y', strtotime($order_data[0]['date'])); ?></p>
+                                        <p class="mb-1"><strong>Customer:</strong> <?php echo $order_data[0]['firstname'] . ' ' . $order_data[0]['lastname']; ?></p>
+                                        <p class="mb-1"><strong>Contact:</strong> <?php echo $order_data[0]['contact_number']; ?></p>
+                                        <p class="mb-1"><strong>Address:</strong> <?php echo $order_data[0]['address']; ?></p>
+                                    </div>
+                                    <div class="col-md-6 text-md-end">
+                                        <h6 class="text-muted mb-2">Order Summary</h6>
+                                        <p class="mb-1"><strong>Total Items:</strong> <?php echo count($order_data); ?></p>
+                                        <p class="mb-1"><strong>Order Status:</strong> 
+                                            <span class="badge <?php echo ($order_data[0]['status_name'] === 'Delivered' || $order_data[0]['status_name'] === 'Completed') ? 'bg-success' : 'bg-warning'; ?>">
+                                                <?php echo $order_data[0]['status_name']; ?>
+                                            </span>
+                                        </p>
+                                        <h5 class="text-primary mb-0">Total Amount: ₱<?php echo number_format($total_data['amount'], 2); ?></h5>
+                                    </div>
+                                </div>
+                                
+                                <hr class="my-4">
                                 <table class="table table-bordered p-1">
                                     <thead>
                                         <tr>
