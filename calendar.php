@@ -150,7 +150,7 @@ if ($next_month > 12) {
         }
         .toggle-label {
             flex-shrink: 0;
-            width: 50px;
+            width: 60px;
             font-weight: 500;
         }
         .toggle-time {
