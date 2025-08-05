@@ -52,11 +52,218 @@
                 text-overflow: ellipsis;
                 display: block;
                 max-width: 200px;
-                
             }
             .notification-text.fw-bold {
                 font-weight: 600;
                 color: #000;
+            }
+            
+            /* Professional Stock Page Styling */
+            .stock-header {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                color: white;
+                padding: 40px 0;
+                border-radius: 15px;
+                margin-bottom: 30px;
+                box-shadow: 0 4px 20px rgba(0, 119, 182, 0.15);
+            }
+            
+            .stock-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+            
+            .stock-subtitle {
+                font-size: 1.1rem;
+                opacity: 0.9;
+                margin-bottom: 0;
+            }
+            
+            .product-card {
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                border: none;
+                overflow: hidden;
+                height: 100%;
+            }
+            
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+            
+            .product-header {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                position: relative;
+            }
+            
+            .product-name {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin: 0;
+                line-height: 1.3;
+            }
+            
+            .product-image-container {
+                padding: 30px 20px;
+                background: #f8f9fa;
+                text-align: center;
+                min-height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .product-image {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .product-placeholder {
+                width: 80px;
+                height: 80px;
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .product-details {
+                padding: 20px;
+                background: white;
+            }
+            
+            .price-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f3f4;
+            }
+            
+            .price-row:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+            
+            .price-label {
+                font-weight: 500;
+                color: #495057;
+                font-size: 0.9rem;
+            }
+            
+            .price-value {
+                font-weight: 600;
+                color: #0077b6;
+                font-size: 0.95rem;
+            }
+            
+            .stock-badge {
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                display: inline-block;
+                margin-top: 10px;
+            }
+            
+            .edit-button {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            }
+            
+            .edit-button:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+            }
+            
+            .action-buttons {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+            
+            .btn-modern {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+            }
+            
+            .btn-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+                color: white;
+            }
+            
+            .btn-success-modern {
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            }
+            
+            .btn-success-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+                color: white;
+            }
+            
+            .stats-card {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 30px;
+                border: none;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #0077b6;
+                margin-bottom: 5px;
+            }
+            
+            .stats-label {
+                color: #6c757d;
+                font-weight: 500;
+                font-size: 0.9rem;
             }
         </style>
     </head>
@@ -187,52 +394,93 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stock</h1>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Order Management</li>
-                            <li class="breadcrumb-item active">Stock</li>
-                        </ol>
-                        <button class="btn btn-success btn-round ms-auto mb-3 me-1" data-bs-toggle="modal" data-bs-target="#additem">
-                            <i class="fa fa-plus"></i>
-                            Add Product
-                        </button>
-                        <button class="btn btn-success btn-round ms-auto mb-3" data-bs-toggle="modal" data-bs-target="#addstock">
-                            <i class="fa fa-plus"></i>
-                            Add Stock
-                        </button>
+                        <!-- Professional Header -->
+                        <div class="stock-header text-center">
+                            <h1 class="stock-title">Product Inventory</h1>
+                            <p class="stock-subtitle">Manage your water products and stock levels</p>
+                        </div>
                         
+                        <!-- Statistics Cards -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stats-card text-center">
+                                    <div class="stats-number"><?php echo count($products_data); ?></div>
+                                    <div class="stats-label">Total Products</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card text-center">
+                                    <div class="stats-number"><?php echo array_sum(array_column($products_data, 'stock')); ?></div>
+                                    <div class="stats-label">Total Stock</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card text-center">
+                                    <div class="stats-number">₱<?php echo number_format(array_sum(array_column($products_data, 'water_price'))); ?></div>
+                                    <div class="stats-label">Total Value</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stats-card text-center">
+                                    <div class="stats-number"><?php echo count(array_filter($products_data, function($p) { return $p['stock'] < 10; })); ?></div>
+                                    <div class="stats-label">Low Stock Items</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#additem">
+                                <i class="fa fa-plus me-2"></i>
+                                Add Product
+                            </button>
+                            <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addstock">
+                                <i class="fa fa-plus me-2"></i>
+                                Add Stock
+                            </button>
+                        </div>
 
+                        <!-- Product Grid -->
                         <div class="row">
                             <?php foreach ($products_data as $row): ?>
-                                <div class="col-xl-3 col-md-6">
+                                <div class="col-xl-3 col-md-6 mb-4">
                                     <div 
-                                        class="card bg-primary text-white mb-4 editProductCard" 
+                                        class="product-card editProductCard" 
                                         style="cursor: pointer;" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#edititem"
                                         data-id="<?php echo $row['product_id']; ?>"
                                     >
-                                        <div class="card-header" style="font-size: 20px;">
-                                            <?php echo $row['product_name']; ?>
+                                        <div class="product-header">
+                                            <h5 class="product-name"><?php echo $row['product_name']; ?></h5>
+                                            <button class="edit-button">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
                                         </div>
-                                        <div class="card-body bg-white text-center d-flex justify-content-center align-items-center">
+                                        
+                                        <div class="product-image-container">
                                             <?php if (!empty($row['product_photo']) && file_exists($row['product_photo'])): ?>
-                                                <img src="<?php echo $row['product_photo']; ?>" width="100px" height="100px" class="rounded">
+                                                <img src="<?php echo $row['product_photo']; ?>" class="product-image" alt="<?php echo $row['product_name']; ?>">
                                             <?php else: ?>
-                                                <div class="d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: #f8f9fa; border-radius: 8px;">
-                                                    <i class="fas fa-water text-primary" style="font-size: 40px;"></i>
+                                                <div class="product-placeholder">
+                                                    <i class="fas fa-water" style="font-size: 30px; color: #0077b6;"></i>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <span>
-                                                Water Price: ₱<?php echo $row['water_price']; ?><br>
-                                                Container Price: ₱<?php echo $row['container_price']; ?><br>
-                                                Stock: <?php echo $row['stock']; ?>
-                                            </span>
-                                            <div class="small text-white">
-                                                <i class="bi bi-pencil-square"></i>
+                                        
+                                        <div class="product-details">
+                                            <div class="price-row">
+                                                <span class="price-label">Water Price:</span>
+                                                <span class="price-value">₱<?php echo number_format($row['water_price'], 2); ?></span>
+                                            </div>
+                                            <div class="price-row">
+                                                <span class="price-label">Container Price:</span>
+                                                <span class="price-value">₱<?php echo number_format($row['container_price'], 2); ?></span>
+                                            </div>
+                                            <div class="text-center">
+                                                <span class="stock-badge">
+                                                    Stock: <?php echo $row['stock']; ?>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
