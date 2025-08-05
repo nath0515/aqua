@@ -29,7 +29,10 @@ if (!is_array($data_items) || $payment_id <= 0) {
 // Handle file upload
 $proof_path = null;
 
-if ($payment_id === 2) {
+if ($payment_id === 1) {
+    // Cash on Delivery - no proof needed
+    $proof_path = '';
+} else if ($payment_id === 2) {
     if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
         $ext = pathinfo($_FILES['proof_file']['name'], PATHINFO_EXTENSION);
         $filename = uniqid("proof_", true) . '.' . $ext;
