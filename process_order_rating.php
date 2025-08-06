@@ -72,6 +72,31 @@ try {
     $stmt->bindParam(':review_text', $review_text);
     $stmt->execute();
 
+    // Create notification for rider about new rating
+    if ($order['rider']) {
+        // Get customer name for notification
+        $customer_sql = "SELECT firstname, lastname FROM user_details WHERE user_id = :user_id";
+        $customer_stmt = $conn->prepare($customer_sql);
+        $customer_stmt->bindParam(':user_id', $user_id);
+        $customer_stmt->execute();
+        $customer_data = $customer_stmt->fetch();
+        
+        $customer_name = '';
+        if ($customer_data) {
+            $customer_name = $customer_data['firstname'] . ' ' . $customer_data['lastname'];
+        }
+        
+        $notification_message = "New rating received from $customer_name for Order #$order_id - Check your ratings!";
+        $now = date('Y-m-d H:i:s');
+        
+        $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider_ratings.php')";
+        $notification_stmt = $conn->prepare($notification_sql);
+        $notification_stmt->execute([
+            ':message' => $notification_message,
+            ':date' => $now
+        ]);
+    }
+
     echo json_encode(['success' => true, 'message' => 'Rating submitted successfully']);
 
 } catch(PDOException $e) {
