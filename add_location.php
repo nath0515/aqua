@@ -368,12 +368,16 @@
                                     </div>
                                     <div class="card-body">
                                         <div id="map"></div>
-                                        <div class="mt-3">
-                                            <p class="text-muted mb-2">
-                                                <i class="fas fa-info-circle me-2"></i>
-                                                Click on the map to adjust your exact delivery location
-                                            </p>
-                                        </div>
+                                                                                    <div class="mt-3">
+                                                <p class="text-muted mb-2">
+                                                    <i class="fas fa-info-circle me-2"></i>
+                                                    Click on the map to adjust your exact delivery location
+                                                </p>
+                                                <div class="alert alert-info" id="reverseGeocodeInfo" style="display: none;">
+                                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                                    <strong>Auto-detecting address...</strong> We're automatically filling in the address details for you.
+                                                </div>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -634,6 +638,9 @@
             document.getElementById('selectedCoordinates').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
             document.getElementById('locationPreview').style.display = 'block';
             
+            // Reverse geocode to get address details
+            reverseGeocode(lat, lon);
+            
             updateStepProgress(2);
         }
 
@@ -656,9 +663,108 @@
             // Update coordinates display
             document.getElementById('selectedCoordinates').textContent = `${selectedLat.toFixed(6)}, ${selectedLng.toFixed(6)}`;
             
+            // Reverse geocode to get address details
+            reverseGeocode(selectedLat, selectedLng);
+            
             updateStepProgress(2);
         });
 
+        // Reverse geocoding function
+        function reverseGeocode(lat, lng) {
+            // Show loading indicator
+            const addressField = document.getElementById('address');
+            const barangayField = document.getElementById('barangay_id');
+            const infoAlert = document.getElementById('reverseGeocodeInfo');
+            
+            // Show info alert
+            infoAlert.style.display = 'block';
+            
+            // Add loading state to fields
+            addressField.style.background = '#f8f9fa';
+            barangayField.style.background = '#f8f9fa';
+            
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Reverse geocoding result:', data);
+                    
+                    // Auto-populate address fields
+                    if (data.address) {
+                        let populatedFields = [];
+                        
+                        // Try to populate street address
+                        if (data.address.road) {
+                            let streetAddress = '';
+                            if (data.address.house_number) {
+                                streetAddress += data.address.house_number + ' ';
+                            }
+                            streetAddress += data.address.road;
+                            document.getElementById('address').value = streetAddress;
+                            populatedFields.push('street address');
+                        }
+                        
+                        // Try to populate barangay
+                        if (data.address.suburb || data.address.neighbourhood) {
+                            const barangayName = data.address.suburb || data.address.neighbourhood;
+                            const wasPopulated = populateBarangayByName(barangayName);
+                            if (wasPopulated) {
+                                populatedFields.push('barangay');
+                            }
+                        }
+                        
+                        // Remove loading state
+                        addressField.style.background = '';
+                        barangayField.style.background = '';
+                        infoAlert.style.display = 'none';
+                        
+                        // Show success message if fields were populated
+                        if (populatedFields.length > 0) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '📍 Address Detected!',
+                                text: `We've automatically filled in: ${populatedFields.join(', ')}`,
+                                timer: 3000,
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-end'
+                            });
+                        }
+                    } else {
+                        // Remove loading state
+                        addressField.style.background = '';
+                        barangayField.style.background = '';
+                        infoAlert.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Reverse geocoding error:', error);
+                    // Remove loading state
+                    addressField.style.background = '';
+                    barangayField.style.background = '';
+                    infoAlert.style.display = 'none';
+                });
+        }
+        
+        // Function to populate barangay by name
+        function populateBarangayByName(barangayName) {
+            const barangaySelect = document.getElementById('barangay_id');
+            const options = barangaySelect.options;
+            
+            // Convert barangay name to lowercase for comparison
+            const searchName = barangayName.toLowerCase();
+            
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].text.toLowerCase();
+                if (optionText.includes(searchName) || searchName.includes(optionText)) {
+                    barangaySelect.selectedIndex = i;
+                    return true; // Successfully populated
+                }
+            }
+            return false; // No match found
+        }
+        
         // Step progress function
         function updateStepProgress(step) {
             const steps = document.querySelectorAll('.step');
