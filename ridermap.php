@@ -43,10 +43,11 @@
     }
 
     $endCoordinatesArray = [];
-        $sql = "SELECT orders.order_id, latitude, longitude FROM orders 
-                JOIN user_details ON orders.user_id = user_details.user_id
-                WHERE latitude IS NOT NULL AND longitude IS NOT NULL 
-                AND status_id = 3 
+        $sql = "SELECT orders.order_id, ul.latitude, ul.longitude, ul.label, ul.address 
+                FROM orders 
+                LEFT JOIN user_locations ul ON orders.location_id = ul.location_id
+                WHERE ul.latitude IS NOT NULL AND ul.longitude IS NOT NULL 
+                AND orders.status_id = 3 
                 AND orders.rider = :rider_id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':rider_id', $user_id);
@@ -516,7 +517,7 @@
                     
                     const marker = L.marker([coord.lat, coord.lon], { icon: customIcon })
                         .addTo(map)
-                        .bindPopup(`<strong>Delivery #${index + 1}</strong><br>Order #${coord.order_id}<br><button class='btn btn-sm btn-primary mt-2' onclick='selectDelivery(${coord.order_id})'>Select This Delivery</button>`)
+                        .bindPopup(`<strong>Delivery #${index + 1}</strong><br>Order #${coord.order_id}<br><strong>${coord.label || 'Delivery Location'}</strong><br><small>${coord.address || ''}</small><br><button class='btn btn-sm btn-primary mt-2' onclick='selectDelivery(${coord.order_id})'>Select This Delivery</button>`)
                         .on('click', function() {
                             selectDelivery(coord.order_id);
                         });

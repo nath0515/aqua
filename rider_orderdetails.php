@@ -35,13 +35,15 @@
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.water_price_promo, b.container_price, 
-        c.date, c.amount, c.rider, 
-        d.firstname, d.lastname, d.address, d.contact_number,
-        e.status_name
+        c.date, c.amount, c.rider, c.location_id,
+        d.firstname, d.lastname, d.contact_number,
+        e.status_name,
+        ul.label, ul.address, ul.latitude, ul.longitude
         FROM orderitems a
         JOIN products b ON a.product_id = b.product_id
         JOIN orders c ON a.order_id = c.order_id
         JOIN user_details d ON c.user_id = d.user_id
+        LEFT JOIN user_locations ul ON c.location_id = ul.location_id
         JOIN orderstatus e ON c.status_id = e.status_id
         WHERE a.order_id = :order_id";
         $stmt = $conn->prepare($sql);
@@ -218,7 +220,15 @@
                                         <p class="mb-1"><strong>Order Date:</strong> <?php echo date('F d, Y', strtotime($order_data[0]['date'])); ?></p>
                                         <p class="mb-1"><strong>Customer:</strong> <?php echo $order_data[0]['firstname'] . ' ' . $order_data[0]['lastname']; ?></p>
                                         <p class="mb-1"><strong>Contact:</strong> <?php echo $order_data[0]['contact_number']; ?></p>
-                                        <p class="mb-1"><strong>Address:</strong> <?php echo $order_data[0]['address']; ?></p>
+                                        <p class="mb-1"><strong>Address:</strong> 
+                                            <?php if (!empty($order_data[0]['label'])): ?>
+                                                <strong><?php echo htmlspecialchars($order_data[0]['label']); ?></strong><br>
+                                            <?php endif; ?>
+                                            <?php echo htmlspecialchars($order_data[0]['address']); ?>
+                                            <?php if (!empty($order_data[0]['latitude']) && !empty($order_data[0]['longitude'])): ?>
+                                                <br><small class="text-muted">📍 Coordinates: <?php echo $order_data[0]['latitude']; ?>, <?php echo $order_data[0]['longitude']; ?></small>
+                                            <?php endif; ?>
+                                        </p>
                                     </div>
                                     <div class="col-md-6 text-md-end">
                                         <h6 class="text-muted mb-2">Order Summary</h6>
