@@ -759,12 +759,32 @@
                         }
                         
                         // Try to populate barangay
-                        if (data.address.suburb || data.address.neighbourhood) {
-                            const barangayName = data.address.suburb || data.address.neighbourhood;
+                        console.log('Full reverse geocoding response:', data.address);
+                        
+                        // Try multiple possible fields for barangay name
+                        const possibleBarangayFields = [
+                            data.address.suburb,
+                            data.address.neighbourhood,
+                            data.address.city_district,
+                            data.address.district,
+                            data.address.quarter,
+                            data.address.residential
+                        ].filter(Boolean); // Remove empty values
+                        
+                        let barangayPopulated = false;
+                        for (const barangayName of possibleBarangayFields) {
+                            console.log('Trying barangay name:', barangayName);
                             const wasPopulated = populateBarangayByName(barangayName);
                             if (wasPopulated) {
                                 populatedFields.push('barangay');
+                                barangayPopulated = true;
+                                break;
                             }
+                        }
+                        
+                        if (!barangayPopulated) {
+                            console.log('Failed to populate barangay. Tried:', possibleBarangayFields);
+                            console.log('Available barangay options:', Array.from(document.getElementById('barangay_id').options).map(opt => opt.text));
                         }
                         
                         // Remove loading state
@@ -810,6 +830,7 @@
             
             // Common barangay name mappings
             const barangayMappings = {
+                'pagsawitan': ['pagsawitan'],
                 'poblacion': ['poblacion 1', 'poblacion 2', 'poblacion 3', 'poblacion 4', 'poblacion 5', 'poblacion 6', 'poblacion 7', 'poblacion 8', 'poblacion 9'],
                 'san jose': ['san jose'],
                 'san antonio': ['san antonio'],
@@ -837,7 +858,27 @@
                 const optionText = options[i].text.toLowerCase();
                 if (optionText.includes(searchName) || searchName.includes(optionText)) {
                     barangaySelect.selectedIndex = i;
+                    console.log('Found exact match:', optionText, 'for search:', searchName);
                     return true;
+                }
+            }
+            
+            // Check for partial matches (more flexible)
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].text.toLowerCase();
+                const searchWords = searchName.split(' ');
+                const optionWords = optionText.split(' ');
+                
+                // Check if any word from search matches any word from option
+                for (const searchWord of searchWords) {
+                    for (const optionWord of optionWords) {
+                        if (searchWord.length > 2 && optionWord.length > 2 && 
+                            (searchWord.includes(optionWord) || optionWord.includes(searchWord))) {
+                            barangaySelect.selectedIndex = i;
+                            console.log('Found partial match:', optionText, 'for search:', searchName);
+                            return true;
+                        }
+                    }
                 }
             }
             
