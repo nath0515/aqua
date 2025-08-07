@@ -242,10 +242,6 @@
                                                     Mark as Delivered
                                                 </button>
                                             <?php endif; ?>
-                                            <button type="button" class="btn btn-primary" id="editOrderBtn" data-id="<?php echo $order_id; ?>" data-bs-toggle="modal" data-bs-target="#editorder">
-                                                <i class="fas fa-edit me-2"></i>
-                                                Edit Order
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -341,48 +337,7 @@
             </div>
         </div>
 
-        <!-- Edit Order Modal -->
-        <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-            
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="process_editorder.php" method="POST" enctype="multipart/form-data">
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                                <!-- Status -->
-                                <div class="mb-3">
-                                    <label for="stock" class="form-label">Status</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
-                                        <select name="status_id" id="editStatusId" class="form-select">
-                                            <?php foreach($status_data as $row):?>
-                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
-                                            <?php endforeach;?>
-                                        </select>
-                                    </div>
-                                </div>
 
-                                <!-- Order Items -->
-                                <div class="mb-3" id="orderItemsContainer">
-                                </div>
-
-                            
-                        </div>
-            
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -443,46 +398,7 @@
             }
         </script>
 
-        <script>
-            $(document).ready(function() {
-                $("#editOrderBtn").click(function() {
-                    var orderId = $(this).data("id");
 
-                    $.ajax({
-                        url: "process_getorderdata.php",
-                        type: "POST",
-                        data: { order_id: orderId },
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                const orderItems = response.data2;
-
-                                $("#editStatusId").val(response.data.status_id);
-
-
-                                let itemsHtml = '<h5>Order Items:</h5>';
-                                orderItems.forEach(item => {
-                                    itemsHtml += `
-                                        <div>
-                                            <p>Item: ${item.product_name}</p>
-                                            <p>Quantity: ${item.quantity}</p>
-                                            <p>Price: ₱${item.price}</p>
-                                        </div>
-                                    `;
-                                });
-                                $('#orderItemsContainer').html(itemsHtml);
-                                
-                            } else {
-                                alert("Error fetching product data.");
-                            }
-                        },
-                        error: function() {
-                            alert("Failed to fetch product details.");
-                        }
-                    });
-                });
-            });
-        </script>
 
         <!-- Mark as Delivered Modal -->
         <div class="modal fade" id="markDeliveredModal" tabindex="-1" aria-labelledby="markDeliveredModalLabel" aria-hidden="true">
