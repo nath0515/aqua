@@ -1,6 +1,7 @@
 <?php 
     require 'session.php';
     require 'db.php';
+    require 'notification_helper.php';
 
     $user_id = $_SESSION['user_id'];
     $role_id = $_SESSION['role_id'];
@@ -18,10 +19,8 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "SELECT * FROM orderstatus";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Get notifications
+    $notifications = getNotifications($conn, $user_id, $role_id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -280,15 +279,11 @@
              <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
+                        <?php echo renderNotificationBadge($notifications['unread_count']); ?>
+                        <span class="visually-hidden">unread messages</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 3</a></li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

@@ -1,9 +1,13 @@
 <?php 
     require 'session.php';
     require 'db.php';
+    require 'notification_helper.php';
 
     $role_id = $_SESSION['role_id'];
     $user_id = $_SESSION['user_id'];
+    
+    // Get notifications
+    $notifications = getNotifications($conn, $user_id, $role_id);
     if(isset($_GET['id'])){
         $order_id = $_GET['id'];
     }
@@ -71,15 +75,11 @@
              <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
+                        <?php echo renderNotificationBadge($notifications['unread_count']); ?>
+                        <span class="visually-hidden">unread messages</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li><a class="dropdown-item" href="#">Notification 1</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 2</a></li>
-                        <li><a class="dropdown-item" href="#">Notification 3</a></li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
