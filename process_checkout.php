@@ -116,6 +116,28 @@ try {
         ]);
     }
 
+    // Update stock levels
+    $select_stock_stmt = $conn->prepare('SELECT stock FROM products WHERE product_id = :product_id');
+    $update_stock_stmt = $conn->prepare('UPDATE products SET stock = :stock WHERE product_id = :product_id');
+    
+    foreach ($data_items as $item) {
+        $product_id = intval($item['product_id']);
+        $quantity = intval($item['quantity']);
+        
+        // Get current stock
+        $select_stock_stmt->execute([':product_id' => $product_id]);
+        $current_stock = $select_stock_stmt->fetchColumn();
+        
+        // Calculate new stock (reduce by quantity ordered)
+        $new_stock = $current_stock - $quantity;
+        
+        // Update stock
+        $update_stock_stmt->execute([
+            ':stock' => $new_stock,
+            ':product_id' => $product_id
+        ]);
+    }
+
     // Remove items from cart
     $cart_stmt = $conn->prepare("DELETE FROM cart WHERE cart_id = :cart_id");
     foreach ($data_items as $item) {
