@@ -259,9 +259,10 @@
                                         <ul class="list-unstyled mb-0">
                                             <li><i class="fas fa-info-circle text-primary me-2"></i>Blue line shows your delivery route</li>
                                             <li><i class="fas fa-truck text-dark me-2"></i>Black icon shows your current location</li>
-                                            <li><i class="fas fa-map-pin text-danger me-2"></i>Red pin shows delivery destination</li>
-                                            <li><i class="fas fa-list-ol text-info me-2"></i>Numbers show delivery sequence</li>
-                                            <li><i class="fas fa-check-circle text-success me-2"></i>Click "Select" then "Complete" when you reach the destination</li>
+                                            <li><i class="fas fa-map-pin text-danger me-2"></i>Colored pins show all delivery locations</li>
+                                            <li><i class="fas fa-list-ol text-info me-2"></i>Click "Select" to view route to specific delivery</li>
+                                            <li><i class="fas fa-check-circle text-success me-2"></i>Click "Complete" when you reach the destination</li>
+                                            <li><i class="fas fa-mouse-pointer text-warning me-2"></i>Click any pin to select that delivery</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -498,10 +499,14 @@
                 destinationMarkers.forEach(marker => map.removeLayer(marker));
                 destinationMarkers = [];
                 
-                // Add markers for all delivery points
+                // Add markers for all delivery points with different colors
                 endCoordinates.forEach((coord, index) => {
-                    const redIcon = L.icon({
-                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                    // Use different colors for different delivery points
+                    const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
+                    const color = colors[index % colors.length];
+                    
+                    const customIcon = L.icon({
+                        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
                         iconSize: [25, 41],
                         iconAnchor: [12, 41],
@@ -509,9 +514,9 @@
                         shadowSize: [41, 41]
                     });
                     
-                    const marker = L.marker([coord.lat, coord.lon], { icon: redIcon })
+                    const marker = L.marker([coord.lat, coord.lon], { icon: customIcon })
                         .addTo(map)
-                        .bindPopup(`Delivery #${index + 1}<br>Order #${coord.order_id}`)
+                        .bindPopup(`<strong>Delivery #${index + 1}</strong><br>Order #${coord.order_id}<br><button class='btn btn-sm btn-primary mt-2' onclick='selectDelivery(${coord.order_id})'>Select This Delivery</button>`)
                         .on('click', function() {
                             selectDelivery(coord.order_id);
                         });
@@ -524,6 +529,10 @@
                     const closestIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
                     const closest = endCoordinates[closestIndex];
                     fetchRoute(currentStartCoord, [closest.lat, closest.lon]);
+                    
+                    // Highlight the closest delivery in the table
+                    $('#deliveryTableBody tr').removeClass('table-primary');
+                    $(`#deliveryTableBody tr[data-order-id="${closest.order_id}"]`).addClass('table-primary');
                 }
             }
         }
@@ -620,12 +629,33 @@
                 // Find the selected delivery coordinates
                 const selectedDelivery = endCoordinates.find(coord => coord.order_id == orderId);
                 if (selectedDelivery && currentStartCoord) {
+                    // Clear existing route
+                    if (currentRouteLine) {
+                        map.removeLayer(currentRouteLine);
+                        currentRouteLine = null;
+                    }
+                    
+                    // Show route to selected delivery
                     fetchRoute(currentStartCoord, [selectedDelivery.lat, selectedDelivery.lon]);
+                    
+                    // Center map on selected delivery
+                    map.setView([selectedDelivery.lat, selectedDelivery.lon], 15);
                 }
                 
                 // Highlight the selected row
                 $('#deliveryTableBody tr').removeClass('table-primary');
                 $(`#deliveryTableBody tr[data-order-id="${orderId}"]`).addClass('table-primary');
+                
+                // Show success message
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Delivery Selected!',
+                    text: `Route to Order #${orderId} is now displayed on the map.`,
+                    timer: 2000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
             }
             
             function removeDeliveryFromMap(orderId) {
