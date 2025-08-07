@@ -823,19 +823,28 @@
                     },
                     body: `lat=${selectedLat}&lng=${selectedLng}&label=${encodeURIComponent(locationLabel)}&address=${encodeURIComponent(address)}&barangay_id=${barangay_id}&additional_info=${encodeURIComponent(additionalInfo)}`
                 })
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(result => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '📍 Address Saved Successfully!',
-                        text: 'Your delivery address has been saved and is ready to use.',
-                        confirmButtonText: 'Continue to Order',
-                        confirmButtonColor: '#28a745'
-                    }).then((res) => {
-                        if (res.isConfirmed) {
-                            window.location.href = "costumerorder.php";
-                        }
-                    });
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '📍 Address Saved Successfully!',
+                            text: result.message || 'Your delivery address has been saved and is ready to use.',
+                            confirmButtonText: 'View My Addresses',
+                            confirmButtonColor: '#28a745'
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                window.location.href = "addresses.php";
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error Saving Address',
+                            text: result.message || 'Failed to save address. Please try again.',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    }
                 })
                 .catch(error => {
                     Swal.fire({

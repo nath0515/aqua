@@ -3,6 +3,16 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $role_id = $_SESSION['role_id'];
+    
+    // Redirect based on role
+    if($role_id == 1){
+        header("Location: index.php");
+        exit();
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+        exit();
+    }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -78,8 +88,8 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="addresses.php">My Addresses</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
-                        <li><a class="dropdown-item" href="mapuser.php">Pinned Location</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
