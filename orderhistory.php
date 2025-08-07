@@ -277,13 +277,37 @@
                     orders.forEach(order => {
                         const row = document.createElement('tr');
                         const riderName = order.rider_firstname === 'None' ? 'None' : `${order.rider_firstname} ${order.rider_lastname}`;
+                        // Build complete address
+                        let completeAddress = '';
+                        if (order.label) {
+                            completeAddress += `<strong>${order.label}</strong><br>`;
+                        }
+                        if (order.address) {
+                            completeAddress += order.address;
+                        }
+                        if (order.barangay_name) {
+                            completeAddress += `, ${order.barangay_name}`;
+                        }
+                        if (order.municipality_name) {
+                            completeAddress += `, ${order.municipality_name}`;
+                        }
+                        if (order.province_name) {
+                            completeAddress += `, ${order.province_name}`;
+                        }
+                        if (order.latitude && order.longitude) {
+                            completeAddress += `<br><small class="text-muted">📍 ${order.latitude}, ${order.longitude}</small>`;
+                        }
+                        if (!completeAddress) {
+                            completeAddress = '<span class="text-muted">No address data</span>';
+                        }
+
                         row.innerHTML = `
                             <td><strong>#${order.order_id}</strong></td>
                             <td>${order.date}</td>
                             <td>₱${order.amount}</td>
                             <td>${order.firstname} ${order.lastname}</td>
                             <td>${order.contact_number}</td>
-                            <td>${order.address}</td>
+                            <td>${completeAddress}</td>
                            <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                     <span class="badge ${getStatusBadgeClass(order.status_name)}">
                                     ${order.status_name}

@@ -25,9 +25,15 @@ try {
     $sql = "SELECT a.order_id, a.date, a.amount, a.status_id, c.status_name, a.rider, 
                    COALESCE(d.firstname, 'None') as rider_firstname, 
                    COALESCE(d.lastname, '') as rider_lastname,
-                   b.firstname, b.lastname, b.contact_number, b.address
+                   b.firstname, b.lastname, b.contact_number,
+                   ul.label, ul.address, ul.latitude, ul.longitude,
+                   tb.barangay_name, tm.municipality_name, tp.province_name
             FROM orders a
             JOIN user_details b ON a.user_id = b.user_id
+            LEFT JOIN user_locations ul ON a.location_id = ul.location_id
+            LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
+            LEFT JOIN table_municipality tm ON tb.municipality_id = tm.municipality_id
+            LEFT JOIN table_province tp ON tm.province_id = tp.province_id
             JOIN orderstatus c ON a.status_id = c.status_id
             LEFT JOIN user_details d ON a.rider = d.user_id
             WHERE a.user_id = :user_id
