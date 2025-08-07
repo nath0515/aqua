@@ -393,6 +393,18 @@
                                                 <i class="fas fa-info-circle me-2"></i>Proof of Delivery Not Available
                                             </span>
                                         <?php endif; ?>
+                                    <?php elseif ($order_status === 'Pending'): ?>
+                                        <div class="text-center">
+                                            <span class="btn btn-secondary disabled">
+                                                <i class="fas fa-clock me-2"></i>Track Your Order
+                                            </span>
+                                            <div class="mt-2">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Tracking will be available once your order is being delivered
+                                                </small>
+                                            </div>
+                                        </div>
                                     <?php else: ?>
                                         <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">
                                             <i class="fas fa-map-marker-alt me-2"></i>Track Your Order
