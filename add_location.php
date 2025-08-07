@@ -763,6 +763,7 @@
                         
                         // Try multiple possible fields for barangay name
                         const possibleBarangayFields = [
+                            data.address.village,
                             data.address.suburb,
                             data.address.neighbourhood,
                             data.address.city_district,
