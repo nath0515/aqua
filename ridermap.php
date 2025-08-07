@@ -195,7 +195,12 @@
                             <li class="breadcrumb-item active">Maps</li>
                         </ol>
                         <div id="map"></div>
-                        <button id="completeBtn">Complete Delivery</button>               
+                        <div class="mt-3">
+                            <button id="completeBtn" class="btn btn-success btn-lg">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Complete Delivery
+                            </button>
+                        </div>               
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -438,97 +443,7 @@
             }
         }
 
-        function completeDelivery() {
-            if (currentDestinationIndex === -1) return;
 
-            const orderId = endCoordinates[currentDestinationIndex].order_id;
-
-            Swal.fire({
-                title: 'Complete this delivery?',
-                html: `
-                    <p>Please upload proof of delivery (photo, signature, etc.):</p>
-                    <input type="file" id="deliveryProofFile" class="swal2-input" accept="image/*,.pdf">
-                `,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Upload & Complete',
-                preConfirm: () => {
-                    const fileInput = document.getElementById('deliveryProofFile');
-                    const file = fileInput.files[0];
-                    if (!file) {
-                        Swal.showValidationMessage('Please select a file');
-                        return false;
-                    }
-                    return file;
-                }
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    const file = result.value;
-                    const formData = new FormData();
-                    formData.append('order_id', orderId);
-                    formData.append('file', file);
-
-                    $.ajax({
-                        url: 'update_delivery_status.php',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                endCoordinates.splice(currentDestinationIndex, 1);
-                                currentDestinationIndex = -1;
-
-                                if (destinationMarker) {
-                                    map.removeLayer(destinationMarker);
-                                    destinationMarker = null;
-                                }
-
-                                if (currentRouteLine) {
-                                    map.removeLayer(currentRouteLine);
-                                    currentRouteLine = null;
-                                }
-
-                                if (endCoordinates.length === 0) {
-                                    Swal.fire({
-                                        title: 'All deliveries completed!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Return to Shop'
-                                    }).then(() => {
-                                        const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
-                                        L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
-                                        fetchRoute(currentStartCoord, shopLatLng);
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Delivery completed!',
-                                        icon: 'success',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    });
-
-                                    updateStartLocation({
-                                        coords: {
-                                            latitude: currentStartCoord[0],
-                                            longitude: currentStartCoord[1]
-                                        }
-                                    });
-                                }
-                            } else {
-                                Swal.fire('Error', response.error || 'Failed to update.', 'error');
-                            }
-                        },
-                        error: function() {
-                            Swal.fire('Error', 'AJAX upload failed.', 'error');
-                        }
-                    });
-                }
-            });
-        }
-
-        // Button listener
-        document.getElementById("completeBtn").addEventListener("click", completeDelivery);
 
         // Start geolocation
         if (navigator.geolocation) {
@@ -545,6 +460,194 @@
         </script>
         <script>
             
+        </script>
+
+        <!-- Mark as Delivered Modal -->
+        <div class="modal fade" id="markDeliveredModal" tabindex="-1" aria-labelledby="markDeliveredModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="markDeliveredModalLabel">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Mark Order as Delivered
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deliveryForm" enctype="multipart/form-data">
+                            <input type="hidden" name="order_id" id="modalOrderId">
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Order #<span id="modalOrderNumber"></span></strong> - Please upload proof of delivery to mark this order as delivered.
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="proof_of_delivery" class="form-label">
+                                    <i class="fas fa-camera me-2"></i>
+                                    Proof of Delivery Image
+                                </label>
+                                <input type="file" class="form-control" id="proof_of_delivery" name="proof_of_delivery" 
+                                       accept="image/*" required>
+                                <div class="form-text">Upload a photo showing the delivery was completed (e.g., customer signature, delivered items, etc.)</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="delivery_notes" class="form-label">
+                                    <i class="fas fa-sticky-note me-2"></i>
+                                    Delivery Notes (Optional)
+                                </label>
+                                <textarea class="form-control" id="delivery_notes" name="delivery_notes" rows="3" 
+                                          placeholder="Any additional notes about the delivery..."></textarea>
+                            </div>
+                            
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Important:</strong> Once confirmed, this order will be marked as delivered and cannot be undone.
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirmDeliveryBtn">
+                            <i class="fas fa-check me-2"></i>
+                            Confirm Delivery
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Mark as Delivered functionality for maps
+            $(document).ready(function() {
+                // Show modal when "Complete Delivery" button is clicked
+                $("#completeBtn").click(function() {
+                    if (currentDestinationIndex === -1) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'No Active Delivery',
+                            text: 'Please select a delivery destination first.',
+                            confirmButtonColor: '#ffc107'
+                        });
+                        return;
+                    }
+                    
+                    const orderId = endCoordinates[currentDestinationIndex].order_id;
+                    $("#modalOrderId").val(orderId);
+                    $("#modalOrderNumber").text(orderId);
+                    $("#markDeliveredModal").modal('show');
+                });
+                
+                // Handle delivery confirmation
+                $("#confirmDeliveryBtn").click(function() {
+                    const form = document.getElementById('deliveryForm');
+                    const formData = new FormData(form);
+                    
+                    // Validate file upload
+                    const fileInput = document.getElementById('proof_of_delivery');
+                    if (!fileInput.files[0]) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Proof of Delivery Required',
+                            text: 'Please upload a proof of delivery image.',
+                            confirmButtonColor: '#dc3545'
+                        });
+                        return;
+                    }
+                    
+                    // Show loading
+                    $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Processing...');
+                    
+                    $.ajax({
+                        url: 'process_mark_delivered.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            try {
+                                const result = JSON.parse(response);
+                                if (result.success) {
+                                    // Close modal
+                                    $("#markDeliveredModal").modal('hide');
+                                    
+                                    // Update map (remove delivery point)
+                                    endCoordinates.splice(currentDestinationIndex, 1);
+                                    currentDestinationIndex = -1;
+
+                                    if (destinationMarker) {
+                                        map.removeLayer(destinationMarker);
+                                        destinationMarker = null;
+                                    }
+
+                                    if (currentRouteLine) {
+                                        map.removeLayer(currentRouteLine);
+                                        currentRouteLine = null;
+                                    }
+
+                                    // Show success message
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Delivery Confirmed!',
+                                        text: 'Order has been marked as delivered successfully.',
+                                        confirmButtonColor: '#28a745'
+                                    }).then(() => {
+                                        // Check if all deliveries are complete
+                                        if (endCoordinates.length === 0) {
+                                            Swal.fire({
+                                                title: 'All deliveries completed!',
+                                                icon: 'success',
+                                                confirmButtonText: 'Return to Shop'
+                                            }).then(() => {
+                                                const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+                                                L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                                                fetchRoute(currentStartCoord, shopLatLng);
+                                            });
+                                        } else {
+                                            // Update to next delivery
+                                            updateStartLocation({
+                                                coords: {
+                                                    latitude: currentStartCoord[0],
+                                                    longitude: currentStartCoord[1]
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: result.message || 'Failed to mark order as delivered.',
+                                        confirmButtonColor: '#dc3545'
+                                    });
+                                }
+                            } catch (e) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'An unexpected error occurred.',
+                                    confirmButtonColor: '#dc3545'
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Network Error',
+                                text: 'Failed to connect to server. Please try again.',
+                                confirmButtonColor: '#dc3545'
+                            });
+                        },
+                        complete: function() {
+                            $("#confirmDeliveryBtn").prop('disabled', false).html('<i class="fas fa-check me-2"></i>Confirm Delivery');
+                        }
+                    });
+                });
+            });
         </script>
     </body>
 </html>
