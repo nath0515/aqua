@@ -36,7 +36,7 @@
 
         $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
         b.product_name, b.water_price, b.container_price, 
-        c.date, c.amount, c.rider, c.location_id,
+        c.date, c.amount, c.rider, c.location_id, c.proof_file,
         d.firstname, d.lastname, d.contact_number,
         e.status_name,
         ul.label, ul.address, ul.latitude, ul.longitude,
@@ -370,7 +370,21 @@
                                     </tbody>
                                 </table>
                                 <div class="text-end mt-3">
-                                    <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">Track Your Order</a>
+                                    <?php if ($order_status === 'Delivered' || $order_status === 'Completed'): ?>
+                                        <?php if (!empty($order_data[0]['proof_file'])): ?>
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#proofOfDeliveryModal">
+                                                <i class="fas fa-camera me-2"></i>Proof of Delivery
+                                            </button>
+                                        <?php else: ?>
+                                            <span class="btn btn-secondary disabled">
+                                                <i class="fas fa-info-circle me-2"></i>Proof of Delivery Not Available
+                                            </span>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <a href="user_tracker.php?id=<?php echo $_GET['id']?>" class="btn btn-primary">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Track Your Order
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Rating Section -->
@@ -647,5 +661,53 @@
                 });
             });
         </script>
+
+        <!-- Proof of Delivery Modal -->
+        <div class="modal fade" id="proofOfDeliveryModal" tabindex="-1" aria-labelledby="proofOfDeliveryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="proofOfDeliveryModalLabel">
+                            <i class="fas fa-camera me-2"></i>
+                            Proof of Delivery
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Order #<?php echo $_GET['id']; ?></strong> - Proof of delivery submitted by your rider.
+                        </div>
+                        
+                        <?php if (!empty($order_data[0]['proof_file']) && file_exists($order_data[0]['proof_file'])): ?>
+                            <div class="proof-image-container">
+                                <img src="<?php echo htmlspecialchars($order_data[0]['proof_file']); ?>" 
+                                     alt="Proof of Delivery" 
+                                     class="img-fluid rounded shadow" 
+                                     style="max-width: 100%; max-height: 500px;">
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Delivered on <?php echo date('F d, Y \a\t g:i A', strtotime($order_data[0]['date'])); ?>
+                                </small>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center py-5">
+                                <i class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                                <h5 class="mt-3 text-muted">Proof of Delivery Not Available</h5>
+                                <p class="text-muted">The proof of delivery image could not be found.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
