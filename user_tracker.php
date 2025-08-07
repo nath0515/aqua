@@ -27,9 +27,13 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT ud.latitude, ud.longitude, o.rider
+    $sql = "SELECT ul.latitude, ul.longitude, ul.label, ul.address, o.rider,
+                   tb.barangay_name, tm.municipality_name, tp.province_name
         FROM orders o
-        JOIN user_details ud ON o.user_id = ud.user_id  
+        LEFT JOIN user_locations ul ON o.location_id = ul.location_id
+        LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
+        LEFT JOIN table_municipality tm ON tb.municipality_id = tm.municipality_id
+        LEFT JOIN table_province tp ON tm.province_id = tp.province_id
         WHERE o.order_id = :order_id AND o.status_id = 3 LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':order_id', $order_id);
@@ -154,10 +158,31 @@
             const userDestination = <?php echo json_encode($destination); ?>;
 
             if (userDestination && userDestination.latitude && userDestination.longitude) {
+                // Build complete address for popup
+                let completeAddress = '';
+                if (userDestination.label) {
+                    completeAddress += `<strong>${userDestination.label}</strong><br>`;
+                }
+                if (userDestination.address) {
+                    completeAddress += userDestination.address;
+                }
+                if (userDestination.barangay_name) {
+                    completeAddress += `, ${userDestination.barangay_name}`;
+                }
+                if (userDestination.municipality_name) {
+                    completeAddress += `, ${userDestination.municipality_name}`;
+                }
+                if (userDestination.province_name) {
+                    completeAddress += `, ${userDestination.province_name}`;
+                }
+                if (!completeAddress) {
+                    completeAddress = 'Your Delivery Address';
+                }
+
                 destinationMarker = L.marker(
                     [userDestination.latitude, userDestination.longitude],
                     { title: "Your Delivery Address" }
-                ).addTo(map).bindPopup("Your Delivery Address").openPopup();
+                ).addTo(map).bindPopup(completeAddress).openPopup();
             }
 
             function fetchRiderLocation() {
