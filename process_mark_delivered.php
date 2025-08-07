@@ -2,6 +2,12 @@
 require 'session.php';
 require 'db.php';
 
+// Enable error logging
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+error_log("Delivery process started for order: " . ($_POST['order_id'] ?? 'unknown'));
+
 header('Content-Type: application/json');
 
 // Check if user is logged in and is a rider
@@ -32,6 +38,8 @@ if (!isset($_FILES['proof_of_delivery']) || $_FILES['proof_of_delivery']['error'
 }
 
 try {
+    error_log("Checking order $order_id for rider $rider_id");
+    
     // Check if order exists and is assigned to this rider
     $sql = "SELECT o.order_id, o.status_id, o.user_id, os.status_name 
             FROM orders o 
@@ -44,9 +52,12 @@ try {
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$order) {
+        error_log("Order $order_id not found or not assigned to rider $rider_id");
         echo json_encode(['success' => false, 'message' => 'Order not found or not assigned to you']);
         exit;
     }
+    
+    error_log("Order found: " . json_encode($order));
 
     // Check if order is already delivered
     if ($order['status_name'] === 'Delivered' || $order['status_name'] === 'Completed') {
@@ -74,20 +85,25 @@ try {
     $upload_path = 'uploads/' . $filename;
 
     // Move uploaded file
+    error_log("Attempting to move uploaded file to: $upload_path");
     if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
+        error_log("Failed to move uploaded file from " . $file['tmp_name'] . " to $upload_path");
         echo json_encode(['success' => false, 'message' => 'Failed to upload file']);
         exit;
     }
+    error_log("File uploaded successfully to: $upload_path");
 
     // Start transaction
     $conn->beginTransaction();
 
     // Update order status to Delivered (status_id = 4)
+    error_log("Updating order status to delivered");
     $update_sql = "UPDATE orders SET status_id = 4, proof_file = :proof_path WHERE order_id = :order_id";
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bindParam(':proof_path', $upload_path);
     $update_stmt->bindParam(':order_id', $order_id);
     $update_stmt->execute();
+    error_log("Order status updated successfully");
 
     // Add delivery notes if provided
     if (!empty($delivery_notes)) {
