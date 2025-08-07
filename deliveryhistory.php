@@ -31,13 +31,19 @@
 
     // Fetch orders assigned to the logged-in rider (user_id is the rider's user_id)
     $sql = "SELECT 
-            a.order_id, a.date, a.amount, 
+            a.order_id, a.date, a.amount, a.location_id,
             b.firstname AS customer_firstname, b.lastname AS customer_lastname, 
-            b.address, b.contact_number, 
+            b.contact_number, 
             c.status_name, 
-            r.firstname AS rider_firstname, r.lastname AS rider_lastname 
+            r.firstname AS rider_firstname, r.lastname AS rider_lastname,
+            ul.label, ul.address, ul.latitude, ul.longitude,
+            tb.barangay_name, tm.municipality_name, tp.province_name
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
+        LEFT JOIN user_locations ul ON a.location_id = ul.location_id
+        LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
+        LEFT JOIN table_municipality tm ON tb.municipality_id = tm.municipality_id
+        LEFT JOIN table_province tp ON tm.province_id = tp.province_id
         JOIN orderstatus c ON a.status_id = c.status_id 
         JOIN user_details r ON a.rider = r.user_id
         WHERE a.rider = :user_id AND a.status_id IN (3, 4, 5)
@@ -226,7 +232,31 @@
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['customer_firstname']." ".$row['customer_lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['address'];?></td>
+                                                <td>
+                                                    <?php 
+                                                        // Build complete address
+                                                        $completeAddress = '';
+                                                        if (!empty($row['label'])) {
+                                                            $completeAddress .= '<strong>' . htmlspecialchars($row['label']) . '</strong><br>';
+                                                        }
+                                                        if (!empty($row['address'])) {
+                                                            $completeAddress .= htmlspecialchars($row['address']);
+                                                        }
+                                                        if (!empty($row['barangay_name'])) {
+                                                            $completeAddress .= ', ' . htmlspecialchars($row['barangay_name']);
+                                                        }
+                                                        if (!empty($row['municipality_name'])) {
+                                                            $completeAddress .= ', ' . htmlspecialchars($row['municipality_name']);
+                                                        }
+                                                        if (!empty($row['province_name'])) {
+                                                            $completeAddress .= ', ' . htmlspecialchars($row['province_name']);
+                                                        }
+                                                        if (!empty($row['latitude']) && !empty($row['longitude'])) {
+                                                            $completeAddress .= '<br><small class="text-muted">📍 ' . $row['latitude'] . ', ' . $row['longitude'] . '</small>';
+                                                        }
+                                                        echo $completeAddress ?: '<span class="text-muted">No address data</span>';
+                                                    ?>
+                                                </td>
                                                 <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                     <?php
                                                         $status = htmlspecialchars($row['status_name']);
