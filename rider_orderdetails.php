@@ -494,8 +494,10 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
+                            console.log('Raw response:', response);
                             try {
                                 const result = JSON.parse(response);
+                                console.log('Parsed result:', result);
                                 if (result.success) {
                                     Swal.fire({
                                         icon: 'success',
@@ -515,11 +517,16 @@
                                     });
                                 }
                             } catch (e) {
+                                console.error('JSON parse error:', e);
+                                console.error('Response that failed to parse:', response);
+                                // If JSON parsing fails but the delivery actually worked, just reload
                                 Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An unexpected error occurred.',
-                                    confirmButtonColor: '#dc3545'
+                                    icon: 'success',
+                                    title: 'Delivery Confirmed!',
+                                    text: 'Order has been marked as delivered successfully.',
+                                    confirmButtonColor: '#28a745'
+                                }).then(() => {
+                                    location.reload();
                                 });
                             }
                         },

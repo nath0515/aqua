@@ -1,4 +1,7 @@
 <?php
+// Start output buffering to prevent any output before JSON
+ob_start();
+
 require 'session.php';
 require 'db.php';
 
@@ -7,6 +10,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_log("Delivery process started for order: " . ($_POST['order_id'] ?? 'unknown'));
+
+// Clear any output buffer
+ob_clean();
 
 header('Content-Type: application/json');
 
@@ -138,6 +144,8 @@ try {
     // Commit transaction
     $conn->commit();
 
+    // Clear any output and send JSON response
+    ob_clean();
     echo json_encode(['success' => true, 'message' => 'Order marked as delivered successfully']);
 
 } catch(PDOException $e) {
@@ -151,6 +159,8 @@ try {
         unlink($upload_path);
     }
     
+    // Clear any output and send JSON response
+    ob_clean();
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 } catch(Exception $e) {
     // Rollback transaction on error
@@ -163,6 +173,11 @@ try {
         unlink($upload_path);
     }
     
+    // Clear any output and send JSON response
+    ob_clean();
     echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
+
+// End output buffering and send response
+ob_end_flush();
 ?> 
