@@ -198,10 +198,10 @@
                             <li class="breadcrumb-item active">Maps</li>
                         </ol>
                         <div id="map"></div>
-                        
+                                
                         <!-- Delivery Orders Information -->
                         <div class="row mt-3">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header">
                                         <h6 class="mb-0">
@@ -214,19 +214,40 @@
                                             <p class="text-muted mb-0">No active delivery orders assigned to you.</p>
                                         <?php else: ?>
                                             <p class="text-muted mb-2">You have <strong><?php echo count($endCoordinatesArray); ?></strong> delivery order(s):</p>
-                                            <ul class="list-group list-group-flush">
-                                                <?php foreach ($endCoordinatesArray as $delivery): ?>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        <span>Order #<?php echo $delivery['order_id']; ?></span>
-                                                        <span class="badge bg-warning text-dark">For Delivery</span>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Order ID</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="deliveryTableBody">
+                                                        <?php foreach ($endCoordinatesArray as $index => $delivery): ?>
+                                                            <tr data-order-id="<?php echo $delivery['order_id']; ?>" data-lat="<?php echo $delivery['lat']; ?>" data-lon="<?php echo $delivery['lon']; ?>">
+                                                                <td><span class="badge bg-primary"><?php echo $index + 1; ?></span></td>
+                                                                <td>Order #<?php echo $delivery['order_id']; ?></td>
+                                                                <td><span class="badge bg-warning text-dark">For Delivery</span></td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-outline-primary select-delivery-btn" data-order-id="<?php echo $delivery['order_id']; ?>">
+                                                                        <i class="fas fa-map-marker-alt me-1"></i>Select
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-success complete-delivery-btn" data-order-id="<?php echo $delivery['order_id']; ?>" style="display: none;">
+                                                                        <i class="fas fa-check me-1"></i>Complete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
                                         <h6 class="mb-0">
@@ -239,7 +260,8 @@
                                             <li><i class="fas fa-info-circle text-primary me-2"></i>Blue line shows your delivery route</li>
                                             <li><i class="fas fa-truck text-dark me-2"></i>Black icon shows your current location</li>
                                             <li><i class="fas fa-map-pin text-danger me-2"></i>Red pin shows delivery destination</li>
-                                            <li><i class="fas fa-check-circle text-success me-2"></i>Click "Complete Delivery" when you reach the destination</li>
+                                            <li><i class="fas fa-list-ol text-info me-2"></i>Numbers show delivery sequence</li>
+                                            <li><i class="fas fa-check-circle text-success me-2"></i>Click "Select" then "Complete" when you reach the destination</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -385,8 +407,8 @@
         var currentStartCoord = null;
         var currentStartMarker = null;
         var currentRouteLine = null;
-        var destinationMarker = null;
-        var currentDestinationIndex = -1;
+        var destinationMarkers = [];
+        var selectedOrderId = null;
 
         var endCoordinates = <?php echo json_encode($endCoordinatesArray); ?>;
 
@@ -470,27 +492,39 @@
                 currentStartMarker.setLatLng(currentStartCoord);
             }
 
+            // Show all delivery points on the map
             if (endCoordinates.length > 0) {
-                currentDestinationIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
-                const next = endCoordinates[currentDestinationIndex];
-                const destinationCoord = [next.lat, next.lon];
-
-                // Define a red marker icon
-                const redIcon = L.icon({
-                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
+                // Clear existing markers
+                destinationMarkers.forEach(marker => map.removeLayer(marker));
+                destinationMarkers = [];
+                
+                // Add markers for all delivery points
+                endCoordinates.forEach((coord, index) => {
+                    const redIcon = L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+                    
+                    const marker = L.marker([coord.lat, coord.lon], { icon: redIcon })
+                        .addTo(map)
+                        .bindPopup(`Delivery #${index + 1}<br>Order #${coord.order_id}`)
+                        .on('click', function() {
+                            selectDelivery(coord.order_id);
+                        });
+                    
+                    destinationMarkers.push(marker);
                 });
-
-                if (!destinationMarker) {
-                    destinationMarker = L.marker(destinationCoord, { icon: redIcon }).addTo(map).bindPopup("Destination").openPopup();
-                } else {
-                    destinationMarker.setLatLng(destinationCoord).setIcon(redIcon).openPopup();
+                
+                // If no delivery is selected, show route to closest one
+                if (!selectedOrderId) {
+                    const closestIndex = findClosestEndCoordinate(currentStartCoord, endCoordinates);
+                    const closest = endCoordinates[closestIndex];
+                    fetchRoute(currentStartCoord, [closest.lat, closest.lon]);
                 }
-                fetchRoute(currentStartCoord, destinationCoord);
             }
         }
 
@@ -573,23 +607,89 @@
         </div>
 
         <script>
+            // Multiple delivery management functions
+            function selectDelivery(orderId) {
+                selectedOrderId = orderId;
+                
+                // Update table UI
+                $('.select-delivery-btn').show();
+                $('.complete-delivery-btn').hide();
+                $(`.select-delivery-btn[data-order-id="${orderId}"]`).hide();
+                $(`.complete-delivery-btn[data-order-id="${orderId}"]`).show();
+                
+                // Find the selected delivery coordinates
+                const selectedDelivery = endCoordinates.find(coord => coord.order_id == orderId);
+                if (selectedDelivery && currentStartCoord) {
+                    fetchRoute(currentStartCoord, [selectedDelivery.lat, selectedDelivery.lon]);
+                }
+                
+                // Highlight the selected row
+                $('#deliveryTableBody tr').removeClass('table-primary');
+                $(`#deliveryTableBody tr[data-order-id="${orderId}"]`).addClass('table-primary');
+            }
+            
+            function removeDeliveryFromMap(orderId) {
+                // Remove from endCoordinates array
+                const index = endCoordinates.findIndex(coord => coord.order_id == orderId);
+                if (index > -1) {
+                    endCoordinates.splice(index, 1);
+                }
+                
+                // Remove marker from map
+                if (destinationMarkers[index]) {
+                    map.removeLayer(destinationMarkers[index]);
+                    destinationMarkers.splice(index, 1);
+                }
+                
+                // Remove from table
+                $(`#deliveryTableBody tr[data-order-id="${orderId}"]`).remove();
+                
+                // Reset selection if this was the selected delivery
+                if (selectedOrderId == orderId) {
+                    selectedOrderId = null;
+                    $('.select-delivery-btn').show();
+                    $('.complete-delivery-btn').hide();
+                    $('#deliveryTableBody tr').removeClass('table-primary');
+                }
+                
+                // Update delivery count
+                const remainingDeliveries = endCoordinates.length;
+                if (remainingDeliveries === 0) {
+                    $('#completeBtn').prop('disabled', true);
+                    Swal.fire({
+                        title: 'All deliveries completed!',
+                        icon: 'success',
+                        confirmButtonText: 'Return to Shop'
+                    }).then(() => {
+                        const shopLatLng = [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>];
+                        L.marker(shopLatLng).addTo(map).bindPopup("Shop").openPopup();
+                        fetchRoute(currentStartCoord, shopLatLng);
+                    });
+                }
+            }
+            
             // Mark as Delivered functionality for maps
             $(document).ready(function() {
+                // Handle Select Delivery button clicks
+                $(document).on('click', '.select-delivery-btn', function() {
+                    const orderId = $(this).data('order-id');
+                    selectDelivery(orderId);
+                });
+                
                 // Show modal when "Complete Delivery" button is clicked
                 $("#completeBtn").click(function() {
-                    if (currentDestinationIndex === -1) {
+                    if (!selectedOrderId) {
                         Swal.fire({
                             icon: 'warning',
-                            title: 'No Active Delivery',
-                            text: 'Please select a delivery destination first.',
+                            title: 'No Delivery Selected',
+                            text: 'Please select a delivery from the table first.',
                             confirmButtonColor: '#ffc107'
                         });
                         return;
                     }
                     
-                    const orderId = endCoordinates[currentDestinationIndex].order_id;
-                    $("#modalOrderId").val(orderId);
-                    $("#modalOrderNumber").text(orderId);
+                    $("#modalOrderId").val(selectedOrderId);
+                    $("#modalOrderNumber").text(selectedOrderId);
                     $("#markDeliveredModal").modal('show');
                 });
                 
@@ -627,13 +727,7 @@
                                     $("#markDeliveredModal").modal('hide');
                                     
                                     // Update map (remove delivery point)
-                                    endCoordinates.splice(currentDestinationIndex, 1);
-                                    currentDestinationIndex = -1;
-
-                                    if (destinationMarker) {
-                                        map.removeLayer(destinationMarker);
-                                        destinationMarker = null;
-                                    }
+                                    removeDeliveryFromMap(selectedOrderId);
 
                                     if (currentRouteLine) {
                                         map.removeLayer(currentRouteLine);
