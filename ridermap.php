@@ -45,8 +45,11 @@
     $endCoordinatesArray = [];
         $sql = "SELECT orders.order_id, latitude, longitude FROM orders 
                 JOIN user_details ON orders.user_id = user_details.user_id
-                WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND status_id = 3";
+                WHERE latitude IS NOT NULL AND longitude IS NOT NULL 
+                AND status_id = 3 
+                AND orders.rider = :rider_id";
         $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':rider_id', $user_id);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -195,8 +198,56 @@
                             <li class="breadcrumb-item active">Maps</li>
                         </ol>
                         <div id="map"></div>
+                        
+                        <!-- Delivery Orders Information -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-truck me-2"></i>
+                                            My Delivery Orders
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <?php if (empty($endCoordinatesArray)): ?>
+                                            <p class="text-muted mb-0">No active delivery orders assigned to you.</p>
+                                        <?php else: ?>
+                                            <p class="text-muted mb-2">You have <strong><?php echo count($endCoordinatesArray); ?></strong> delivery order(s):</p>
+                                            <ul class="list-group list-group-flush">
+                                                <?php foreach ($endCoordinatesArray as $delivery): ?>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span>Order #<?php echo $delivery['order_id']; ?></span>
+                                                        <span class="badge bg-warning text-dark">For Delivery</span>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-map-marker-alt me-2"></i>
+                                            Map Instructions
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><i class="fas fa-info-circle text-primary me-2"></i>Blue line shows your delivery route</li>
+                                            <li><i class="fas fa-truck text-dark me-2"></i>Black icon shows your current location</li>
+                                            <li><i class="fas fa-map-pin text-danger me-2"></i>Red pin shows delivery destination</li>
+                                            <li><i class="fas fa-check-circle text-success me-2"></i>Click "Complete Delivery" when you reach the destination</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="mt-3">
-                            <button id="completeBtn" class="btn btn-success btn-lg">
+                            <button id="completeBtn" class="btn btn-success btn-lg" <?php echo empty($endCoordinatesArray) ? 'disabled' : ''; ?>>
                                 <i class="fas fa-check-circle me-2"></i>
                                 Complete Delivery
                             </button>
