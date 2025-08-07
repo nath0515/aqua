@@ -83,7 +83,7 @@ try {
     $conn->beginTransaction();
 
     // Update order status to Delivered (status_id = 4)
-    $update_sql = "UPDATE orders SET status_id = 4, proofofdelivery = :proof_path WHERE order_id = :order_id";
+    $update_sql = "UPDATE orders SET status_id = 4, proof_file = :proof_path WHERE order_id = :order_id";
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bindParam(':proof_path', $upload_path);
     $update_stmt->bindParam(':order_id', $order_id);
