@@ -236,15 +236,27 @@ error_reporting(E_ALL);
                                         <h5 class="mb-0"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
                                         <h5 class="mb-0">Total Price: ₱ <?php echo $total_data['amount']?></h5>
                                     </div>
+                                    <?php
+                                    // Check if any items in the order have containers
+                                    $has_containers = false;
+                                    foreach($order_data as $row) {
+                                        if($row['with_container'] == 1) {
+                                            $has_containers = true;
+                                            break;
+                                        }
+                                    }
+                                    ?>
                                     <table class="table table-bordered p-1">
                                         <thead>
                                             <tr>
                                                 <th>Item Name</th>
                                                 <th>Unit Price</th>
                                                 <th>Quantity</th>
-                                                <th>Has Container</th>
-                                                <th>Container Quantity</th>
-                                                <th>Container Price</th>
+                                                <?php if($has_containers): ?>
+                                                    <th>Has Container</th>
+                                                    <th>Container Quantity</th>
+                                                    <th>Container Price</th>
+                                                <?php endif; ?>
                                                 <th>Total Price</th>
                                             </tr>
                                         </thead>
@@ -264,19 +276,20 @@ error_reporting(E_ALL);
                                                         ?>
                                                     </td>
                                                     <td><?php echo $row['quantity'];?></td>
-                                                    <td>
-                                                        <?php 
-                                                            if($row['with_container'] == 1){
-                                                                echo 'Yes';
-                                                            }
-                                                            else{
-                                                                echo 'No';
-                                                            }
-                                                            
-                                                        ?>
-                                                    </td>
-                                                    <td><?php echo $row['container_quantity'];?></td>
-                                                    <td>₱<?php echo $row['container_price'];?></td>
+                                                    <?php if($has_containers): ?>
+                                                        <td>
+                                                            <?php 
+                                                                if($row['with_container'] == 1){
+                                                                    echo 'Yes';
+                                                                }
+                                                                else{
+                                                                    echo 'No';
+                                                                }
+                                                            ?>
+                                                        </td>
+                                                        <td><?php echo $row['container_quantity'];?></td>
+                                                        <td>₱<?php echo $row['container_price'];?></td>
+                                                    <?php endif; ?>
                                                     <td>₱<?php echo $row['amount'];?></td>
                                                 </tr>
                                             <?php endforeach;?>
