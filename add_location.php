@@ -253,6 +253,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="addresses.php">My Addresses</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -343,8 +344,12 @@
                                             <input type="text" 
                                                    id="addressSearch" 
                                                    class="form-control form-control-lg" 
-                                                   placeholder="Enter your address (e.g., 123 Main St, Santa Cruz, Laguna)"
+                                                   placeholder="Enter your address in Santa Cruz, Laguna (e.g., 123 Main St)"
                                                    autocomplete="off">
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                We only deliver within Santa Cruz, Laguna area
+                                            </div>
                                             <div class="search-results" id="searchResults"></div>
                                         </div>
                                         
@@ -468,15 +473,7 @@
                                                 <div class="form-text">Your specific street address or building details</div>
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label for="additionalInfo" class="form-label">
-                                                    <i class="fas fa-info-circle me-2"></i>Additional Information
-                                                </label>
-                                                <textarea class="form-control" 
-                                                          id="additionalInfo" 
-                                                          rows="3" 
-                                                          placeholder="Landmarks, building name, floor number, etc. (optional)"></textarea>
-                                            </div>
+
                                         </form>
                                     </div>
                                 </div>
@@ -578,12 +575,20 @@
         });
 
         function searchAddress(query) {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laguna, Philippines')}&limit=5`;
+            // Add Santa Cruz, Laguna to the search query
+            const searchQuery = query + ', Santa Cruz, Laguna, Philippines';
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=5`;
             
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    displaySearchResults(data);
+                    // Filter results to only show Santa Cruz, Laguna addresses
+                    const filteredData = data.filter(result => {
+                        const displayName = result.display_name.toLowerCase();
+                        return displayName.includes('santa cruz') && displayName.includes('laguna');
+                    });
+                    
+                    displaySearchResults(filteredData);
                 })
                 .catch(error => {
                     console.error('Search error:', error);
@@ -610,13 +615,24 @@
         }
 
         function selectSearchResult(result) {
+            // Check delivery range first
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+            
+            if (!isWithinDeliveryRange(lat, lon)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '📍 Outside Delivery Range',
+                    text: 'This location is outside our delivery area. We only deliver within Santa Cruz, Laguna. Please select a different address.',
+                    confirmButtonColor: '#ffc107'
+                });
+                return;
+            }
+            
             document.getElementById('addressSearch').value = result.display_name;
             document.getElementById('searchResults').style.display = 'none';
             
             // Update map
-            const lat = parseFloat(result.lat);
-            const lon = parseFloat(result.lon);
-            
             map.setView([lat, lon], 17);
             
             if (userMarker) {
@@ -669,8 +685,44 @@
             updateStepProgress(2);
         });
 
+        // Check if location is within Santa Cruz, Laguna delivery range
+        function isWithinDeliveryRange(lat, lng) {
+            // Santa Cruz, Laguna coordinates (approximate center)
+            const santaCruzLat = 14.2783;
+            const santaCruzLng = 121.4157;
+            
+            // Calculate distance in kilometers
+            const distance = calculateDistance(lat, lng, santaCruzLat, santaCruzLng);
+            
+            // Allow delivery within 20km radius
+            return distance <= 20;
+        }
+        
+        // Calculate distance between two points
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in kilometers
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+        
         // Reverse geocoding function
         function reverseGeocode(lat, lng) {
+            // Check delivery range first
+            if (!isWithinDeliveryRange(lat, lng)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '📍 Outside Delivery Range',
+                    text: 'This location is outside our delivery area. We only deliver within Santa Cruz, Laguna. Please select a location within our service area.',
+                    confirmButtonColor: '#ffc107'
+                });
+                return;
+            }
+            
             // Show loading indicator
             const addressField = document.getElementById('address');
             const barangayField = document.getElementById('barangay_id');
@@ -755,13 +807,54 @@
             // Convert barangay name to lowercase for comparison
             const searchName = barangayName.toLowerCase();
             
+            // Common barangay name mappings
+            const barangayMappings = {
+                'poblacion': ['poblacion 1', 'poblacion 2', 'poblacion 3', 'poblacion 4', 'poblacion 5', 'poblacion 6', 'poblacion 7', 'poblacion 8', 'poblacion 9'],
+                'san jose': ['san jose'],
+                'san antonio': ['san antonio'],
+                'san isidro': ['san isidro'],
+                'san francisco': ['san francisco'],
+                'san lorenzo': ['san lorenzo'],
+                'san miguel': ['san miguel'],
+                'san pablo': ['san pablo'],
+                'san pedro': ['san pedro'],
+                'santa rosa': ['santa rosa'],
+                'santa maria': ['santa maria'],
+                'santa ana': ['santa ana'],
+                'santa cruz': ['santa cruz'],
+                'santa isabel': ['santa isabel'],
+                'santa lucia': ['santa lucia'],
+                'santa monica': ['santa monica'],
+                'santa rita': ['santa rita'],
+                'santa teresa': ['santa teresa'],
+                'santa ursula': ['santa ursula'],
+                'santa veronica': ['santa veronica']
+            };
+            
+            // Check for exact matches first
             for (let i = 0; i < options.length; i++) {
                 const optionText = options[i].text.toLowerCase();
                 if (optionText.includes(searchName) || searchName.includes(optionText)) {
                     barangaySelect.selectedIndex = i;
-                    return true; // Successfully populated
+                    return true;
                 }
             }
+            
+            // Check for mapped barangay names
+            for (const [key, values] of Object.entries(barangayMappings)) {
+                if (searchName.includes(key)) {
+                    for (const value of values) {
+                        for (let i = 0; i < options.length; i++) {
+                            const optionText = options[i].text.toLowerCase();
+                            if (optionText.includes(value)) {
+                                barangaySelect.selectedIndex = i;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return false; // No match found
         }
         
@@ -807,7 +900,6 @@
             const locationLabel = document.getElementById("locationLabel").value;
             const address = document.getElementById("address").value;
             const barangay_id = document.getElementById("barangay_id").value;
-            const additionalInfo = document.getElementById("additionalInfo").value;
             
             if (selectedLat && selectedLng) {
                 // Show loading state
@@ -821,7 +913,7 @@
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${encodeURIComponent(locationLabel)}&address=${encodeURIComponent(address)}&barangay_id=${barangay_id}&additional_info=${encodeURIComponent(additionalInfo)}`
+                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${encodeURIComponent(locationLabel)}&address=${encodeURIComponent(address)}&barangay_id=${barangay_id}`
                 })
                 .then(response => response.json())
                 .then(result => {

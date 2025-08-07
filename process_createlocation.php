@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $label = $_POST['label'];
         $barangay_id = $_POST['barangay_id'];
         $address = $_POST['address'];
-        $additional_info = isset($_POST['additional_info']) ? $_POST['additional_info'] : '';
         $created_at = date('Y-m-d H:i:s');
 
         // Validate required fields
@@ -20,15 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            $sql = "INSERT INTO user_locations (latitude, longitude, user_id, label, barangay_id, address, additional_info, created_at) 
-            VALUES (:latitude, :longitude, :user_id, :label, :barangay_id, :address, :additional_info, :created_at)";
+            $sql = "INSERT INTO user_locations (latitude, longitude, user_id, label, barangay_id, address, created_at) 
+            VALUES (:latitude, :longitude, :user_id, :label, :barangay_id, :address, :created_at)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':latitude', $lat);
             $stmt->bindParam(':longitude', $lng);
             $stmt->bindParam(':label', $label);
             $stmt->bindParam(':barangay_id', $barangay_id);
             $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':additional_info', $additional_info);
             $stmt->bindParam(':created_at', $created_at);
             $stmt->bindParam(':user_id', $_SESSION['user_id']);
             $stmt->execute();
