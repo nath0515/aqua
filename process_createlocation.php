@@ -9,32 +9,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $label = $_POST['label'];
         $barangay_id = $_POST['barangay_id'];
         $address = $_POST['address'];
+        $additional_info = isset($_POST['additional_info']) ? $_POST['additional_info'] : '';
+        $created_at = date('Y-m-d H:i:s');
+
+        // Validate required fields
+        if (empty($label) || empty($barangay_id) || empty($address)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Please fill in all required fields']);
+            exit;
+        }
 
         try {
-            $sql = "INSERT INTO user_locations (latitude, longitude, user_id, label, barangay_id, address, created_at) 
-            VALUES (:latitude, :longitude, :user_id, :label, :barangay_id, :address, :created_at)";
+            $sql = "INSERT INTO user_locations (latitude, longitude, user_id, label, barangay_id, address, additional_info, created_at) 
+            VALUES (:latitude, :longitude, :user_id, :label, :barangay_id, :address, :additional_info, :created_at)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':latitude', $lat);
             $stmt->bindParam(':longitude', $lng);
             $stmt->bindParam(':label', $label);
             $stmt->bindParam(':barangay_id', $barangay_id);
             $stmt->bindParam(':address', $address);
+            $stmt->bindParam(':additional_info', $additional_info);
             $stmt->bindParam(':created_at', $created_at);
             $stmt->bindParam(':user_id', $_SESSION['user_id']);
             $stmt->execute();
 
-            echo "success";
+            echo json_encode(['success' => true, 'message' => 'Address saved successfully']);
         } catch (PDOException $e) {
             http_response_code(500);
-            echo "Database error: " . $e->getMessage();
+            echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
         }
     } else {
         http_response_code(400);
-        echo "Invalid input";
+        echo json_encode(['success' => false, 'message' => 'Invalid input: Missing coordinates']);
     }
 } else {
     http_response_code(405); // Method Not Allowed
-    echo "Only POST requests are allowed";
+    echo json_encode(['success' => false, 'message' => 'Only POST requests are allowed']);
 }
+?>
 
 

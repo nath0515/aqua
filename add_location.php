@@ -3,7 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
-    $location_id = $_GET['location_id'];
+    $location_id = isset($_GET['location_id']) ? $_GET['location_id'] : null;
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, longitude, latitude,address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
@@ -66,7 +66,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Orders</title>
+        <title>Add Delivery Address - AquaDrop</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -76,11 +76,150 @@
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
         <style>
             #map {
-                height: 500px;
+                height: 400px;
                 width: 100%;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
-            .button-group {
-                margin-top: 10px;
+            
+            .address-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 15px;
+                color: white;
+                padding: 2rem;
+                margin-bottom: 2rem;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+            
+            .form-control, .form-select {
+                border-radius: 10px;
+                border: 2px solid #e9ecef;
+                transition: all 0.3s ease;
+            }
+            
+            .form-control:focus, .form-select:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            }
+            
+            .btn-custom {
+                border-radius: 10px;
+                padding: 12px 24px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                border: none;
+            }
+            
+            .btn-custom:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+            
+            .search-container {
+                position: relative;
+                margin-bottom: 1.5rem;
+            }
+            
+            .search-results {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 1000;
+                display: none;
+            }
+            
+            .search-result-item {
+                padding: 10px 15px;
+                cursor: pointer;
+                border-bottom: 1px solid #eee;
+                transition: background-color 0.2s;
+            }
+            
+            .search-result-item:hover {
+                background-color: #f8f9fa;
+            }
+            
+            .search-result-item:last-child {
+                border-bottom: none;
+            }
+            
+            .location-preview {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 1rem;
+                margin-top: 1rem;
+                border-left: 4px solid #28a745;
+            }
+            
+            .coordinate-display {
+                background: #e9ecef;
+                border-radius: 8px;
+                padding: 0.5rem;
+                font-family: monospace;
+                font-size: 0.9rem;
+                color: #495057;
+            }
+            
+            .step-indicator {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 2rem;
+                position: relative;
+            }
+            
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: relative;
+                z-index: 2;
+            }
+            
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #e9ecef;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #6c757d;
+                margin-bottom: 0.5rem;
+                transition: all 0.3s ease;
+            }
+            
+            .step.active .step-circle {
+                background: #667eea;
+                color: white;
+            }
+            
+            .step.completed .step-circle {
+                background: #28a745;
+                color: white;
+            }
+            
+            .step-line {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                height: 2px;
+                background: #e9ecef;
+                z-index: 1;
+            }
+            
+            .step-line-fill {
+                height: 100%;
+                background: #667eea;
+                width: 0%;
+                transition: width 0.3s ease;
             }
         </style>
     </head>
@@ -152,61 +291,213 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <h2>📍 Pin Your Location</h2>
-                    <div id="map"></div>
-                    <div class="mt-3 w-50 ms-3">
-                        <label for="locationLabel" class="form-label">🏷️ Add a Label for this Location</label>
-                        <input type="text" id="locationLabel" class="form-control mb-2" placeholder="e.g. Home, Work, Apartment 3B" value="<?php echo $user_location['label']?>" />
-                    </div>
-                    <div class="mt-3 w-50 ms-3">
-                        <label for="locationLabel" class="form-label">🏷️ Add Address</label>
-                        <div class="row">
-                            <div class="col-3">
-                                <select name="province" class="form-select">
-                                    <?php 
-                                        $stmt = $conn->prepare("SELECT * FROM table_province WHERE province_id = 20");
-                                        $stmt->execute();
-                                        $province = $stmt->fetch();
-                                    ?>
-                                    <option value="<?php echo $province['province_id']?>"><?php echo $province['province_name']?></option>
-                                </select>
+                    <div class="container-fluid px-4">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator">
+                            <div class="step-line">
+                                <div class="step-line-fill" id="stepLineFill"></div>
                             </div>
-                            <div class="col-3">
-                                <select name="municipality" class="form-select">
-                                    <?php 
-                                        $stmt = $conn->prepare("SELECT * FROM table_municipality WHERE municipality_id = 431");
-                                        $stmt->execute();
-                                        $municipality = $stmt->fetch();
-                                    ?>
-                                    <option value="<?php echo $municipality['municipality_id']?>"><?php echo $municipality['municipality_name']?></option>
-                                </select>
+                            <div class="step active" id="step1">
+                                <div class="step-circle">1</div>
+                                <small>Search Address</small>
                             </div>
-                            <div class="col-3">
-                                <select name="barangay_id" id="barangay_id" class="form-select">
-                                    <?php 
-                                        $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431");
-                                        $stmt->execute();
-                                        $barangay = $stmt->fetchAll();
-                                    ?>
-                                    <option value="">Select Barangay</option>
-                                    <?php foreach($barangay as $row): ?>
-                                        <option value="<?php echo $row['barangay_id']; ?>" <?php if ($user_location['barangay_id'] == $row['barangay_id']) echo 'selected'; ?>>
-                                            <?php echo $row['barangay_name']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                    
-                                </select>
+                            <div class="step" id="step2">
+                                <div class="step-circle">2</div>
+                                <small>Pin Location</small>
                             </div>
-                            <div class="col-3">
-                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user_location['address']?>" placeholder="Street/House Number" required>
+                            <div class="step" id="step3">
+                                <div class="step-circle">3</div>
+                                <small>Save Address</small>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="button-group">
-                        <button id="confirmLocationBtn" class="btn btn-success">✅ Confirm Location</button>
-                        <button id="saveLocationBtn" class="btn btn-primary" disabled>💾 Save Location</button>
-                        <button id="editLocationBtn" class="btn btn-warning" style="display: none;">✏️ Edit Location</button>
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h1 class="h3 mb-0 text-gray-800">
+                                    <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                    Add Delivery Address
+                                </h1>
+                                <p class="text-muted">Set up your delivery location for faster checkout</p>
+                            </div>
+                            <a href="addresses.php" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Addresses
+                            </a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Address Search Section -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-search me-2"></i>
+                                            Step 1: Search for Your Address
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="search-container">
+                                            <label for="addressSearch" class="form-label">
+                                                <i class="fas fa-search me-2"></i>Search Address
+                                            </label>
+                                            <input type="text" 
+                                                   id="addressSearch" 
+                                                   class="form-control form-control-lg" 
+                                                   placeholder="Enter your address (e.g., 123 Main St, Santa Cruz, Laguna)"
+                                                   autocomplete="off">
+                                            <div class="search-results" id="searchResults"></div>
+                                        </div>
+                                        
+                                        <div class="location-preview" id="locationPreview" style="display: none;">
+                                            <h6><i class="fas fa-map-pin me-2"></i>Selected Location</h6>
+                                            <p id="selectedAddress" class="mb-2"></p>
+                                            <div class="coordinate-display">
+                                                <small>Coordinates: <span id="selectedCoordinates"></span></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Map Section -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-map me-2"></i>
+                                            Step 2: Fine-tune Your Location
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="map"></div>
+                                        <div class="mt-3">
+                                            <p class="text-muted mb-2">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                Click on the map to adjust your exact delivery location
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <!-- Address Details Form -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-edit me-2"></i>
+                                            Step 3: Address Details
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="addressForm">
+                                            <div class="mb-3">
+                                                <label for="locationLabel" class="form-label">
+                                                    <i class="fas fa-tag me-2"></i>Location Label
+                                                </label>
+                                                <input type="text" 
+                                                       id="locationLabel" 
+                                                       class="form-control" 
+                                                       placeholder="e.g., Home, Work, Apartment 3B"
+                                                       value="<?php echo isset($user_location['label']) ? htmlspecialchars($user_location['label']) : ''; ?>"
+                                                       required>
+                                                <div class="form-text">Give this location a memorable name</div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    <i class="fas fa-map me-2"></i>Province
+                                                </label>
+                                                <select name="province" class="form-select" disabled>
+                                                    <?php 
+                                                        $stmt = $conn->prepare("SELECT * FROM table_province WHERE province_id = 20");
+                                                        $stmt->execute();
+                                                        $province = $stmt->fetch();
+                                                    ?>
+                                                    <option value="<?php echo $province['province_id']?>"><?php echo $province['province_name']?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    <i class="fas fa-city me-2"></i>Municipality
+                                                </label>
+                                                <select name="municipality" class="form-select" disabled>
+                                                    <?php 
+                                                        $stmt = $conn->prepare("SELECT * FROM table_municipality WHERE municipality_id = 431");
+                                                        $stmt->execute();
+                                                        $municipality = $stmt->fetch();
+                                                    ?>
+                                                    <option value="<?php echo $municipality['municipality_id']?>"><?php echo $municipality['municipality_name']?></option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="barangay_id" class="form-label">
+                                                    <i class="fas fa-building me-2"></i>Barangay
+                                                </label>
+                                                <select name="barangay_id" id="barangay_id" class="form-select" required>
+                                                    <option value="">Select Barangay</option>
+                                                    <?php 
+                                                        $stmt = $conn->prepare("SELECT * FROM table_barangay WHERE municipality_id = 431 ORDER BY barangay_name");
+                                                        $stmt->execute();
+                                                        $barangay = $stmt->fetchAll();
+                                                    ?>
+                                                    <?php foreach($barangay as $row): ?>
+                                                        <option value="<?php echo $row['barangay_id']; ?>" 
+                                                                <?php if (isset($user_location['barangay_id']) && $user_location['barangay_id'] == $row['barangay_id']) echo 'selected'; ?>>
+                                                            <?php echo $row['barangay_name']; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">
+                                                    <i class="fas fa-home me-2"></i>Street Address
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="address" 
+                                                       id="address" 
+                                                       value="<?php echo isset($user_location['address']) ? htmlspecialchars($user_location['address']) : ''; ?>" 
+                                                       placeholder="House/Unit Number, Street Name"
+                                                       required>
+                                                <div class="form-text">Your specific street address or building details</div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="additionalInfo" class="form-label">
+                                                    <i class="fas fa-info-circle me-2"></i>Additional Information
+                                                </label>
+                                                <textarea class="form-control" 
+                                                          id="additionalInfo" 
+                                                          rows="3" 
+                                                          placeholder="Landmarks, building name, floor number, etc. (optional)"></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <button id="saveLocationBtn" class="btn btn-success btn-custom" disabled>
+                                                <i class="fas fa-save me-2"></i>
+                                                Save Address
+                                            </button>
+                                            <button id="editLocationBtn" class="btn btn-warning btn-custom" style="display: none;">
+                                                <i class="fas fa-edit me-2"></i>
+                                                Edit Location
+                                            </button>
+                                            <a href="addresses.php" class="btn btn-outline-secondary btn-custom">
+                                                <i class="fas fa-times me-2"></i>
+                                                Cancel
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -228,6 +519,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+        // Initialize map
         const map = L.map('map').setView(
             [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 
             17
@@ -237,19 +529,14 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Reference marker
-        L.marker([<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>])
-            .addTo(map)
-            .bindPopup("📍 Reference: Santa Cruz public market, Laguna")
-            .openPopup();
-
+        // Variables
         let savedLat = <?php echo $savedLat !== null ? json_encode(floatval($savedLat)) : 'null'; ?>;
         let savedLng = <?php echo $savedLng !== null ? json_encode(floatval($savedLng)) : 'null'; ?>;
-
         let selectedLat = null;
         let selectedLng = null;
         let userMarker = null;
         let isLocationConfirmed = false;
+        let searchTimeout = null;
 
         // Show existing location if available
         if (savedLat !== null && savedLng !== null) {
@@ -261,22 +548,97 @@
             }).addTo(map).bindPopup("📍 Your Saved Location").openPopup();
 
             map.setView([savedLat, savedLng], 17);
-
             selectedLat = savedLat;
             selectedLng = savedLng;
             isLocationConfirmed = true;
-
-            document.getElementById("confirmLocationBtn").disabled = true;
+            updateStepProgress(3);
             document.getElementById("saveLocationBtn").disabled = false;
-            document.getElementById("editLocationBtn").style.display = "inline-block";
         }
 
-        map.on('click', function(e) {
-            if (isLocationConfirmed) {
-                alert("You've already confirmed your location.");
+        // Address search functionality
+        document.getElementById('addressSearch').addEventListener('input', function(e) {
+            const query = e.target.value;
+            
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            if (query.length < 3) {
+                document.getElementById('searchResults').style.display = 'none';
                 return;
             }
+            
+            searchTimeout = setTimeout(() => {
+                searchAddress(query);
+            }, 500);
+        });
 
+        function searchAddress(query) {
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Laguna, Philippines')}&limit=5`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data);
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                });
+        }
+
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-result-item">No results found</div>';
+            } else {
+                results.forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item';
+                    item.textContent = result.display_name;
+                    item.addEventListener('click', () => selectSearchResult(result));
+                    resultsContainer.appendChild(item);
+                });
+            }
+            
+            resultsContainer.style.display = 'block';
+        }
+
+        function selectSearchResult(result) {
+            document.getElementById('addressSearch').value = result.display_name;
+            document.getElementById('searchResults').style.display = 'none';
+            
+            // Update map
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+            
+            map.setView([lat, lon], 17);
+            
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+            
+            userMarker = L.marker([lat, lon], {
+                icon: L.icon({
+                    iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
+                    iconSize: [30, 30]
+                })
+            }).addTo(map).bindPopup("📍 Selected Location").openPopup();
+            
+            selectedLat = lat;
+            selectedLng = lon;
+            
+            // Update preview
+            document.getElementById('selectedAddress').textContent = result.display_name;
+            document.getElementById('selectedCoordinates').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+            document.getElementById('locationPreview').style.display = 'block';
+            
+            updateStepProgress(2);
+        }
+
+        // Map click handler
+        map.on('click', function(e) {
             selectedLat = e.latlng.lat;
             selectedLng = e.latlng.lng;
 
@@ -291,65 +653,99 @@
                 }).addTo(map).bindPopup("📍 Your Chosen Location").openPopup();
             }
 
-            console.log("Pinned location:", selectedLat, selectedLng);
+            // Update coordinates display
+            document.getElementById('selectedCoordinates').textContent = `${selectedLat.toFixed(6)}, ${selectedLng.toFixed(6)}`;
+            
+            updateStepProgress(2);
         });
 
-        document.getElementById("confirmLocationBtn").addEventListener("click", function() {
-            if (selectedLat && selectedLng) {
-                isLocationConfirmed = true;
-                Swal.fire({
-                    icon: 'success',
-                    title: '✅ Location Confirmed!',
-                    text: 'Your location has been confirmed. You can now save it.'
-                });
-                document.getElementById("confirmLocationBtn").disabled = true;
-                document.getElementById("saveLocationBtn").disabled = false;
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'No location selected',
-                    text: 'Please pin a location first.'
-                });
+        // Step progress function
+        function updateStepProgress(step) {
+            const steps = document.querySelectorAll('.step');
+            const lineFill = document.getElementById('stepLineFill');
+            
+            steps.forEach((stepEl, index) => {
+                stepEl.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                }
+            });
+            
+            const progress = ((step - 1) / (steps.length - 1)) * 100;
+            lineFill.style.width = progress + '%';
+        }
+
+        // Form validation
+        document.getElementById('addressForm').addEventListener('input', function() {
+            validateForm();
+        });
+
+        function validateForm() {
+            const label = document.getElementById('locationLabel').value;
+            const barangay = document.getElementById('barangay_id').value;
+            const address = document.getElementById('address').value;
+            const hasLocation = selectedLat && selectedLng;
+            
+            const isValid = label && barangay && address && hasLocation;
+            document.getElementById('saveLocationBtn').disabled = !isValid;
+            
+            if (isValid) {
+                updateStepProgress(3);
             }
-        });
+        }
 
+        // Save location
         document.getElementById("saveLocationBtn").addEventListener("click", function () {
-            let locationLabel = document.getElementById("locationLabel").value;
-            let address = document.getElementById("address").value;
-            let barangay_id = document.getElementById("barangay_id").value;
+            const locationLabel = document.getElementById("locationLabel").value;
+            const address = document.getElementById("address").value;
+            const barangay_id = document.getElementById("barangay_id").value;
+            const additionalInfo = document.getElementById("additionalInfo").value;
+            
             if (selectedLat && selectedLng) {
+                // Show loading state
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+                btn.disabled = true;
+                
                 fetch("process_createlocation.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${locationLabel}&address=${address}&barangay_id=${barangay_id}`
+                    body: `lat=${selectedLat}&lng=${selectedLng}&label=${encodeURIComponent(locationLabel)}&address=${encodeURIComponent(address)}&barangay_id=${barangay_id}&additional_info=${encodeURIComponent(additionalInfo)}`
                 })
                 .then(response => response.text())
                 .then(result => {
                     Swal.fire({
                         icon: 'success',
-                        title: '📌 Location Saved!',
-                        text: 'Your delivery location has been saved successfully.',
-                        confirmButtonText: 'Proceed to Order'
+                        title: '📍 Address Saved Successfully!',
+                        text: 'Your delivery address has been saved and is ready to use.',
+                        confirmButtonText: 'Continue to Order',
+                        confirmButtonColor: '#28a745'
                     }).then((res) => {
                         if (res.isConfirmed) {
                             window.location.href = "costumerorder.php";
                         }
                     });
-
-                    document.getElementById("editLocationBtn").style.display = "inline-block";
                 })
                 .catch(error => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Error saving location: ' + error
+                        text: 'Error saving address: ' + error
                     });
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
                 });
             }
         });
 
+        // Edit location
         document.getElementById("editLocationBtn").addEventListener("click", function () {
             isLocationConfirmed = false;
             selectedLat = null;
@@ -360,15 +756,18 @@
                 userMarker = null;
             }
 
-            document.getElementById("confirmLocationBtn").disabled = false;
             document.getElementById("saveLocationBtn").disabled = true;
-
+            updateStepProgress(1);
+            
             Swal.fire({
                 icon: 'info',
                 title: 'Edit Location Mode',
-                text: 'You can now re-pin a new location on the map.'
+                text: 'You can now search for a new address or click on the map to select a new location.'
             });
         });
-    </script>
+
+        // Initialize step progress
+        updateStepProgress(1);
+        </script>
     </body>
 </html>
