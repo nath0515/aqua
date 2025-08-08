@@ -754,7 +754,7 @@
                             console.log('Raw response:', response);
                             
                             // Check if response is empty or null
-                            if (!response || response.trim() === '') {
+                            if (!response) {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Empty Response',
@@ -764,10 +764,10 @@
                                 return;
                             }
                             
-                            try {
-                                const result = JSON.parse(response);
-                                console.log('Parsed result:', result);
-                                if (result.success) {
+                            // jQuery automatically parses JSON, so response is already an object
+                            const result = response;
+                            console.log('Parsed result:', result);
+                            if (result.success) {
                                     // Close modal
                                     $("#markDeliveredModal").modal('hide');
                                     
@@ -815,37 +815,6 @@
                                         confirmButtonColor: '#dc3545'
                                     });
                                 }
-                            } catch (e) {
-                                console.error('JSON parse error:', e);
-                                console.error('Response that failed to parse:', response);
-                                
-                                // Check if the response contains success indicators even if not valid JSON
-                                if (response.includes('success') || response.includes('delivered')) {
-                                    // Likely succeeded despite JSON parse error
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Delivery Confirmed!',
-                                        text: 'Order has been marked as delivered successfully.',
-                                        confirmButtonColor: '#28a745'
-                                    }).then(() => {
-                                        // Close modal and update map
-                                        $("#markDeliveredModal").modal('hide');
-                                        removeDeliveryFromMap(selectedOrderId);
-                                        if (currentRouteLine) {
-                                            map.removeLayer(currentRouteLine);
-                                            currentRouteLine = null;
-                                        }
-                                        location.reload(); // Refresh to show updated status
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Response Error',
-                                        text: 'Server returned invalid response. Please try again.',
-                                        confirmButtonColor: '#dc3545'
-                                    });
-                                }
-                            }
                         },
                         error: function() {
                             Swal.fire({
