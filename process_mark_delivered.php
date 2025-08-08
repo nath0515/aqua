@@ -1,6 +1,10 @@
 <?php
-// Start output buffering to prevent any output before JSON
+// Prevent any output before JSON
 ob_start();
+
+// Suppress warnings and notices that might cause output
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 0);
 
 require 'session.php';
 require 'db.php';
