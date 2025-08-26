@@ -399,7 +399,7 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container-fluid px-4">
+                    <div class="container-fluid px-4 mt-3">
                         <!-- Professional Header -->
                         <div class="stock-header text-center">
                             <h1 class="stock-title">Product Inventory</h1>
