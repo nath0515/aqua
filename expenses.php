@@ -292,7 +292,7 @@
                             </button>
                             <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addexpensetype">
                                 <i class="fa fa-plus me-2"></i>
-                                Add Expense Type
+                                Add Expense Type 
                             </button>
                         </div>
                         <form id="filterForm" action="expenses.php" method="GET">

@@ -144,6 +144,22 @@ error_reporting(E_ALL);
                 font-weight: 600;
                 color: #000;
             }
+            .btn-modern {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+            }
+            
+            .btn-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+                color: white;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -283,7 +299,7 @@ error_reporting(E_ALL);
                             <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
-                        <a class="btn btn-success btn-round ms-auto mb-3 me-1" href="create_purchase.php">
+                        <a class="btn btn-modern" href="create_purchase.php">
                             <i class="fa fa-plus"></i>
                             Add Order
                         </a>
