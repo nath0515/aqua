@@ -307,7 +307,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
-                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>aaaaaa
                         <li><hr class="dropdown-divider"></li>
                         <?php foreach($activity_logs as $row):?>
                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
