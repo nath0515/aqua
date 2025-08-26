@@ -295,6 +295,11 @@
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
                                 </div>
+
+                                <div>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Add Expense</button>
+                                </div>
                             </div>
                         </form>
 
