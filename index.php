@@ -563,6 +563,26 @@ $sma = round($totalQuantity / 7);
             $income_values[] = $sales_value - $expense_value;
         }
         ?>
+        <?php
+        // Fetch product stock data
+        $sql = "SELECT product_name, stock FROM products";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $productNames = [];
+        $productStocks = [];
+        $colors = [];
+
+        $lowStockThreshold = 10;
+
+        foreach ($products as $product) {
+            $productNames[] = $product['product_name'];
+            $productStocks[] = (int)$product['stock']; // Ensure numeric
+            $colors[] = ($product['stock'] < $lowStockThreshold) ? 'rgb(255, 99, 71)' : 'rgb(34, 193, 34)';
+        }
+        ?>
+
 
 
         <script>
