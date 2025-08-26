@@ -247,6 +247,10 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Add Expense</button>
+                        </div>
                         <form id="filterForm" action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <!-- Manual date filters -->
@@ -294,11 +298,6 @@
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
-                                </div>
-
-                                <div>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success">Add Expense</button>
                                 </div>
                             </div>
                         </form>
