@@ -247,8 +247,15 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
-                        <div>
-                            <button type="submit" class="btn btn-success">Add Expense</button>
+                        <div class="action-buttons">
+                            <button class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#additem">
+                                <i class="fa fa-plus me-2"></i>
+                                Add Product
+                            </button>
+                            <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addstock">
+                                <i class="fa fa-plus me-2"></i>
+                                Add Stock
+                            </button>
                         </div>
                         <form id="filterForm" action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
