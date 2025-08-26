@@ -248,7 +248,6 @@
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
                         <div>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Add Expense</button>
                         </div>
                         <form id="filterForm" action="expenses.php" method="GET">
