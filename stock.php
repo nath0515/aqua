@@ -269,14 +269,7 @@
                 border: 2px solid #ff4d4d;
                 background-color: #ffe6e6;
             }
-
-            .low-stock .product-header {
-                background-color: #ff4d4d !important;
-                color: white !important;
-            }
-            .low-stock .product-header .edit-button i {
-                color: white !important;
-            }
+            
 
         </style>
     </head>
