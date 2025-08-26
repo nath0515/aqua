@@ -343,15 +343,15 @@ $sma = round($totalQuantity / 7);
                                         <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
                                             <canvas id="multipleLineChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
                                         </div>
-                                        <form action="expenses.php" method="GET">
+                                        <form method="GET" action="">
                                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                                 <div>
                                                     <label for="start_date" class="form-label">Start Date</label>
-                                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                                    <input type="date" name="start_date" id="start_date" class="form-control" required value="<?php echo isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : ''; ?>">
                                                 </div>
                                                 <div>
                                                     <label for="end_date" class="form-label">End Date</label>
-                                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                                    <input type="date" name="end_date" id="end_date" class="form-control" required value="<?php echo isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : ''; ?>">
                                                 </div>
                                                 <div>
                                                     <label class="form-label d-block">&nbsp;</label>
@@ -447,6 +447,8 @@ $sma = round($totalQuantity / 7);
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/datatables-simple-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
         <script>
             let deferredPrompt;
@@ -501,74 +503,67 @@ $sma = round($totalQuantity / 7);
         </script>
         
 
-        <?php 
-            // Fetch Sales Data
-            $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders
-                    WHERE status_id = 5
-                    GROUP BY DATE(date)
-                    ORDER BY day ASC";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        <?php
+        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : null;
+        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : null;
 
-            // Fetch Expenses Data (Target Sales)
-            $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_expense FROM expense
-                    GROUP BY DATE(date)
-                    ORDER BY day ASC";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // --- Fetch Sales Data ---
+        $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders WHERE status_id = 5";
+        if ($start_date && $end_date) {
+            $sql .= " AND DATE(date) BETWEEN :start_date AND :end_date";
+        }
+        $sql .= " GROUP BY DATE(date) ORDER BY day ASC";
+        $stmt = $conn->prepare($sql);
+        if ($start_date && $end_date) {
+            $stmt->bindParam(':start_date', $start_date);
+            $stmt->bindParam(':end_date', $end_date);
+        }
+        $stmt->execute();
+        $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $labels = [];
-            $sales_values = [];
-            $expenses_values = [];
-            $income_values = [];
+        // --- Fetch Expenses Data ---
+        $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_expense FROM expense";
+        if ($start_date && $end_date) {
+            $sql .= " WHERE DATE(date) BETWEEN :start_date AND :end_date";
+        }
+        $sql .= " GROUP BY DATE(date) ORDER BY day ASC";
+        $stmt = $conn->prepare($sql);
+        if ($start_date && $end_date) {
+            $stmt->bindParam(':start_date', $start_date);
+            $stmt->bindParam(':end_date', $end_date);
+        }
+        $stmt->execute();
+        $expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Combine Sales and Expenses Data
-            $sales_data = [];
-            foreach ($sales as $row) {
-                $sales_data[$row['day']] = (float) $row['total_price'];
-            }
+        // --- Combine data ---
+        $sales_data = [];
+        foreach ($sales as $row) {
+            $sales_data[$row['day']] = (float) $row['total_price'];
+        }
 
-            $expenses_data = [];
-            foreach ($expenses as $row) {
-                $expenses_data[$row['day']] = (float) $row['total_expense'];
-            }
+        $expenses_data = [];
+        foreach ($expenses as $row) {
+            $expenses_data[$row['day']] = (float) $row['total_expense'];
+        }
 
-            // Collect labels and data for both Sales and Expenses
-            $all_dates = array_merge(array_keys($sales_data), array_keys($expenses_data));
-            $all_dates = array_unique($all_dates);  // Remove duplicates
+        $all_dates = array_unique(array_merge(array_keys($sales_data), array_keys($expenses_data)));
+        sort($all_dates);
 
-            foreach ($all_dates as $date) {
-                $labels[] = date("M d, Y", strtotime($date));
-                $sales_values[] = isset($sales_data[$date]) ? $sales_data[$date] : 0;
-                $expenses_values[] = isset($expenses_data[$date]) ? $expenses_data[$date] : 0;
-                $income_values[] = isset($sales_data[$date]) ? $sales_data[$date] - (isset($expenses_data[$date]) ? $expenses_data[$date] : 0) : 0;
-            }
+        $labels = [];
+        $sales_values = [];
+        $expenses_values = [];
+        $income_values = [];
 
-            // Fetch Product Data
-            $sql = "SELECT product_name, stock FROM products";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $productNames = [];
-            $productStocks = [];
-            $colors = [];
-            
-            $lowStockThreshold = 10;
-
-            foreach ($products as $product) {
-                $productNames[] = $product['product_name'];
-                $productStocks[] = $product['stock'];
-                
-                if ($product['stock'] < $lowStockThreshold) {
-                    $colors[] = 'rgb(255, 99, 71)';  // Red color for low stock
-                } else {
-                    $colors[] = 'rgb(34, 193, 34)';  // Green color for sufficient stock
-                }
-            }
+        foreach ($all_dates as $date) {
+            $labels[] = date("M d, Y", strtotime($date));
+            $sales_value = $sales_data[$date] ?? 0;
+            $expense_value = $expenses_data[$date] ?? 0;
+            $sales_values[] = $sales_value;
+            $expenses_values[] = $expense_value;
+            $income_values[] = $sales_value - $expense_value;
+        }
         ?>
+
 
         <script>
             // Prepare chart data for JavaScript
