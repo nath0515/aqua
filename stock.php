@@ -271,10 +271,12 @@
             }
 
             .low-stock .product-header {
-                background-color: #ff4d4d;
-                color: white;
+                background-color: #ff4d4d !important;
+                color: white !important;
             }
-
+            .low-stock .product-header .edit-button i {
+                color: white !important;
+            }
 
         </style>
     </head>
