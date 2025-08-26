@@ -38,7 +38,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title><?php echo $user_data['drivers_license'] ?></title>
+        <title>My Profile</title>
         <link rel="manifest" href="/manifest.json">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -187,7 +187,7 @@
                                         <label class="form-label fw-bold">Driver's License</label><br>
                                         <?php 
                                         $license_path = "uploads/" . ($user_data['drivers_license'] ?? 'default_license.png');
-                                        if (!empty($user_data['drivers_license']) && file_exists($license_path)): 
+                                        if (!empty($user_data['drivers_license'])): 
                                         ?>
                                             <img src="<?php echo $license_path; ?>" 
                                                 alt="Driver's License" 
