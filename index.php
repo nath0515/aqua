@@ -389,6 +389,10 @@ $sma = round($totalQuantity / 7);
                                                     <label class="form-label d-block">&nbsp;</label>
                                                     <button type="submit" class="btn btn-primary">Filter</button>
                                                 </div>
+                                                <div>
+                                                    <label class="form-label d-block">&nbsp;</label>
+                                                    <a href="<?php echo strtok($_SERVER["REQUEST_URI"], '?'); ?>" class="btn btn-secondary">Clear Filter</a>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
