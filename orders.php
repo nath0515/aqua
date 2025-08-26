@@ -299,7 +299,7 @@ error_reporting(E_ALL);
                             <li class="breadcrumb-item active">Order Management</li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
-                        <a class="btn btn-modern" href="create_purchase.php">
+                        <a class="btn btn-modern mb-2" href="create_purchase.php">
                             <i class="fa fa-plus"></i>
                             Add Order
                         </a>
