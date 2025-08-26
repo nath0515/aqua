@@ -265,6 +265,11 @@
                 font-weight: 500;
                 font-size: 0.9rem;
             }
+            .low-stock {
+                border: 2px solid #ff4d4d;
+                background-color: #ffe6e6;
+            }
+
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -443,9 +448,12 @@
                         <!-- Product Grid -->
                         <div class="row">
                             <?php foreach ($products_data as $row): ?>
+                                <?php 
+                                    $lowStock = $row['stock'] < 10 ? 'low-stock' : ''; 
+                                ?>
                                 <div class="col-xl-3 col-md-6 mb-4">
                                     <div 
-                                        class="product-card editProductCard" 
+                                        class="product-card editProductCard <?php echo $lowStock; ?>" 
                                         style="cursor: pointer;" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#edititem"
