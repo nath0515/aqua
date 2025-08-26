@@ -288,8 +288,7 @@
                         </ol>
                         <div class="action-buttons">
                             <button class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#addexpense">
-                                <i class="fa fa-plus me-2"></i>
-                                Add Expense
+                                <i class="fa fa-plus me-2"></i> Add Expense
                             </button>
                             <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addexpensetype">
                                 <i class="fa fa-plus me-2"></i>
