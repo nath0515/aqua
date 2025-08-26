@@ -287,13 +287,13 @@
                             <li class="breadcrumb-item active">Expenses</li>
                         </ol>
                         <div class="action-buttons">
-                            <button class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#additem">
+                            <button class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#addexpense">
                                 <i class="fa fa-plus me-2"></i>
-                                Add Product
+                                Add Expense
                             </button>
-                            <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addstock">
+                            <button class="btn btn-success-modern" data-bs-toggle="modal" data-bs-target="#addexpensetype">
                                 <i class="fa fa-plus me-2"></i>
-                                Add Stock
+                                Add Expense Type
                             </button>
                         </div>
                         <form id="filterForm" action="expenses.php" method="GET">
