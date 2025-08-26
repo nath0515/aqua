@@ -269,6 +269,10 @@
                 border: 2px solid #ff4d4d;
                 background-color: #ffe6e6;
             }
+            .low-stock .product-header {
+                background-color: #ff4d4d;
+                color: white;
+            }
 
         </style>
     </head>
