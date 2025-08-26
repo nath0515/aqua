@@ -111,6 +111,45 @@
                 font-weight: 600;
                 color: #000;
             }
+            .action-buttons {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+            
+            .btn-modern {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+            }
+            
+            .btn-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+                color: white;
+            }
+            
+            .btn-success-modern {
+                background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            }
+            
+            .btn-success-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+                color: white;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
