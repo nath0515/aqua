@@ -193,7 +193,7 @@
                                 <h4 class="mb-0">🚴 Rider Registration</h4>
                             </div>
                             <div class="card-body">
-                                <form action="process_registerrider.php" method="POST" enctype="multipart/form-data">
+                                <form id="riderForm" action="process_registerrider.php" method="POST" enctype="multipart/form-data">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">First Name</label>
                                         <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan Dela Cruz">
