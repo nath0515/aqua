@@ -156,10 +156,10 @@
                                 </nav>
                             </div>
                             <a class="nav-link" href="rider_ratings.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                             My Ratings
                             </a>
-                                                    <a class="nav-link" href="attendance.php">
+                            <a class="nav-link" href="attendance.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
                         </a>
