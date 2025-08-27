@@ -284,8 +284,8 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
                         <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
                     </ul>
-                    <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
