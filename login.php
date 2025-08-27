@@ -15,7 +15,7 @@
             case 3:
                 $d = "riderdashboard.php";
                 break;
-            case 3:
+            case 4:
                 $d = "staffdashboard.php";
             default:
                 $error_message = "Unexpected error. Please try again.";
