@@ -189,10 +189,10 @@
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow border-0">
                     <div class="card-header bg-primary text-white text-center">
-                        <h4 class="mb-0">👤 Admin Registration</h4>
+                        <h4 class="mb-0">👤 Staff Registration</h4>
                     </div>
                     <div class="card-body">
-                        <form action="process_registeradmin.php" method="POST" onsubmit="return checkForm()" id="adminForm">
+                        <form action="process_registerstaff.php" method="POST" onsubmit="return checkForm()" id="adminForm">
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstname" name="firstname" required placeholder="Juan">
