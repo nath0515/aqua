@@ -308,7 +308,7 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
                                 <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
                             <?php endforeach; ?>
                         <?php endif; ?>
-                        <li><a class="dropdown-item text-center text-muted small" href="activityloguser.php">View all notifications</a></li>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
                     </ul>
         </li>
         <li class="nav-item dropdown">
@@ -317,7 +317,7 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
-                <li><a class="dropdown-item" href="activityloguser.php">Activity Log</a></li>
+                <li><a class="dropdown-item" href="activitylogsuser.php">Activity Log</a></li>
                 <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
