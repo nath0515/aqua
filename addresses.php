@@ -285,6 +285,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
                         <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
                     </ul>
+                    <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -292,7 +293,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogsuser.php">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
