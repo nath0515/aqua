@@ -15,7 +15,7 @@
             case 3:
                 $d = "riderdashboard.php";
                 break;
-            case 4:
+            case 5:
                 $d = "staffdashboard.php";
             default:
                 $error_message = "Unexpected error. Please try again.";
@@ -54,7 +54,7 @@
                         case 3:
                             $destination = "riderdashboard.php";
                             break;
-                        case 4:
+                        case 5:
                             $destination = "staffdashboard.php";
                             break;
                         default:
