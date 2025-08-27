@@ -405,7 +405,9 @@
                                                     <?php echo htmlspecialchars($loc['label']); ?>
                                                 </div>
                                                 <div class="address-text">
-                                                    <?php echo htmlspecialchars($loc['address']); ?>
+                                                    <?php 
+                                                    echo !empty($loc['address']) ? htmlspecialchars($loc['address']) : " ";
+                                                    ?>
                                                 </div>
                                                 <div class="coordinates">
                                                     <small>
