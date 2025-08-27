@@ -95,8 +95,9 @@
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <?php 
-                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
+                    $sql = "SELECT * FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC LIMIT 3";
                     $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':user_id', $user_id);
                     $stmt->execute();
                     $activity_logs = $stmt->fetchAll();
                 ?>
