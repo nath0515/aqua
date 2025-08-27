@@ -14,20 +14,20 @@ require 'db.php';
     $role_id = $_SESSION['role_id'];
     
     // Only admin (role_id == 1) can access this page
-    //if($role_id == 2){
-        //header("Location: home.php");
-       // exit();
-    //}else if ($role_id == 3){
-       // header("Location: riderdashboard.php");
-       // exit();
-    //}
-    //else if ($role_id == 5){
-        //header("Location: index.php");
-       // exit();
-   // }else if ($role_id != 1){
-      //  header("Location: login.php");
-    //    exit();
-    //}
+    if($role_id == 2){
+        header("Location: home.php");
+        exit();
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+        exit();
+    }
+    else if ($role_id == 1){
+        header("Location: index.php");
+        exit();
+    }else if ($role_id != 5){
+        header("Location: login.php");
+        exit();
+    }
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
