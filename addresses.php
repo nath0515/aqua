@@ -363,7 +363,7 @@
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <div class="stats-card">
-                                    <div class="number"><?php echo $total_addresses; ?></div>
+                                    <div class="number" id="address-count"><?php echo $total_addresses; ?></div>
                                     <div class="label">Total Addresses</div>
                                 </div>
                             </div>
