@@ -18,13 +18,15 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs ORDER BY date DESC";
+    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0 AND user_id = :user_id";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
     $unread_count = $unread_result['unread_count'];
