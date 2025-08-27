@@ -496,14 +496,14 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         showLoading();
-                        
+
                         $.ajax({
                             url: 'delete_location.php',
                             type: 'POST',
                             data: { id: locationId },
                             success: function (response) {
                                 hideLoading();
-                                
+
                                 Swal.fire({
                                     title: 'Deleted!',
                                     text: 'The address has been successfully removed.',
@@ -512,20 +512,37 @@
                                     showConfirmButton: false
                                 });
 
-                                // Remove the card with animation
                                 const card = document.getElementById('location-card-' + locationId);
                                 if (card) {
                                     card.style.transition = 'all 0.5s ease';
                                     card.style.transform = 'scale(0.8)';
                                     card.style.opacity = '0';
-                                    
+
                                     setTimeout(() => {
-                                        card.closest('.col-lg-6').remove();
-                                        
-                                        // Check if no more addresses
+                                        const col = card.closest('.col-lg-6');
+                                        if (col) col.remove();
+
+                                        // ✅ Update address count if you have a counter element
+                                        const addressCountEl = document.getElementById('address-count');
+                                        if (addressCountEl) {
+                                            let currentCount = parseInt(addressCountEl.textContent);
+                                            if (!isNaN(currentCount) && currentCount > 0) {
+                                                addressCountEl.textContent = currentCount - 1;
+                                            }
+                                        }
+
+                                        // ✅ Check if any address cards are left
                                         const remainingCards = document.querySelectorAll('.address-card');
                                         if (remainingCards.length === 0) {
-                                            location.reload(); // Reload to show empty state
+                                            // Show empty state message
+                                            const container = document.getElementById('address-container');
+                                            if (container) {
+                                                container.innerHTML = `
+                                                    <div class="alert alert-info text-center">
+                                                        You have no saved addresses. Add one to get started!
+                                                    </div>
+                                                `;
+                                            }
                                         }
                                     }, 500);
                                 }
@@ -543,6 +560,7 @@
                     }
                 });
             }
+
             
             // Add some interactive effects
             document.addEventListener('DOMContentLoaded', function() {
