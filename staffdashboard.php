@@ -22,7 +22,7 @@ require 'db.php';
         exit();
     }
     else if ($role_id == 1){
-        header("Location: index.php");
+        header("Location: staffdashboard.php");
         exit();
     }else if ($role_id != 1){
         header("Location: login.php");
