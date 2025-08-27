@@ -24,7 +24,7 @@ require 'db.php';
     else if ($role_id == 1){
         header("Location: index.php");
         exit();
-    }else if ($role_id != 5){
+    }else if ($role_id != 1){
         header("Location: login.php");
         exit();
     }
