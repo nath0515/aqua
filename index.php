@@ -274,7 +274,7 @@ $sma = round($totalQuantity / 7);
                                     <a class="nav-link" href="accounts.php">Accounts</a>
                                     <a class="nav-link" href="rideraccount.php">Add Rider</a>
                                     <a class="nav-link" href="adminaccount.php">Add Admin</a>
-                                    
+                                    <a class="nav-link" href="addstaff.php">Add Staff</a>
                                 </nav>
                             </div>
                         </div>
