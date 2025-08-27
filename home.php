@@ -221,6 +221,18 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
             height: 50px;
             animation: spin 0.8s linear infinite;
         }
+        .notification-text{
+                white-space: nowrap;
+                overflow: hidden;D
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+        }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -252,6 +264,7 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
                 padding: 30px 20px;
             }
         }
+        
     </style>
 
     <!-- Icons -->
