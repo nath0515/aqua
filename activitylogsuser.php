@@ -4,8 +4,8 @@
 
     $user_id = $_SESSION['user_id'];
     $role_id = $_SESSION['role_id'];
-    if($role_id == 2){
-        header("Location: home.php");
+    if($role_id == 1){
+        header("Location: index.php");
     }else if ($role_id == 3){
         header("Location: riderdashboard.php");
     }
