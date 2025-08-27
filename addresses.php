@@ -406,7 +406,7 @@
                                                 </div>
                                                 <div class="address-text">
                                                     <?php 
-                                                    echo !empty($loc['address']) ? htmlspecialchars($loc['address']) : " ";
+                                                    echo !empty($loc['address']) ? htmlspecialchars($loc['address']) : "Not Specified";
                                                     ?>
                                                 </div>
                                                 <div class="coordinates">
