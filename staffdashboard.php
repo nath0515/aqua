@@ -255,7 +255,7 @@ $sma = round($totalQuantity / 7);
                                     <a class="nav-link" href="stock.php">Stock</a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <!--<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Analytics
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -280,7 +280,7 @@ $sma = round($totalQuantity / 7);
                                     <a class="nav-link" href="adminaccount.php">Add Admin</a>
                                     <a class="nav-link" href="addstaff.php">Add Staff</a>
                                 </nav>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
