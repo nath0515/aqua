@@ -291,7 +291,7 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
             </a>
         </li>
         <li class="nav-item dropdown me-1">
-                                <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <?php if ($unread_count > 0): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -308,6 +308,7 @@ $recent_notifications = $recent_notifications_stmt->fetchAll();
                                 <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
                             <?php endforeach; ?>
                         <?php endif; ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
         </li>
         <li class="nav-item dropdown">
