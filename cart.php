@@ -137,7 +137,7 @@ error_reporting(E_ALL);
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
-                        <li><a class="dropdown-item" href="mapuser.php">Pinned Location</a></li>
+                        <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
