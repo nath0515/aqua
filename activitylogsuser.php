@@ -94,6 +94,11 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="cart.php">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </li>
                 <?php 
                     $sql = "SELECT * FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC LIMIT 3";
                     $stmt = $conn->prepare($sql);

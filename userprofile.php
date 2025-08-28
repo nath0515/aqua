@@ -57,7 +57,7 @@
                 <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
             </a>
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                    <li class="nav-item me-2">
+                <li class="nav-item me-2">
                     <a class="nav-link" href="cart.php">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
