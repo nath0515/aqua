@@ -264,7 +264,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.php">
+            <a class="navbar-brand ps-3" href="home.php">
                 <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
             </a>
             <!-- Sidebar Toggle-->
