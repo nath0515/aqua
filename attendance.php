@@ -237,7 +237,7 @@
                                 </div>
                                 <div>
                                     <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                 </div>
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
