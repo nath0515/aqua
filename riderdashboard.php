@@ -102,6 +102,7 @@
                                 <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
                             <?php endforeach; ?>
                         <?php endif; ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsrider.php">View all notifications</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -110,7 +111,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogsrider.php">Activity Log</a></li>
                         <?php 
                         // Commented out Off Duty toggle
                         /*
