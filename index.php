@@ -347,11 +347,11 @@ $sma = round($totalQuantity / 7);
                                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                                 <div>
                                                     <label for="start_date" class="form-label">Start Date</label>
-                                                    <input type="date" name="start_date" id="start_date" class="form-control" required value="<?php echo isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : ''; ?>">
+                                                    <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                                 </div>
                                                 <div>
                                                     <label for="end_date" class="form-label">End Date</label>
-                                                    <input type="date" name="end_date" id="end_date" class="form-control" required value="<?php echo isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : ''; ?>">
+                                                    <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                                 </div>
                                                 <div>
                                                     <label class="form-label d-block">&nbsp;</label>
