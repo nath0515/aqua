@@ -239,6 +239,20 @@
         text-decoration: underline;
         color: #fff;
     }
+    .app-description {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+    }
+
 
     @media (max-width: 768px) {
         .login-container {
