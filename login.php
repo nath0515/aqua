@@ -151,38 +151,15 @@
         animation: float 3s ease-in-out infinite;
     }
     .modal-content {
-        background-color: #fff; 
-        color: #333;
+        color: #000; 
     }
 
     .modal-content .form-control {
-        background-color: #f9f9f9; 
-        color: #333; 
-        border: 1px solid #ccc;
+        color: #000; 
     }
 
     .modal-content .form-control::placeholder {
-        color: #777; 
-    }
-    .modal-content {
-        background-color: #ffffff;
-        color: #000000;
-    }
-
-    .modal-content .form-control {
-        background-color: #ffffff; 
-        color: #000000;           
-        border: 1px solid #ccc;   
-    }
-
-    .modal-content .form-control::placeholder {
-        color: #555555;
-    }
-
-    .modal-content .input-group-text {
-        background-color: #f1f1f1;
-        color: #000000;
-        border: 1px solid #ccc;
+        color: #555;
     }
 
     @keyframes float {
