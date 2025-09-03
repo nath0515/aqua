@@ -423,8 +423,8 @@ require 'db.php';
                                 </div>
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-calculator me-1"></i>
-                                        Reserved Orders
+                                        <i class="fas fa-calendar-check"></i>
+                                        Reserved Orders for Todays
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Total Reservations Received Today:</strong></p>
