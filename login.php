@@ -150,6 +150,20 @@
         margin-bottom: 15px;
         animation: float 3s ease-in-out infinite;
     }
+    .modal-content {
+        background-color: #fff; /* White modal */
+        color: #333;
+    }
+
+    .modal-content .form-control {
+        background-color: #f9f9f9; /* Light gray input */
+        color: #333; /* Dark text */
+        border: 1px solid #ccc;
+    }
+
+    .modal-content .form-control::placeholder {
+        color: #777; /* Gray placeholder */
+    }
 
     @keyframes float {
         0%, 100% { transform: translateY(0); }
