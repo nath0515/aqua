@@ -110,155 +110,151 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
-        /* Base styles */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Segoe UI', sans-serif;
-}
+   <style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(-45deg, #1e3c72, #2a5298, #1e3c72, #2a5298);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+    }
 
-.login-container {
-    display: flex;
-    height: 100vh;
-    flex-direction: row;
-}
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-/* Left side */
-.login-left {
-    flex: 1;
-    background: linear-gradient(135deg, #f99f2c, #f97f2c);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 40px;
-}
-
-.branding i {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.branding h1 {
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-/* Right side */
-.login-right {
-    flex: 1;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
-.login-form {
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-form .avatar {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #ccc;
-}
-
-/* Input styles */
-.input-group-text {
-    background-color: #f1f1f1;
-    border-right: none;
-}
-
-.input-group .form-control {
-    border-left: none;
-}
-
-.input-group .form-control:focus {
-    box-shadow: none;
-    border-color: #f97f2c;
-}
-
-/* Button */
-.login-btn {
-    background: linear-gradient(135deg, #f99f2c, #f97f2c);
-    color: white;
-    border: none;
-    padding: 10px;
-    font-weight: bold;
-    border-radius: 30px;
-    transition: background 0.3s;
-}
-
-.login-btn:hover {
-    background: #e86c1a;
-}
-
-/* Links */
-.register-link {
-    color: #f97f2c;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.register-link:hover {
-    text-decoration: underline;
-
-}.forgot-link {
-    font-size: 0.9rem;
-    color: #f97f2c;
-    text-decoration: none;
-}
-.forgot-link:hover {
-    text-decoration: underline;
-}
-.branding-logo {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 15px;
-}
-
-@media screen and (max-width: 768px) {
     .login-container {
-        flex-direction: column;
-    }
-
-    .login-left,
-    .login-right {
-        flex: none;
-        width: 100%;
-        padding: 30px 20px;
-        text-align: center;
-    }
-
-    .login-left {
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
-    }
-
-    .login-form {
-        max-width: 100%;
-    }
-
-    .input-group {
+        display: flex;
+        height: 100vh;
         flex-direction: row;
     }
 
+    /* Left Panel */
+    .login-left {
+        flex: 1;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 40px;
+    }
+
+    .branding-logo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 15px;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Right Panel */
+    .login-right {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 400px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        color: #fff;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-form .avatar {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+
+    /* Input Styling */
     .input-group-text {
-        border-radius: 30px 0 0 30px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
     }
 
     .form-control {
-        border-radius: 0 30px 30px 0;
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: #fff;
+        transition: all 0.3s;
     }
-}
 
-    </style>
+    .form-control::placeholder {
+        color: #eee;
+    }
+
+    .form-control:focus {
+        background: rgba(255,255,255,0.3);
+        box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        color: #fff;
+    }
+
+    /* Button */
+    .login-btn {
+        background: linear-gradient(45deg, #1e3c72, #2a5298);
+        border: none;
+        padding: 12px;
+        font-weight: bold;
+        border-radius: 30px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        color: white;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Links */
+    .forgot-link, .register-link {
+        color: #cde3ff;
+        transition: 0.3s;
+    }
+
+    .forgot-link:hover, .register-link:hover {
+        text-decoration: underline;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .login-container {
+            flex-direction: column;
+        }
+
+        .login-left {
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .login-right {
+            padding: 20px;
+        }
+    }
+</style>
+
 </head>
 <body class="bg-white">
     <div id="layoutAuthentication">
@@ -286,7 +282,10 @@ body, html {
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                                <span class="input-group-text" onclick="togglePassword()" style="cursor:pointer;">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                </span>
                             </div>
                             <div class="text-end mb-3">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#forgot" class="forgot-link">Forgot Password?</a>
