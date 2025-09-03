@@ -214,9 +214,13 @@ body, html {
     color: #f97f2c;
     text-decoration: none;
 }
-
 .forgot-link:hover {
     text-decoration: underline;
+}
+.branding-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 15px;
 }
 
 @media screen and (max-width: 768px) {
@@ -263,7 +267,7 @@ body, html {
                 <div class="login-container">
                     <div class="login-left">
                         <div class="branding">
-                            <i class="fas fa-fire fa-2x"></i>
+                            <img src="assets/img/aquadrop.png" alt="Logo" class="branding-logo">
                             <h1><strong>Nothing.</strong></h1>
                             <p>Welcome to Nothing!</p>
                         </div>
