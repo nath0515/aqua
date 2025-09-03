@@ -41,8 +41,8 @@ try {
     $conn->beginTransaction();
 
     // Insert into orders table
-    $order_sql = "INSERT INTO orders (user_id, payment_id, location_id, delivery_date, status, created_at)
-                  VALUES (:user_id, :payment_id, :location_id, :delivery_date, 'Reserved', NOW())";
+    $order_sql = "INSERT INTO orders (user_id, payment_id, location_id, delivery_date, status_id, created_at)
+                  VALUES (:user_id, :payment_id, :location_id, :delivery_date, '7', NOW())";
     $stmt = $conn->prepare($order_sql);
     $stmt->execute([
         ':user_id' => $user_id,
