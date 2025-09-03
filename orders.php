@@ -351,7 +351,7 @@ error_reporting(E_ALL);
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
                                 </div>
                                 <div class="text-end mt-3">
-                                    <a href="sale_reserve.php" class="btn btn-primary">Reserved</a>
+                                    <a href="sales_reserve.php" class="btn btn-primary">Reserved</a>
                                 </div>
                             </div>
                         </form>

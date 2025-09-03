@@ -48,7 +48,7 @@ try {
     $order_sql = "INSERT INTO orders (
         user_id, payment_id, location_id, delivery_date, status_id, amount, rider, proof_file, proofofpayment
     ) VALUES (
-        :user_id, :payment_id, :location_id, :delivery_date, 7, :amount, 0, 1, 1
+        :user_id, :payment_id, :location_id, :delivery_date, 7, :amount, 0, 0, 0
     )";
     
     $stmt = $conn->prepare($order_sql);
