@@ -91,7 +91,7 @@
                 $error_message = "Email already exists!";
             }
             else{
-                header("Location: register.php?email=".$email)
+                header("Location: register.php?email=".$email);
                 exit();
             }
         }
