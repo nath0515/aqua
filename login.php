@@ -110,58 +110,179 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        /* Base styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+}
 
+.login-container {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+}
+
+/* Left side */
+.login-left {
+    flex: 1;
+    background: linear-gradient(135deg, #f99f2c, #f97f2c);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+}
+
+.branding i {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.branding h1 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Right side */
+.login-right {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-form .avatar {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+/* Input styles */
+.input-group-text {
+    background-color: #f1f1f1;
+    border-right: none;
+}
+
+.input-group .form-control {
+    border-left: none;
+}
+
+.input-group .form-control:focus {
+    box-shadow: none;
+    border-color: #f97f2c;
+}
+
+/* Button */
+.login-btn {
+    background: linear-gradient(135deg, #f99f2c, #f97f2c);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: #e86c1a;
+}
+
+/* Links */
+.register-link {
+    color: #f97f2c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-left,
+    .login-right {
+        flex: none;
+        width: 100%;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .login-left {
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
+
+    .login-form {
+        max-width: 100%;
+    }
+
+    .input-group {
+        flex-direction: row;
+    }
+
+    .input-group-text {
+        border-radius: 30px 0 0 30px;
+    }
+
+    .form-control {
+        border-radius: 0 30px 30px 0;
+    }
+}
+
+    </style>
 </head>
 <body class="bg-white">
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
             <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header">
-                                <img src="assets/img/logo.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
-                                    <h3 class="text-center font-weight-light my-4">Login</h3>
-                                </div>
-                                <div class="card-body">
-                                    <form action="" method="POST">
-                                        <div class="mb-3 input-group">
-                                            <span class="input-group-text">
-                                                <i class="fa fa-user"></i>
-                                            </span>
-                                            <input type="text" name="username" class="form-control" placeholder="Username" required>
-                                        </div>
-
-                                        <div class="mb-3 input-group">
-                                            <span class="input-group-text">
-                                                <i class="fa fa-lock"></i> 
-                                            </span>
-                                            <input type="password" id="password" class="form-control" name="password" placeholder="Password" required>
-                                            <span class="input-group-text" onclick="togglePassword()">
-                                                <i class="fa fa-eye" id="eyeIcon"></i> 
-                                            </span>
-                                        </div>
-                                        <!--
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                            <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                        </div>
-                                        -->
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="#" data-bs-toggle="modal" data-bs-target="#forgot">Forgot Password?</a>
-
-                                            <button type="submit" class="btn btn-primary">Login</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small">
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#register">Need an account? Sign up!</a>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="login-container">
+                    <div class="login-left">
+                        <div class="branding">
+                            <i class="fas fa-fire fa-2x"></i>
+                            <h1><strong>Nothing.</strong></h1>
+                            <p>Welcome to Nothing!</p>
                         </div>
+                    </div>
+                    <div class="login-right">
+                        <form method="POST" class="login-form">
+                            <div class="avatar">
+                                <i class="fas fa-user-circle fa-4x"></i>
+                            </div>
+                            <p class="text-muted text-center mb-4">Login below to get started.</p>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="text" name="username" class="form-control" placeholder="Email Address" required>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                            </div>
+
+                            <button type="submit" class="btn login-btn w-100">Login</button>
+
+                            <div class="text-center mt-3">
+                                <span class="text-muted">New user?</span> 
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#register" class="register-link">Register</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </main>
