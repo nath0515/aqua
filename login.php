@@ -218,8 +218,8 @@ body, html {
     text-decoration: underline;
 }
 .branding-logo {
-    width: 80px;
-    height: auto;
+    width: 150px;
+    height: 150px;
     margin-bottom: 15px;
 }
 
