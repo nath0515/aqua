@@ -264,7 +264,6 @@
                     <div class="login-left">
                         <div class="branding">
                             <img src="assets/img/logo.png" alt="Logo" class="branding-logo">
-                            <h1><strong>Nothing.</strong></h1>
                             <p>Welcome to AquaDrop is a modern web-based platform designed to simplify water delivery and ordering services. Customers can easily place orders for purified water, track delivery status in real-time, and manage their accounts, while businesses can efficiently handle inventory, delivery routes, and customer requests. With a user-friendly interface, secure login, and mobile-friendly design, AquaDrop ensures a smooth and hassle-free water ordering experience for both customers and service providers.</p>
                         </div>
                     </div>
