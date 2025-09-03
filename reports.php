@@ -435,7 +435,7 @@
             // Title
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(18);
-            pdf.text("💧 DoodsNer Water Refilling Station", 105, y, { align: "center" });
+            pdf.text("DoodsNer Water Refilling Station", 105, y, { align: "center" });
             y += 8;
 
             pdf.setFontSize(14);
