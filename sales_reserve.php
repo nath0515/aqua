@@ -26,7 +26,7 @@
         JOIN orderstatus c ON a.status_id = c.status_id
         LEFT JOIN user_details d ON a.rider = d.user_id
         JOIN payment_method e ON a.payment_id = e.payment_id
-         WHERE a.status_id = 7
+        WHERE a.status_id = 7
         WHERE DATE(date) = :date
         ORDER BY date DESC";
         $stmt = $conn->prepare($sql);
@@ -42,6 +42,7 @@
     LEFT JOIN user_locations ul ON a.location_id = ul.location_id
     LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
     JOIN payment_method e ON a.payment_id = e.payment_id
+    WHERE a.status_id = 7
     ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     }
