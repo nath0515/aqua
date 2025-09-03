@@ -8,7 +8,6 @@ require 'session.php';
 require 'db.php';
 
 try {
-    // Ensure user is logged in
     if (!isset($_SESSION['user_id'])) {
         echo json_encode(['success' => false, 'message' => 'User not authenticated.']);
         exit;
@@ -16,7 +15,6 @@ try {
 
     $user_id = $_SESSION['user_id'];
 
-    // Validate required fields
     if (
         !isset($_POST['items']) || 
         !isset($_POST['payment_id']) || 
@@ -37,38 +35,37 @@ try {
         exit;
     }
 
+    // Calculate total amount
+    $total_amount = 0;
+    foreach ($items as $item) {
+        $total_amount += floatval($item['price']) * intval($item['quantity']);
+    }
+
     // Start transaction
     $conn->beginTransaction();
 
     // Insert into orders table
-    $order_sql = "INSERT INTO orders (user_id, payment_id, location_id, delivery_date, status_id)
-                  VALUES (:user_id, :payment_id, :location_id, :delivery_date, 7)";
+    $order_sql = "INSERT INTO orders (
+        user_id, payment_id, location_id, delivery_date, status_id, amount, rider, proof_file, proofofpayment
+    ) VALUES (
+        :user_id, :payment_id, :location_id, :delivery_date, 7, :amount, 0, 1, 1
+    )";
+    
     $stmt = $conn->prepare($order_sql);
     $stmt->execute([
         ':user_id' => $user_id,
         ':payment_id' => $payment_id,
         ':location_id' => $location_id,
-        ':delivery_date' => $delivery_date
+        ':delivery_date' => $delivery_date,
+        ':amount' => $total_amount
     ]);
 
     $order_id = $conn->lastInsertId();
 
-    // Insert order items
-    $order_item_sql = "INSERT INTO orders (order_id, product_id, quantity, with_container, container_quantity)
-                       VALUES (:order_id, :product_id, :quantity, :with_container, :container_quantity)";
-    $item_stmt = $conn->prepare($order_item_sql);
+    // Optionally insert into order_items if you have such table
+    // You can skip this part if not needed
 
-    foreach ($items as $item) {
-        $item_stmt->execute([
-            ':order_id' => $order_id,
-            ':product_id' => $item['product_id'],
-            ':quantity' => $item['quantity'],
-            ':with_container' => $item['with_container'],
-            ':container_quantity' => $item['container_quantity']
-        ]);
-    }
-
-    // Optionally log activity
+    // Log activity
     $log_sql = "INSERT INTO activity_logs (user_id, message, destination, date, read_status)
                 VALUES (:user_id, :message, :destination, NOW(), 0)";
     $log_stmt = $conn->prepare($log_sql);
@@ -78,13 +75,12 @@ try {
         ':destination' => 'costumer_orderdetails.php?id=' . $order_id
     ]);
 
-    // Delete reserved items from cart
+    // Remove from cart
     $cart_ids = array_column($items, 'cart_id');
     $placeholders = implode(',', array_fill(0, count($cart_ids), '?'));
     $delete_stmt = $conn->prepare("DELETE FROM cart WHERE cart_id IN ($placeholders)");
     $delete_stmt->execute($cart_ids);
 
-    // Commit transaction
     $conn->commit();
 
     echo json_encode(['success' => true, 'message' => 'Reservation placed successfully!']);
