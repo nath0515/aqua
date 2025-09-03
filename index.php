@@ -65,39 +65,39 @@ require 'db.php';
     $unread_count = $unread_result['unread_count'];
 
     $dateToday = date('Y-m-d');
-$sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
-$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($dateToday)));
+    $sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
+    $yesterday = date('Y-m-d', strtotime('-1 day', strtotime($dateToday)));
 
-// Prepare a date map with zeros
-$dateMap = [];
-for ($i = 7; $i >= 1; $i--) {
-    $day = date('Y-m-d', strtotime("-$i days", strtotime($dateToday)));
-    $dateMap[$day] = 0;
-}
+    // Prepare a date map with zeros
+    $dateMap = [];
+    for ($i = 7; $i >= 1; $i--) {
+        $day = date('Y-m-d', strtotime("-$i days", strtotime($dateToday)));
+        $dateMap[$day] = 0;
+    }
 
-// Fetch order quantities over the last 7 days
-$sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
-        FROM orderitems
-        JOIN orders ON orderitems.order_id = orders.order_id
-        WHERE DATE(orders.date) BETWEEN DATE(:seven_days_ago) AND DATE(:yesterday)
-        GROUP BY order_date";
+    // Fetch order quantities over the last 7 days
+    $sql = "SELECT DATE(orders.date) AS order_date, SUM(orderitems.quantity) AS total_quantity
+            FROM orderitems
+            JOIN orders ON orderitems.order_id = orders.order_id
+            WHERE DATE(orders.date) BETWEEN DATE(:seven_days_ago) AND DATE(:yesterday)
+            GROUP BY order_date";
 
-$stmt = $conn->prepare($sql);
-$stmt->execute([
-    ':seven_days_ago' => $sevenDaysAgo,
-    ':yesterday' => $yesterday
-]);
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([
+        ':seven_days_ago' => $sevenDaysAgo,
+        ':yesterday' => $yesterday
+    ]);
 
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fill in quantities into the date map
-foreach ($data as $row) {
-    $dateMap[$row['order_date']] = (int)$row['total_quantity'];
-}
+    // Fill in quantities into the date map
+    foreach ($data as $row) {
+        $dateMap[$row['order_date']] = (int)$row['total_quantity'];
+    }
 
-// Calculate SMA
-$totalQuantity = array_sum($dateMap);
-$sma = round($totalQuantity / 7);
+    // Calculate SMA
+    $totalQuantity = array_sum($dateMap);
+    $sma = round($totalQuantity / 7);
     
     ?>
     <?php
