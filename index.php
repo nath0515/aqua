@@ -100,6 +100,18 @@ $totalQuantity = array_sum($dateMap);
 $sma = round($totalQuantity / 7);
     
     ?>
+    <?php
+    $today = date('Y-m-d');
+
+    $sql = "SELECT COUNT(*) AS today_reserved_count 
+            FROM orders 
+            WHERE status_id = 7 AND DATE(date) = :today";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([':today' => $today]);
+    $reservedToday = $stmt->fetch(PDO::FETCH_ASSOC);
+    $reservationCount = $reservedToday['today_reserved_count'];
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -412,11 +424,11 @@ $sma = round($totalQuantity / 7);
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
-                                        Predicted Production for Today
+                                        Reserved Orders
                                     </div>
                                     <div class="card-body">
-                                        <p><strong>Predicted Production for Today:</strong></p>
-                                        <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
+                                        <p><strong>Total Reservations Received Today:</strong></p>
+                                        <p><?php echo $reservationCount; ?> orders</p> 
                                     </div>
                                 </div>
                             </div>
