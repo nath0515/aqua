@@ -133,7 +133,6 @@
         flex-direction: row;
     }
 
-    /* Left Panel */
     .login-left {
         flex: 1;
         color: white;
@@ -157,7 +156,6 @@
         50% { transform: translateY(-10px); }
     }
 
-    /* Right Panel */
     .login-right {
         flex: 1;
         display: flex;
@@ -189,7 +187,6 @@
         color: #fff;
     }
 
-    /* Input Styling */
     .input-group-text {
         background-color: rgba(255, 255, 255, 0.2);
         border: none;
@@ -213,7 +210,6 @@
         color: #fff;
     }
 
-    /* Button */
     .login-btn {
         background: linear-gradient(45deg, #1e3c72, #2a5298);
         border: none;
@@ -229,7 +225,6 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
-    /* Links */
     .forgot-link, .register-link {
         color: #cde3ff;
         transition: 0.3s;

@@ -494,39 +494,49 @@ error_reporting(E_ALL);
         </script>
         <script>
             document.getElementById("downloadPDF").addEventListener("click", function () {
-                document.getElementById("processedBy").innerHTML = "Processed By: <?php echo $user_data['firstname'].' '.$user_data['lastname']?>";
-                const { jsPDF } = window.jspdf;
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
 
-                const report = document.getElementById("reportContent");
+            pdf.setFontSize(18);
+            pdf.setFont("helvetica", "bold");
+            pdf.text("AquaDrop Receipt", 105, 15, { align: "center" });
 
-                html2canvas(report, { scale: 2 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    const pdf = new jsPDF('p', 'mm', 'a4');
+            pdf.setFontSize(12);
+            pdf.setFont("helvetica", "normal");
+            pdf.text("Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?>", 14, 30);
 
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const pageHeight = pdf.internal.pageSize.getHeight();
-                    const imgWidth = pageWidth;
-                    const imgHeight = canvas.height * imgWidth / canvas.width;
+            pdf.text("Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?>", 14, 38);
+            pdf.text("Address: <?php echo $order_data[0]['address']; ?>", 14, 46);
+            pdf.text("Contact: <?php echo $order_data[0]['contact_number']; ?>", 14, 54);
 
-                    let heightLeft = imgHeight;
-                    let position = 0;
+            let startY = 70;
+            pdf.setFont("helvetica", "bold");
+            pdf.text("Item", 14, startY);
+            pdf.text("Qty", 90, startY);
+            pdf.text("Unit Price", 120, startY);
+            pdf.text("Total", 160, startY);
 
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
+            startY += 6;
+            pdf.setFont("helvetica", "normal");
 
-                    while (heightLeft > 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-                    }
+            <?php foreach($order_data as $row): ?>
+            pdf.text("<?php echo $row['product_name']; ?>", 14, startY);
+            pdf.text("<?php echo $row['quantity']; ?>", 95, startY, { align: "right" });
+            pdf.text("₱<?php echo ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price']; ?>", 130, startY, { align: "right" });
+            pdf.text("₱<?php echo $row['amount']; ?>", 180, startY, { align: "right" });
+            startY += 6;
+            <?php endforeach; ?>
 
-                    const filename = `Report_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`;
-                    pdf.save(filename);
-                });
+            startY += 6;
+            pdf.setFont("helvetica", "bold");
+            pdf.text("Total: ₱<?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
 
-                document.getElementById("processedBy").innerHTML = '';
-            });
+            startY += 20;
+            pdf.setFont("helvetica", "italic");
+            pdf.text("Thank you for choosing AquaDrop!", 105, startY, { align: "center" });
+
+            pdf.save(`Receipt_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`);
+        });
         </script>
     </body>
 </html>
