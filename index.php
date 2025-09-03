@@ -409,8 +409,6 @@ $sma = round($totalQuantity / 7);
                                         <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-4">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
