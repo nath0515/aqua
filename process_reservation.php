@@ -54,7 +54,7 @@ try {
     $order_id = $conn->lastInsertId();
 
     // Insert order items
-    $order_item_sql = "INSERT INTO order_items (order_id, product_id, quantity, with_container, container_quantity)
+    $order_item_sql = "INSERT INTO orders (order_id, product_id, quantity, with_container, container_quantity)
                        VALUES (:order_id, :product_id, :quantity, :with_container, :container_quantity)";
     $item_stmt = $conn->prepare($order_item_sql);
 
