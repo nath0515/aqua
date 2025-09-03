@@ -33,7 +33,7 @@
         $stmt->bindParam(':date', $dateNow);
     }
     else{
-        $sql = "SELECT a.order_id, a.date, sa.delivery_date, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
+        $sql = "SELECT a.order_id, a.date, a.delivery_date, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
         c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
     FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
