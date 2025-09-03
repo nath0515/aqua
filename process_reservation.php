@@ -42,7 +42,7 @@ try {
 
     // Insert into orders table
     $order_sql = "INSERT INTO orders (user_id, payment_id, location_id, delivery_date, status_id)
-                  VALUES (:user_id, :payment_id, :location_id, :delivery_date, 7";
+                  VALUES (:user_id, :payment_id, :location_id, :delivery_date, 7)";
     $stmt = $conn->prepare($order_sql);
     $stmt->execute([
         ':user_id' => $user_id,
