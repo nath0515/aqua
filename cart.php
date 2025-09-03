@@ -541,7 +541,7 @@ error_reporting(E_ALL);
         </script>
 
         <script>
-            document.getElementById("reserve-btn").addEventListener("click", function () {
+        document.getElementById("reserve-btn").addEventListener("click", function () {
             const selectedItems = [];
             let totalPrice = 0;
 
@@ -549,17 +549,19 @@ error_reporting(E_ALL);
                 const parentCard = cb.closest('.product-item');
                 const priceElem = parentCard.querySelector('.price');
                 const price = parseFloat(priceElem.getAttribute('data-price')) || 0;
+                const quantity = parseInt(cb.getAttribute('data-quantity')) || 1;
 
                 const item = {
                     cart_id: parseInt(cb.getAttribute('data-cart-id')),
                     product_id: parseInt(cb.getAttribute('data-id')),
-                    quantity: parseInt(cb.getAttribute('data-quantity')),
-                    with_container: parseInt(cb.getAttribute('data-with-container')),
-                    container_quantity: parseInt(cb.getAttribute('data-container-quantity'))
+                    quantity: quantity,
+                    price: price, // ✅ include price so backend can compute amount
+                    with_container: parseInt(cb.getAttribute('data-with-container')) || 0,
+                    container_quantity: parseInt(cb.getAttribute('data-container-quantity')) || 0
                 };
 
                 selectedItems.push(item);
-                totalPrice += price;
+                totalPrice += price * quantity; // ✅ fix: include quantity
             });
 
             if (selectedItems.length === 0) {
@@ -643,9 +645,7 @@ error_reporting(E_ALL);
                 Swal.fire("Error!", "An unexpected error occurred.", "error");
             });
         });
-
         </script>
-
         
     </body>
 </html>
