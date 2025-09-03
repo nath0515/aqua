@@ -9,7 +9,7 @@ error_reporting(E_ALL);
     $user_id = $_SESSION['user_id'];
     $role_id = $_SESSION['role_id'];
     if($role_id == 1){
-        header("Location: index.php");
+        header("Location: index.php");  
     }else if ($role_id == 3){
         header("Location: riderdashboard.php");
     }
@@ -269,7 +269,7 @@ error_reporting(E_ALL);
                                         <p class="mb-1">Total (<span id="selected-count">0</span> item): 
                                             <strong>₱<span id="total-price">0</span></strong>
                                         </p>
-                                        <button class="btn btn-success">Reserve</button>
+                                        <button class="btn btn-success" id="reserve-btn">Reserve</button>
                                         <button class="btn btn-warning">Check Out</button>
                                     </div>
                                 </div>
@@ -285,7 +285,27 @@ error_reporting(E_ALL);
                     </div>
                 </footer>
             </div>
-        </div>        
+        </div>      
+
+        <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reserveModalLabel">Select Delivery Date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="modal_delivery_date" class="form-label">Delivery Date</label>
+                    <input type="date" id="modal_delivery_date" class="form-control" min="<?php echo date('Y-m-d'); ?>">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirm-reserve-btn">Confirm Reservation</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -318,13 +338,11 @@ error_reporting(E_ALL);
             totalPriceEl.textContent = total.toLocaleString();
         }
 
-        // Toggle all checkboxes when "Select All" is clicked
         selectAllCheckbox.addEventListener('change', function () {
             productCheckboxes.forEach(cb => cb.checked = this.checked);
             updateTotal();
         });
 
-        // Update "Select All" state and total when any checkbox changes
         productCheckboxes.forEach(cb => {
             cb.addEventListener('change', () => {
             const allChecked = Array.from(productCheckboxes).every(cb => cb.checked);
@@ -517,6 +535,112 @@ error_reporting(E_ALL);
                         });
                     }
                 });
+            });
+        });
+
+        </script>
+
+        <script>
+            document.getElementById("reserve-btn").addEventListener("click", function () {
+            const selectedItems = [];
+            let totalPrice = 0;
+
+            document.querySelectorAll('.product-checkbox:checked').forEach(cb => {
+                const parentCard = cb.closest('.product-item');
+                const priceElem = parentCard.querySelector('.price');
+                const price = parseFloat(priceElem.getAttribute('data-price')) || 0;
+
+                const item = {
+                    cart_id: parseInt(cb.getAttribute('data-cart-id')),
+                    product_id: parseInt(cb.getAttribute('data-id')),
+                    quantity: parseInt(cb.getAttribute('data-quantity')),
+                    with_container: parseInt(cb.getAttribute('data-with-container')),
+                    container_quantity: parseInt(cb.getAttribute('data-container-quantity'))
+                };
+
+                selectedItems.push(item);
+                totalPrice += price;
+            });
+
+            if (selectedItems.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No items selected',
+                    text: 'Please select at least one item to reserve.'
+                });
+                return;
+            }
+
+            const paymentId = parseInt(document.getElementById('payment_id').value);
+            const locationId = parseInt(document.getElementById('location_id').value);
+
+            if (locationId === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Location',
+                    text: 'Please choose a delivery address.'
+                });
+                return;
+            }
+
+            if (paymentId === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Payment Method',
+                    text: 'Please choose a payment method.'
+                });
+                return;
+            }
+
+            // Save the selected data temporarily
+            window.reservationData = {
+                items: selectedItems,
+                payment_id: paymentId,
+                location_id: locationId
+            };
+
+            // Open modal
+            const modal = new bootstrap.Modal(document.getElementById('reserveModal'));
+            modal.show();
+        });
+
+        document.getElementById("confirm-reserve-btn").addEventListener("click", function () {
+            const deliveryDate = document.getElementById("modal_delivery_date").value;
+
+            if (!deliveryDate) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Delivery Date',
+                    text: 'Please choose a delivery date to proceed.'
+                });
+                return;
+            }
+
+            const { items, payment_id, location_id } = window.reservationData;
+
+            // Proceed with reservation
+            const formData = new FormData();
+            formData.append("items", JSON.stringify(items));
+            formData.append("payment_id", payment_id);
+            formData.append("location_id", location_id);
+            formData.append("delivery_date", deliveryDate);
+
+            fetch("process_reservation.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire("Reserved!", data.message, "success")
+                        .then(() => window.location.href = "orders.php");
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                Swal.fire("Error!", "An unexpected error occurred.", "error");
             });
         });
 
