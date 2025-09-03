@@ -284,7 +284,7 @@
                                 AquaDrop is your smart water ordering system — order purified water, track deliveries, 
                                 and manage your account with ease. Fast, reliable, and made for your convenience.
                             </p>
-                            </div>op ensures a smooth and hassle-free water ordering experience for both customers and service providers.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="login-right">
