@@ -62,18 +62,15 @@ try {
 
     $order_id = $conn->lastInsertId();
 
-    // Optionally insert into order_items if you have such table
-    // You can skip this part if not needed
-
-    // Log activity
     $log_sql = "INSERT INTO activity_logs (user_id, message, destination, date, read_status)
                 VALUES (:user_id, :message, :destination, NOW(), 0)";
     $log_stmt = $conn->prepare($log_sql);
     $log_stmt->execute([
         ':user_id' => $user_id,
-        ':message' => 'You reserved an order for delivery on ' . $delivery_date,
+        ':message' => 'You reserved an order for delivery on ' . date('F j, Y', strtotime($delivery_date)),
         ':destination' => 'costumer_orderdetails.php?id=' . $order_id
     ]);
+
 
     // Remove from cart
     $cart_ids = array_column($items, 'cart_id');
