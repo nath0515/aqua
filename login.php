@@ -111,101 +111,141 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <style>
-        body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: 'Segoe UI', sans-serif;
+        /* Base styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.login-container {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+}
+
+/* Left side */
+.login-left {
+    flex: 1;
+    background: linear-gradient(135deg, #f99f2c, #f97f2c);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+}
+
+.branding i {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.branding h1 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Right side */
+.login-right {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-form .avatar {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+/* Input styles */
+.input-group-text {
+    background-color: #f1f1f1;
+    border-right: none;
+}
+
+.input-group .form-control {
+    border-left: none;
+}
+
+.input-group .form-control:focus {
+    box-shadow: none;
+    border-color: #f97f2c;
+}
+
+/* Button */
+.login-btn {
+    background: linear-gradient(135deg, #f99f2c, #f97f2c);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: #e86c1a;
+}
+
+/* Links */
+.register-link {
+    color: #f97f2c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
     }
 
-    .login-container {
-        display: flex;
-        height: 100vh;
+    .login-left,
+    .login-right {
+        flex: none;
+        width: 100%;
+        padding: 30px 20px;
+        text-align: center;
     }
 
     .login-left {
-        flex: 1;
-        background: linear-gradient(135deg, #f99f2c, #f97f2c);
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        text-align: center;
-        padding: 40px;
-    }
-
-    .branding i {
-        font-size: 40px;
-        margin-bottom: 10px;
-    }
-
-    .branding h1 {
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .login-right {
-        flex: 1;
-        background-color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
     }
 
     .login-form {
-        width: 100%;
-        max-width: 400px;
+        max-width: 100%;
     }
 
-    .login-form .avatar {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #ccc;
+    .input-group {
+        flex-direction: row;
     }
 
     .input-group-text {
-        background-color: #f1f1f1;
-        border-right: none;
+        border-radius: 30px 0 0 30px;
     }
 
-    .input-group .form-control {
-        border-left: none;
+    .form-control {
+        border-radius: 0 30px 30px 0;
     }
-
-    .input-group .form-control:focus {
-        box-shadow: none;
-        border-color: #f97f2c;
-    }
-
-    .login-btn {
-        background: linear-gradient(135deg, #f99f2c, #f97f2c);
-        color: white;
-        border: none;
-        padding: 10px;
-        font-weight: bold;
-        border-radius: 30px;
-        transition: background 0.3s;
-    }
-
-    .login-btn:hover {
-        background: #e86c1a;
-    }
-
-    .register-link {
-        color: #f97f2c;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .register-link:hover {
-        text-decoration: underline;
-    }
+}
 
     </style>
-
-
 </head>
 <body class="bg-white">
     <div id="layoutAuthentication">
