@@ -267,7 +267,7 @@ body, html {
                 <div class="login-container">
                     <div class="login-left">
                         <div class="branding">
-                            <img src="assets/img/aquadrop.png" alt="Logo" class="branding-logo">
+                            <img src="assets/img/logo.png" alt="Logo" class="branding-logo">
                             <h1><strong>Nothing.</strong></h1>
                             <p>Welcome to Nothing!</p>
                         </div>
