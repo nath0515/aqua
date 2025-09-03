@@ -217,12 +217,12 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Promo Sales</h1>
+                        <h1 class="mt-4">Reserve</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active"><a href="sales.php">Sales</a></li>
-                            <li class="breadcrumb-item active">Promo Sales</li>
+                            <li class="breadcrumb-item active">Reserve</li>
                         </ol>
                         <form action="expenses.php" method="GET">
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
