@@ -272,7 +272,7 @@
                             <div class="avatar">
                                 <i class="fas fa-user-circle fa-4x"></i>
                             </div>
-                            <p class="text-muted text-center mb-4">Login below to get started.</p>
+                            <p class="text-center mb-4">Login below to get started.</p>
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
@@ -293,7 +293,7 @@
                             <button type="submit" class="btn login-btn w-100">Login</button>
 
                             <div class="text-center mt-3">
-                                <span class="text-muted">New user?</span> 
+                                <span>New user?</span> 
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#register" class="register-link">Register</a>
                             </div>
                         </form>
