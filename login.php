@@ -208,6 +208,15 @@ body, html {
 
 .register-link:hover {
     text-decoration: underline;
+
+}.forgot-link {
+    font-size: 0.9rem;
+    color: #f97f2c;
+    text-decoration: none;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
 }
 
 @media screen and (max-width: 768px) {
@@ -274,6 +283,9 @@ body, html {
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                 <input type="password" name="password" class="form-control" placeholder="Password" required>
+                            </div>
+                            <div class="text-end mb-3">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#forgot" class="forgot-link">Forgot Password?</a>
                             </div>
 
                             <button type="submit" class="btn login-btn w-100">Login</button>
