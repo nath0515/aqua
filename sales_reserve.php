@@ -18,12 +18,33 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, a.rider FROM orders a
+    if(isset($_GET['from_card'])){
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+               c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
+        FROM orders a
+        JOIN user_details b ON a.user_id = b.user_id
+        JOIN orderstatus c ON a.status_id = c.status_id
+        LEFT JOIN user_details d ON a.rider = d.user_id
+        JOIN payment_method e ON a.payment_id = e.payment_id
+         WHERE a.status_id = 7
+        WHERE DATE(date) = :date
+        ORDER BY date DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':date', $dateNow);
+    }
+    else{
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
+        c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
+    FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id 
-    WHERE a.status_id = 7
+    JOIN orderstatus c ON a.status_id = c.status_id
+    LEFT JOIN user_details d ON a.rider = d.user_id
+    LEFT JOIN user_locations ul ON a.location_id = ul.location_id
+    LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
+    JOIN payment_method e ON a.payment_id = e.payment_id
     ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
+    }
     $stmt->execute();
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -246,7 +267,7 @@
                                             <td>₱<?php echo $row['amount'];?></td>
                                             <td><?php echo $row['firstname'] . ' ' . $row['lastname'];?></td>
                                             <td><?php echo $row['contact_number'];?></td>
-                                            <td><?php echo $row['address'];?></td>
+                                            <td><?php echo $row['barangay_name']." ".$row['address'];?></td>
                                             <td>
                                                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                     <?php
