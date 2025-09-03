@@ -350,6 +350,9 @@ error_reporting(E_ALL);
                                 <div class="text-end mt-3">
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
                                 </div>
+                                <div class="text-end mt-3">
+                                    <a href="sale_reserve.php" class="btn btn-primary">Reserved</a>
+                                </div>
                             </div>
                         </form>
                         <div class="card mb-4">
