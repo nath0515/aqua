@@ -359,9 +359,16 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($order_data as $row):?>
+                                            <?php
+                                            // Calculate line item total
+                                            $line_total = $row['water_price'] * $row['quantity'];
+                                            if($row['with_container'] == 1) {
+                                                $line_total += $row['container_price'] * $row['container_quantity'];
+                                            }
+                                            ?>
                                             <tr>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td>₱<?php echo $row['water_price'];?></td>
+                                                <td>₱<?php echo number_format($row['water_price'], 2);?></td>
                                                 <td><?php echo $row['quantity'];?></td>
                                                 <?php if($has_containers): ?>
                                                     <td>
@@ -375,9 +382,9 @@
                                                         ?>
                                                     </td>
                                                     <td><?php echo $row['container_quantity'];?></td>
-                                                    <td>₱<?php echo $row['container_price'];?></td>
+                                                    <td>₱<?php echo number_format($row['container_price'], 2);?></td>
                                                 <?php endif; ?>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($line_total, 2);?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
