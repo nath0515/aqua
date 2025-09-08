@@ -257,11 +257,11 @@ ini_set('display_errors', 1);
                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                 <div>
                                     <label for="start_date" class="form-label">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" value="<?php echo htmlspecialchars($start_date ?? ''); ?>" required>
                                 </div>
                                 <div>
                                     <label for="end_date" class="form-label">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" value="<?php echo htmlspecialchars($end_date ?? ''); ?>" required>
                                 </div>
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
@@ -529,6 +529,11 @@ ini_set('display_errors', 1);
             const endDate = document.getElementById('end_date').value;
             const filterRange = document.getElementById('filter_range_input').value;
             
+            // Debug: Log the values
+            console.log('Download PDF - Start Date:', startDate);
+            console.log('Download PDF - End Date:', endDate);
+            console.log('Download PDF - Filter Range:', filterRange);
+            
             // Create download URL with current filters
             let downloadUrl = 'download_sales_pdf.php?';
             if (startDate) downloadUrl += 'start_date=' + startDate + '&';
@@ -537,6 +542,8 @@ ini_set('display_errors', 1);
             
             // Remove trailing & if exists
             downloadUrl = downloadUrl.replace(/&$/, '');
+            
+            console.log('Download URL:', downloadUrl);
             
             // Create a temporary link and trigger download
             const link = document.createElement('a');
