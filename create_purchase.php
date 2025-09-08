@@ -393,6 +393,17 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Hide "With Container" option if container price is 0 or very low
+                        const containerCheckbox = document.getElementById("hasContainer");
+                        const containerLabel = containerCheckbox.nextElementSibling;
+                        const containerDiv = containerCheckbox.closest('.col');
+                        
+                        if (data.data.container_price <= 0) {
+                            containerDiv.style.display = 'none';
+                        } else {
+                            containerDiv.style.display = 'block';
+                        }
+                        
                         document.getElementById("quantity").addEventListener("input", function () {
                             let quantity = parseInt(this.value, 10);
                             if (!isNaN(quantity) && quantity >= 10) {

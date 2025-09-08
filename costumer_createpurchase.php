@@ -283,6 +283,17 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Hide "With Container" option if container price is 0 or very low
+                        const containerCheckbox = document.getElementById("hasContainer");
+                        const containerLabel = containerCheckbox.nextElementSibling;
+                        const containerDiv = containerCheckbox.closest('.col-6');
+                        
+                        if (data.data.container_price <= 0) {
+                            containerDiv.style.display = 'none';
+                        } else {
+                            containerDiv.style.display = 'block';
+                        }
+                        
                         let quantity = document.getElementById('quantity').value;
                         if (quantity >= 10) {
                                 document.getElementById("unitprice").value = data.data.water_price_promo;
