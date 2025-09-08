@@ -42,10 +42,45 @@ if ($status == 1) {
     $updateStatus->bindParam(':date', $today);
     $updateStatus->execute();
 
+    // Get the attendance record to calculate salary
+    $attendance_stmt = $conn->prepare("SELECT in_time FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today AND out_time IS NULL");
+    $attendance_stmt->bindParam(':user_id', $user_id);
+    $attendance_stmt->bindParam(':today', $today);
+    $attendance_stmt->execute();
+    $attendance_record = $attendance_stmt->fetch(PDO::FETCH_ASSOC);
+
     $updateOut = $conn->prepare("UPDATE attendance SET out_time = :out_time WHERE user_id = :user_id AND out_time IS NULL");
     $updateOut->bindParam(':out_time', $now);
     $updateOut->bindParam(':user_id', $user_id);
     $updateOut->execute();
+
+    // Calculate daily salary and add to expenses if attendance record exists
+    if ($attendance_record) {
+        $salary_per_day = 500; // Daily rate
+        $hourly_rate = $salary_per_day / 8; // Assuming 8-hour work day
+        
+        $time_in = strtotime($attendance_record['in_time']);
+        $time_out = strtotime($now);
+        $hours_worked = ($time_out - $time_in) / 3600; // Convert seconds to hours
+        $daily_salary = $hours_worked * $hourly_rate;
+        
+        // Get rider details for expense comment
+        $rider_stmt = $conn->prepare("SELECT u.username, ud.firstname, ud.lastname FROM users u 
+                                    JOIN user_details ud ON u.user_id = ud.user_id 
+                                    WHERE u.user_id = :user_id");
+        $rider_stmt->bindParam(':user_id', $user_id);
+        $rider_stmt->execute();
+        $rider_data = $rider_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $rider_name = $rider_data['firstname'] . ' ' . $rider_data['lastname'];
+        $comment = "Daily salary for " . $rider_name . " - " . number_format($hours_worked, 2) . " hours worked";
+        
+        // Add salary to expenses (Salary expense type ID = 2)
+        $expense_stmt = $conn->prepare("INSERT INTO expense (expensetype_id, comment, amount) VALUES (2, :comment, :amount)");
+        $expense_stmt->bindParam(':comment', $comment);
+        $expense_stmt->bindParam(':amount', $daily_salary);
+        $expense_stmt->execute();
+    }
 } else {
     // Prevent multiple clock-ins after clocking out
     $checkAttendance = $conn->prepare("SELECT * FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today AND out_time IS NOT NULL");
