@@ -200,10 +200,42 @@
                             <li class="breadcrumb-item active">Analytics</li>
                             <li class="breadcrumb-item active">Report</li>
                         </ol>
+                        <!-- Custom Date Range Report -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                Generate Custom Report
+                            </div>
+                            <div class="card-body">
+                                <form method="GET" action="custom_report.php" class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="start_date" class="form-label">Start Date</label>
+                                        <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="end_date" class="form-label">End Date</label>
+                                        <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">&nbsp;</label>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary" onclick="return validateDateRange()">
+                                                <i class="fas fa-chart-line"></i> Generate Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="dateError" class="alert alert-danger mt-3" style="display: none;">
+                                    <i class="fas fa-exclamation-triangle"></i> Start date cannot be after end date!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Reports -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Income
+                                Daily Reports
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -298,6 +330,30 @@
             }
         </script>
         <script>
+            function validateDateRange() {
+                const startDate = document.getElementById('start_date').value;
+                const endDate = document.getElementById('end_date').value;
+                const errorDiv = document.getElementById('dateError');
+                
+                errorDiv.style.display = 'none';
+                
+                if (startDate && endDate) {
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    
+                    if (start > end) {
+                        errorDiv.style.display = 'block';
+                        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            // Add event listeners for real-time validation
+            document.getElementById('start_date').addEventListener('change', validateDateRange);
+            document.getElementById('end_date').addEventListener('change', validateDateRange);
+
             $(document).ready(function() {
                 $("#editOrderBtn").click(function() {
                     var orderId = $(this).data("id");

@@ -1,0 +1,501 @@
+<?php 
+    require 'session.php';
+    require 'db.php';
+
+    $user_id = $_SESSION['user_id'];
+    $role_id = $_SESSION['role_id'];
+    if($role_id == 2){
+        header("Location: home.php");
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+    }
+
+    // Get date range from URL parameters
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+
+    // Validate date range
+    if (empty($start_date) || empty($end_date)) {
+        header('Location: report.php');
+        exit();
+    }
+
+    if (strtotime($start_date) > strtotime($end_date)) {
+        header('Location: report.php');
+        exit();
+    }
+
+    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+    JOIN user_details ud ON u.user_id = ud.user_id
+    WHERE u.user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Get orders within date range
+    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.contact_number, 
+            c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
+            FROM orders a
+            JOIN user_details b ON a.user_id = b.user_id
+            JOIN orderstatus c ON a.status_id = c.status_id
+            LEFT JOIN user_details d ON a.rider = d.user_id
+            JOIN payment_method e ON a.payment_id = e.payment_id
+            WHERE DATE(a.date) BETWEEN :start_date AND :end_date
+            AND (a.status_id = 4 OR a.status_id = 5)
+            ORDER BY a.date DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':start_date', $start_date);
+    $stmt->bindParam(':end_date', $end_date);
+    $stmt->execute();
+    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Get expenses within date range
+    $sql = "SELECT a.expense_id, a.date, a.amount, b.expensetype_name, c.firstname, c.lastname
+            FROM expense a
+            JOIN expensetype b ON a.expensetype_id = b.expensetype_id
+            LEFT JOIN user_details c ON a.user_id = c.user_id
+            WHERE DATE(a.date) BETWEEN :start_date AND :end_date
+            ORDER BY a.date DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':start_date', $start_date);
+    $stmt->bindParam(':end_date', $end_date);
+    $stmt->execute();
+    $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calculate totals
+    $total_sales = array_sum(array_column($order_data, 'amount'));
+    $total_expenses = array_sum(array_column($expense_data, 'amount'));
+    $net_income = $total_sales - $total_expenses;
+
+    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $unread_count = $unread_result['unread_count'];
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Custom Report</title>
+        <link rel="manifest" href="/manifest.json">
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+            .notification-text{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.php">
+                <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
+            </a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+                <?php 
+                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $activity_logs = $stmt->fetchAll();
+                ?>
+                
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                            <?php if ($unread_count > 0): ?>
+                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                    <?php echo $unread_count; ?>
+                                    <span class="visually-hidden">unread notifications</span>
+                                </span>
+                            <?php endif; ?>
+                            <span class="visually-hidden">unread notifications</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <?php foreach($activity_logs as $row):?>
+                        <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
+                        <hr>
+                        <?php endforeach; ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
+                        
+                        <?php 
+                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $status = $stmt->fetchColumn();
+                        ?>
+                        <li>
+                            <a 
+                                href="process_dailyreport.php" 
+                                class="dropdown-item"
+                                <?php if ($status == 1): ?>
+                                    onclick="return confirmCloseShop(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
+                            </a>
+                        </li>
+                        <div id="loadingOverlay">
+                            <div class="spinner"></div>
+                        </div>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Menu</div>
+                            <a class="nav-link" href="index.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Order Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="orders.php">Orders</a>
+                                    <a class="nav-link" href="stock.php">Stock</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Analytics
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="sales.php">Sales</a>
+                                    <a class="nav-link" href="expenses.php">Expenses</a>
+                                    <a class="nav-link" href="income.php">Income</a>
+                                    <a class="nav-link" href="report.php">Report</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Account Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts2" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="accounts.php">Accounts</a>
+                                    <a class="nav-link" href="rideraccount.php">Add Rider</a>
+                                    <a class="nav-link" href="adminaccount.php">Add Admin</a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Custom Report</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="report.php">Report</a></li>
+                            <li class="breadcrumb-item active">Custom Report</li>
+                        </ol>
+
+                        <!-- Report Summary -->
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-calendar-alt"></i> Report Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <strong>Total Sales:</strong> ₱<?php echo number_format($total_sales, 2); ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Total Expenses:</strong> ₱<?php echo number_format($total_expenses, 2); ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Net Income:</strong> ₱<?php echo number_format($net_income, 2); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="reportContent">
+                        <h1>💧 DoodsNer Water Refilling Station</h1>
+                        <h5>📅 Custom Sales & Expense Report - <?php echo date('F j, Y', strtotime($start_date)); ?> to <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Sales (<?php echo count($order_data); ?> orders)
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Rider</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($order_data as $row):?>
+                                                <tr>
+                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                                                    <td><?php echo $row['status_name']; ?></td>
+                                                    <td><?php echo $row['rider_firstname'] . ' ' . $row['rider_lastname']; ?></td>
+                                                </tr>
+                                            <?php endforeach;?>
+                                            <tr class="table-success">
+                                                <td colspan="2"><strong>Total Sales</strong></td>
+                                                <td><strong>₱<?php echo number_format($total_sales, 2); ?></strong></td>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Expenses (<?php echo count($expense_data); ?> entries)
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple1">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Purpose</th>
+                                                <th>Amount (₱)</th>
+                                                <th>Added By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($expense_data as $row):?>
+                                                <tr>
+                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                    <td><?php echo $row['expensetype_name']; ?></td>
+                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                                                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                                                </tr>
+                                            <?php endforeach;?>
+                                            <tr class="table-danger">
+                                                <td colspan="2"><strong>Total Expenses</strong></td>
+                                                <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Income Summary
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple2">
+                                        <thead>
+                                            <tr>
+                                                <th>Total Sales</th>
+                                                <th>Less : Expenses</th>
+                                                <th>Net Income</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>₱<?php echo number_format($total_sales, 2); ?></td>
+                                                <td>₱<?php echo number_format($total_expenses, 2); ?></td>
+                                                <td class="table-<?php echo $net_income >= 0 ? 'success' : 'danger'; ?>"><strong>₱<?php echo number_format($net_income, 2); ?></strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <button id="downloadPDF" class="btn btn-danger">
+                                <i class="fas fa-file-pdf"></i> Download Report as PDF
+                            </button>
+                            <a href="report.php" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Reports
+                            </a>
+                        </div>
+                    </div>
+                </main>    
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', event => {
+                // Simple-DataTables
+                const datatablesSimple = document.getElementById('datatablesSimple');
+                if (datatablesSimple) {
+                    new simpleDatatables.DataTable(datatablesSimple);
+                }
+                const datatablesSimple2 = document.getElementById('datatablesSimple2');
+                if (datatablesSimple2) {
+                    new simpleDatatables.DataTable(datatablesSimple2);
+                }
+                const datatablesSimple1 = document.getElementById('datatablesSimple1');
+                if (datatablesSimple1) {
+                    new simpleDatatables.DataTable(datatablesSimple1);
+                }
+            });
+        </script>
+
+        <script>
+            document.getElementById("downloadPDF").addEventListener("click", function () {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                let y = 15;
+
+                // Title
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(18);
+                pdf.text("DoodsNer Water Refilling Station", 105, y, { align: "center" });
+                y += 8;
+
+                pdf.setFontSize(14);
+                pdf.setFont("helvetica", "normal");
+                pdf.text("Custom Sales & Expense Report", 105, y, { align: "center" });
+                y += 6;
+
+                pdf.setFontSize(12);
+                pdf.text("Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?>", 105, y, { align: "center" });
+                y += 15;
+
+                // Summary
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Summary", 14, y);
+                y += 6;
+                pdf.setFont("helvetica", "normal");
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
+                y += 6;
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
+                y += 6;
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
+                y += 15;
+
+                // --- SALES TABLE ---
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Sales (<?php echo count($order_data); ?> orders)", 14, y);
+                y += 6;
+
+                pdf.setFontSize(10);
+                pdf.text("Date", 14, y);
+                pdf.text("Customer", 50, y);
+                pdf.text("Amount (₱)", 170, y, { align: "right" });
+                y += 6;
+                pdf.setFont("helvetica", "normal");
+
+                <?php foreach($order_data as $row): ?>
+                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
+                    pdf.text("<?php echo $row['firstname'] . ' ' . $row['lastname']; ?>", 50, y);
+                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
+                    y += 6;
+                <?php endforeach; ?>
+
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 170, y, { align: "right" });
+                y += 12;
+
+                // --- EXPENSES TABLE ---
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Expenses (<?php echo count($expense_data); ?> entries)", 14, y);
+                y += 6;
+
+                pdf.setFontSize(10);
+                pdf.text("Date", 14, y);
+                pdf.text("Purpose", 50, y);
+                pdf.text("Amount (₱)", 170, y, { align: "right" });
+                y += 6;
+                pdf.setFont("helvetica", "normal");
+
+                <?php foreach($expense_data as $row): ?>
+                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
+                    pdf.text("<?php echo $row['expensetype_name']; ?>", 50, y);
+                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
+                    y += 6;
+                <?php endforeach; ?>
+
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 170, y, { align: "right" });
+                y += 12;
+
+                // --- INCOME SUMMARY ---
+                pdf.setFontSize(12);
+                pdf.text("Net Income Summary", 14, y);
+                y += 6;
+
+                pdf.setFont("helvetica", "normal");
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
+                y += 6;
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
+                y += 6;
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
+                y += 15;
+
+                // Footer
+                pdf.setFont("helvetica", "italic");
+                pdf.setFontSize(10);
+                pdf.text("Generated by AquaDrop Water Ordering System", 105, 285, { align: "center" });
+
+                // Save PDF
+                const filename = `Custom_Report_<?php echo date('Ymd', strtotime($start_date)); ?>_to_<?php echo date('Ymd', strtotime($end_date)); ?>.pdf`;
+                pdf.save(filename);
+            });
+        </script>
+    </body>
+</html>
