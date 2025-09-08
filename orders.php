@@ -70,12 +70,14 @@ error_reporting(E_ALL);
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if(isset($_GET['from_card'])){
-        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
                c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
         JOIN orderstatus c ON a.status_id = c.status_id
         LEFT JOIN user_details d ON a.rider = d.user_id
+        LEFT JOIN user_locations ul ON a.location_id = ul.location_id
+        LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
         JOIN payment_method e ON a.payment_id = e.payment_id
         WHERE DATE(date) = :date
         ORDER BY date DESC";
