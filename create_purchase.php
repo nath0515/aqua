@@ -382,6 +382,14 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
+            // Call fetchProductDetails when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                const productSelect = document.getElementById('product');
+                if (productSelect && productSelect.value) {
+                    fetchProductDetails(productSelect.value);
+                }
+            });
+            
             function fetchProductDetails(productId) {
                 if (productId === '') return;
             

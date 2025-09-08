@@ -272,6 +272,14 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
+            // Call fetchProductDetails when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                const productId = <?php echo $_GET['id'] ?? 'null'; ?>;
+                if (productId) {
+                    fetchProductDetails(productId);
+                }
+            });
+            
             function fetchProductDetails(productId) {
                 if (productId === '') return;
             
@@ -285,7 +293,6 @@
                     if (data.success) {
                         // Hide "With Container" option if container price is 0 or very low
                         const containerCheckbox = document.getElementById("hasContainer");
-                        const containerLabel = containerCheckbox.nextElementSibling;
                         const containerDiv = containerCheckbox.closest('.col-6');
                         
                         if (data.data.container_price <= 0) {
