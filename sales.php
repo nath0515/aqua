@@ -265,7 +265,7 @@ ini_set('display_errors', 1);
                                 </div>
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <button type="submit" class="btn btn-primary" onclick="return validateDateRange()">Filter</button>
                                 </div>
                                 <!-- Quick filter dropdown -->
                                 <div id="quickFilterDropdown">
@@ -307,6 +307,12 @@ ini_set('display_errors', 1);
                                 </div>
                             </div>
                         </form>
+                        
+                        <!-- Error Message -->
+                        <div id="dateError" class="alert alert-danger" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Invalid Date Range:</strong> Start date cannot be after end date. Please select a valid date range.
+                        </div>
                         
                         <!-- Total Summary -->
                         <?php if ($total_orders > 0): ?>
@@ -521,6 +527,42 @@ ini_set('display_errors', 1);
                 document.getElementById('filterForm').submit();
             });
         });
+        
+        // Real-time date validation
+        document.getElementById('start_date').addEventListener('change', validateDateRange);
+        document.getElementById('end_date').addEventListener('change', validateDateRange);
+        
+        // Date Range Validation Function
+        function validateDateRange() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const errorDiv = document.getElementById('dateError');
+            
+            // Hide error message first
+            errorDiv.style.display = 'none';
+            
+            // Check if both dates are selected
+            if (startDate && endDate) {
+                // Convert to Date objects for comparison
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                // Check if start date is after end date
+                if (start > end) {
+                    // Show error message
+                    errorDiv.style.display = 'block';
+                    
+                    // Scroll to error message
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Prevent form submission
+                    return false;
+                }
+            }
+            
+            // Allow form submission if validation passes
+            return true;
+        }
         
         // PDF Download Function
         function downloadPDF() {
