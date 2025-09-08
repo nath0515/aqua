@@ -52,7 +52,7 @@ ini_set('display_errors', 1);
     $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, c.status_name, CONCAT(r.firstname, ' ', r.lastname) as rider FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
     LEFT JOIN user_details r ON a.rider = r.user_id
-    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id IN (4, 5) ORDER BY a.date DESC";
+    JOIN orderstatus c ON a.status_id = c.status_id WHERE a.status_id IN (4, 5)";
 
     $params = [];
 
@@ -64,10 +64,19 @@ ini_set('display_errors', 1);
         $params[':start_date'] = $start_date_time;
         $params[':end_date'] = $end_date_time;
     }
+    
+    $sql .= " ORDER BY a.date DESC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);
     $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Calculate total amount for filtered data
+    $total_amount = 0;
+    $total_orders = count($order_data);
+    foreach ($order_data as $order) {
+        $total_amount += floatval($order['amount']);
+    }
 
     $sql = "SELECT * FROM orderstatus";
     $stmt = $conn->prepare($sql);
@@ -290,9 +299,38 @@ ini_set('display_errors', 1);
                                 </div>
                                 <div class="text-end mt-3">
                                     <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
+                                    <?php if ($total_orders > 0): ?>
+                                        <button onclick="downloadPDF()" class="btn btn-success ms-2">
+                                            <i class="fas fa-download"></i> Download PDF
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </form>
+                        
+                        <!-- Total Summary -->
+                        <?php if ($total_orders > 0): ?>
+                        <div class="alert alert-info mb-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Total Orders:</strong> <?php echo $total_orders; ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Total Amount:</strong> ₱<?php echo number_format($total_amount, 2); ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Date Range:</strong> 
+                                    <?php 
+                                    if ($start_date && $end_date) {
+                                        echo date('M d, Y', strtotime($start_date)) . ' - ' . date('M d, Y', strtotime($end_date));
+                                    } else {
+                                        echo 'All Time';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -483,6 +521,26 @@ ini_set('display_errors', 1);
                 document.getElementById('filterForm').submit();
             });
         });
+        
+        // PDF Download Function
+        function downloadPDF() {
+            // Get current filter parameters
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const filterRange = document.getElementById('filter_range_input').value;
+            
+            // Create download URL with current filters
+            let downloadUrl = 'download_sales_pdf.php?';
+            if (startDate) downloadUrl += 'start_date=' + startDate + '&';
+            if (endDate) downloadUrl += 'end_date=' + endDate + '&';
+            if (filterRange) downloadUrl += 'filter_range=' + filterRange + '&';
+            
+            // Remove trailing & if exists
+            downloadUrl = downloadUrl.replace(/&$/, '');
+            
+            // Open download in new tab
+            window.open(downloadUrl, '_blank');
+        }
         </script>
     </body>
 </html>
