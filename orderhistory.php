@@ -64,6 +64,23 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            .sortable {
+                cursor: pointer;
+                user-select: none;
+                transition: background-color 0.2s ease;
+            }
+            .sortable:hover {
+                background-color: #f8f9fa;
+            }
+            .sortable i {
+                margin-left: 5px;
+                opacity: 0.5;
+            }
+            .sortable:hover i {
+                opacity: 1;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
@@ -167,13 +184,25 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Order ID</th>
-                                            <th>Date</th>
-                                            <th>Amount (₱)</th>
-                                            <th>Full Name</th>
-                                            <th>Contact #</th>
+                                            <th class="sortable" data-sort="order_id">
+                                                Order ID <i class="fas fa-sort"></i>
+                                            </th>
+                                            <th class="sortable" data-sort="date">
+                                                Date <i class="fas fa-sort"></i>
+                                            </th>
+                                            <th class="sortable" data-sort="amount">
+                                                Amount (₱) <i class="fas fa-sort"></i>
+                                            </th>
+                                            <th class="sortable" data-sort="firstname">
+                                                Full Name <i class="fas fa-sort"></i>
+                                            </th>
+                                            <th class="sortable" data-sort="contact_number">
+                                                Contact # <i class="fas fa-sort"></i>
+                                            </th>
                                             <th>Address</th>
-                                            <th>Status</th>
+                                            <th class="sortable" data-sort="status_name">
+                                                Status <i class="fas fa-sort"></i>
+                                            </th>
                                             <th>Rider</th>
                                             <th>Action</th>
                                         </tr>
@@ -251,9 +280,11 @@
                 const paginationContainer = document.getElementById('pagination');
                 let currentPage = 1;
                 const perPage = 10;
+                let currentSortBy = 'date';
+                let currentSortOrder = 'DESC';
 
-                function fetchOrders(page = 1) {
-                    fetch(`process_usercheckorders.php?page=${page}&perPage=${perPage}`, {
+                function fetchOrders(page = 1, sortBy = currentSortBy, sortOrder = currentSortOrder) {
+                    fetch(`process_usercheckorders.php?page=${page}&perPage=${perPage}&sortBy=${sortBy}&sortOrder=${sortOrder}`, {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' }
                     })
@@ -394,8 +425,51 @@
                             return 'bg-secondary';
                     }
                 }
-                // Load first page
+
+                // Add sorting functionality
+                function setupSorting() {
+                    const sortableHeaders = document.querySelectorAll('.sortable');
+                    sortableHeaders.forEach(header => {
+                        header.style.cursor = 'pointer';
+                        header.addEventListener('click', function() {
+                            const sortBy = this.getAttribute('data-sort');
+                            let newSortOrder = 'ASC';
+                            
+                            // If clicking the same column, toggle sort order
+                            if (currentSortBy === sortBy) {
+                                newSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
+                            }
+                            
+                            currentSortBy = sortBy;
+                            currentSortOrder = newSortOrder;
+                            
+                            // Update sort icons
+                            updateSortIcons();
+                            
+                            // Reset to first page and fetch data
+                            currentPage = 1;
+                            fetchOrders(currentPage, currentSortBy, currentSortOrder);
+                        });
+                    });
+                }
+
+                function updateSortIcons() {
+                    const sortableHeaders = document.querySelectorAll('.sortable');
+                    sortableHeaders.forEach(header => {
+                        const icon = header.querySelector('i');
+                        const sortBy = header.getAttribute('data-sort');
+                        
+                        if (currentSortBy === sortBy) {
+                            icon.className = currentSortOrder === 'ASC' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+                        } else {
+                            icon.className = 'fas fa-sort';
+                        }
+                    });
+                }
+
+                // Load first page and setup sorting
                 fetchOrders(currentPage);
+                setupSorting();
             });
         </script>
     </body>

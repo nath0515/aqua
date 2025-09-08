@@ -14,6 +14,21 @@ $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $perPage = isset($_GET['perPage']) ? max(1, intval($_GET['perPage'])) : 10;
 $offset = ($page - 1) * $perPage;
 
+// Sorting parameters
+$sortBy = isset($_GET['sortBy']) ? $_GET['sortBy'] : 'date';
+$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'DESC';
+
+// Validate sort parameters
+$allowedSortColumns = ['order_id', 'date', 'amount', 'firstname', 'contact_number', 'status_name'];
+$allowedSortOrders = ['ASC', 'DESC'];
+
+if (!in_array($sortBy, $allowedSortColumns)) {
+    $sortBy = 'date';
+}
+if (!in_array($sortOrder, $allowedSortOrders)) {
+    $sortOrder = 'DESC';
+}
+
 try {
     // Count total records
     $countStmt = $conn->prepare("SELECT COUNT(*) FROM orders WHERE user_id = :user_id");
@@ -21,7 +36,7 @@ try {
     $countStmt->execute();
     $total = $countStmt->fetchColumn();
 
-    // Fetch paginated data
+    // Fetch paginated data with dynamic sorting
     $sql = "SELECT a.order_id, a.date, a.amount, a.status_id, c.status_name, a.rider, 
                    COALESCE(d.firstname, 'None') as rider_firstname, 
                    COALESCE(d.lastname, '') as rider_lastname,
@@ -37,7 +52,7 @@ try {
             JOIN orderstatus c ON a.status_id = c.status_id
             LEFT JOIN user_details d ON a.rider = d.user_id
             WHERE a.user_id = :user_id
-            ORDER BY a.date DESC
+            ORDER BY a.$sortBy $sortOrder
             LIMIT :limit OFFSET :offset";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
