@@ -81,10 +81,9 @@
 
         // Test expenses query
         echo "<h3>3. Expenses Query</h3>";
-        $sql = "SELECT a.expense_id, a.date, a.amount, b.expensetype_name, c.firstname, c.lastname
+        $sql = "SELECT a.expense_id, a.date, a.amount, a.comment, b.expensetype_name
                 FROM expense a
                 JOIN expensetype b ON a.expensetype_id = b.expensetype_id
-                LEFT JOIN user_details c ON a.user_id = c.user_id
                 WHERE DATE(a.date) BETWEEN :start_date AND :end_date
                 ORDER BY a.date DESC";
         $stmt = $conn->prepare($sql);

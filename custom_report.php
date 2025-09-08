@@ -71,10 +71,9 @@
 
     // Get expenses within date range
     try {
-        $sql = "SELECT a.expense_id, a.date, a.amount, b.expensetype_name, c.firstname, c.lastname
+        $sql = "SELECT a.expense_id, a.date, a.amount, a.comment, b.expensetype_name
                 FROM expense a
                 JOIN expensetype b ON a.expensetype_id = b.expensetype_id
-                LEFT JOIN user_details c ON a.user_id = c.user_id
                 WHERE DATE(a.date) BETWEEN :start_date AND :end_date
                 ORDER BY a.date DESC";
         $stmt = $conn->prepare($sql);
@@ -336,8 +335,8 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th>Purpose</th>
+                                                <th>Comment</th>
                                                 <th>Amount (₱)</th>
-                                                <th>Added By</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -345,14 +344,13 @@
                                                 <tr>
                                                     <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                     <td><?php echo $row['expensetype_name']; ?></td>
+                                                    <td><?php echo $row['comment']; ?></td>
                                                     <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
                                                 </tr>
                                             <?php endforeach;?>
                                             <tr class="table-danger">
-                                                <td colspan="2"><strong>Total Expenses</strong></td>
+                                                <td colspan="3"><strong>Total Expenses</strong></td>
                                                 <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
-                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -489,6 +487,7 @@
                 pdf.setFontSize(10);
                 pdf.text("Date", 14, y);
                 pdf.text("Purpose", 50, y);
+                pdf.text("Comment", 100, y);
                 pdf.text("Amount (₱)", 170, y, { align: "right" });
                 y += 6;
                 pdf.setFont("helvetica", "normal");
@@ -496,6 +495,7 @@
                 <?php foreach($expense_data as $row): ?>
                     pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
                     pdf.text("<?php echo $row['expensetype_name']; ?>", 50, y);
+                    pdf.text("<?php echo $row['comment']; ?>", 100, y);
                     pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
                     y += 6;
                 <?php endforeach; ?>
