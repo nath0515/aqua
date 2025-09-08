@@ -34,7 +34,7 @@ require 'db.php';
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = :dateNow";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id IN (4, 5) AND DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
@@ -46,7 +46,7 @@ require 'db.php';
     $stmt->execute();
     $amount1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = :dateNow";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id IN (4, 5) AND DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':dateNow', $dateNow);
     $stmt->execute();
@@ -538,7 +538,7 @@ require 'db.php';
         $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : null;
 
         // --- Fetch Sales Data ---
-        $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders WHERE status_id = 5";
+        $sql = "SELECT DATE(date) AS day, SUM(amount) AS total_price FROM orders WHERE status_id IN (4, 5)";
         if ($start_date && $end_date) {
             $sql .= " AND DATE(date) BETWEEN :start_date AND :end_date";
         }

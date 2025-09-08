@@ -10,7 +10,7 @@ try {
     echo "<h3>📊 Dashboard Queries Test</h3>";
     
     // 1. Today's sales
-    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id = 5 AND DATE(date) = :dateNow";
+    $sql = "SELECT SUM(amount) as total_sales FROM orders WHERE status_id IN (4, 5) AND DATE(date) = :dateNow";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':dateNow', $today);
     $stmt->execute();
