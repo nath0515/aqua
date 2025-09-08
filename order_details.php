@@ -262,19 +262,17 @@ error_reporting(E_ALL);
                                         </thead>
                                         <tbody>
                                             <?php foreach($order_data as $row):?>
+                                                <?php
+                                                // Calculate line item total
+                                                $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                                                $line_total = $unit_price * $row['quantity'];
+                                                if($row['with_container'] == 1) {
+                                                    $line_total += $row['container_price'] * $row['container_quantity'];
+                                                }
+                                                ?>
                                                 <tr>
                                                     <td><?php echo $row['product_name'];?></td>
-                                                    <td>₱
-                                                        <?php 
-                                                            if($row['quantity'] >= 10){
-                                                                echo $row['water_price_promo'];
-                                                            }
-                                                            else{
-                                                                echo $row['water_price'];
-                                                            }
-                                                    
-                                                        ?>
-                                                    </td>
+                                                    <td>₱<?php echo number_format($unit_price, 2);?></td>
                                                     <td><?php echo $row['quantity'];?></td>
                                                     <?php if($has_containers): ?>
                                                         <td>
@@ -288,9 +286,9 @@ error_reporting(E_ALL);
                                                             ?>
                                                         </td>
                                                         <td><?php echo $row['container_quantity'];?></td>
-                                                        <td>₱<?php echo $row['container_price'];?></td>
+                                                        <td>₱<?php echo number_format($row['container_price'], 2);?></td>
                                                     <?php endif; ?>
-                                                    <td>₱<?php echo $row['amount'];?></td>
+                                                    <td>₱<?php echo number_format($line_total, 2);?></td>
                                                 </tr>
                                             <?php endforeach;?>
                                         </tbody>
@@ -520,10 +518,18 @@ error_reporting(E_ALL);
             pdf.setFont("helvetica", "normal");
 
             <?php foreach($order_data as $row): ?>
+            <?php
+            // Calculate line item total for PDF
+            $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+            $line_total = $unit_price * $row['quantity'];
+            if($row['with_container'] == 1) {
+                $line_total += $row['container_price'] * $row['container_quantity'];
+            }
+            ?>
             pdf.text("<?php echo $row['product_name']; ?>", 14, startY);
             pdf.text("<?php echo $row['quantity']; ?>", 95, startY, { align: "right" });
-            pdf.text("₱<?php echo ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price']; ?>", 130, startY, { align: "right" });
-            pdf.text("₱<?php echo $row['amount']; ?>", 180, startY, { align: "right" });
+            pdf.text("₱<?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
+            pdf.text("₱<?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
             startY += 6;
             <?php endforeach; ?>
 
