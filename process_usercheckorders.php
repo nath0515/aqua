@@ -15,7 +15,7 @@ $perPage = isset($_GET['perPage']) ? max(1, intval($_GET['perPage'])) : 10;
 $offset = ($page - 1) * $perPage;
 
 // Sorting parameters
-$sortBy = isset($_GET['sortBy']) ? $_GET['sortBy'] : 'date';
+$sortBy = isset($_GET['sortBy']) ? $_GET['sortBy'] : 'order_id';
 $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'DESC';
 
 // Validate sort parameters
