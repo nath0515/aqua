@@ -161,10 +161,12 @@ $html .= '
 
 // Set headers for PDF download
 $filename = 'Sales_Report_' . date('Y-m-d_H-i-s') . '.html';
-header('Content-Type: text/html');
+header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
+header('Content-Transfer-Encoding: binary');
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+header('Pragma: no-cache');
 
 echo $html;
 ?>

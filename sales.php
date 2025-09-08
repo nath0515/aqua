@@ -538,8 +538,13 @@ ini_set('display_errors', 1);
             // Remove trailing & if exists
             downloadUrl = downloadUrl.replace(/&$/, '');
             
-            // Open download in new tab
-            window.open(downloadUrl, '_blank');
+            // Create a temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = 'Sales_Report_' + new Date().toISOString().slice(0,10) + '.html';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
         </script>
     </body>
