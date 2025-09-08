@@ -18,7 +18,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT report_id, date FROM reports";
+    $sql = "SELECT report_id, date FROM reports ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $reports_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
