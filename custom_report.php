@@ -1,13 +1,24 @@
 <?php 
-    require 'session.php';
-    require 'db.php';
+    // Enable error reporting for debugging
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
-    $user_id = $_SESSION['user_id'];
-    $role_id = $_SESSION['role_id'];
-    if($role_id == 2){
-        header("Location: home.php");
-    }else if ($role_id == 3){
-        header("Location: riderdashboard.php");
+    try {
+        require 'session.php';
+        require 'db.php';
+
+        $user_id = $_SESSION['user_id'];
+        $role_id = $_SESSION['role_id'];
+        if($role_id == 2){
+            header("Location: home.php");
+            exit();
+        }else if ($role_id == 3){
+            header("Location: riderdashboard.php");
+            exit();
+        }
+    } catch (Exception $e) {
+        die("Error: " . $e->getMessage());
     }
 
     // Get date range from URL parameters
@@ -25,54 +36,70 @@
         exit();
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
-    JOIN user_details ud ON u.user_id = ud.user_id
-    WHERE u.user_id = :user_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+        JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.user_id = :user_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Database Error: " . $e->getMessage());
+    }
 
     // Get orders within date range
-    $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.contact_number, 
-            c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
-            FROM orders a
-            JOIN user_details b ON a.user_id = b.user_id
-            JOIN orderstatus c ON a.status_id = c.status_id
-            LEFT JOIN user_details d ON a.rider = d.user_id
-            JOIN payment_method e ON a.payment_id = e.payment_id
-            WHERE DATE(a.date) BETWEEN :start_date AND :end_date
-            AND (a.status_id = 4 OR a.status_id = 5)
-            ORDER BY a.date DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':start_date', $start_date);
-    $stmt->bindParam(':end_date', $end_date);
-    $stmt->execute();
-    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $sql = "SELECT a.order_id, a.date, a.amount, b.firstname, b.lastname, b.contact_number, 
+                c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
+                FROM orders a
+                JOIN user_details b ON a.user_id = b.user_id
+                JOIN orderstatus c ON a.status_id = c.status_id
+                LEFT JOIN user_details d ON a.rider = d.user_id
+                JOIN payment_method e ON a.payment_id = e.payment_id
+                WHERE DATE(a.date) BETWEEN :start_date AND :end_date
+                AND (a.status_id = 4 OR a.status_id = 5)
+                ORDER BY a.date DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':start_date', $start_date);
+        $stmt->bindParam(':end_date', $end_date);
+        $stmt->execute();
+        $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Orders Query Error: " . $e->getMessage());
+    }
 
     // Get expenses within date range
-    $sql = "SELECT a.expense_id, a.date, a.amount, b.expensetype_name, c.firstname, c.lastname
-            FROM expense a
-            JOIN expensetype b ON a.expensetype_id = b.expensetype_id
-            LEFT JOIN user_details c ON a.user_id = c.user_id
-            WHERE DATE(a.date) BETWEEN :start_date AND :end_date
-            ORDER BY a.date DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':start_date', $start_date);
-    $stmt->bindParam(':end_date', $end_date);
-    $stmt->execute();
-    $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $sql = "SELECT a.expense_id, a.date, a.amount, b.expensetype_name, c.firstname, c.lastname
+                FROM expense a
+                JOIN expensetype b ON a.expensetype_id = b.expensetype_id
+                LEFT JOIN user_details c ON a.user_id = c.user_id
+                WHERE DATE(a.date) BETWEEN :start_date AND :end_date
+                ORDER BY a.date DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':start_date', $start_date);
+        $stmt->bindParam(':end_date', $end_date);
+        $stmt->execute();
+        $expense_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Expenses Query Error: " . $e->getMessage());
+    }
 
     // Calculate totals
     $total_sales = array_sum(array_column($order_data, 'amount'));
     $total_expenses = array_sum(array_column($expense_data, 'amount'));
     $net_income = $total_sales - $total_expenses;
 
-    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $unread_count = $unread_result['unread_count'];
+    try {
+        $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $unread_count = $unread_result['unread_count'];
+    } catch (PDOException $e) {
+        $unread_count = 0; // Default value if query fails
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -154,10 +181,14 @@
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         
                         <?php 
-                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute();
-                        $status = $stmt->fetchColumn();
+                        try {
+                            $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->execute();
+                            $status = $stmt->fetchColumn();
+                        } catch (PDOException $e) {
+                            $status = 0; // Default to closed if query fails
+                        }
                         ?>
                         <li>
                             <a 
