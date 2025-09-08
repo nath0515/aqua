@@ -387,7 +387,16 @@ error_reporting(E_ALL);
                                                 <td>₱<?php echo $row['amount'];?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
-                                                <td><?php echo $row['barangay_name']." ".$row['address'];?></td>
+                                                <td><?php 
+                                                    $address_parts = [];
+                                                    if (!empty($row['barangay_name'])) {
+                                                        $address_parts[] = $row['barangay_name'];
+                                                    }
+                                                    if (!empty($row['address'])) {
+                                                        $address_parts[] = $row['address'];
+                                                    }
+                                                    echo !empty($address_parts) ? implode(', ', $address_parts) : 'No address';
+                                                ?></td>
                                                 <td><div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                     <?php
                                                         $status = htmlspecialchars($row['status_name']);
