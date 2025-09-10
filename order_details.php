@@ -215,18 +215,16 @@ error_reporting(E_ALL);
                             <li class="breadcrumb-item active"><a href="orders.php">Order</a></li>
                             <li class="breadcrumb-item active">View Orders</li>
                         </ol>
-                        <div class="card mb-4">
-                            <div style="margin-bottom: 20px;">
-                                <button id="downloadPDF" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
-                                <button id="printReceipt" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
-                                    <i class="fas fa-print"></i>
-                                </button>
-                                <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
+                        <div style="margin-bottom: 20px;">
+                            <button id="downloadPDF" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="printReceipt" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                         <div id="reportContent">
                             <div class="card mb-4">
