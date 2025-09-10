@@ -329,10 +329,21 @@ error_reporting(E_ALL);
                             </div>
                         </div>
                         
-                        <div style="margin-bottom: 20px;">
-                        <button id="downloadPDF" class="btn btn-danger">
-                            <i class="fas fa-file-pdf"></i> Download Receipt as PDF
-                        </button>
+                        <div class="d-flex gap-2">
+                            <!-- Download PDF Button -->
+                            <button id="downloadPDF" class="btn btn-danger">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </button>
+
+                            <!-- View Receipt (opens modal) -->
+                            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#receiptModal">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+
+                            <!-- Print Receipt -->
+                            <button id="printReceipt" class="btn btn-primary">
+                                <i class="fas fa-print"></i> Print
+                            </button>
                         </div>
                     </div>
                 </main>
@@ -387,6 +398,53 @@ error_reporting(E_ALL);
                     </form>
                 </div>
             </div>
+        </div>
+        <!-- Receipt Modal -->
+        <div id="printableReceipt">
+            <div class="text-center mb-3">
+                <h4>AquaDrop Receipt</h4>
+                <p><strong>Date:</strong> <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
+            </div>
+
+            <p><strong>Customer:</strong> <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
+            <p><strong>Address:</strong> <?php echo $order_data[0]['address']; ?></p>
+            <p><strong>Contact:</strong> <?php echo $order_data[0]['contact_number']; ?></p>
+
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="text-end">Qty</th>
+                        <th class="text-end">Unit Price</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order_data as $row): ?>
+                        <?php
+                            $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                            $line_total = $unit_price * $row['quantity'];
+                            if($row['with_container'] == 1) {
+                                $line_total += $row['container_price'] * $row['container_quantity'];
+                            }
+                        ?>
+                        <tr>
+                            <td><?php echo $row['product_name']; ?></td>
+                            <td class="text-end"><?php echo $row['quantity']; ?></td>
+                            <td class="text-end">₱<?php echo number_format($unit_price, 2); ?></td>
+                            <td class="text-end">₱<?php echo number_format($line_total, 2); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-end">Total:</th>
+                        <th class="text-end">₱<?php echo $total_data['amount']; ?></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <p class="text-center mt-4 fst-italic">Thank you for choosing AquaDrop!</p>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
@@ -544,5 +602,24 @@ error_reporting(E_ALL);
             pdf.save(`Receipt_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`);
         });
         </script>
+
+        <script>
+            document.getElementById("printReceipt").addEventListener("click", function () {
+                var printContents = document.getElementById("printableReceipt").innerHTML;
+
+                var printWindow = window.open('', '', 'height=700,width=900');
+                printWindow.document.write('<html><head><title>Print Receipt</title>');
+                printWindow.document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">');
+                printWindow.document.write('</head><body>');
+                printWindow.document.write('<div class="container mt-4">');
+                printWindow.document.write(printContents);
+                printWindow.document.write('</div></body></html>');
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            });
+        </script>
+
     </body>
 </html>
