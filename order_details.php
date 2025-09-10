@@ -329,27 +329,13 @@ error_reporting(E_ALL);
                             </div>
                         </div>
                         
-                        <div class="d-flex gap-2">
-                            <div class="d-flex gap-2">
-                                <button id="downloadPDF" class="btn btn-danger">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
-
-                                <button 
-                                        class="btn btn-secondary view-receipt-btn" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#receiptModal" 
-                                        data-id="<?php echo htmlspecialchars($row['order_id']); ?>"
-                                    >
-                                        <i class="fas fa-eye"></i>
-                                </button>
-
-
-
-                                <button id="printReceipt" class="btn btn-primary" title="Print Receipt">
-                                    <i class="fas fa-print"></i>
-                                </button>
-                            </div>
+                        <div style="margin-bottom: 20px;">
+                            <button id="downloadPDF" class="btn btn-danger">
+                                <i class="fas fa-file-pdf"></i> Download Receipt as PDF
+                            </button>
+                            <button id="printReceipt" class="btn btn-primary">
+                                <i class="fas fa-print"></i> Print Receipt
+                            </button>
                         </div>
                     </div>
                 </main>
@@ -405,72 +391,44 @@ error_reporting(E_ALL);
                 </div>
             </div>
         </div>
-        <!-- Receipt Modal -->
-        <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="receiptModalLabel">Receipt Preview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="receiptModalBody">
-                    <!-- Receipt content will be injected here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-                </div>
-            </div>
+        <div id="receiptContent">
+        <!-- Your receipt content here, with PHP-generated data -->
+        <h2>AquaDrop Receipt</h2>
+        <p>Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
+        <p>Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
+        <p>Address: <?php echo $order_data[0]['address']; ?></p>
+        <p>Contact: <?php echo $order_data[0]['contact_number']; ?></p>
+        
+            <table>
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($order_data as $row): ?>
+                    <?php
+                    $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                    $line_total = $unit_price * $row['quantity'];
+                    if($row['with_container'] == 1) {
+                        $line_total += $row['container_price'] * $row['container_quantity'];
+                    }
+                    ?>
+                <tr>
+                    <td><?php echo $row['product_name']; ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td>₱<?php echo number_format($unit_price, 2); ?></td>
+                    <td>₱<?php echo number_format($line_total, 2); ?></td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <p><strong>Total: ₱<?php echo $total_data['amount']; ?></strong></p>
+        <p><em>Thank you for choosing AquaDrop!</em></p>
         </div>
-        <template id="receiptTemplate">
-            <div id="printableReceipt">
-                <div class="text-center mb-3">
-                    <h4>AquaDrop Receipt</h4>
-                    <p><strong>Date:</strong> <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
-                </div>
-
-                <p><strong>Customer:</strong> <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
-                <p><strong>Address:</strong> <?php echo $order_data[0]['address']; ?></p>
-                <p><strong>Contact:</strong> <?php echo $order_data[0]['contact_number']; ?></p>
-
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th class="text-end">Qty</th>
-                            <th class="text-end">Unit Price</th>
-                            <th class="text-end">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($order_data as $row): ?>
-                            <?php
-                                $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
-                                $line_total = $unit_price * $row['quantity'];
-                                if($row['with_container'] == 1) {
-                                    $line_total += $row['container_price'] * $row['container_quantity'];
-                                }
-                            ?>
-                            <tr>
-                                <td><?php echo $row['product_name']; ?></td>
-                                <td class="text-end"><?php echo $row['quantity']; ?></td>
-                                <td class="text-end">₱<?php echo number_format($unit_price, 2); ?></td>
-                                <td class="text-end">₱<?php echo number_format($line_total, 2); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="3" class="text-end">Total:</th>
-                            <th class="text-end">₱<?php echo $total_data['amount']; ?></th>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <p class="text-center mt-4 fst-italic">Thank you for choosing AquaDrop!</p>
-            </div>
-        </template>
-
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
@@ -628,52 +586,15 @@ error_reporting(E_ALL);
             pdf.save(`Receipt_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`);
         });
         </script>
-
         <script>
-            document.getElementById("printReceipt").addEventListener("click", function () {
-                var printContents = document.getElementById("printableReceipt").innerHTML;
+            document.getElementById('printReceipt').addEventListener('click', function() {
+            const printContents = document.getElementById('receiptContent').innerHTML;
+            const originalContents = document.body.innerHTML;
 
-                var printWindow = window.open('', '', 'height=700,width=900');
-                printWindow.document.write('<html><head><title>Print Receipt</title>');
-                printWindow.document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">');
-                printWindow.document.write('</head><body>');
-                printWindow.document.write('<div class="container mt-4">');
-                printWindow.document.write(printContents);
-                printWindow.document.write('</div></body></html>');
-                printWindow.document.close();
-                printWindow.focus();
-                printWindow.print();
-                printWindow.close();
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const viewBtn = document.querySelector('[data-bs-target="#receiptModal"]');
-                const modalBody = document.getElementById("receiptModalBody");
-                const template = document.getElementById("receiptTemplate");
-
-                viewBtn.addEventListener("click", function () {
-                    // Clone the template content and insert into modal body
-                    const clone = template.content.cloneNode(true);
-                    modalBody.innerHTML = ""; // Clear any old content
-                    modalBody.appendChild(clone);
-                });
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const viewButtons = document.querySelectorAll(".view-receipt-btn");
-                const modalBody = document.getElementById("receiptModalBody");
-                const template = document.getElementById("receiptTemplate");
-
-                viewButtons.forEach(button => {
-                    button.addEventListener("click", function () {
-                        const clone = template.content.cloneNode(true);
-                        modalBody.innerHTML = "";
-                        modalBody.appendChild(clone);
-                    });
-                });
-            });
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }); 
         </script>
     </body>
 </html>
