@@ -335,9 +335,15 @@ error_reporting(E_ALL);
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
 
-                                <button class="btn btn-secondary view-receipt-btn" data-bs-toggle="modal" data-bs-target="#receiptModal" data-id="<?php echo $row['order_id']; ?>">
-                                    <i class="fas fa-eye"></i>
+                                <button 
+                                        class="btn btn-secondary view-receipt-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#receiptModal" 
+                                        data-id="<?php echo $row['order_id']; ?>"
+                                    >
+                                        <i class="fas fa-eye"></i>
                                 </button>
+
 
 
                                 <button id="printReceipt" class="btn btn-primary" title="Print Receipt">
