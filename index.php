@@ -194,7 +194,6 @@ require 'db.php';
                                     <span class="visually-hidden">unread notifications</span>
                                 </span>
                             <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
