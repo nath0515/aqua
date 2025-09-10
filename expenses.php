@@ -424,11 +424,16 @@
                                     <input type="text" name="comment" class="form-control" placeholder="Comment" required>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="commet" class="form-label">Amount</label>
+                           <div class="mb-3">
+                                <label for="amount" class="form-label">Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text pe-3">₱</span>
-                                    <input type="number" step="0.01" name="amount" value="0.00" class="form-control" placeholder="Amount" required>
+                                    <input type="text"
+                                        id="amount"
+                                        name="amount"
+                                        class="form-control"
+                                        placeholder="Amount"
+                                        required>
                                 </div>
                             </div>
                             <div class="mb-3" id="orderItemsContainer">
@@ -566,5 +571,47 @@
             });
         });
         </script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const amountInput = document.getElementById("amount");
+
+            amountInput.addEventListener("input", function (e) {
+                let value = amountInput.value.replace(/[^0-9.]/g, ""); // Remove anything except numbers and dot
+                let parts = value.split(".");
+
+                // Limit to two decimal places
+                if (parts.length > 2) {
+                    value = parts[0] + "." + parts[1].slice(0, 2);
+                } else if (parts[1]) {
+                    value = parts[0] + "." + parts[1].slice(0, 2);
+                }
+
+                // Convert to float for value check
+                let floatVal = parseFloat(value);
+                if (isNaN(floatVal)) {
+                    amountInput.value = "";
+                    return;
+                }
+
+                // Limit to 100000
+                if (floatVal > 100000) {
+                    floatVal = 100000;
+                }
+
+                // Format with commas and 2 decimals
+                amountInput.value = floatVal.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            });
+
+            // Optional: remove formatting on form submit to get clean value
+            document.querySelector("form").addEventListener("submit", function () {
+                let raw = amountInput.value.replace(/,/g, "");
+                amountInput.value = parseFloat(raw).toFixed(2);
+            });
+        });
+        </script>
+
     </body>
 </html>
