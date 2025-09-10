@@ -336,6 +336,9 @@ error_reporting(E_ALL);
                             <button id="printReceipt" class="btn btn-primary">
                                 <i class="fas fa-print"></i> Print Receipt
                             </button>
+                            <button id="viewReceipt" class="btn btn-secondary">
+                                <i class="fas fa-eye"></i> View Receipt
+                            </button>
                         </div>
                     </div>
                 </main>
@@ -348,6 +351,62 @@ error_reporting(E_ALL);
                 </footer>
             </div>
         </div>
+        <!-- View Receipt Modal -->
+        <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- You can use modal-xl if needed -->
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">AquaDrop Receipt Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Receipt content starts here -->
+                <div id="sampleReceipt">
+                    <h2>AquaDrop Receipt</h2>
+                    <p>Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
+                    <p>Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
+                    <p>Address: <?php echo $order_data[0]['address']; ?></p>
+                    <p>Contact: <?php echo $order_data[0]['contact_number']; ?></p>
+
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($order_data as $row): ?>
+                            <?php
+                            $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                            $line_total = $unit_price * $row['quantity'];
+                            if($row['with_container'] == 1) {
+                                $line_total += $row['container_price'] * $row['container_quantity'];
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $row['product_name']; ?></td>
+                                <td><?php echo $row['quantity']; ?></td>
+                                <td>₱<?php echo number_format($unit_price, 2); ?></td>
+                                <td>₱<?php echo number_format($line_total, 2); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p><strong>Total: ₱<?php echo $total_data['amount']; ?></strong></p>
+                    <p><em>Thank you for choosing AquaDrop!</em></p>
+                </div>
+                <!-- Receipt content ends here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
 
         <!-- Edit Order Modal -->
         <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -596,5 +655,12 @@ error_reporting(E_ALL);
             document.body.innerHTML = originalContents;
         }); 
         </script>
+        <script>
+        document.getElementById('viewReceipt').addEventListener('click', function () {
+            var receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+            receiptModal.show();
+        });
+        </script>
+
     </body>
 </html>
