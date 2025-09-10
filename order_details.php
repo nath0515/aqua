@@ -339,7 +339,7 @@ error_reporting(E_ALL);
                                         class="btn btn-secondary view-receipt-btn" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#receiptModal" 
-                                        data-id="<?php echo $row['order_id']; ?>"
+                                        data-id="<?php echo htmlspecialchars($row['order_id']); ?>"
                                     >
                                         <i class="fas fa-eye"></i>
                                 </button>
