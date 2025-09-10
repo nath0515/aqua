@@ -215,11 +215,11 @@ error_reporting(E_ALL);
                             <li class="breadcrumb-item active"><a href="orders.php">Order</a></li>
                             <li class="breadcrumb-item active">View Orders</li>
                         </ol>
-                        <div style="margin-bottom: 20px;">
-                            <button id="downloadPDF" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                        <div class="d-flex justify-content-end mb-4">
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
                                 <i class="fas fa-file-pdf"></i>
                             </button>
-                            <button id="printReceipt" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                            <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
                                 <i class="fas fa-print"></i>
                             </button>
                             <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
