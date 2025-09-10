@@ -201,6 +201,11 @@ require 'db.php';
                          <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
                         <hr>
                         <?php endforeach; ?>
+                        <li>
+                            <form method="post" action="mark_all_read.php" class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-sm btn-link text-decoration-none text-primary">Mark all as read</button>
+                            </form>
+                        </li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
