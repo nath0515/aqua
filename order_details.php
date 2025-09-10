@@ -330,14 +330,14 @@ error_reporting(E_ALL);
                         </div>
                         
                         <div style="margin-bottom: 20px;">
-                            <button id="downloadPDF" class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Download Receipt as PDF
+                            <button id="downloadPDF" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
                             </button>
-                            <button id="printReceipt" class="btn btn-primary">
-                                <i class="fas fa-print"></i> Print Receipt
+                            <button id="printReceipt" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
                             </button>
-                            <button id="viewReceipt" class="btn btn-secondary">
-                                <i class="fas fa-eye"></i> View Receipt
+                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
                             </button>
                         </div>
                     </div>
