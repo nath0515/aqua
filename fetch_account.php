@@ -1,10 +1,12 @@
+
 <?php
-require 'session.php';
-require 'db.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL)
+require 'session.php';
+require 'db.php';
+
 
 $role_id = isset($_GET['role']) && $_GET['role'] !== '' ? intval($_GET['role']) : null;
 $start_date = isset($_GET['start_date']) && $_GET['start_date'] !== '' ? $_GET['start_date'] : null;
