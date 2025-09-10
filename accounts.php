@@ -201,26 +201,30 @@
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
                         <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <label for="roleFilter" class="form-label">Filter by Role</label>
-                                    <select id="roleFilter" class="form-select">
-                                        <option value="">All Roles</option>
-                                        <?php
-                                            // Fetch roles dynamically from DB for the filter dropdown
-                                            $roleStmt = $conn->prepare("SELECT role_id, role_name FROM roles");
-                                            $roleStmt->execute();
-                                            $roles = $roleStmt->fetchAll(PDO::FETCH_ASSOC);
-                                            foreach($roles as $role) {
-                                                echo '<option value="'.htmlspecialchars($role['role_id']).'">'.htmlspecialchars($role['role_name']).'</option>';
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="dateFilter" class="form-label">Filter by Date Created</label>
-                                    <input type="date" id="dateFilter" class="form-control" />
-                                </div>
+                            <div class="col-md-3">
+                                <label for="roleFilter" class="form-label">Filter by Role</label>
+                                <select id="roleFilter" class="form-select">
+                                    <option value="">All Roles</option>
+                                    <?php
+                                        $roleStmt = $conn->prepare("SELECT role_id, role_name FROM roles");
+                                        $roleStmt->execute();
+                                        $roles = $roleStmt->fetchAll(PDO::FETCH_ASSOC);
+                                        foreach($roles as $role) {
+                                            echo '<option value="'.htmlspecialchars($role['role_id']).'">'.htmlspecialchars($role['role_name']).'</option>';
+                                        }
+                                    ?>
+                                </select>
                             </div>
+                            <div class="col-md-3">
+                                <label for="startDateFilter" class="form-label">Start Date</label>
+                                <input type="date" id="startDateFilter" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="endDateFilter" class="form-label">End Date</label>
+                                <input type="date" id="endDateFilter" class="form-control" />
+                            </div>
+                        </div>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -333,18 +337,20 @@
                 });
                 </script>
             <?php endif; ?>
-            <script>
+        <script>
         $(document).ready(function(){
             function fetchFilteredAccounts() {
                 const role = $('#roleFilter').val();
-                const date = $('#dateFilter').val();
+                const startDate = $('#startDateFilter').val();
+                const endDate = $('#endDateFilter').val();
 
                 $.ajax({
                     url: 'fetch_accounts.php',
                     method: 'GET',
                     data: {
                         role: role,
-                        date: date
+                        start_date: startDate,
+                        end_date: endDate
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -373,10 +379,8 @@
                 });
             }
 
-            // Trigger fetch on filter changes
-            $('#roleFilter, #dateFilter').on('change', fetchFilteredAccounts);
+            $('#roleFilter, #startDateFilter, #endDateFilter').on('change', fetchFilteredAccounts);
         });
         </script>
-
     </body>
 </html>
