@@ -313,7 +313,7 @@
                     <div class="login-left">
                         <div class="branding">
                             <img src="assets/img/logo.png" alt="Logo" class="branding-logo">
-                           <div class="app-description d-none d-md-block mt-3 px-4">
+                           <div class="app-description d-none  mt-3 px-4">
                             <p class="lead text-light">
                                 AquaDrop is your smart water ordering system — order purified water, track deliveries, 
                                 and manage your account with ease. Fast, reliable, and made for your convenience.
