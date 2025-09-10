@@ -403,7 +403,7 @@ error_reporting(E_ALL);
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        <div id="receiptContent">
+        <div id="receiptContent" class="d-none">
         <h2>AquaDrop Receipt</h2>
         <p>Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
         <p>Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
