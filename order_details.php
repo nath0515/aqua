@@ -330,20 +330,19 @@ error_reporting(E_ALL);
                         </div>
                         
                         <div class="d-flex gap-2">
-                            <!-- Download PDF Button -->
-                            <button id="downloadPDF" class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Download PDF
-                            </button>
+                            <div class="d-flex gap-2">
+                                <button id="downloadPDF" class="btn btn-danger">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
 
-                            <!-- View Receipt (opens modal) -->
-                            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#receiptModal">
-                                <i class="fas fa-eye"></i> View
-                            </button>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#receiptModal" title="View Receipt">
+                                    <i class="fas fa-eye"></i>
+                                </button>
 
-                            <!-- Print Receipt -->
-                            <button id="printReceipt" class="btn btn-primary">
-                                <i class="fas fa-print"></i> Print
-                            </button>
+                                <button id="printReceipt" class="btn btn-primary" title="Print Receipt">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </main>
