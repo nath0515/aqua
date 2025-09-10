@@ -2,6 +2,10 @@
 require 'session.php';
 require 'db.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL)
+
 $role_id = isset($_GET['role']) && $_GET['role'] !== '' ? intval($_GET['role']) : null;
 $start_date = isset($_GET['start_date']) && $_GET['start_date'] !== '' ? $_GET['start_date'] : null;
 $end_date = isset($_GET['end_date']) && $_GET['end_date'] !== '' ? $_GET['end_date'] : null;
