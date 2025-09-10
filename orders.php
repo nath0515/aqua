@@ -700,13 +700,5 @@ error_reporting(E_ALL);
             });
         });
         </script>
-        <script>
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        </script>
-
-
     </body>
 </html>
