@@ -200,13 +200,7 @@
                             <li class="breadcrumb-item active">Account Manager</li>
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Accounts
-                            </div>
-                            <!-- Filter Section -->
-                            <div class="row mb-3">
+                        <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label for="roleFilter" class="form-label">Filter by Role</label>
                                     <select id="roleFilter" class="form-select">
@@ -227,6 +221,12 @@
                                     <input type="date" id="dateFilter" class="form-control" />
                                 </div>
                             </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Accounts
+                            </div>
+                            <!-- Filter Section -->
                             <div class="card-body">
                                 <table id="accountsTable" class="table table-striped">
                                     <thead>
