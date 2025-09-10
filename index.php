@@ -203,7 +203,7 @@ require 'db.php';
                         <?php endforeach; ?>
                         <li>
                             <form method="post" action="mark_all_read.php" class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-sm btn-link text-decoration-none text-primary">Mark all as read</button>
+                                <button type="post" class="btn btn-sm btn-link text-decoration-none text-primary">Mark all as read</button>
                             </form>
                         </li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
