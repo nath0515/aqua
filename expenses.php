@@ -428,9 +428,12 @@
                                 <label for="amount" class="form-label">Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text pe-3">₱</span>
-                                    <input type="text"
+                                    <input type="number"
                                         id="amount"
                                         name="amount"
+                                        step="0.01"
+                                        min="0"
+                                        max="100000"
                                         class="form-control"
                                         placeholder="Amount"
                                         required>
@@ -572,46 +575,51 @@
         });
         </script>
         <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const amountInput = document.getElementById("amount");
+        document.addEventListener('DOMContentLoaded', function () {
+            const amountInput = document.getElementById('amount');
 
-            amountInput.addEventListener("input", function (e) {
-                let value = amountInput.value.replace(/[^0-9.]/g, ""); // Remove anything except numbers and dot
-                let parts = value.split(".");
-
-                // Limit to two decimal places
-                if (parts.length > 2) {
-                    value = parts[0] + "." + parts[1].slice(0, 2);
-                } else if (parts[1]) {
-                    value = parts[0] + "." + parts[1].slice(0, 2);
-                }
-
-                // Convert to float for value check
-                let floatVal = parseFloat(value);
-                if (isNaN(floatVal)) {
-                    amountInput.value = "";
+            // Format on blur (after user finishes typing)
+            amountInput.addEventListener('blur', function () {
+                let value = parseFloat(amountInput.value);
+                if (isNaN(value)) {
+                    amountInput.value = '';
                     return;
                 }
-
-                // Limit to 100000
-                if (floatVal > 100000) {
-                    floatVal = 100000;
+                if (value > 100000) {
+                    value = 100000;
                 }
-
-                // Format with commas and 2 decimals
-                amountInput.value = floatVal.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
+                amountInput.value = value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             });
 
-            // Optional: remove formatting on form submit to get clean value
-            document.querySelector("form").addEventListener("submit", function () {
-                let raw = amountInput.value.replace(/,/g, "");
-                amountInput.value = parseFloat(raw).toFixed(2);
+            // Remove formatting on focus for easy editing
+            amountInput.addEventListener('focus', function () {
+                let value = amountInput.value.replace(/,/g, '');
+                amountInput.value = value;
+            });
+
+            // Prevent manual input greater than max
+            amountInput.addEventListener('input', function () {
+                let value = parseFloat(amountInput.value);
+                if (!isNaN(value) && value > 100000) {
+                    amountInput.value = '100000';
+                }
+            });
+
+            // On form submit, convert formatted value back to plain number
+            document.querySelector('form').addEventListener('submit', function (e) {
+                let value = amountInput.value.replace(/,/g, '');
+                let floatVal = parseFloat(value);
+                if (isNaN(floatVal) || floatVal > 100000) {
+                    e.preventDefault();
+                    alert('Please enter a valid amount not exceeding ₱100,000.');
+                    amountInput.focus();
+                    return false;
+                }
+                amountInput.value = floatVal.toFixed(2);
             });
         });
         </script>
+
 
     </body>
 </html>
