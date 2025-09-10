@@ -433,19 +433,24 @@ error_reporting(E_ALL);
                                                 </td>
                                                 <td><?php echo $row['payment_name'];?></td>
                                                 <td>
-                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
+                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" 
+                                                    class="btn btn-outline-secondary btn-sm me-1" 
+                                                    title="View Order">
+                                                        <i class="bi bi-eye"></i>
                                                     </a>
+
                                                     <button class="btn btn-outline-primary btn-sm editOrderBtn"
                                                         data-id="<?php echo $row['order_id']; ?>"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#editorder">
-                                                            <i class="bi bi-pencil"></i> Edit
+                                                        data-bs-target="#editorder"
+                                                        title="Edit Order">
+                                                        <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button 
-                                                        class="btn btn-outline-danger btn-sm cancelOrderBtn"
-                                                        data-id="<?php echo $row['order_id']; ?>">
-                                                        <i class="bi bi-x-circle"></i> Cancel
+
+                                                    <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
+                                                        data-id="<?php echo $row['order_id']; ?>"
+                                                        title="Cancel Order">
+                                                        <i class="bi bi-x-circle"></i>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -695,6 +700,13 @@ error_reporting(E_ALL);
             });
         });
         </script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>
+
 
     </body>
 </html>
