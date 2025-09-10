@@ -200,55 +200,29 @@
                             <li class="breadcrumb-item active">Account Manager</li>
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="roleFilter" class="form-label">Filter by Role</label>
-                                <select id="roleFilter" class="form-select">
-                                    <option value="">All Roles</option>
-                                    <?php
-                                        $roleStmt = $conn->prepare("SELECT role_id, role_name FROM roles");
-                                        $roleStmt->execute();
-                                        $roles = $roleStmt->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach($roles as $role) {
-                                            echo '<option value="'.htmlspecialchars($role['role_id']).'">'.htmlspecialchars($role['role_name']).'</option>';
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="startDateFilter" class="form-label">Start Date</label>
-                                <input type="date" id="startDateFilter" class="form-control" />
-                            </div>
-                            <div class="col-md-3">
-                                <label for="endDateFilter" class="form-label">End Date</label>
-                                <input type="date" id="endDateFilter" class="form-control" />
-                            </div>
-                        </div>
-
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
                                 Accounts
                             </div>
-                            <!-- Filter Section -->
                             <div class="card-body">
-                                <table id="accountsTable" class="table table-striped">
+                                <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Role</th>
                                             <th>Contact Number</th>
                                             <th>Date Created</th>
+                                            
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <!-- Initial PHP render of all users -->
+                                    <tbody>                                   
                                         <?php foreach($alluserdata as $row):?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['role_name']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['contact_number']); ?></td>
-                                            <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                            <td><?php echo $row['full_name']; ?></td>
+                                            <td><?php echo $row['role_name']; ?></td>
+                                            <td><?php echo $row['contact_number']; ?></td>
+                                            <td><?php echo $row['created_at']; ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -328,59 +302,14 @@
                     .catch(err => console.error('❌ Service Worker registration failed:', err));
             }
         </script>
-            <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-                <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Account created.',
-                });
-                </script>
-            <?php endif; ?>
+    <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
         <script>
-        $(document).ready(function(){
-            function fetchFilteredAccounts() {
-                const role = $('#roleFilter').val();
-                const startDate = $('#startDateFilter').val();
-                const endDate = $('#endDateFilter').val();
-
-                $.ajax({
-                    url: 'fetch_accounts.php',
-                    method: 'GET',
-                    data: {
-                        role: role,
-                        start_date: startDate,
-                        end_date: endDate
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        const tbody = $('#accountsTable tbody');
-                        tbody.empty();
-
-                        if(data.length === 0){
-                            tbody.append('<tr><td colspan="4" class="text-center">No records found.</td></tr>');
-                            return;
-                        }
-
-                        data.forEach(function(row){
-                            tbody.append(`
-                                <tr>
-                                    <td>${row.full_name}</td>
-                                    <td>${row.role_name}</td>
-                                    <td>${row.contact_number}</td>
-                                    <td>${row.created_at}</td>
-                                </tr>
-                            `);
-                        });
-                    },
-                    error: function() {
-                        alert('An error occurred while fetching data.');
-                    }
-                });
-            }
-
-            $('#roleFilter, #startDateFilter, #endDateFilter').on('change', fetchFilteredAccounts);
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Account created.',
         });
         </script>
+     <?php endif; ?>
     </body>
 </html>
