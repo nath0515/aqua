@@ -208,15 +208,15 @@
                             </div>
                             <div class="card-body col-md-6 ">
                                 <form method="GET" action="custom_report.php" class="row g-3">
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="start_date" class="form-label">Start Date</label>
                                         <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="end_date" class="form-label">End Date</label>
                                         <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label class="form-label">&nbsp;</label>
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary" onclick="return validateDateRange()">
