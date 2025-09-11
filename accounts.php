@@ -320,19 +320,69 @@
                 fetchFilteredAccounts();
             });
         </script>
-
-
         <script>
+            let dataTable;
+
             document.addEventListener('DOMContentLoaded', function () {
                 const table = document.querySelector('#accountTable');
-                const dataTable = new simpleDatatables.DataTable(table, {
+                dataTable = new simpleDatatables.DataTable(table, {
                     perPage: 5,
                     perPageSelect: [5, 10, 15, 20],
                     searchable: true,
-                    sortable: true,
+                    sortable: true
                 });
+
+                fetchFilteredAccounts(); // Load initial data
+            });
+
+            function fetchFilteredAccounts() {
+                const role = $('#roleFilter').val();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+
+                $.ajax({
+                    url: 'fetch_accounts.php',
+                    method: 'POST',
+                    data: {
+                        role: role,
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    success: function (response) {
+                        // Parse returned HTML rows into a temporary DOM
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = `<table><tbody>${response}</tbody></table>`;
+                        const newRows = tempDiv.querySelectorAll('tr');
+
+                        // Clear existing table rows
+                        dataTable.rows().remove();
+
+                        // Add new rows
+                        newRows.forEach(row => {
+                            const cells = Array.from(row.querySelectorAll('td')).map(td => td.innerText);
+                            dataTable.rows().add(cells);
+                        });
+                    },
+                    error: function () {
+                        alert('Failed to filter accounts.');
+                    }
+                });
+            }
+
+            // Auto-filter on any change
+            $('#roleFilter, #startDate, #endDate').on('change', function () {
+                fetchFilteredAccounts();
+            });
+
+            // Reset filters and reload
+            $('#resetFilterBtn').on('click', function () {
+                $('#roleFilter').val('');
+                $('#startDate').val('');
+                $('#endDate').val('');
+                fetchFilteredAccounts();
             });
         </script>
+
         <script>
             let deferredPrompt;
 
