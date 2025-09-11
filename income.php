@@ -242,9 +242,9 @@ ini_set('display_errors', 1);
                                         <?php foreach($reports_data as $row):?>
                                             <tr>
                                                 <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
-                                                <td>₱<?php echo $row['total_sales'];?></td>
-                                                <td>₱<?php echo $row['total_expense'];?></td>
-                                                <td>₱<?php echo $row['total_income'];?></td>
+                                                <td>₱<?php echo number_format($row['total_sales'],2);?></td>
+                                                <td>₱<?php echo number_format($row['total_expense'],2);?></td>
+                                                <td>₱<?php echo number_format($row['total_income'],2);?></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
