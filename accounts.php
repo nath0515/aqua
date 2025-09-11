@@ -224,9 +224,8 @@
                                 <label for="endDate" class="form-label">End Date:</label>
                                 <input type="date" id="endDate" class="form-control">
                             </div>
-                            <div class="col-md-3 d-flex flex-column justify-content-end">
-                                <button id="filterBtn" class="btn btn-primary mb-2">Apply Filter</button>
-                                <button id="resetFilterBtn" class="btn btn-secondary">Reset Filters</button>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
                             </div>
                         </div>
                     </div>
