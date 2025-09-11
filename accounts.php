@@ -201,34 +201,33 @@
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
                         <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="roleFilter" class="form-label">Filter by Role:</label>
-                                <select id="roleFilter" class="form-select">
-                                    <option value="">All Roles</option>
-                                    <?php
-                                    $sql = "SELECT role_name FROM roles";
-                                    $stmt = $conn->prepare($sql);
-                                    $stmt->execute();
-                                    $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    foreach ($roles as $role) {
-                                        echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="startDate" class="form-label">Start Date:</label>
-                                <input type="date" id="startDate" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="endDate" class="form-label">End Date:</label>
-                                <input type="date" id="endDate" class="form-control">
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
-                            </div>
+                        <div class="col-md-3">
+                            <label for="roleFilter" class="form-label">Filter by Role:</label>
+                            <select id="roleFilter" class="form-select">
+                                <option value="">All Roles</option>
+                                <?php
+                                $sql = "SELECT role_name FROM roles";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->execute();
+                                $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($roles as $role) {
+                                    echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
-
+                        <div class="col-md-3">
+                            <label for="startDate" class="form-label">Start Date:</label>
+                            <input type="date" id="startDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="endDate" class="form-label">End Date:</label>
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
+                        </div>
+                    </div>
                     </div>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -281,21 +280,6 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-            let dataTable; // Global variable
-
-            function initializeDataTable() {
-                const table = document.querySelector('#accountTable');
-                if (dataTable) {
-                    dataTable.destroy(); // Destroy previous instance
-                }
-                dataTable = new simpleDatatables.DataTable(table, {
-                    perPage: 5,
-                    perPageSelect: [5, 10, 15, 20],
-                    searchable: true,
-                    sortable: true,
-                });
-            }
-
             function fetchFilteredAccounts() {
                 const role = $('#roleFilter').val();
                 const startDate = $('#startDate').val();
@@ -311,7 +295,6 @@
                     },
                     success: function (response) {
                         $('#accountTable tbody').html(response);
-                        initializeDataTable(); // Re-initialize after updating table content
                     },
                     error: function () {
                         alert('Failed to filter accounts.');
@@ -319,23 +302,35 @@
                 });
             }
 
-
-            // Initialize on document ready
-            $(document).ready(function () {
-                fetchFilteredAccounts();
-            });
-
-            // Filters trigger new fetch
+            // Automatically filter on any change
             $('#roleFilter, #startDate, #endDate').on('change', function () {
                 fetchFilteredAccounts();
             });
 
-            // Reset filters
+            // Reset filters and reload
             $('#resetFilterBtn').on('click', function () {
                 $('#roleFilter').val('');
                 $('#startDate').val('');
                 $('#endDate').val('');
                 fetchFilteredAccounts();
+            });
+
+            // Optional: Run once on page load
+            $(document).ready(function () {
+                fetchFilteredAccounts();
+            });
+        </script>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const table = document.querySelector('#accountTable');
+                const dataTable = new simpleDatatables.DataTable(table, {
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    searchable: true,
+                    sortable: true,
+                });
             });
         </script>
         <script>
