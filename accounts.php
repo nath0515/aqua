@@ -278,48 +278,6 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <script>
-            function fetchFilteredAccounts() {
-                const role = $('#roleFilter').val();
-                const startDate = $('#startDate').val();
-                const endDate = $('#endDate').val();
-
-                $.ajax({
-                    url: 'fetch_accounts.php',
-                    method: 'POST',
-                    data: {
-                        role: role,
-                        startDate: startDate,
-                        endDate: endDate
-                    },
-                    success: function (response) {
-                        $('#accountTable tbody').html(response);
-                    },
-                    error: function () {
-                        alert('Failed to filter accounts.');
-                    }
-                });
-            }
-
-            // Automatically filter on any change
-            $('#roleFilter, #startDate, #endDate').on('change', function () {
-                fetchFilteredAccounts();
-            });
-
-            // Reset filters and reload
-            $('#resetFilterBtn').on('click', function () {
-                $('#roleFilter').val('');
-                $('#startDate').val('');
-                $('#endDate').val('');
-                fetchFilteredAccounts();
-            });
-
-            // Optional: Run once on page load
-            $(document).ready(function () {
-                fetchFilteredAccounts();
-            });
-        </script>
         <script>
             let dataTable;
 
