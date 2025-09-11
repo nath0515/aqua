@@ -201,7 +201,7 @@
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
                         <div class="row mb-3">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="roleFilter" class="form-label">Filter by Role:</label>
                             <select id="roleFilter" class="form-select">
                                 <option value="">All Roles</option>
@@ -216,15 +216,15 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <label for="startDate" class="form-label">Start Date:</label>
                             <input type="date" id="startDate" class="form-control">
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <label for="endDate" class="form-label">End Date:</label>
                             <input type="date" id="endDate" class="form-control">
                         </div>
-                        <div class="col-md-1 d-flex align-items-end">
+                        <div class="col-md-2 d-flex align-items-end">
                             <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
                         </div>
                     </div>
