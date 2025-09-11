@@ -457,6 +457,7 @@ error_reporting(E_ALL);
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="js/fonts/NotoSans-normal.js"></script>
 
         <div id="receiptContent" class="d-none">
         <h2>AquaDrop Receipt</h2>
@@ -592,31 +593,33 @@ error_reporting(E_ALL);
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
 
+            // Register the custom font
+            pdf.addFileToVFS("NotoSans-Regular.ttf", NotoSansNormal);
+            pdf.addFont("NotoSans-Regular.ttf", "NotoSans", "normal");
+            pdf.setFont("NotoSans");
             pdf.setFontSize(18);
-            pdf.setFont("helvetica", "bold");
+            pdf.setFont(undefined, "bold");
             pdf.text("AquaDrop Receipt", 105, 15, { align: "center" });
 
             pdf.setFontSize(12);
-            pdf.setFont("helvetica", "normal");
+            pdf.setFont(undefined, "normal");
             pdf.text("Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?>", 14, 30);
-
             pdf.text("Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?>", 14, 38);
             pdf.text("Address: <?php echo $order_data[0]['address']; ?>", 14, 46);
             pdf.text("Contact: <?php echo $order_data[0]['contact_number']; ?>", 14, 54);
 
             let startY = 70;
-            pdf.setFont("helvetica", "bold");
+            pdf.setFont(undefined, "bold");
             pdf.text("Item", 14, startY);
             pdf.text("Qty", 90, startY);
             pdf.text("Unit Price", 120, startY);
             pdf.text("Total", 160, startY);
 
             startY += 6;
-            pdf.setFont("helvetica", "normal");
+            pdf.setFont(undefined, "normal");
 
             <?php foreach($order_data as $row): ?>
             <?php
-            // Calculate line item total for PDF
             $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
             $line_total = $unit_price * $row['quantity'];
             if($row['with_container'] == 1) {
@@ -625,17 +628,17 @@ error_reporting(E_ALL);
             ?>
             pdf.text("<?php echo $row['product_name']; ?>", 14, startY);
             pdf.text("<?php echo $row['quantity']; ?>", 95, startY, { align: "right" });
-            pdf.text("Php<?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
-            pdf.text("Php<?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
+            pdf.text("\u20B1<?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
+            pdf.text("\u20B1<?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
             startY += 6;
             <?php endforeach; ?>
 
             startY += 6;
-            pdf.setFont("helvetica", "bold");
-            pdf.text("Total: Php<?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
+            pdf.setFont(undefined, "bold");
+            pdf.text("Total: \u20B1<?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
 
             startY += 20;
-            pdf.setFont("helvetica", "italic");
+            pdf.setFont(undefined, "italic");
             pdf.text("Thank you for choosing AquaDrop!", 105, startY, { align: "center" });
 
             pdf.save(`Receipt_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`);
