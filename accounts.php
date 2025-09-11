@@ -264,7 +264,6 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -281,6 +280,17 @@
                     } else {
                         row.style.display = 'none';
                     }
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const table = document.querySelector('#accountTable');
+                const dataTable = new simpleDatatables.DataTable(table, {
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    searchable: true,
+                    sortable: true,
                 });
             });
         </script>
