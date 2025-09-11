@@ -258,17 +258,6 @@
                     <div id="reportContent">
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
-                        <div class="d-flex justify-content-end mb-4">
-                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
-                                <i class="fas fa-file-pdf"></i>
-                            </button>
-                            <button id="reportContainer" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
-                                <i class="fas fa-print"></i>
-                            </button>
-                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>             
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -358,86 +347,14 @@
                             </div>
                         </div>
                     </div>
+                    <div style="margin-bottom: 20px;">
+                        <button id="downloadPDF" class="btn btn-danger">
+                            <i class="fas fa-file-pdf"></i> Download Report as PDF
+                        </button>
+                    </div>
                 </main>    
             </div>
         </div>
-        <div id="reportContainer" style="max-width: 700px; margin: auto; font-family: Helvetica, Arial, sans-serif" class="d-none" >
-        <h1 style="text-align: center; font-weight: bold;">DoodsNer Water Refilling Station</h1>
-        <h2 style="text-align: center; font-weight: normal; margin-top: -10px;">Daily Sales & Expense Report</h2>
-        <p style="text-align: center; font-size: 14px; margin-top: 0;">
-            Date: <?php echo date('F j, Y', strtotime($date_data)); ?>
-        </p>
-
-        <section>
-            <h3 style="font-weight: bold; border-bottom: 1px solid #000;">Sales</h3>
-            <table width="100%" style="border-collapse: collapse; margin-bottom: 15px;">
-                <thead>
-                    <tr style="border-bottom: 1px solid #000;">
-                        <th style="text-align: left; padding: 4px;">Date</th>
-                        <th style="text-align: left; padding: 4px;">Product</th>
-                        <th style="text-align: right; padding: 4px;">Amount (₱)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($order_data as $row): ?>
-                        <tr>
-                            <td style="padding: 4px;"><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
-                            <td style="padding: 4px;"><?php echo $row['product_name']; ?></td>
-                            <td style="padding: 4px; text-align: right;"><?php echo number_format($row['amount'], 2); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                    <tr style="border-top: 1px solid #000; font-weight: bold;">
-                        <td colspan="2" style="padding: 4px; text-align: right;">Total Sales:</td>
-                        <td style="padding: 4px; text-align: right;">₱<?php echo number_format($total_amount, 2); ?></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </section>
-
-        <section>
-            <h3 style="font-weight: bold; border-bottom: 1px solid #000;">Expenses</h3>
-            <table width="100%" style="border-collapse: collapse; margin-bottom: 15px;">
-                <thead>
-                    <tr style="border-bottom: 1px solid #000;">
-                        <th style="text-align: left; padding: 4px;">Date</th>
-                        <th style="text-align: left; padding: 4px;">Purpose</th>
-                        <th style="text-align: right; padding: 4px;">Amount (₱)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($expense_data as $row): ?>
-                        <tr>
-                            <td style="padding: 4px;"><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
-                            <td style="padding: 4px;"><?php echo $row['expensetype_name']; ?></td>
-                            <td style="padding: 4px; text-align: right;"><?php echo number_format($row['amount'], 2); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                    <tr style="border-top: 1px solid #000; font-weight: bold;">
-                        <td colspan="2" style="padding: 4px; text-align: right;">Total Expenses:</td>
-                        <td style="padding: 4px; text-align: right;">₱<?php echo number_format($total_expense, 2); ?></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </section>
-
-        <section>
-            <h3 style="font-weight: normal;">Net Income Summary</h3>
-            <p>Total Sales: ₱<?php echo number_format($total_amount, 2); ?></p>
-            <p>Total Expenses: ₱<?php echo number_format($total_expense, 2); ?></p>
-            <p style="font-weight: bold;">Net Income: ₱<?php echo number_format($total_income, 2); ?></p>
-        </section>
-
-        <footer style="text-align: center; font-style: italic; font-size: 10px; margin-top: 30px;">
-            Generated by AquaDrop Water Ordering System
-        </footer>
-    </div>
-
-    <button id="printReport" style="display: block; margin: 20px auto;">Print Report</button>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -599,7 +516,7 @@
             const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
             pdf.save(filename);
         });
-        
+
         </script>
     </body>
 </html>
