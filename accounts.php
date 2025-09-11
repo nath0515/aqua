@@ -239,7 +239,7 @@
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
-                                            <td><?php echo $row['created_at']; ?></td>
+                                            <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
