@@ -216,15 +216,15 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-1">
                             <label for="startDate" class="form-label">Start Date:</label>
                             <input type="date" id="startDate" class="form-control">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-1">
                             <label for="endDate" class="form-label">End Date:</label>
                             <input type="date" id="endDate" class="form-control">
                         </div>
-                        <div class="col-md-3 d-flex align-items-end">
+                        <div class="col-md-1 d-flex align-items-end">
                             <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
                         </div>
                     </div>
