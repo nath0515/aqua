@@ -594,8 +594,8 @@ error_reporting(E_ALL);
             const pdf = new jsPDF();
 
             // Register the custom font
-            pdf.addFileToVFS("NotoSans-Regular.ttf", NotoSansNormal);
-            pdf.addFont("NotoSans-Regular.ttf", "NotoSans", "normal");
+            pdf.addFileToVFS("NotoSans-normal.ttf", NotoSansNormal);
+            pdf.addFont("NotoSans-normal.ttf", "NotoSans", "normal");
             pdf.setFont("NotoSans");
             pdf.setFontSize(18);
             pdf.setFont(undefined, "bold");
