@@ -578,7 +578,7 @@
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Product", 70, y);
-            pdf.text("Amount (₱)", 170, y, { align: "right" });
+            pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
             pdf.setFont("helvetica", "normal");
 
@@ -590,7 +590,7 @@
             <?php endforeach; ?>
 
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total Sales: ₱<?php echo number_format($total_amount, 2); ?>", 170, y, { align: "right" });
+            pdf.text("Total Sales: Php <?php echo number_format($total_amount, 2); ?>", 170, y, { align: "right" });
             y += 12;
 
             // --- EXPENSES TABLE ---
@@ -601,7 +601,7 @@
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Purpose", 70, y);
-            pdf.text("Amount (₱)", 170, y, { align: "right" });
+            pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
             pdf.setFont("helvetica", "normal");
 
@@ -613,7 +613,7 @@
             <?php endforeach; ?>
 
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total Expenses: ₱<?php echo number_format($total_expense, 2); ?>", 170, y, { align: "right" });
+            pdf.text("Total Expenses: Php <?php echo number_format($total_expense, 2); ?>", 170, y, { align: "right" });
             y += 12;
 
             // --- INCOME SUMMARY ---
@@ -622,12 +622,12 @@
             y += 6;
 
             pdf.setFont("helvetica", "normal");
-            pdf.text("Total Sales: ₱<?php echo number_format($total_amount, 2); ?>", 14, y);
+            pdf.text("Total Sales: Php <?php echo number_format($total_amount, 2); ?>", 14, y);
             y += 6;
-            pdf.text("Total Expenses: ₱<?php echo number_format($total_expense, 2); ?>", 14, y);
+            pdf.text("Total Expenses: Php <?php echo number_format($total_expense, 2); ?>", 14, y);
             y += 6;
             pdf.setFont("helvetica", "bold");
-            pdf.text("Net Income: ₱<?php echo number_format($total_income, 2); ?>", 14, y);
+            pdf.text("Net Income: Php <?php echo number_format($total_income, 2); ?>", 14, y);
             y += 15;
 
             // Footer
