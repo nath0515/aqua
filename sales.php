@@ -362,7 +362,7 @@ ini_set('display_errors', 1);
                                             <tr>
                                                 <td><?php echo $row['order_id'];?></td>
                                                 <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php echo $row['address'];?></td>
