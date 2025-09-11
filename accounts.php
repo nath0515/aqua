@@ -218,11 +218,11 @@
                         </div>
                         <div class="col-md-2">
                             <label for="startDate" class="form-label">Start Date:</label>
-                            <input type="date" id="startDate" class="form-control">
+                            <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div class="col-md-2">
                             <label for="endDate" class="form-label">End Date:</label>
-                            <input type="date" id="endDate" class="form-control">
+                            <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
                             <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
