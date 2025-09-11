@@ -349,7 +349,7 @@ error_reporting(E_ALL);
         </div>
         <!-- View Receipt Modal -->
         <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg"> <!-- You can use modal-xl if needed -->
+            <div class="modal-dialog modal-lg"> <!-- You can use modal-xl if needed -->
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="receiptModalLabel">AquaDrop Receipt Preview</h5>
@@ -402,8 +402,6 @@ error_reporting(E_ALL);
             </div>
         </div>
         </div>
-
-
         <!-- Edit Order Modal -->
         <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
