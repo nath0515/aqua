@@ -205,8 +205,7 @@
                         <select id="roleFilter" class="form-select" style="max-width: 300px;">
                             <option value="">All Roles</option>
                             <?php
-                            // Get roles from database
-                            $sql = "SELECT role_id, role_name FROM roles";
+                            $sql = "SELECT role_name FROM roles";
                             $stmt = $conn->prepare($sql);
                             $stmt->execute();
                             $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -215,6 +214,7 @@
                             }
                             ?>
                         </select>
+
                     </div>
 
                         <div class="card mb-4">
@@ -269,16 +269,18 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-            document.getElementById('roleFilter').addEventListener('change', function () {
-                const selectedRole = this.value.toLowerCase();
-                const rows = document.querySelectorAll('#accountTable tbody tr');
+            $('#roleFilter').on('change', function () {
+                const selectedRole = $(this).val();
 
-                rows.forEach(row => {
-                    const roleCell = row.children[1].textContent.toLowerCase(); // assuming 2nd column is role
-                    if (!selectedRole || roleCell.includes(selectedRole)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+                $.ajax({
+                    url: 'fetch_accounts.php',
+                    type: 'POST',
+                    data: { role: selectedRole },
+                    success: function (response) {
+                        $('#accountTable tbody').html(response);
+                    },
+                    error: function () {
+                        alert('Failed to fetch filtered data.');
                     }
                 });
             });
