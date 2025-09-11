@@ -255,20 +255,19 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="d-flex justify-content-end mb-4">
-                        <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
-                        <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
                     <div id="reportContent">
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
+                        <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
