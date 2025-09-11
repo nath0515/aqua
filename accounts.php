@@ -200,13 +200,30 @@
                             <li class="breadcrumb-item active">Account Manager</li>
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
+                        <div class="mb-3">
+                        <label for="roleFilter" class="form-label">Filter by Role:</label>
+                        <select id="roleFilter" class="form-select" style="max-width: 300px;">
+                            <option value="">All Roles</option>
+                            <?php
+                            // Get roles from database
+                            $sql = "SELECT role_id, role_name FROM roles";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->execute();
+                            $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($roles as $role) {
+                                echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
                                 Accounts
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                                <table id="accountTable" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -252,6 +269,21 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <script>
+            document.getElementById('roleFilter').addEventListener('change', function () {
+                const selectedRole = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#accountTable tbody tr');
+
+                rows.forEach(row => {
+                    const roleCell = row.children[1].textContent.toLowerCase(); // assuming 2nd column is role
+                    if (!selectedRole || roleCell.includes(selectedRole)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        </script>
         <script>
             let deferredPrompt;
 
