@@ -201,7 +201,7 @@
                             <li class="breadcrumb-item active">Report</li>
                         </ol>
                         <!-- Custom Date Range Report -->
-                        <div class="card-fluid mb-4">
+                        <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-calendar-alt me-1"></i>
                                 Generate Custom Report
