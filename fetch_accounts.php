@@ -1,16 +1,9 @@
 <?php
 require 'db.php';
 
-// Sanitize inputs
-$role = isset($_POST['role']) ? trim($_POST['role']) : '';
-$startDate = isset($_POST['startDate']) ? trim($_POST['startDate']) : '';
-$endDate = isset($_POST['endDate']) ? trim($_POST['endDate']) : '';
-
-// Validate date formats (optional but recommended)
-function validateDate($date, $format = 'Y-m-d') {
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) === $date;
-}
+$role = $_POST['role'] ?? '';
+$startDate = $_POST['startDate'] ?? '';
+$endDate = $_POST['endDate'] ?? '';
 
 $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, r.role_name, contact_number, u.created_at 
         FROM users u
@@ -25,40 +18,33 @@ if (!empty($role)) {
     $params[':role'] = $role;
 }
 
-if (!empty($startDate) && validateDate($startDate)) {
+if (!empty($startDate)) {
     $sql .= " AND DATE(u.created_at) >= :startDate";
     $params[':startDate'] = $startDate;
 }
 
-if (!empty($endDate) && validateDate($endDate)) {
+if (!empty($endDate)) {
     $sql .= " AND DATE(u.created_at) <= :endDate";
     $params[':endDate'] = $endDate;
 }
 
 $stmt = $conn->prepare($sql);
-
 foreach ($params as $key => $val) {
     $stmt->bindValue($key, $val);
 }
+$stmt->execute();
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-try {
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if (count($users) > 0) {
-        foreach ($users as $row) {
-            echo "<tr>
-                <td>" . htmlspecialchars($row['full_name']) . "</td>
-                <td>" . htmlspecialchars($row['role_name']) . "</td>
-                <td>" . htmlspecialchars($row['contact_number']) . "</td>
-                <td>" . date('F j, Y', strtotime($row['created_at'])) . "</td>
-            </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='4' class='text-center'>No accounts found.</td></tr>";
+if (count($users) > 0) {
+    foreach ($users as $row) {
+        echo "<tr>
+            <td>" . htmlspecialchars($row['full_name']) . "</td>
+            <td>" . htmlspecialchars($row['role_name']) . "</td>
+            <td>" . htmlspecialchars($row['contact_number']) . "</td>
+            <td>" . date('F j, Y', strtotime($row['created_at'])) . "</td>
+        </tr>";
     }
-} catch (PDOException $e) {
-    // You can log this error and show a generic message to the user
-    echo "<tr><td colspan='4' class='text-center text-danger'>Error fetching accounts.</td></tr>";
+} else {
+    echo "<tr><td colspan='4' class='text-center'>No accounts found.</td></tr>";
 }
 ?>

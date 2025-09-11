@@ -319,6 +319,7 @@
                 });
             }
 
+
             // Initialize on document ready
             $(document).ready(function () {
                 fetchFilteredAccounts();
