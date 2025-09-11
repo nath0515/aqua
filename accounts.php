@@ -281,6 +281,21 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
+            let dataTable; // Global variable
+
+            function initializeDataTable() {
+                const table = document.querySelector('#accountTable');
+                if (dataTable) {
+                    dataTable.destroy(); // Destroy previous instance
+                }
+                dataTable = new simpleDatatables.DataTable(table, {
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    searchable: true,
+                    sortable: true,
+                });
+            }
+
             function fetchFilteredAccounts() {
                 const role = $('#roleFilter').val();
                 const startDate = $('#startDate').val();
@@ -296,6 +311,7 @@
                     },
                     success: function (response) {
                         $('#accountTable tbody').html(response);
+                        initializeDataTable(); // Re-initialize after updating table content
                     },
                     error: function () {
                         alert('Failed to filter accounts.');
@@ -303,35 +319,22 @@
                 });
             }
 
-            // Automatically filter on any change
+            // Initialize on document ready
+            $(document).ready(function () {
+                fetchFilteredAccounts();
+            });
+
+            // Filters trigger new fetch
             $('#roleFilter, #startDate, #endDate').on('change', function () {
                 fetchFilteredAccounts();
             });
 
-            // Reset filters and reload
+            // Reset filters
             $('#resetFilterBtn').on('click', function () {
                 $('#roleFilter').val('');
                 $('#startDate').val('');
                 $('#endDate').val('');
                 fetchFilteredAccounts();
-            });
-
-            // Optional: Run once on page load
-            $(document).ready(function () {
-                fetchFilteredAccounts();
-            });
-        </script>
-
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const table = document.querySelector('#accountTable');
-                const dataTable = new simpleDatatables.DataTable(table, {
-                    perPage: 5,
-                    perPageSelect: [5, 10, 15, 20],
-                    searchable: true,
-                    sortable: true,
-                });
             });
         </script>
         <script>
