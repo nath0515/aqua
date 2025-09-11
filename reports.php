@@ -262,7 +262,7 @@
                             <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
                                 <i class="fas fa-file-pdf"></i>
                             </button>
-                            <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                            <button id="reportContainer" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
                                 <i class="fas fa-print"></i>
                             </button>
                             <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
@@ -361,7 +361,7 @@
                 </main>    
             </div>
         </div>
-        <div id="reportContainer" style="max-width: 700px; margin: auto; font-family: Helvetica, Arial, sans-serif;">
+        <div id="reportContainer" style="max-width: 700px; margin: auto; font-family: Helvetica, Arial, sans-serif" class="d-none" >
         <h1 style="text-align: center; font-weight: bold;">DoodsNer Water Refilling Station</h1>
         <h2 style="text-align: center; font-weight: normal; margin-top: -10px;">Daily Sales & Expense Report</h2>
         <p style="text-align: center; font-size: 14px; margin-top: 0;">
@@ -599,10 +599,7 @@
             const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
             pdf.save(filename);
         });
-            document.getElementById('printReport').addEventListener('click', function() {
-            window.print();
-        });
-
+        
         </script>
     </body>
 </html>
