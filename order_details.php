@@ -625,14 +625,14 @@ error_reporting(E_ALL);
             ?>
             pdf.text("<?php echo $row['product_name']; ?>", 14, startY);
             pdf.text("<?php echo $row['quantity']; ?>", 95, startY, { align: "right" });
-            pdf.text("Php<?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
-            pdf.text("Php<?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
+            pdf.text("Php <?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
+            pdf.text("Php <?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
             startY += 6;
             <?php endforeach; ?>
 
             startY += 6;
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total: Php<?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
+            pdf.text("Total: Php <?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
 
             startY += 20;
             pdf.setFont("helvetica", "italic");
