@@ -206,7 +206,7 @@
                                 <i class="fas fa-calendar-alt me-1"></i>
                                 Generate Custom Report
                             </div>
-                            <div class="card-body ">
+                            <div class="card-body container-fluid">
                                 <form method="GET" action="custom_report.php" class="row g-3">
                                     <div class="col-md-2">
                                         <label for="start_date" class="form-label">Start Date</label>
