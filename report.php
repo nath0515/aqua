@@ -201,12 +201,12 @@
                             <li class="breadcrumb-item active">Report</li>
                         </ol>
                         <!-- Custom Date Range Report -->
-                        <div class="card mb-4">
+                        <div class="card col-md-6 mb-4">
                             <div class="card-header">
                                 <i class="fas fa-calendar-alt me-1"></i>
                                 Generate Custom Report
                             </div>
-                            <div class="card-body container-fluid">
+                            <div class="card-body col-md-6 ">
                                 <form method="GET" action="custom_report.php" class="row g-3">
                                     <div class="col-md-2">
                                         <label for="start_date" class="form-label">Start Date</label>
