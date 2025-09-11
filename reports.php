@@ -288,7 +288,7 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                         <tr>
@@ -320,7 +320,7 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['expensetype_name'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                         <tr>
