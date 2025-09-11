@@ -200,23 +200,36 @@
                             <li class="breadcrumb-item active">Account Manager</li>
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
-                        <div class="mb-3">
-                        <label for="roleFilter" class="form-label">Filter by Role:</label>
-                        <select id="roleFilter" class="form-select" style="max-width: 300px;">
-                            <option value="">All Roles</option>
-                            <?php
-                            $sql = "SELECT role_name FROM roles";
-                            $stmt = $conn->prepare($sql);
-                            $stmt->execute();
-                            $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($roles as $role) {
-                                echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
-                            }
-                            ?>
-                        </select>
-
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="roleFilter" class="form-label">Filter by Role:</label>
+                                <select id="roleFilter" class="form-select">
+                                    <option value="">All Roles</option>
+                                    <?php
+                                    $sql = "SELECT role_name FROM roles";
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->execute();
+                                    $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($roles as $role) {
+                                        echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="startDate" class="form-label">Start Date:</label>
+                                <input type="date" id="startDate" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="endDate" class="form-label">End Date:</label>
+                                <input type="date" id="endDate" class="form-control">
+                            </div>
+                            <div class="col-md-3 d-flex flex-column justify-content-end">
+                                <button id="filterBtn" class="btn btn-primary mb-2">Apply Filter</button>
+                                <button id="resetFilterBtn" class="btn btn-secondary">Reset Filters</button>
+                            </div>
+                        </div>
                     </div>
-
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -269,22 +282,52 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-            $('#roleFilter').on('change', function () {
-                const selectedRole = $(this).val();
+            function fetchFilteredAccounts() {
+                const role = $('#roleFilter').val();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
 
                 $.ajax({
                     url: 'fetch_accounts.php',
-                    type: 'POST',
-                    data: { role: selectedRole },
+                    method: 'POST',
+                    data: {
+                        role: role,
+                        startDate: startDate,
+                        endDate: endDate
+                    },
                     success: function (response) {
                         $('#accountTable tbody').html(response);
                     },
                     error: function () {
-                        alert('Failed to fetch filtered data.');
+                        alert('Failed to filter accounts.');
                     }
                 });
+            }
+
+            // Apply filter on button click
+            $('#filterBtn').on('click', function () {
+                fetchFilteredAccounts();
+            });
+
+            // Optional: Auto-filter on any input change
+            $('#roleFilter, #startDate, #endDate').on('change', function () {
+                fetchFilteredAccounts();
+            });
+
+            // Bonus: Reset all filters
+            $('#resetFilterBtn').on('click', function () {
+                $('#roleFilter').val('');
+                $('#startDate').val('');
+                $('#endDate').val('');
+                fetchFilteredAccounts(); // Reload all data
+            });
+
+            // Optional: Run once on page load to initialize data
+            $(document).ready(function () {
+                fetchFilteredAccounts();
             });
         </script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const table = document.querySelector('#accountTable');
