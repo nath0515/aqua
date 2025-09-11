@@ -228,6 +228,7 @@
                                 <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
                             </div>
                         </div>
+
                     </div>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -278,21 +279,8 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <script>
-            let dataTable;
-
-            document.addEventListener('DOMContentLoaded', function () {
-                const table = document.querySelector('#accountTable');
-                dataTable = new simpleDatatables.DataTable(table, {
-                    perPage: 5,
-                    perPageSelect: [5, 10, 15, 20],
-                    searchable: true,
-                    sortable: true
-                });
-
-                fetchFilteredAccounts(); // Load initial data
-            });
-
             function fetchFilteredAccounts() {
                 const role = $('#roleFilter').val();
                 const startDate = $('#startDate').val();
@@ -307,19 +295,7 @@
                         endDate: endDate
                     },
                     success: function (response) {
-                        // Parse returned HTML rows into a temporary DOM
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = `<table><tbody>${response}</tbody></table>`;
-                        const newRows = tempDiv.querySelectorAll('tr');
-
-                        // Clear existing table rows
-                        dataTable.rows().remove();
-
-                        // Add new rows
-                        newRows.forEach(row => {
-                            const cells = Array.from(row.querySelectorAll('td')).map(td => td.innerText);
-                            dataTable.rows().add(cells);
-                        });
+                        $('#accountTable tbody').html(response);
                     },
                     error: function () {
                         alert('Failed to filter accounts.');
@@ -327,7 +303,7 @@
                 });
             }
 
-            // Auto-filter on any change
+            // Automatically filter on any change
             $('#roleFilter, #startDate, #endDate').on('change', function () {
                 fetchFilteredAccounts();
             });
@@ -339,8 +315,25 @@
                 $('#endDate').val('');
                 fetchFilteredAccounts();
             });
+
+            // Optional: Run once on page load
+            $(document).ready(function () {
+                fetchFilteredAccounts();
+            });
         </script>
 
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const table = document.querySelector('#accountTable');
+                const dataTable = new simpleDatatables.DataTable(table, {
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    searchable: true,
+                    sortable: true,
+                });
+            });
+        </script>
         <script>
             let deferredPrompt;
 
