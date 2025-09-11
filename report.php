@@ -216,7 +216,7 @@
                                         <label for="end_date" class="form-label">End Date</label>
                                         <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label class="form-label">&nbsp;</label>
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary" onclick="return validateDateRange()">
