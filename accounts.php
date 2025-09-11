@@ -278,7 +278,6 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
@@ -304,29 +303,25 @@
                 });
             }
 
-            // Apply filter on button click
-            $('#filterBtn').on('click', function () {
-                fetchFilteredAccounts();
-            });
-
-            // Optional: Auto-filter on any input change
+            // Automatically filter on any change
             $('#roleFilter, #startDate, #endDate').on('change', function () {
                 fetchFilteredAccounts();
             });
 
-            // Bonus: Reset all filters
+            // Reset filters and reload
             $('#resetFilterBtn').on('click', function () {
                 $('#roleFilter').val('');
                 $('#startDate').val('');
                 $('#endDate').val('');
-                fetchFilteredAccounts(); // Reload all data
+                fetchFilteredAccounts();
             });
 
-            // Optional: Run once on page load to initialize data
+            // Optional: Run once on page load
             $(document).ready(function () {
                 fetchFilteredAccounts();
             });
         </script>
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
