@@ -599,20 +599,8 @@
             const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.pdf`;
             pdf.save(filename);
         });
-
-            document.getElementById('printReceipt').addEventListener('click', function() {
-            const printContents = document.getElementById('receiptContent').innerHTML;
-            const printWindow = window.open('', '', 'height=600,width=800');
-
-            printWindow.document.write('<html><head><title>Print Receipt</title>');
-            printWindow.document.write('</head><body >');
-            printWindow.document.write(printContents);
-            printWindow.document.write('</body></html>');
-
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
+            document.getElementById('printReport').addEventListener('click', function() {
+            window.print();
         });
 
         </script>
