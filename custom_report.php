@@ -499,108 +499,137 @@
             document.getElementById("downloadPDF").addEventListener("click", function () {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF();
+                
+                const margin = 14;
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const usableWidth = pageWidth - margin * 2;
                 let y = 15;
+                const lineHeight = 6;
+
+                function checkPageSpace(additionalHeight) {
+                    if (y + additionalHeight > pageHeight - margin) {
+                        pdf.addPage();
+                        y = margin;
+                    }
+                }
 
                 // Title
                 pdf.setFont("helvetica", "bold");
                 pdf.setFontSize(18);
-                pdf.text("DoodsNer Water Refilling Station", 105, y, { align: "center" });
+                pdf.text("DoodsNer Water Refilling Station", pageWidth / 2, y, { align: "center" });
                 y += 8;
 
                 pdf.setFontSize(14);
                 pdf.setFont("helvetica", "normal");
-                pdf.text("Custom Sales & Expense Report", 105, y, { align: "center" });
+                pdf.text("Custom Sales & Expense Report", pageWidth / 2, y, { align: "center" });
                 y += 6;
 
                 pdf.setFontSize(12);
-                pdf.text("Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?>", 105, y, { align: "center" });
+                pdf.text("Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?>", pageWidth / 2, y, { align: "center" });
                 y += 15;
 
                 // Summary
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Summary", 14, y);
-                y += 6;
+                pdf.text("Summary", margin, y);
+                y += lineHeight;
+
                 pdf.setFont("helvetica", "normal");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
-                y += 6;
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
-                y += 6;
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", margin, y);
+                y += lineHeight;
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", margin, y);
+                y += lineHeight;
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
+                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", margin, y);
                 y += 15;
 
                 // --- SALES TABLE ---
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Sales (<?php echo count($order_data); ?> orders)", 14, y);
-                y += 6;
+                pdf.text("Sales (<?php echo count($order_data); ?> orders)", margin, y);
+                y += lineHeight;
 
                 pdf.setFontSize(10);
-                pdf.text("Date", 14, y);
-                pdf.text("Customer", 50, y);
-                pdf.text("Amount (₱)", 170, y, { align: "right" });
-                y += 6;
+                pdf.text("Date", margin, y);
+                pdf.text("Customer", margin + 40, y);
+                pdf.text("Amount (₱)", pageWidth - margin, y, { align: "right" });
+                y += lineHeight;
                 pdf.setFont("helvetica", "normal");
 
                 <?php foreach($order_data as $row): ?>
-                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
-                    pdf.text("<?php echo $row['firstname'] . ' ' . $row['lastname']; ?>", 50, y);
-                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
-                    y += 6;
+                    checkPageSpace(lineHeight);
+                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", margin, y);
+                    pdf.text("<?php echo addslashes($row['firstname'] . ' ' . $row['lastname']); ?>", margin + 40, y);
+                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", pageWidth - margin, y, { align: "right" });
+                    y += lineHeight;
                 <?php endforeach; ?>
 
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 170, y, { align: "right" });
+                checkPageSpace(lineHeight + 6);
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", pageWidth - margin, y, { align: "right" });
                 y += 12;
 
                 // --- EXPENSES TABLE ---
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Expenses (<?php echo count($expense_data); ?> entries)", 14, y);
-                y += 6;
+                checkPageSpace(lineHeight);
+                pdf.text("Expenses (<?php echo count($expense_data); ?> entries)", margin, y);
+                y += lineHeight;
 
                 pdf.setFontSize(10);
-                pdf.text("Date", 14, y);
-                pdf.text("Purpose", 50, y);
-                pdf.text("Comment", 100, y);
-                pdf.text("Amount (₱)", 170, y, { align: "right" });
-                y += 6;
+                pdf.text("Date", margin, y);
+                pdf.text("Purpose", margin + 40, y);
+                pdf.text("Comment", margin + 90, y);
+                pdf.text("Amount (₱)", pageWidth - margin, y, { align: "right" });
+                y += lineHeight;
                 pdf.setFont("helvetica", "normal");
 
                 <?php foreach($expense_data as $row): ?>
-                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
-                    pdf.text("<?php echo $row['expensetype_name']; ?>", 50, y);
-                    pdf.text("<?php echo $row['comment']; ?>", 100, y);
-                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
-                    y += 6;
+                    // Wrap the comment to fit in a 70 unit width
+                    const wrappedComment = pdf.splitTextToSize("<?php echo addslashes($row['comment']); ?>", 70);
+
+                    // Calculate height needed for this row
+                    const rowHeight = wrappedComment.length * lineHeight;
+                    checkPageSpace(rowHeight);
+
+                    pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", margin, y);
+                    pdf.text("<?php echo addslashes($row['expensetype_name']); ?>", margin + 40, y);
+                    pdf.text(wrappedComment, margin + 90, y);
+                    pdf.text("<?php echo number_format($row['amount'], 2); ?>", pageWidth - margin, y, { align: "right" });
+
+                    y += rowHeight;
                 <?php endforeach; ?>
 
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 170, y, { align: "right" });
+                checkPageSpace(lineHeight + 6);
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", pageWidth - margin, y, { align: "right" });
                 y += 12;
 
                 // --- INCOME SUMMARY ---
                 pdf.setFontSize(12);
-                pdf.text("Net Income Summary", 14, y);
-                y += 6;
+                pdf.setFont("helvetica", "bold");
+                checkPageSpace(lineHeight);
+                pdf.text("Net Income Summary", margin, y);
+                y += lineHeight;
 
                 pdf.setFont("helvetica", "normal");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
-                y += 6;
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
-                y += 6;
+                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", margin, y);
+                y += lineHeight;
+                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", margin, y);
+                y += lineHeight;
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
+                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", margin, y);
                 y += 15;
 
                 // Footer
                 pdf.setFont("helvetica", "italic");
                 pdf.setFontSize(10);
-                pdf.text("Generated by AquaDrop Water Ordering System", 105, 285, { align: "center" });
+                pdf.text("Generated by AquaDrop Water Ordering System", pageWidth / 2, pageHeight - 10, { align: "center" });
 
                 // Save PDF
                 const filename = `Custom_Report_<?php echo date('Ymd', strtotime($start_date)); ?>_to_<?php echo date('Ymd', strtotime($end_date)); ?>.pdf`;
                 pdf.save(filename);
             });
         </script>
+
         <script>
             function printReport() {
                 var printContents = document.getElementById("reportContent").innerHTML;
