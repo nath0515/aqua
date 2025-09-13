@@ -613,63 +613,86 @@
             }
         </script>
         <script>
-        document.getElementById('viewReport').addEventListener('click', function () {
-        const reportHTML = `
-            <h2>DoodsNer Water Refilling Station</h2>
-            <h4>Custom Sales & Expense Report</h4>
-            <p>Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?></p>
+            document.getElementById('viewReportBtn').addEventListener('click', function () {
+            const reportHTML = `
+                <div class="text-center">
+                <h3><strong>DoodsNer Water Refilling Station</strong></h3>
+                <h5>Custom Sales & Expense Report</h5>
+                <p>Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?></p>
+                </div>
 
-            <hr>
+                <hr>
 
-            <h5>Summary</h5>
-            <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
-            <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
-            <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
+                <h5><strong>Summary</strong></h5>
+                <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
+                <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
+                <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
 
-            <hr>
+                <hr>
 
-            <h5>Sales (<?php echo count($order_data); ?> orders)</h5>
-            <table class="table table-bordered table-striped">
-            <thead>
-                <tr><th>Date</th><th>Customer</th><th>Amount</th></tr>
-            </thead>
-            <tbody>
-                <?php foreach($order_data as $row): ?>
-                <tr>
+                <h5><strong>Sales (<?php echo count($order_data); ?> orders)</strong></h5>
+                <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th class="text-end">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order_data as $row): ?>
+                    <tr>
                     <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
                     <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-            </table>
+                    <td class="text-end">₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                </table>
+                <p class="text-end"><strong>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></strong></p>
 
-            <hr>
+                <hr>
 
-            <h5>Expenses (<?php echo count($expense_data); ?> entries)</h5>
-            <table class="table table-bordered table-striped">
-            <thead>
-                <tr><th>Date</th><th>Purpose</th><th>Comment</th><th>Amount</th></tr>
-            </thead>
-            <tbody>
-                <?php foreach($expense_data as $row): ?>
-                <tr>
+                <h5><strong>Expenses (<?php echo count($expense_data); ?> entries)</strong></h5>
+                <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Comment</th>
+                    <th class="text-end">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($expense_data as $row): ?>
+                    <tr>
                     <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
                     <td><?php echo $row['expensetype_name']; ?></td>
                     <td><?php echo $row['comment']; ?></td>
-                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-            </table>
-        `;
+                    <td class="text-end">₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                </table>
+                <p class="text-end"><strong>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></strong></p>
 
-        document.getElementById('reportContent').innerHTML = reportHTML;
+                <hr>
 
-        // Open Bootstrap modal manually (if not using data-bs-toggle)
-        const reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
-        reportModal.show();
-        });
-        </script>
+                <h5><strong>Net Income Summary</strong></h5>
+                <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
+                <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
+                <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
+
+                <hr>
+                <p class="text-center text-muted"><em>Generated by AquaDrop Water Ordering System</em></p>
+            `;
+
+            document.getElementById('reportPreviewContent').innerHTML = reportHTML;
+
+            const modal = new bootstrap.Modal(document.getElementById('viewReportModal'));
+            modal.show();
+            });
+            </script>
+
     </body>
 </html>
