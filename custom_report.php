@@ -268,6 +268,24 @@
                             <li class="breadcrumb-item"><a href="report.php">Report</a></li>
                             <li class="breadcrumb-item active">Custom Report</li>
                         </ol>
+                        <!-- Back Button -->
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="report.php" class="btn btn-secondary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Back to Reports">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Report as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+
+                            <button id="printReport" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Report">
+                                <i class="fas fa-print"></i>
+                            </button>
+
+                            <button id="viewReportBtn" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Report">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
 
                         <!-- Report Summary -->
                         <div class="alert alert-info">
@@ -381,21 +399,6 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <button id="downloadPDF" class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Download Report as PDF
-                            </button>
-                            <button onclick="printReport()">
-                                <i class="fa fa-print"></i> Print Report
-                            </button>
-                            <button id="viewReportBtn" class="btn btn-secondary" data-bs-toggle="tooltip" title="View Report">
-                                <i class="fas fa-eye"></i>
-                            </button>                           
-
-                            <a href="report.php" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to Reports
-                            </a>
                         </div>
                     </div>
                 </main>    
