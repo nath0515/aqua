@@ -496,7 +496,8 @@
         </script>
 
         <script>
-            document.getElementById("downloadPDF").addEventListener("click", function () {
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("downloadPDF").addEventListener("click", function () {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF();
                 
@@ -628,6 +629,7 @@
                 const filename = `Custom_Report_<?php echo date('Ymd', strtotime($start_date)); ?>_to_<?php echo date('Ymd', strtotime($end_date)); ?>.pdf`;
                 pdf.save(filename);
             });
+        }):
         </script>
 
         <script>
