@@ -278,7 +278,7 @@
                                 <i class="fas fa-file-pdf"></i>
                             </button>
 
-                            <button id="printReport" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Report">
+                            <button id="printReport" onclick="printReport()" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Report">
                                 <i class="fas fa-print"></i>
                             </button>
 
