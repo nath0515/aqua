@@ -389,9 +389,9 @@
                             <button onclick="printReport()">
                                 <i class="fa fa-print"></i> Print Report
                             </button>
-                            <button id="viewReport" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Report">
+                            <button id="viewReportBtn" class="btn btn-secondary" data-bs-toggle="tooltip" title="View Report">
                                 <i class="fas fa-eye"></i>
-                            </button>                            
+                            </button>                           
 
                             <a href="report.php" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Back to Reports
@@ -450,16 +450,15 @@
             </footer>
         </div>
 
-        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal fade" id="viewReportModal" tabindex="-1" aria-labelledby="viewReportModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel">Report Preview</h5>
+                    <h5 class="modal-title" id="viewReportModalLabel">Report Preview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                <div class="modal-body" id="reportContent">
-                    <!-- HTML report content will be injected here dynamically -->
+                <div class="modal-body" id="reportPreviewContent">
+                    <!-- Dynamic content injected here -->
                 </div>
                 </div>
             </div>
