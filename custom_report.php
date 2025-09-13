@@ -274,7 +274,9 @@
                                 <i class="fas fa-arrow-left"></i>
                             </a>
 
-                            <button id="downloadPDF">Download PDF Report</button>
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Report as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
 
                             <button id="printReport" onclick="printReport()" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Report">
                                 <i class="fas fa-print"></i>
