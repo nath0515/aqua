@@ -188,7 +188,7 @@ require 'db.php';
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <?php if ($unread_count > 0): ?>
-                            <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
                                 <?php echo $unread_count; ?>
                                 <span class="visually-hidden">unread notifications</span>
                             </span>
@@ -203,7 +203,9 @@ require 'db.php';
                         <?php endforeach; ?>
                         <li>
                             <form method="post" action="mark_all_read.php" class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-sm btn-link text-decoration-none text-primary">Mark all as read</button>
+                                <a href="#" id="markAllReadBtn" class="dropdown-item text-center small text-gray-500">
+                                    Mark all as read
+                                </a>
                             </form>
                         </li>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
@@ -776,12 +778,29 @@ require 'db.php';
             }
         </script>
         <script>
-            function markAsReadAndRedirect(id, url) {
-            fetch('mark_notification_read.php?id=' + id)
-                .then(() => {
-                    window.location.href = url;
+        document.getElementById('markAllReadBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Stop the link from navigating
+
+            fetch('mark_all_read.php')
+                .then(response => {
+                    if (response.ok) {
+                        // Hide or clear the badge
+                        const badge = document.getElementById('notificationBadge');
+                        if (badge) {
+                            badge.style.display = 'none'; // or badge.classList.add('d-none');
+                        }
+
+                        // Optionally clear notifications list in the dropdown
+                        const dropdownList = document.getElementById('notificationList'); // example id
+                        if (dropdownList) {
+                            dropdownList.innerHTML = '<span class="dropdown-item text-center small text-muted">No new notifications</span>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to mark all as read:', error);
                 });
-        }
+        });
         </script>
     </body>
 </html>
