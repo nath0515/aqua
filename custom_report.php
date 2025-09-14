@@ -415,7 +415,7 @@
             <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
 
             <h4>Sales</h4>
-            <table>
+            <table class="table table-bordered table-sm">
                 <thead>
                     <tr><th>Date</th><th>Customer</th><th>Amount</th></tr>
                 </thead>
@@ -431,7 +431,7 @@
             </table>
 
             <h4>Expenses</h4>
-            <table>
+            <table class="table table-bordered table-sm">
                 <thead>
                     <tr><th>Date</th><th>Purpose</th><th>Comment</th><th>Amount</th></tr>
                 </thead>
