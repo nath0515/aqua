@@ -468,7 +468,7 @@
             </div>
         </div>
         <!-- Hidden div with full PHP-rendered report -->
-        <div id="pdfReportContent" style="display: none;">
+        <div id="pdfReportContent" style="visibility: hidden; position: absolute; left: -9999px;">
             <div class="text-center">
                 <h3><strong>DoodsNer Water Refilling Station</strong></h3>
                 <h5>Custom Sales & Expense Report</h5>
@@ -572,8 +572,10 @@
 
         <script>
             document.getElementById('downloadPDFBtn').addEventListener('click', function () {
-                const element = document.getElementById('pdfReportContent');
+            const element = document.getElementById('pdfReportContent');
 
+            // Optional: add a short delay to ensure DOM is ready
+            setTimeout(() => {
                 html2pdf().from(element).set({
                     margin: 0.5,
                     filename: 'Sales-Expense-Report.pdf',
@@ -581,7 +583,9 @@
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
                 }).save();
-            });
+            }, 100); // 100ms delay
+        });
+
         </script>
 
 
