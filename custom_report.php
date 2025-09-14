@@ -304,101 +304,99 @@
                             </div>
                         </div>
 
-                        <div id="reportContent">
                         <h1>💧 DoodsNer Water Refilling Station</h1>
                         <h5>📅 Custom Sales & Expense Report - <?php echo date('F j, Y', strtotime($start_date)); ?> to <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Sales (<?php echo count($order_data); ?> orders)
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
-                                                <th>Rider</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($order_data as $row):?>
-                                                <tr>
-                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                                    <td><?php echo $row['status_name']; ?></td>
-                                                    <td><?php echo $row['rider_firstname'] . ' ' . $row['rider_lastname']; ?></td>
-                                                </tr>
-                                            <?php endforeach;?>
-                                            <tr class="table-success">
-                                                <td colspan="2"><strong>Total Sales</strong></td>
-                                                <td><strong>₱<?php echo number_format($total_sales, 2); ?></strong></td>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Sales (<?php echo count($order_data); ?> orders)
                             </div>
-
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Expenses (<?php echo count($expense_data); ?> entries)
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple1">
-                                        <thead>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Rider</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($order_data as $row):?>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Purpose</th>
-                                                <th>Comment</th>
-                                                <th>Amount (₱)</th>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                                                <td><?php echo $row['status_name']; ?></td>
+                                                <td><?php echo $row['rider_firstname'] . ' ' . $row['rider_lastname']; ?></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($expense_data as $row):?>
-                                                <tr>
-                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                    <td><?php echo $row['expensetype_name']; ?></td>
-                                                    <td><?php echo $row['comment']; ?></td>
-                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                                </tr>
-                                            <?php endforeach;?>
-                                            <tr class="table-danger">
-                                                <td colspan="3"><strong>Total Expenses</strong></td>
-                                                <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endforeach;?>
+                                        <tr class="table-success">
+                                            <td colspan="2"><strong>Total Sales</strong></td>
+                                            <td><strong>₱<?php echo number_format($total_sales, 2); ?></strong></td>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
 
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Income Summary
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple2">
-                                        <thead>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Expenses (<?php echo count($expense_data); ?> entries)
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple1">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Purpose</th>
+                                            <th>Comment</th>
+                                            <th>Amount (₱)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($expense_data as $row):?>
                                             <tr>
-                                                <th>Total Sales</th>
-                                                <th>Less : Expenses</th>
-                                                <th>Net Income</th>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['expensetype_name']; ?></td>
+                                                <td><?php echo $row['comment']; ?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>₱<?php echo number_format($total_sales, 2); ?></td>
-                                                <td>₱<?php echo number_format($total_expenses, 2); ?></td>
-                                                <td class="table-<?php echo $net_income >= 0 ? 'success' : 'danger'; ?>"><strong>₱<?php echo number_format($net_income, 2); ?></strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endforeach;?>
+                                        <tr class="table-danger">
+                                            <td colspan="3"><strong>Total Expenses</strong></td>
+                                            <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Income Summary
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple2">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Sales</th>
+                                            <th>Less : Expenses</th>
+                                            <th>Net Income</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>₱<?php echo number_format($total_sales, 2); ?></td>
+                                            <td>₱<?php echo number_format($total_expenses, 2); ?></td>
+                                            <td class="table-<?php echo $net_income >= 0 ? 'success' : 'danger'; ?>"><strong>₱<?php echo number_format($net_income, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
