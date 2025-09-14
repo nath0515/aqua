@@ -428,6 +428,7 @@
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <p class="text-end"><strong>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></strong></p>
             </table>
 
             <h4>Expenses</h4>
@@ -445,6 +446,7 @@
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <p class="text-end"><strong>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></strong></p>
             </table>
 
             <footer>
