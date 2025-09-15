@@ -290,7 +290,6 @@
                     $activity_logs = $stmt->fetchAll();
                 ?>
                 
-                
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
