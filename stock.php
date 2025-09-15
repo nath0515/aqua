@@ -308,7 +308,7 @@
                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
                         <hr>
                         <?php endforeach; ?>
-                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notificationsa</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
