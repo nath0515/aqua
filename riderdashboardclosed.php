@@ -438,6 +438,19 @@
                 return false;  // Prevent default action (i.e., preventing the link click from doing anything)
             }
         </script>
-    </body>
+            <?php if ($notification_success > 0): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Marked as Read!',
+                    text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
+</body>
 </html>
 

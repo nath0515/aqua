@@ -86,21 +86,13 @@
             <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <?php if ($unread_count > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?php echo $unread_count; ?>
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                        <?php endif; ?>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <?php if (empty($recent_notifications)): ?>
-                            <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>
-                        <?php else: ?>
-                            <?php foreach($recent_notifications as $notification): ?>
-                                <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsrider.php">View all notifications</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -583,5 +575,18 @@
                 });
             });
         </script>
-    </body>
+            <?php if ($notification_success > 0): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Marked as Read!',
+                    text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
+</body>
 </html>
