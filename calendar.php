@@ -26,16 +26,13 @@ $stmt = $conn->prepare("SELECT u.user_id, username, email, role_id, firstname, l
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Fetch notifications for rider (delivery assignments + ratings)
-    $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
-    $notification_stmt = $conn->prepare($notification_sql);
-    $notification_stmt->execute();
-    $unread_count = $notification_stmt->fetchColumn();
-
-    $recent_notifications_sql = "SELECT * FROM activity_logs WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') ORDER BY date DESC LIMIT 3";
-    $recent_notifications_stmt = $conn->prepare($recent_notifications_sql);
-    $recent_notifications_stmt->execute();
-    $recent_notifications = $recent_notifications_stmt->fetchAll();
+    // Get notifications using helper for consistency
+    require 'notification_helper.php';
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+    
+    // Check for notification success message
+    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
 // Get today's attendance data
 $stmt = $conn->prepare("SELECT in_time, out_time FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today");
