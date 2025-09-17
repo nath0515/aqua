@@ -58,11 +58,13 @@ require 'db.php';
     $stmt->execute();
     $orders = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE read_status = 0";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $unread_result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $unread_count = $unread_result['unread_count'];
+    // Get notifications using helper
+    require 'notification_helper.php';
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+    
+    // Check for notification success message
+    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
     $dateToday = date('Y-m-d');
     $sevenDaysAgo = date('Y-m-d', strtotime('-7 days', strtotime($dateToday)));
@@ -177,33 +179,15 @@ require 'db.php';
                
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                <?php 
-                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    $activity_logs = $stmt->fetchAll();
-                ?>
-                
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            <?php if ($unread_count > 0): ?>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                    <?php echo $unread_count; ?>
-                                    <span class="visually-hidden">unread notifications</span>
-                                </span>
-                            <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
-                        </span>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
-                        <?php foreach($activity_logs as $row):?>
-                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
-                        <hr>
-                        <?php endforeach; ?>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
@@ -781,5 +765,19 @@ require 'db.php';
                 });
         }
         </script>
+        
+        <?php if ($notification_success > 0): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Marked as Read!',
+                    text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
     </body>
 </html>

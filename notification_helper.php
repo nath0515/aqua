@@ -59,17 +59,46 @@ function renderNotificationBadge($unread_count) {
     return '';
 }
 
-function renderNotificationDropdown($recent_notifications) {
+function renderNotificationDropdown($recent_notifications, $unread_count, $user_id, $role_id) {
     $html = '';
     
     if (empty($recent_notifications)) {
         $html .= '<li><a class="dropdown-item text-muted" href="#">No notifications</a></li>';
     } else {
+        // Add mark all as read button if there are unread notifications
+        if ($unread_count > 0) {
+            $html .= '<li><a class="dropdown-item text-center text-primary fw-bold" href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '"><i class="fas fa-check-double"></i> Mark All as Read</a></li>';
+            $html .= '<li><hr class="dropdown-divider"></li>';
+        }
+        
         foreach ($recent_notifications as $notification) {
-            $html .= '<li><a class="dropdown-item" href="process_readnotification.php?id=' . $notification['activitylogs_id'] . '&destination=' . $notification['destination'] . '">' . htmlspecialchars($notification['message']) . '</a></li>';
+            $read_class = $notification['read_status'] == 1 ? 'text-muted' : 'fw-bold';
+            $html .= '<li><a class="dropdown-item ' . $read_class . '" href="process_readnotification.php?id=' . $notification['activitylogs_id'] . '&destination=' . $notification['destination'] . '">' . htmlspecialchars($notification['message']) . '</a></li>';
         }
     }
     
     return $html;
+}
+
+function markAllAsRead($conn, $user_id, $role_id) {
+    try {
+        if ($role_id == 2) { // Customer
+            $sql = "UPDATE activity_logs SET read_status = 1 WHERE destination LIKE 'costumer_orderdetails.php%' AND user_id = :user_id AND read_status = 0";
+        } elseif ($role_id == 3) { // Rider
+            $sql = "UPDATE activity_logs SET read_status = 1 WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
+        } else { // Admin
+            $sql = "UPDATE activity_logs SET read_status = 1 WHERE destination LIKE 'order_details.php%' AND read_status = 0";
+        }
+        
+        $stmt = $conn->prepare($sql);
+        if ($role_id != 1) { // Not admin
+            $stmt->bindParam(':user_id', $user_id);
+        }
+        $stmt->execute();
+        
+        return $stmt->rowCount(); // Return number of notifications marked as read
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 ?> 
