@@ -57,14 +57,14 @@
                         <i class="fas fa-shopping-cart"></i>
                     </a>
                 </li>
-                <li class="nav-item dropdown me-1">
+                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
+                        <i class="fas fa-bell fs-5"></i>
                         <?php if ($unread_count > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?php echo $unread_count; ?>
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                <?php echo $unread_count; ?>
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
                         <?php endif; ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">

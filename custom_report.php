@@ -268,6 +268,25 @@
                             <li class="breadcrumb-item"><a href="report.php">Report</a></li>
                             <li class="breadcrumb-item active">Custom Report</li>
                         </ol>
+                        <!-- Back Button -->
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="report.php" class="btn btn-secondary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Back to Reports">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Report as PDF">
+                                <i class="fas fa-download"></i>
+                            </button>
+
+
+                            <button id="printReport" onclick="printReport()" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Report">
+                                <i class="fas fa-print"></i>
+                            </button>
+
+                            <button id="viewReportBtn" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Report">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
 
                         <!-- Report Summary -->
                         <div class="alert alert-info">
@@ -285,115 +304,170 @@
                             </div>
                         </div>
 
-                        <div id="reportContent">
                         <h1>💧 DoodsNer Water Refilling Station</h1>
                         <h5>📅 Custom Sales & Expense Report - <?php echo date('F j, Y', strtotime($start_date)); ?> to <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Sales (<?php echo count($order_data); ?> orders)
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
-                                                <th>Rider</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($order_data as $row):?>
-                                                <tr>
-                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                                    <td><?php echo $row['status_name']; ?></td>
-                                                    <td><?php echo $row['rider_firstname'] . ' ' . $row['rider_lastname']; ?></td>
-                                                </tr>
-                                            <?php endforeach;?>
-                                            <tr class="table-success">
-                                                <td colspan="2"><strong>Total Sales</strong></td>
-                                                <td><strong>₱<?php echo number_format($total_sales, 2); ?></strong></td>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Sales (<?php echo count($order_data); ?> orders)
                             </div>
-
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Expenses (<?php echo count($expense_data); ?> entries)
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple1">
-                                        <thead>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Rider</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($order_data as $row):?>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Purpose</th>
-                                                <th>Comment</th>
-                                                <th>Amount (₱)</th>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                                                <td><?php echo $row['status_name']; ?></td>
+                                                <td><?php echo $row['rider_firstname'] . ' ' . $row['rider_lastname']; ?></td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($expense_data as $row):?>
-                                                <tr>
-                                                    <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                    <td><?php echo $row['expensetype_name']; ?></td>
-                                                    <td><?php echo $row['comment']; ?></td>
-                                                    <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                                </tr>
-                                            <?php endforeach;?>
-                                            <tr class="table-danger">
-                                                <td colspan="3"><strong>Total Expenses</strong></td>
-                                                <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-table me-1"></i>
-                                    Income Summary
-                                </div>
-                                <div class="card-body">
-                                    <table id="datatablesSimple2">
-                                        <thead>
-                                            <tr>
-                                                <th>Total Sales</th>
-                                                <th>Less : Expenses</th>
-                                                <th>Net Income</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>₱<?php echo number_format($total_sales, 2); ?></td>
-                                                <td>₱<?php echo number_format($total_expenses, 2); ?></td>
-                                                <td class="table-<?php echo $net_income >= 0 ? 'success' : 'danger'; ?>"><strong>₱<?php echo number_format($net_income, 2); ?></strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endforeach;?>
+                                        <tr class="table-success">
+                                            <td colspan="2"><strong>Total Sales</strong></td>
+                                            <td><strong>₱<?php echo number_format($total_sales, 2); ?></strong></td>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div style="margin-bottom: 20px;">
-                            <button id="downloadPDF" class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Download Report as PDF
-                            </button>
-                            <a href="report.php" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to Reports
-                            </a>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Expenses (<?php echo count($expense_data); ?> entries)
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple1">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Purpose</th>
+                                            <th>Comment</th>
+                                            <th>Amount (₱)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($expense_data as $row):?>
+                                            <tr>
+                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                                <td><?php echo $row['expensetype_name']; ?></td>
+                                                <td><?php echo $row['comment']; ?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                        <tr class="table-danger">
+                                            <td colspan="3"><strong>Total Expenses</strong></td>
+                                            <td><strong>₱<?php echo number_format($total_expenses, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Income Summary
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple2">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Sales</th>
+                                            <th>Less : Expenses</th>
+                                            <th>Net Income</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>₱<?php echo number_format($total_sales, 2); ?></td>
+                                            <td>₱<?php echo number_format($total_expenses, 2); ?></td>
+                                            <td class="table-<?php echo $net_income >= 0 ? 'success' : 'danger'; ?>"><strong>₱<?php echo number_format($net_income, 2); ?></strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </main>    
             </div>
         </div>
+        <div id="reportContent" class="d-none">
+            <!-- Your HTML report goes here -->
+            <h2>DoodsNer Water Refilling Station</h2>
+            <h3>Custom Sales & Expense Report</h3>
+            <p>Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?></p>
+            
+            <h4>Summary</h4>
+            <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
+            <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
+            <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
+
+            <h4>Sales</h4>
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr><th>Date</th><th>Customer</th><th>Amount</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order_data as $row): ?>
+                    <tr>
+                        <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
+                        <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                        <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <p class="text-end"><strong>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></strong></p>       
+            <hr>    
+            <h4>Expenses</h4>
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr><th>Date</th><th>Purpose</th><th>Comment</th><th>Amount</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach($expense_data as $row): ?>
+                    <tr>
+                        <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
+                        <td><?php echo $row['expensetype_name']; ?></td>
+                        <td><?php echo $row['comment']; ?></td>
+                        <td>₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <p class="text-end"><strong>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></strong></p>
+            <hr>           
+            <footer>
+                <p><i>Generated by AquaDrop Water Ordering System</i></p>
+            </footer>
+        </div>
+
+        <div class="modal fade" id="viewReportModal" tabindex="-1" aria-labelledby="viewReportModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReportModalLabel">Report Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="reportPreviewContent">
+                    <!-- Dynamic content injected here -->
+                </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -401,6 +475,7 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -443,40 +518,39 @@
                 pdf.text("Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?>", 105, y, { align: "center" });
                 y += 15;
 
-                // Summary
+                // --- SUMMARY ---
                 pdf.setFont("helvetica", "bold");
                 pdf.text("Summary", 14, y);
                 y += 6;
+
                 pdf.setFont("helvetica", "normal");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
-                y += 6;
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
-                y += 6;
+                pdf.text("Total Sales: Php <?php echo number_format($total_sales, 2); ?>", 14, y); y += 6;
+                pdf.text("Total Expenses: Php <?php echo number_format($total_expenses, 2); ?>", 14, y); y += 6;
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
-                y += 15;
+                pdf.text("Net Income: Php <?php echo number_format($net_income, 2); ?>", 14, y); y += 12;
 
                 // --- SALES TABLE ---
                 pdf.setFont("helvetica", "bold");
                 pdf.text("Sales (<?php echo count($order_data); ?> orders)", 14, y);
                 y += 6;
 
-                pdf.setFontSize(10);
+                pdf.setFontSize(11);
                 pdf.text("Date", 14, y);
-                pdf.text("Customer", 50, y);
-                pdf.text("Amount (₱)", 170, y, { align: "right" });
+                pdf.text("Customer", 70, y);
+                pdf.text("Amount (Php)", 170, y, { align: "right" });
                 y += 6;
-                pdf.setFont("helvetica", "normal");
 
+                pdf.setFont("helvetica", "normal");
                 <?php foreach($order_data as $row): ?>
+                    if (y > 270) { pdf.addPage(); y = 15; }
                     pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
-                    pdf.text("<?php echo $row['firstname'] . ' ' . $row['lastname']; ?>", 50, y);
+                    pdf.text("<?php echo $row['firstname'] . ' ' . $row['lastname']; ?>", 70, y);
                     pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
                     y += 6;
                 <?php endforeach; ?>
 
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 170, y, { align: "right" });
+                pdf.text("Total Sales: Php <?php echo number_format($total_sales, 2); ?>", 170, y, { align: "right" });
                 y += 12;
 
                 // --- EXPENSES TABLE ---
@@ -484,39 +558,36 @@
                 pdf.text("Expenses (<?php echo count($expense_data); ?> entries)", 14, y);
                 y += 6;
 
-                pdf.setFontSize(10);
+                pdf.setFontSize(11);
                 pdf.text("Date", 14, y);
-                pdf.text("Purpose", 50, y);
-                pdf.text("Comment", 100, y);
-                pdf.text("Amount (₱)", 170, y, { align: "right" });
+                pdf.text("Purpose", 70, y);
+                pdf.text("Amount (Php)", 170, y, { align: "right" });
                 y += 6;
-                pdf.setFont("helvetica", "normal");
 
+                pdf.setFont("helvetica", "normal");
                 <?php foreach($expense_data as $row): ?>
+                    if (y > 270) { pdf.addPage(); y = 15; }
                     pdf.text("<?php echo date('M d, Y', strtotime($row['date'])); ?>", 14, y);
-                    pdf.text("<?php echo $row['expensetype_name']; ?>", 50, y);
-                    pdf.text("<?php echo $row['comment']; ?>", 100, y);
+                    pdf.text("<?php echo $row['expensetype_name']; ?>", 70, y);
                     pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
                     y += 6;
                 <?php endforeach; ?>
 
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 170, y, { align: "right" });
+                pdf.text("Total Expenses: Php <?php echo number_format($total_expenses, 2); ?>", 170, y, { align: "right" });
                 y += 12;
 
-                // --- INCOME SUMMARY ---
+                // --- NET INCOME SUMMARY ---
                 pdf.setFontSize(12);
+                pdf.setFont("helvetica", "bold");
                 pdf.text("Net Income Summary", 14, y);
                 y += 6;
 
                 pdf.setFont("helvetica", "normal");
-                pdf.text("Total Sales: ₱<?php echo number_format($total_sales, 2); ?>", 14, y);
-                y += 6;
-                pdf.text("Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?>", 14, y);
-                y += 6;
+                pdf.text("Total Sales: Php <?php echo number_format($total_sales, 2); ?>", 14, y); y += 6;
+                pdf.text("Total Expenses: Php <?php echo number_format($total_expenses, 2); ?>", 14, y); y += 6;
                 pdf.setFont("helvetica", "bold");
-                pdf.text("Net Income: ₱<?php echo number_format($net_income, 2); ?>", 14, y);
-                y += 15;
+                pdf.text("Net Income: Php <?php echo number_format($net_income, 2); ?>", 14, y); y += 15;
 
                 // Footer
                 pdf.setFont("helvetica", "italic");
@@ -524,9 +595,112 @@
                 pdf.text("Generated by AquaDrop Water Ordering System", 105, 285, { align: "center" });
 
                 // Save PDF
-                const filename = `Custom_Report_<?php echo date('Ymd', strtotime($start_date)); ?>_to_<?php echo date('Ymd', strtotime($end_date)); ?>.pdf`;
+                const filename = `Custom_Report_<?php echo date('Ymd', strtotime($start_date)); ?>-<?php echo date('Ymd', strtotime($end_date)); ?>.pdf`;
                 pdf.save(filename);
             });
         </script>
+
+        <script>
+            function printReport() {
+                var printContents = document.getElementById("reportContent").innerHTML;
+                var originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+
+                // Optional: Reload the page to reattach event listeners
+                location.reload();
+            }
+        </script>
+        <script>
+            document.getElementById('viewReportBtn').addEventListener('click', function () {
+            const reportHTML = `
+                <div class="text-center">
+                <h3><strong>DoodsNer Water Refilling Station</strong></h3>
+                <h5>Custom Sales & Expense Report</h5>
+                <p>Period: <?php echo date('F j, Y', strtotime($start_date)); ?> - <?php echo date('F j, Y', strtotime($end_date)); ?></p>
+                </div>
+
+                <hr>
+
+                <h5><strong>Summary</strong></h5>
+                <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
+                <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
+                <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
+
+                <hr>
+
+                <h5><strong>Sales (<?php echo count($order_data); ?> orders)</strong></h5>
+                <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th class="text-end">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order_data as $row): ?>
+                    <tr>
+                    <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
+                    <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
+                    <td class="text-end">₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                </table>
+                <p class="text-end"><strong>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></strong></p>
+
+                <hr>
+
+                <h5><strong>Expenses (<?php echo count($expense_data); ?> entries)</strong></h5>
+                <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>Purpose</th>
+                    <th>Comment</th>
+                    <th class="text-end">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($expense_data as $row): ?>
+                    <tr>
+                    <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
+                    <td><?php echo $row['expensetype_name']; ?></td>
+                    <td><?php echo $row['comment']; ?></td>
+                    <td class="text-end">₱<?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                </table>
+                <p class="text-end"><strong>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></strong></p>
+
+                <hr>
+
+                <h5><strong>Net Income Summary</strong></h5>
+                <p>Total Sales: ₱<?php echo number_format($total_sales, 2); ?></p>
+                <p>Total Expenses: ₱<?php echo number_format($total_expenses, 2); ?></p>
+                <p><strong>Net Income: ₱<?php echo number_format($net_income, 2); ?></strong></p>
+
+                <hr>
+                <p class="text-center text-muted"><em>Generated by AquaDrop Water Ordering System</em></p>
+            `;
+
+            document.getElementById('reportPreviewContent').innerHTML = reportHTML;
+
+            const modal = new bootstrap.Modal(document.getElementById('viewReportModal'));
+            modal.show();
+            });
+            </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                        new bootstrap.Tooltip(tooltipTriggerEl)
+                    });
+                });
+            </script>
     </body>
 </html>

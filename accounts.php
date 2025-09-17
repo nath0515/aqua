@@ -78,18 +78,15 @@
                     $activity_logs = $stmt->fetchAll();
                 ?>
                 
-                <li class="nav-item dropdown me-3">
+                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            <?php if ($unread_count > 0): ?>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                    <?php echo $unread_count; ?>
-                                    <span class="visually-hidden">unread notifications</span>
-                                </span>
-                            <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
-                        </span>
+                        <?php if ($unread_count > 0): ?>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                <?php echo $unread_count; ?>
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
+                        <?php endif; ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
@@ -200,13 +197,42 @@
                             <li class="breadcrumb-item active">Account Manager</li>
                             <li class="breadcrumb-item active">Accounts</li>
                         </ol>
+                        <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="roleFilter" class="form-label">Filter by Role:</label>
+                            <select id="roleFilter" class="form-select">
+                                <option value="">All Roles</option>
+                                <?php
+                                $sql = "SELECT role_name FROM roles";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->execute();
+                                $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                foreach ($roles as $role) {
+                                    echo "<option value=\"{$role['role_name']}\">{$role['role_name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="startDate" class="form-label">Start Date:</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="endDate" class="form-label">End Date:</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button id="resetFilterBtn" class="btn btn-secondary w-100">Reset Filters</button>
+                        </div>
+                    </div>
+                    </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
                                 Accounts
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                                <table id="accountTable" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -222,7 +248,7 @@
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
-                                            <td><?php echo $row['created_at']; ?></td>
+                                            <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -247,11 +273,63 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <script>
+            function fetchFilteredAccounts() {
+                const role = $('#roleFilter').val();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+
+                $.ajax({
+                    url: 'fetch_accounts.php',
+                    method: 'POST',
+                    data: {
+                        role: role,
+                        startDate: startDate,
+                        endDate: endDate
+                    },
+                    success: function (response) {
+                        $('#accountTable tbody').html(response);
+                    },
+                    error: function () {
+                        alert('Failed to filter accounts.');
+                    }
+                });
+            }
+
+            // Automatically filter on any change
+            $('#roleFilter, #startDate, #endDate').on('change', function () {
+                fetchFilteredAccounts();
+            });
+
+            // Reset filters and reload
+            $('#resetFilterBtn').on('click', function () {
+                $('#roleFilter').val('');
+                $('#startDate').val('');
+                $('#endDate').val('');
+                fetchFilteredAccounts();
+            });
+
+            // Optional: Run once on page load
+            $(document).ready(function () {
+                fetchFilteredAccounts();
+            });
+        </script>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const table = document.querySelector('#accountTable');
+                const dataTable = new simpleDatatables.DataTable(table, {
+                    perPage: 5,
+                    perPageSelect: [5, 10, 15, 20],
+                    searchable: true,
+                    sortable: true,
+                });
+            });
+        </script>
         <script>
             let deferredPrompt;
 

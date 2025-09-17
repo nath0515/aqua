@@ -172,15 +172,12 @@
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            <?php if ($unread_count > 0): ?>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                    <?php echo $unread_count; ?>
-                                    <span class="visually-hidden">unread notifications</span>
-                                </span>
-                            <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
-                        </span>
+                        <?php if ($unread_count > 0): ?>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                <?php echo $unread_count; ?>
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
+                        <?php endif; ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
@@ -424,11 +421,19 @@
                                     <input type="text" name="comment" class="form-control" placeholder="Comment" required>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="commet" class="form-label">Amount</label>
+                           <div class="mb-3">
+                                <label for="amount" class="form-label">Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text pe-3">₱</span>
-                                    <input type="number" step="0.01" name="amount" value="0.00" class="form-control" placeholder="Amount" required>
+                                    <input type="number"
+                                        id="amount"
+                                        name="amount"
+                                        step="0.01"
+                                        min="0"
+                                        max="100000"
+                                        class="form-control"
+                                        placeholder="Amount"
+                                        required>
                                 </div>
                             </div>
                             <div class="mb-3" id="orderItemsContainer">
@@ -566,5 +571,52 @@
             });
         });
         </script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const amountInput = document.getElementById('amount');
+
+            // Format on blur (after user finishes typing)
+            amountInput.addEventListener('blur', function () {
+                let value = parseFloat(amountInput.value);
+                if (isNaN(value)) {
+                    amountInput.value = '';
+                    return;
+                }
+                if (value > 100000) {
+                    value = 100000;
+                }
+                amountInput.value = value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            });
+
+            // Remove formatting on focus for easy editing
+            amountInput.addEventListener('focus', function () {
+                let value = amountInput.value.replace(/,/g, '');
+                amountInput.value = value;
+            });
+
+            // Prevent manual input greater than max
+            amountInput.addEventListener('input', function () {
+                let value = parseFloat(amountInput.value);
+                if (!isNaN(value) && value > 100000) {
+                    amountInput.value = '100000';
+                }
+            });
+
+            // On form submit, convert formatted value back to plain number
+            document.querySelector('form').addEventListener('submit', function (e) {
+                let value = amountInput.value.replace(/,/g, '');
+                let floatVal = parseFloat(value);
+                if (isNaN(floatVal) || floatVal > 100000) {
+                    e.preventDefault();
+                    alert('Please enter a valid amount not exceeding ₱100,000.');
+                    amountInput.focus();
+                    return false;
+                }
+                amountInput.value = floatVal.toFixed(2);
+            });
+        });
+        </script>
+
+
     </body>
 </html>

@@ -758,12 +758,29 @@ require 'db.php';
             }
         </script>
         <script>
-            function markAsReadAndRedirect(id, url) {
-            fetch('mark_notification_read.php?id=' + id)
-                .then(() => {
-                    window.location.href = url;
+        document.getElementById('markAllReadBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Stop the link from navigating
+
+            fetch('mark_all_read.php')
+                .then(response => {
+                    if (response.ok) {
+                        // Hide or clear the badge
+                        const badge = document.getElementById('notificationBadge');
+                        if (badge) {
+                            badge.style.display = 'none'; // or badge.classList.add('d-none');
+                        }
+
+                        // Optionally clear notifications list in the dropdown
+                        const dropdownList = document.getElementById('notificationList'); // example id
+                        if (dropdownList) {
+                            dropdownList.innerHTML = '<span class="dropdown-item text-center small text-muted">No new notifications</span>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to mark all as read:', error);
                 });
-        }
+        });
         </script>
         
         <?php if ($notification_success > 0): ?>

@@ -184,15 +184,12 @@ error_reporting(E_ALL);
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            <?php if ($unread_count > 0): ?>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                    <?php echo $unread_count; ?>
-                                    <span class="visually-hidden">unread notifications</span>
-                                </span>
-                            <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
-                        </span>
+                        <?php if ($unread_count > 0): ?>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                <?php echo $unread_count; ?>
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
+                        <?php endif; ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
@@ -386,7 +383,7 @@ error_reporting(E_ALL);
                                             <tr>
                                                 <td><?php echo $row['order_id'];?></td>
                                                 <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                                 <td><?php echo "".$row['firstname']." ".$row['lastname'];?></td>
                                                 <td><?php echo $row['contact_number'];?></td>
                                                 <td><?php 
@@ -433,19 +430,24 @@ error_reporting(E_ALL);
                                                 </td>
                                                 <td><?php echo $row['payment_name'];?></td>
                                                 <td>
-                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" class="btn btn-outline-secondary btn-sm me-1">
-                                                        <i class="bi bi-eye"></i> View
+                                                    <a href="order_details.php?id=<?php echo $row['order_id']?>" 
+                                                    class="btn btn-outline-secondary btn-sm me-1" 
+                                                    title="View Order">
+                                                        <i class="bi bi-eye"></i>
                                                     </a>
+
                                                     <button class="btn btn-outline-primary btn-sm editOrderBtn"
                                                         data-id="<?php echo $row['order_id']; ?>"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#editorder">
-                                                            <i class="bi bi-pencil"></i> Edit
+                                                        data-bs-target="#editorder"
+                                                        title="Edit Order">
+                                                        <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button 
-                                                        class="btn btn-outline-danger btn-sm cancelOrderBtn"
-                                                        data-id="<?php echo $row['order_id']; ?>">
-                                                        <i class="bi bi-x-circle"></i> Cancel
+
+                                                    <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
+                                                        data-id="<?php echo $row['order_id']; ?>"
+                                                        title="Cancel Order">
+                                                        <i class="bi bi-x-circle"></i>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -695,6 +697,5 @@ error_reporting(E_ALL);
             });
         });
         </script>
-
     </body>
 </html>

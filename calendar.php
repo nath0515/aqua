@@ -473,16 +473,16 @@ if ($next_month > 12) {
             <i class="fas fa-bars"></i>
         </button>
         <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <li class="nav-item dropdown">
-                <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-bell fa-fw"></i>
-                    <?php if ($unread_count > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        <?php echo $unread_count; ?>
-                        <span class="visually-hidden">unread messages</span>
-                    </span>
-                    <?php endif; ?>
-                </a>
+            <li class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fs-5"></i>
+                        <?php if ($unread_count > 0): ?>
+                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                <?php echo $unread_count; ?>
+                                <span class="visually-hidden">unread notifications</span>
+                            </span>
+                        <?php endif; ?>
+                    </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
                     <?php if (empty($recent_notifications)): ?>
                         <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>

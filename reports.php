@@ -258,6 +258,17 @@
                     <div id="reportContent">
                     <h1>💧 DoodsNer Water Refilling Station</h1>
                     <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
+                        <div class="d-flex justify-content-end mb-4">
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>             
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -277,7 +288,7 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                         <tr>
@@ -309,7 +320,7 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['expensetype_name'];?></td>
-                                                <td>₱<?php echo $row['amount'];?></td>
+                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                         <tr>
@@ -347,14 +358,126 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-bottom: 20px;">
-                        <button id="downloadPDF" class="btn btn-danger">
-                            <i class="fas fa-file-pdf"></i> Download Report as PDF
-                        </button>
-                    </div>
                 </main>    
             </div>
         </div>
+        <div id="printableReceipt" style="display: none;">
+            <style>
+                #printableReceipt {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                }
+                h2, h3 {
+                    text-align: center;
+                    margin: 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                }
+                th, td {
+                    border-bottom: 1px solid #ccc;
+                    padding: 5px;
+                    text-align: left;
+                }
+                .right {
+                    text-align: right;
+                }
+                .section-title {
+                    margin-top: 20px;
+                    font-weight: bold;
+                }
+            </style>
+
+            <h2>DoodsNer Water Refilling Station</h2>
+            <h3>Daily Sales & Expense Report</h3>
+            <p style="text-align: center;">Date: <?php echo date('F j, Y', strtotime($date_data)); ?></p>
+
+            <div class="section-title">Sales</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th class="right">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order_data as $row): ?>
+                    <tr>
+                        <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
+                        <td><?php echo $row['product_name']; ?></td>
+                        <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <td colspan="2"><strong>Total Sales</strong></td>
+                        <td class="right"><strong>₱<?php echo number_format($total_amount, 2); ?></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Expenses</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Purpose</th>
+                        <th class="right">Amount (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($expense_data as $row): ?>
+                    <tr>
+                        <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
+                        <td><?php echo $row['expensetype_name']; ?></td>
+                        <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <td colspan="2"><strong>Total Expenses</strong></td>
+                        <td class="right"><strong>₱<?php echo number_format($total_expense, 2); ?></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Net Income Summary</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Total Sales</td>
+                        <td class="right">₱<?php echo number_format($total_amount, 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Total Expenses</td>
+                        <td class="right">₱<?php echo number_format($total_expense, 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Net Income</strong></td>
+                        <td class="right"><strong>₱<?php echo number_format($total_income, 2); ?></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="text-align: center; font-style: italic; margin-top: 40px;">
+                Generated by AquaDrop Water Ordering System
+            </p>
+        </div>
+         <!-- Receipt Modal -->
+        <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">Receipt Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="receiptContent">
+                <!-- Receipt HTML will be injected here -->
+            </div>
+            </div>
+        </div>
+        </div>   
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -455,7 +578,7 @@
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Product", 70, y);
-            pdf.text("Amount (₱)", 170, y, { align: "right" });
+            pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
             pdf.setFont("helvetica", "normal");
 
@@ -467,7 +590,7 @@
             <?php endforeach; ?>
 
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total Sales: ₱<?php echo number_format($total_amount, 2); ?>", 170, y, { align: "right" });
+            pdf.text("Total Sales: Php <?php echo number_format($total_amount, 2); ?>", 170, y, { align: "right" });
             y += 12;
 
             // --- EXPENSES TABLE ---
@@ -478,7 +601,7 @@
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Purpose", 70, y);
-            pdf.text("Amount (₱)", 170, y, { align: "right" });
+            pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
             pdf.setFont("helvetica", "normal");
 
@@ -490,7 +613,7 @@
             <?php endforeach; ?>
 
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total Expenses: ₱<?php echo number_format($total_expense, 2); ?>", 170, y, { align: "right" });
+            pdf.text("Total Expenses: Php <?php echo number_format($total_expense, 2); ?>", 170, y, { align: "right" });
             y += 12;
 
             // --- INCOME SUMMARY ---
@@ -499,12 +622,12 @@
             y += 6;
 
             pdf.setFont("helvetica", "normal");
-            pdf.text("Total Sales: ₱<?php echo number_format($total_amount, 2); ?>", 14, y);
+            pdf.text("Total Sales: Php <?php echo number_format($total_amount, 2); ?>", 14, y);
             y += 6;
-            pdf.text("Total Expenses: ₱<?php echo number_format($total_expense, 2); ?>", 14, y);
+            pdf.text("Total Expenses: Php <?php echo number_format($total_expense, 2); ?>", 14, y);
             y += 6;
             pdf.setFont("helvetica", "bold");
-            pdf.text("Net Income: ₱<?php echo number_format($total_income, 2); ?>", 14, y);
+            pdf.text("Net Income: Php <?php echo number_format($total_income, 2); ?>", 14, y);
             y += 15;
 
             // Footer
@@ -518,5 +641,33 @@
         });
 
         </script>
+        <script>
+            document.getElementById("printReceipt").addEventListener("click", function () {
+                const content = document.getElementById("printableReceipt").innerHTML;
+                const printWindow = window.open("", "", "width=800,height=600");
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Print Receipt</title>
+                        </head>
+                        <body onload="window.print(); window.close();">
+                            ${content}
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            });
+        </script>
+        <script>
+            document.getElementById("viewReceipt").addEventListener("click", function () {
+                const receiptContent = document.getElementById("printableReceipt").innerHTML;
+                document.getElementById("receiptContent").innerHTML = receiptContent;
+
+                // Show the Bootstrap modal
+                const modal = new bootstrap.Modal(document.getElementById("receiptModal"));
+                modal.show();
+            });
+        </script>
+
     </body>
 </html>

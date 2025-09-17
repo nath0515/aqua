@@ -215,8 +215,16 @@ error_reporting(E_ALL);
                             <li class="breadcrumb-item active"><a href="orders.php">Order</a></li>
                             <li class="breadcrumb-item active">View Orders</li>
                         </ol>
-                        <div class="card mb-4">
-                            
+                        <div class="d-flex justify-content-end mb-4">
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="printReceipt" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                         <div id="reportContent">
                             <div class="card mb-4">
@@ -328,12 +336,6 @@ error_reporting(E_ALL);
                                 </div>
                             </div>
                         </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                        <button id="downloadPDF" class="btn btn-danger">
-                            <i class="fas fa-file-pdf"></i> Download Receipt as PDF
-                        </button>
-                        </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -345,7 +347,61 @@ error_reporting(E_ALL);
                 </footer>
             </div>
         </div>
+        <!-- View Receipt Modal -->
+        <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg"> <!-- You can use modal-xl if needed -->
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">AquaDrop Receipt Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Receipt content starts here -->
+                <div id="sampleReceipt">
+                    <h2>AquaDrop Receipt</h2>
+                    <p>Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
+                    <p>Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
+                    <p>Address: <?php echo $order_data[0]['address']; ?></p>
+                    <p>Contact: <?php echo $order_data[0]['contact_number']; ?></p>
 
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach($order_data as $row): ?>
+                            <?php
+                            $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                            $line_total = $unit_price * $row['quantity'];
+                            if($row['with_container'] == 1) {
+                                $line_total += $row['container_price'] * $row['container_quantity'];
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $row['product_name']; ?></td>
+                                <td><?php echo $row['quantity']; ?></td>
+                                <td>₱<?php echo number_format($unit_price, 2); ?></td>
+                                <td>₱<?php echo number_format($line_total, 2); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p><strong>Total: ₱<?php echo $total_data['amount']; ?></strong></p>
+                    <p><em>Thank you for choosing AquaDrop!</em></p>
+                </div>
+                <!-- Receipt content ends here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
         <!-- Edit Order Modal -->
         <div class="modal fade" id="editorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -388,6 +444,7 @@ error_reporting(E_ALL);
                 </div>
             </div>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -398,6 +455,44 @@ error_reporting(E_ALL);
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+        <div id="receiptContent" class="d-none">
+        <h2>AquaDrop Receipt</h2>
+        <p>Date: <?php echo date("F j, Y - h:i A", strtotime($date_data['date'])); ?></p>
+        <p>Customer: <?php echo $order_data[0]['firstname'].' '.$order_data[0]['lastname']; ?></p>
+        <p>Address: <?php echo $order_data[0]['address']; ?></p>
+        <p>Contact: <?php echo $order_data[0]['contact_number']; ?></p>
+        
+            <table>
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($order_data as $row): ?>
+                    <?php
+                    $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                    $line_total = $unit_price * $row['quantity'];
+                    if($row['with_container'] == 1) {
+                        $line_total += $row['container_price'] * $row['container_quantity'];
+                    }
+                    ?>
+                <tr>
+                    <td><?php echo $row['product_name']; ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td>₱<?php echo number_format($unit_price, 2); ?></td>
+                    <td>₱<?php echo number_format($line_total, 2); ?></td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <p><strong>Total: ₱<?php echo $total_data['amount']; ?></strong></p>
+        <p><em>Thank you for choosing AquaDrop!</em></p>
+        </div>
 
         <script>
             let deferredPrompt;
@@ -528,14 +623,14 @@ error_reporting(E_ALL);
             ?>
             pdf.text("<?php echo $row['product_name']; ?>", 14, startY);
             pdf.text("<?php echo $row['quantity']; ?>", 95, startY, { align: "right" });
-            pdf.text("₱<?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
-            pdf.text("₱<?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
+            pdf.text("Php <?php echo number_format($unit_price, 2); ?>", 130, startY, { align: "right" });
+            pdf.text("Php <?php echo number_format($line_total, 2); ?>", 180, startY, { align: "right" });
             startY += 6;
             <?php endforeach; ?>
 
             startY += 6;
             pdf.setFont("helvetica", "bold");
-            pdf.text("Total: ₱<?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
+            pdf.text("Total: Php <?php echo $total_data['amount']; ?>", 180, startY, { align: "right" });
 
             startY += 20;
             pdf.setFont("helvetica", "italic");
@@ -544,5 +639,22 @@ error_reporting(E_ALL);
             pdf.save(`Receipt_<?php echo date('Ymd', strtotime($date_data['date'])); ?>.pdf`);
         });
         </script>
+        <script>
+            document.getElementById('printReceipt').addEventListener('click', function() {
+            const printContents = document.getElementById('receiptContent').innerHTML;
+            const originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }); 
+        </script>
+        <script>
+        document.getElementById('viewReceipt').addEventListener('click', function () {
+            var receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+            receiptModal.show();
+        });
+        </script>
+
     </body>
 </html>
