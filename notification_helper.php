@@ -10,7 +10,7 @@ function getNotifications($conn, $user_id, $role_id) {
         } elseif ($role_id == 3) { // Rider
             $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination LIKE 'rider_orderdetails.php%' AND user_id = :user_id AND read_status = 0";
         } else { // Admin
-            $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE destination LIKE 'order_details.php%' AND read_status = 0";
+            $notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE (destination LIKE 'order_details.php%' OR destination = 'orders.php' OR destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
         }
         
         $notification_stmt = $conn->prepare($notification_sql);
@@ -26,7 +26,7 @@ function getNotifications($conn, $user_id, $role_id) {
         } elseif ($role_id == 3) { // Rider
             $recent_sql = "SELECT * FROM activity_logs WHERE destination LIKE 'rider_orderdetails.php%' AND user_id = :user_id ORDER BY date DESC LIMIT 5";
         } else { // Admin
-            $recent_sql = "SELECT * FROM activity_logs WHERE destination LIKE 'order_details.php%' ORDER BY date DESC LIMIT 5";
+            $recent_sql = "SELECT * FROM activity_logs WHERE (destination LIKE 'order_details.php%' OR destination = 'orders.php' OR destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') ORDER BY date DESC LIMIT 5";
         }
         
         $recent_stmt = $conn->prepare($recent_sql);
@@ -87,7 +87,7 @@ function markAllAsRead($conn, $user_id, $role_id) {
         } elseif ($role_id == 3) { // Rider
             $sql = "UPDATE activity_logs SET read_status = 1 WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
         } else { // Admin
-            $sql = "UPDATE activity_logs SET read_status = 1 WHERE destination LIKE 'order_details.php%' AND read_status = 0";
+            $sql = "UPDATE activity_logs SET read_status = 1 WHERE (destination LIKE 'order_details.php%' OR destination = 'orders.php' OR destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
         }
         
         $stmt = $conn->prepare($sql);

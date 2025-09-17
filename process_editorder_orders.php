@@ -47,11 +47,12 @@
                     $rider_name = $rider_data['firstname'] . ' ' . $rider_data['lastname'];
                     $notification_message = "New delivery assigned: Order #$order_id - Please check your delivery history";
                     
-                    $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider_orderdetails.php?id=$order_id')";
+                    $notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'rider_orderdetails.php?id=$order_id', :user_id)";
                     $notification_stmt = $conn->prepare($notification_sql);
                     $notification_stmt->execute([
                         ':message' => $notification_message,
-                        ':date' => $now
+                        ':date' => $now,
+                        ':user_id' => $rider
                     ]);
                 }
             }

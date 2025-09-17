@@ -89,11 +89,12 @@ try {
         $notification_message = "New rating received from $customer_name for Order #$order_id - Check your ratings!";
         $now = date('Y-m-d H:i:s');
         
-        $notification_sql = "INSERT INTO activity_logs (message, date, destination) VALUES (:message, :date, 'rider_ratings.php')";
+        $notification_sql = "INSERT INTO activity_logs (message, date, destination, user_id) VALUES (:message, :date, 'rider_ratings.php', :user_id)";
         $notification_stmt = $conn->prepare($notification_sql);
         $notification_stmt->execute([
             ':message' => $notification_message,
-            ':date' => $now
+            ':date' => $now,
+            ':user_id' => $order['rider']
         ]);
     }
 
