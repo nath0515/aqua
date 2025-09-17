@@ -21,6 +21,14 @@ ini_set('display_errors', 1);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    
+    // Get notifications using helper for consistency
+    require 'notification_helper.php';
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+    
+    // Check for notification success message
+    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
     $filter_range = $_GET['filter_range'] ?? null;
     $start_date = $_GET['start_date'] ?? null;
     $end_date = $_GET['end_date'] ?? null;
@@ -139,12 +147,7 @@ ini_set('display_errors', 1);
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <?php if ($unread_count > 0): ?>
-                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                <?php echo $unread_count; ?>
-                                <span class="visually-hidden">unread notifications</span>
-                            </span>
-                        <?php endif; ?>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
@@ -593,5 +596,18 @@ ini_set('display_errors', 1);
             document.body.removeChild(link);
         }
         </script>
+            <?php if ($notification_success > 0): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Marked as Read!',
+                    text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
     </body>
 </html>
