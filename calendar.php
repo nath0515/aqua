@@ -473,21 +473,13 @@ if ($next_month > 12) {
             <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <?php if ($unread_count > 0): ?>
-                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                <?php echo $unread_count; ?>
-                                <span class="visually-hidden">unread notifications</span>
-                            </span>
-                        <?php endif; ?>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                    <?php if (empty($recent_notifications)): ?>
-                        <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>
-                    <?php else: ?>
-                        <?php foreach($recent_notifications as $notification): ?>
-                            <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                    <li><hr class="dropdown-divider"></li>
+                    <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                    <li><a class="dropdown-item text-center text-muted small" href="activitylogsrider.php">View all notifications</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
