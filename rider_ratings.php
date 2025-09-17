@@ -2,19 +2,16 @@
 require 'session.php';
 require 'db.php';
 
-// Fetch notifications for rider (delivery assignments + ratings)
-$notification_sql = "SELECT COUNT(*) AS unread_count FROM activity_logs WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') AND read_status = 0";
-$notification_stmt = $conn->prepare($notification_sql);
-$notification_stmt->execute();
-$unread_count = $notification_stmt->fetchColumn();
-
-$recent_notifications_sql = "SELECT * FROM activity_logs WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') ORDER BY date DESC LIMIT 3";
-$recent_notifications_stmt = $conn->prepare($recent_notifications_sql);
-$recent_notifications_stmt->execute();
-$recent_notifications = $recent_notifications_stmt->fetchAll();
-
 $user_id = $_SESSION['user_id'];
 $role_id = $_SESSION['role_id'];
+
+// Get notifications using helper for consistency
+require 'notification_helper.php';
+$notifications = getNotifications($conn, $user_id, $role_id);
+$unread_count = $notifications['unread_count'];
+
+// Check for notification success message
+$notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
 // Only riders can access this page
 if($role_id != 3){
@@ -109,21 +106,13 @@ if($total_orders > 0) {
              <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <?php if ($unread_count > 0): ?>
-                            <span id="notificationBadge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                <?php echo $unread_count; ?>
-                                <span class="visually-hidden">unread notifications</span>
-                            </span>
-                        <?php endif; ?>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                    <?php if (empty($recent_notifications)): ?>
-                        <li><a class="dropdown-item text-muted" href="#">No notifications</a></li>
-                    <?php else: ?>
-                        <?php foreach($recent_notifications as $notification): ?>
-                            <li><a class="dropdown-item" href="process_readnotification.php?id=<?php echo $notification['activitylogs_id']?>&destination=<?php echo $notification['destination']?>"><?php echo $notification['message'];?></a></li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                    <li><hr class="dropdown-divider"></li>
+                    <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                    <li><a class="dropdown-item text-center text-muted small" href="activitylogsrider.php">View all notifications</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
@@ -266,5 +255,18 @@ if($total_orders > 0) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
+        <?php if ($notification_success > 0): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Notifications Marked as Read!',
+                    text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
 </body>
 </html> 
