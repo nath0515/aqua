@@ -184,29 +184,27 @@
     }
 
 
-        /* Logo container */
-    .branding {
+        /* Make left and right sides equal */
+    .login-left, .login-right {
+        flex: 1 1 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        min-width: 300px; /* keeps responsive */
     }
 
-    /* Logo image itself */
+    /* Logo container */
+    .branding {
+        text-align: center;
+    }
+
+    /* Logo image */
     .branding img {
-        width: 350px;      /* bigger size */
-        max-width: 80%;    /* scale down on smaller screens */
+        width: 400px;      /* bigger size */
+        max-width: 90%;    /* shrink gracefully on smaller screens */
         height: auto;
         animation: float 3s ease-in-out infinite;
     }
-
-    /* Prevent overlap by balancing left & right */
-    .login-left, .login-right {
-        flex: 1 1 50%;
-        min-width: 300px;  /* makes sure both sections shrink gracefully */
-    }
-
-
 
     @keyframes float {
         0%, 100% { transform: translateY(0); }
