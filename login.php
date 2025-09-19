@@ -132,13 +132,6 @@
         height: 100vh;
         flex-direction: row;
     }
-    .login-left, .login-right {
-    flex: 1 1 50%;          /* each side takes half of the width */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    }
 
     .login-left {
         flex: 1;
@@ -191,15 +184,12 @@
     }
 
 
-    .branding img {
-    width: 400px;           /* adjust logo size */
-    max-width: 80%;         /* responsive */
-    height: auto;
-    animation: float 3s ease-in-out infinite;
-    z-index: 1;             /* stay above background */
-}
-
-
+    .branding-logo {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 15px;
+        animation: float 3s ease-in-out infinite;
+    }
 
     @keyframes float {
         0%, 100% { transform: translateY(0); }
@@ -207,22 +197,24 @@
     }
 
     .login-right {
-    padding: 40px;
-    z-index: 2;             /* ensures form is above but does not overlap */
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
     }
 
     .login-form {
-    width: 100%;
-    max-width: 400px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    color: #fff;
-    animation: fadeIn 1s ease-in-out;
-    z-index: 3;
-}
+        width: 100%;
+        max-width: 400px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        color: #fff;
+        animation: fadeIn 1s ease-in-out;
+    }
 
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
