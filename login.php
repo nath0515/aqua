@@ -184,11 +184,30 @@
     }
 
 
+    .branding {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
     .branding-logo {
-        width: 100vw;  
-        max-width: 350px; 
-        height: 100px;
-        }
+        width: 25vw;      
+        max-width: 320px;  
+        min-width: 150px;  
+        height: auto;      
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Text styling */
+    .branding-text {
+        font-size: clamp(1.5rem, 3vw, 3rem); 
+        letter-spacing: 3px;
+        color: white;
+        margin-top: 10px;
+    }
+
 
 
     @keyframes float {
