@@ -166,13 +166,19 @@ require 'db.php';
                 font-weight: 600;
                 color: #000;
             }
+            .logo {
+                height: 40px;         /* keep consistent navbar height */
+                width: auto;          /* auto width keeps aspect ratio */
+                max-width: 236px;     /* prevents stretching too wide */
+            }
+
     </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">
-                <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
+                <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" class="logo">
             </a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button> 
