@@ -184,19 +184,28 @@
     }
 
 
+        /* Logo container */
     .branding {
-    width: 300px;        /* adjust size as needed */
-    max-width: 40vw;     /* responsive scaling */
-    height: auto;        /* keeps proportions */
-    display: block;
-    margin: 0 auto;      /* center horizontally */
-    }
-    .left-section {
-        flex: 1;
         display: flex;
-        justify-content: center;  /* center horizontally */
-        align-items: center;      /* center vertically */
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
+
+    /* Logo image itself */
+    .branding img {
+        width: 350px;      /* bigger size */
+        max-width: 80%;    /* scale down on smaller screens */
+        height: auto;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Prevent overlap by balancing left & right */
+    .login-left, .login-right {
+        flex: 1 1 50%;
+        min-width: 300px;  /* makes sure both sections shrink gracefully */
+    }
+
 
 
     @keyframes float {
@@ -318,7 +327,7 @@
         <div id="layoutAuthentication_content">
             <main>
                 <div class="login-container">
-                    <div class="left-section">
+                    <div class="login-left">
                         <div class="branding">
                             <img src="assets/img/logo1.png" alt="Logo" class="branding-logo">
                         </div>
