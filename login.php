@@ -185,11 +185,11 @@
 
 
     .branding-logo {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 15px;
-        animation: float 3s ease-in-out infinite;
-    }
+        width: 25vw;  
+        max-width: 350px; 
+        height: auto;
+        }
+
 
     @keyframes float {
         0%, 100% { transform: translateY(0); }
