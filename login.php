@@ -312,7 +312,7 @@
                 <div class="login-container">
                     <div class="login-left">
                         <div class="branding">
-                            <img src="assets/img/logo1.png" alt="Logo" class="branding-logo">
+                            <img src="assets/img/logo2.png" alt="Logo" class="branding-logo">
                         </div>
                     </div>
                     <div class="login-right">
