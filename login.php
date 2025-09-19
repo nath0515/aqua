@@ -184,27 +184,15 @@
     }
 
 
-        /* Make left and right sides equal */
-    .login-left, .login-right {
-        flex: 1 1 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-width: 300px; /* keeps responsive */
-    }
-
-    /* Logo container */
     .branding {
-        text-align: center;
-    }
+    width: 300px;        /* adjust size as needed */
+    max-width: 40vw;     /* responsive scaling */
+    height: auto;        /* keeps proportions */
+    display: block;
+    margin: 0 auto;      /* center horizontally */
+}
 
-    /* Logo image */
-    .branding img {
-        width: 400px;      /* bigger size */
-        max-width: 90%;    /* shrink gracefully on smaller screens */
-        height: auto;
-        animation: float 3s ease-in-out infinite;
-    }
+
 
     @keyframes float {
         0%, 100% { transform: translateY(0); }
