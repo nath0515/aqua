@@ -764,7 +764,7 @@ require 'db.php';
 
             fetch('mark_all_read.php')
                 .then(response => {
-                    if (response.ok) {
+                    if (response.ok) {2
                         // Hide or clear the badge
                         const badge = document.getElementById('notificationBadge');
                         if (badge) {
