@@ -137,7 +137,7 @@ ini_set('display_errors', 1);
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <li class="nav-item dropdown me-3">
+           <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>
@@ -611,6 +611,7 @@ ini_set('display_errors', 1);
                 });
         });
         </script>
+        
             <?php if ($notification_success > 0): ?>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
