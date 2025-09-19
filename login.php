@@ -185,8 +185,8 @@
 
 
     .branding-logo {
-        width: 200px;
-        height: 200px;
+        width: 400px;
+        height: 400px;
         margin-bottom: 15px;
         animation: float 3s ease-in-out infinite;
     }
