@@ -137,14 +137,7 @@ ini_set('display_errors', 1);
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <?php 
-                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    $activity_logs = $stmt->fetchAll();
-                ?>
-                
-                <li class="nav-item dropdown me-3">
+            <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>
@@ -152,10 +145,7 @@ ini_set('display_errors', 1);
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
-                        <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
-                        <hr>
-                        <?php endforeach; ?>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
@@ -595,6 +585,31 @@ ini_set('display_errors', 1);
             link.click();
             document.body.removeChild(link);
         }
+        </script>
+        <script>
+        document.getElementById('markAllReadBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Stop the link from navigating
+
+            fetch('mark_all_read.php')
+                .then(response => {
+                    if (response.ok) {2
+                        // Hide or clear the badge
+                        const badge = document.getElementById('notificationBadge');
+                        if (badge) {
+                            badge.style.display = 'none'; // or badge.classList.add('d-none');
+                        }
+
+                        // Optionally clear notifications list in the dropdown
+                        const dropdownList = document.getElementById('notificationList'); // example id
+                        if (dropdownList) {
+                            dropdownList.innerHTML = '<span class="dropdown-item text-center small text-muted">No new notifications</span>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to mark all as read:', error);
+                });
+        });
         </script>
             <?php if ($notification_success > 0): ?>
         <script>
