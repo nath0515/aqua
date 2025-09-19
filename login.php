@@ -190,7 +190,13 @@
     height: auto;        /* keeps proportions */
     display: block;
     margin: 0 auto;      /* center horizontally */
-}
+    }
+    .left-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;  /* center horizontally */
+        align-items: center;      /* center vertically */
+    }
 
 
     @keyframes float {
@@ -312,7 +318,7 @@
         <div id="layoutAuthentication_content">
             <main>
                 <div class="login-container">
-                    <div class="login-left">
+                    <div class="left-section">
                         <div class="branding">
                             <img src="assets/img/logo1.png" alt="Logo" class="branding-logo">
                         </div>
