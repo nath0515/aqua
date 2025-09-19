@@ -185,9 +185,9 @@
 
 
     .branding-logo {
-        width: 25vw;  
+        width: 100vw;  
         max-width: 350px; 
-        height: auto;
+        height: 100px;
         }
 
 
