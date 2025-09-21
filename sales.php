@@ -131,20 +131,13 @@ ini_set('display_errors', 1);
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">
-                <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
+                <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 220px; height: 60px;">
             </a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-            <?php 
-                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    $activity_logs = $stmt->fetchAll();
-                ?>
-                
-                <li class="nav-item dropdown me-3">
+           <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>

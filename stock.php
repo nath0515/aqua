@@ -280,13 +280,12 @@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">
-                <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
+                <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 220px; height: 60px;">
             </a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-                
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
@@ -901,6 +900,31 @@
                     });
                 });
             });
+        </script>
+         <script>
+        document.getElementById('markAllReadBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Stop the link from navigating
+
+            fetch('mark_all_read.php')
+                .then(response => {
+                    if (response.ok) {2
+                        // Hide or clear the badge
+                        const badge = document.getElementById('notificationBadge');
+                        if (badge) {
+                            badge.style.display = 'none'; // or badge.classList.add('d-none');
+                        }
+
+                        // Optionally clear notifications list in the dropdown
+                        const dropdownList = document.getElementById('notificationList'); // example id
+                        if (dropdownList) {
+                            dropdownList.innerHTML = '<span class="dropdown-item text-center small text-muted">No new notifications</span>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to mark all as read:', error);
+                });
+        });
         </script>
             
             <?php if ($notification_success > 0): ?>
