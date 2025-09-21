@@ -12,19 +12,23 @@ try {
         $marked_count = markAllAsRead($conn, $user_id, $role_id);
         
         if ($marked_count !== false) {
-            // Redirect back to the current page or dashboard
-            $redirect_url = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
-            
-            // Set appropriate redirect based on role
-            if ($role_id == 2) { // Customer
-                $redirect_url = 'home.php';
-            } elseif ($role_id == 3) { // Rider
-                $redirect_url = 'riderdashboard.php';
-            } else { // Admin
-                $redirect_url = 'index.php';
+            // Redirect back to the current page if redirect parameter is provided
+            if (isset($_GET['redirect']) && !empty($_GET['redirect'])) {
+                $redirect_url = $_GET['redirect'];
+            } else {
+                // Fallback to appropriate dashboard based on role
+                if ($role_id == 2) { // Customer
+                    $redirect_url = 'home.php';
+                } elseif ($role_id == 3) { // Rider
+                    $redirect_url = 'riderdashboard.php';
+                } else { // Admin
+                    $redirect_url = 'index.php';
+                }
             }
             
-            header('Location: ' . $redirect_url . '?notifications_marked=' . $marked_count);
+            // Add success parameter to the redirect URL
+            $separator = (strpos($redirect_url, '?') !== false) ? '&' : '?';
+            header('Location: ' . $redirect_url . $separator . 'notifications_marked=' . $marked_count);
             exit();
         } else {
             echo "Error marking notifications as read.";

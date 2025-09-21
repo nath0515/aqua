@@ -62,12 +62,18 @@ function renderNotificationBadge($unread_count) {
 function renderNotificationDropdown($recent_notifications, $unread_count, $user_id, $role_id) {
     $html = '';
     
+    // Get current page URL for redirect
+    $current_page = basename($_SERVER['PHP_SELF']);
+    if (!empty($_SERVER['QUERY_STRING'])) {
+        $current_page .= '?' . $_SERVER['QUERY_STRING'];
+    }
+    
     if (empty($recent_notifications)) {
         $html .= '<li><a class="dropdown-item text-muted" href="#">No notifications</a></li>';
     } else {
         // Add mark all as read button if there are unread notifications
         if ($unread_count > 0) {
-            $html .= '<li><a class="dropdown-item text-center text-primary fw-bold" href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '"><i class="fas fa-check-double"></i> Mark All as Read</a></li>';
+            $html .= '<li><a class="dropdown-item text-center text-primary fw-bold" href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '"><i class="fas fa-check-double"></i> Mark All as Read</a></li>';
             $html .= '<li><hr class="dropdown-divider"></li>';
         }
         
