@@ -152,10 +152,7 @@ ini_set('display_errors', 1);
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
                         <li class="dropdown-header fw-bold text-dark">Notifications</li>
                         <li><hr class="dropdown-divider"></li>
-                        <?php foreach($activity_logs as $row):?>
-                        <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
-                        <hr>
-                        <?php endforeach; ?>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
                     </ul>
                 </li>
