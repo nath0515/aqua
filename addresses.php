@@ -538,7 +538,7 @@
                                         const remainingCards = document.querySelectorAll('.address-card');
                                         if (remainingCards.length === 0) {
                                             // Show empty state message
-                                            const container = document.getElementById('address-container');
+                                            const container = document.getElementById('addressContainer');
                                             if (container) {
                                                 container.innerHTML = `
                                                     <div class="alert alert-info text-center">
