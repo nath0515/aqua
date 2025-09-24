@@ -421,7 +421,13 @@
                             </select>
                             <input type="text" id="otherReason" class="swal2-input" placeholder="Enter reason" style="display:none;">
                         `,
-                        focusConfirm: false,
+                        didOpen: () => {
+                            const dropdown = document.getElementById("cancelReason");
+                            const input = document.getElementById("otherReason");
+                            dropdown.addEventListener("change", () => {
+                                input.style.display = dropdown.value === "Other" ? "block" : "none";
+                            });
+                        },
                         preConfirm: () => {
                             const selected = document.getElementById("cancelReason").value;
                             const other = document.getElementById("otherReason").value.trim();
@@ -476,7 +482,6 @@
                             });
                         }
                     });
-
                 });
             });
         </script>
