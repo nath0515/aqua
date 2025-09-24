@@ -965,5 +965,31 @@
                 }
             }
         </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Select input fields by ID (or use a class if you have many)
+                const inputs = ['stock', 'waterPrice'];
+
+                inputs.forEach(function(id) {
+                    const input = document.getElementById(id);
+                    if (!input) return;
+
+                    // Block minus key
+                    input.addEventListener('keydown', function (e) {
+                        if (e.key === '-' || e.key === 'Minus') {
+                            e.preventDefault(); // 🚫 Block typing negative
+                        }
+                    });
+
+                    // Also sanitize pasted values
+                    input.addEventListener('input', function () {
+                        if (parseFloat(input.value) < 0) {
+                            input.value = ''; // or reset to 1 if preferred
+                        }
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>
