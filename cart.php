@@ -278,21 +278,35 @@ error_reporting(E_ALL);
         <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reserveModalLabel">Select Delivery Date</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <label for="modal_delivery_date" class="form-label">Delivery Date</label>
-                    <input type="date" id="modal_delivery_date" class="form-control" min="<?php echo date('Y-m-d'); ?>">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="confirm-reserve-btn">Confirm Reservation</button>
-                </div>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reserveModalLabel">Select Delivery Date & Time</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- Delivery Date -->
+                        <div class="mb-3">
+                            <label for="modal_delivery_date" class="form-label">Delivery Date</label>
+                            <input type="date" id="modal_delivery_date" class="form-control" min="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <!-- Delivery Time -->
+                        <div class="mb-3">
+                            <label for="modal_delivery_time" class="form-label">Delivery Time</label>
+                            <input type="time" id="modal_delivery_time" class="form-control" min="08:00" max="17:00">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" id="confirm-reserve-btn">Confirm Reservation</button>
+                    </div>
+
                 </div>
             </div>
         </div>
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
