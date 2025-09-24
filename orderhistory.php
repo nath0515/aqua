@@ -310,6 +310,7 @@
                                 <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
                                 data-id="${order.order_id}"
                                 title="Cancel Order">
+                                <i class="bi bi-x-circle"></i>
                             </td>
                         `;
                         tbody.appendChild(row);
