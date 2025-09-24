@@ -1,5 +1,5 @@
 <?php
-require 'session.php'; // Start session, get user info
+require 'session.php'; 
 require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ");
         $update->execute([':order_id' => $order_id]);
 
-        // Step 3: Log cancellation activity for the user
+        // Step 3: Log cancellation activity for the customer
         $notif = $conn->prepare("
             INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
             VALUES (:user_id, :message, 'orders.php', NOW(), 0)
@@ -42,14 +42,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ':message' => "Your order #$order_id has been cancelled. Reason: $reason"
         ]);
 
-        // Step 4: Log cancellation activity for the admin
+        // Step 4: Notify all admins (role_id = 1)
+        $admins = $conn->query("SELECT user_id FROM users WHERE role_id = 1")->fetchAll(PDO::FETCH_ASSOC);
+
         $adminNotif = $conn->prepare("
             INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
-            VALUES (0, :message, 'orders.php', NOW(), 0)
+            VALUES (:user_id, :message, 'orders.php', NOW(), 0)
         ");
-        $adminNotif->execute([
-            ':message' => "Order #$order_id was cancelled by $customerName. Reason: $reason"
-        ]);
+
+        foreach ($admins as $admin) {
+            $adminNotif->execute([
+                ':user_id' => $admin['user_id'],
+                ':message' => "Order #$order_id was cancelled by $customerName. Reason: $reason"
+            ]);
+        }
 
         echo json_encode(['success' => true, 'message' => 'Order cancelled successfully.']);
 
