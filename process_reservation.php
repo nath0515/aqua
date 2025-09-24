@@ -70,7 +70,7 @@ try {
     $log_stmt = $conn->prepare($log_sql);
     $log_stmt->execute([
         ':user_id' => $user_id,
-        'You reserved an order for delivery on ' . date('F j, Y \a\t g:i A', strtotime($delivery_datetime))
+        ':message' => 'You reserved an order for delivery on ' . date('F j, Y \a\t g:i A', strtotime($delivery_datetime)),
         ':destination' => 'costumer_orderdetails.php?id=' . $order_id
     ]);
 
