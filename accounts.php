@@ -249,7 +249,7 @@
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
-                                            <td> <<button 
+                                            <td><button 
                                                 class="btn btn-danger btn-sm delete-btn" 
                                                 data-user-id="<?php echo $row['user_id']; ?>" 
                                                 data-bs-toggle="modal" 
