@@ -307,6 +307,11 @@
                                 <a href="costumer_orderdetails.php?id=${order.order_id}" class="btn btn-outline-secondary btn-sm me-1">
                                     <i class="bi bi-eye"></i> View
                                 </a>
+                                <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
+                                    data-id="<?php echo $row['order_id']; ?>"
+                                    title="Cancel Order">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
                             </td>
                         `;
                         tbody.appendChild(row);
