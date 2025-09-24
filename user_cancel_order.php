@@ -1,5 +1,5 @@
 <?php
-require 'session.php';  // Start session and get $_SESSION['user_id']
+require 'session.php'; // Start session, get user info
 require 'db.php';
 
 header('Content-Type: application/json');
@@ -25,7 +25,7 @@ if (empty($order_id) || empty($reason)) {
 
 try {
     // 1. Check if order exists and belongs to the user
-    $stmt = $conn->prepare("SELECT order_id, status_id FROM orders WHERE order_id = :order_id AND user_id = :user_id");
+    $stmt = $conn->prepare("SELECT order_id FROM orders WHERE order_id = :order_id AND user_id = :user_id");
     $stmt->execute([':order_id' => $order_id, ':user_id' => $user_id]);
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -34,27 +34,25 @@ try {
         exit;
     }
 
-    // 2. Get cancel status_id
-    $cancelStatusStmt = $conn->prepare("SELECT status_id FROM orderstatus WHERE status_name = 'Cancel' LIMIT 1");
-    $cancelStatusStmt->execute();
-    $cancelStatusId = $cancelStatusStmt->fetchColumn();
+    // 2. Update order status to Cancelled
+    $update = $conn->prepare("UPDATE orders SET status_name = 'Cancelled' WHERE order_id = :order_id");
+    $update->execute([':order_id' => $order_id]);
 
-    if (!$cancelStatusId) {
-        echo json_encode(['success' => false, 'message' => 'Cancel status not found in the system.']);
-        exit;
+    // 3. Notify the shop owner/admin
+    // Assuming admin user(s) have role_id = 1 (adjust as needed)
+    $adminStmt = $conn->prepare("SELECT user_id FROM users WHERE role_id = 1");
+    $adminStmt->execute();
+    $admins = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($admins as $admin) {
+        $notify = $conn->prepare("INSERT INTO notifications (user_id, message, date, read_status) VALUES (:user_id, :message, NOW(), 0)");
+        $notify->execute([
+            ':user_id' => $admin['user_id'],
+            ':message' => "Order #$order_id was cancelled by user ID $user_id. Reason: $reason"
+        ]);
     }
 
-    // 3. Check if order is already cancelled
-    if ($order['status_id'] == $cancelStatusId) {
-        echo json_encode(['success' => false, 'message' => 'Order is already cancelled.']);
-        exit;
-    }
-
-    // 4. Update order status to Cancel
-    $update = $conn->prepare("UPDATE orders SET status_id = :cancelStatusId WHERE order_id = :order_id");
-    $update->execute([':cancelStatusId' => $cancelStatusId, ':order_id' => $order_id]);
-
-    // 5. Log cancellation activity
+    // 4. Log this activity for the user
     $log = $conn->prepare("
         INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
         VALUES (:user_id, :message, 'orders.php', NOW(), 0)
