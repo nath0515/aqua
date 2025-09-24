@@ -433,11 +433,13 @@ error_reporting(E_ALL);
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
 
-                                                    <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
-                                                        data-id="<?php echo $row['order_id']; ?>"
-                                                        title="Cancel Order">
-                                                        <i class="bi bi-x-circle"></i>
-                                                    </button>
+                                                    <?php if (!in_array($status, ['Delivering', 'Delivered', 'Completed'])): ?>
+                                                        <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
+                                                            data-id="<?php echo $row['order_id']; ?>"
+                                                            title="Cancel Order">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </button>
+                                                    <?php endif; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach;?>
