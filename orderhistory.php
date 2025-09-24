@@ -414,9 +414,9 @@
                             <div style="display:flex; flex-direction:column; gap:10px;">
                                 <select id="cancelReason" class="swal2-input">
                                     <option value="" disabled selected>Select a reason</option>
-                                    <option value="Changed my mind">Changed my mind</option>
-                                    <option value="Found a better price">Found a better price</option>
-                                    <option value="Order took too long">Order took too long</option>
+                                    <option value="Changed my mind">Wrong Delivery Address</option>
+                                    <option value="Found a better price">Entered Date And time is wrong</option>
+                                    <option value="Order took too long">Changed my mind</option>
                                     <option value="Wrong item ordered">Wrong item ordered</option>
                                     <option value="Other">Other</option>
                                 </select>
