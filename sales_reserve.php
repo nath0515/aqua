@@ -19,7 +19,7 @@
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if(isset($_GET['from_card'])){
-        $sql = "SELECT a.order_id, a.date,a.delivery_date, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
+        $sql = "SELECT a.order_id, a.date,a.delivery_datetime, a.amount, b.firstname, b.lastname, b.address, b.contact_number, 
                c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
         FROM orders a
         JOIN user_details b ON a.user_id = b.user_id
@@ -33,7 +33,7 @@
         $stmt->bindParam(':date', $dateNow);
     }
     else{
-        $sql = "SELECT a.order_id, a.date, a.delivery_date, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
+        $sql = "SELECT a.order_id, a.date, a.delivery_datetime, a.amount, b.firstname, b.lastname, ul.address, tb.barangay_name, b.contact_number, 
         c.status_name, d.firstname AS rider_firstname, d.lastname AS rider_lastname, e.payment_name
     FROM orders a
     JOIN user_details b ON a.user_id = b.user_id
@@ -266,7 +266,7 @@
                                         <tr>
                                             <td><?php echo $row['order_id'];?></td>
                                             <td><?php echo date("F j, Y - h:iA", strtotime($row['date'])); ?></td>
-                                            <td><?php echo date("F j, Y - h:iA", strtotime($row['delivery_date'])); ?></td>
+                                            <td><?php echo date("F j, Y - h:iA", strtotime($row['delivery_datetime'])); ?></td>
                                             <td>₱<?php echo $row['amount'];?></td>
                                             <td><?php echo $row['firstname'] . ' ' . $row['lastname'];?></td>
                                             <td><?php echo $row['contact_number'];?></td>
