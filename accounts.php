@@ -239,7 +239,7 @@
                                             <th>Role</th>
                                             <th>Contact Number</th>
                                             <th>Date Created</th>
-                                            
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>                                   
@@ -249,6 +249,7 @@
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
+                                            <td><?php echo $row['contact_number']; ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
