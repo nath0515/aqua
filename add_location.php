@@ -245,7 +245,7 @@
                         <span class="visually-hidden">unread messages</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
+                         <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
