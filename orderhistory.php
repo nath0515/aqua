@@ -429,28 +429,29 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: "process_cancelorder.php",
+                                url: "user_cancel_order.php",
                                 type: "POST",
                                 data: {
                                     order_id: orderId,
                                     reason: result.value
                                 },
-                                success: function (response) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Order Cancelled",
-                                        text: "The user will be notified.",
-                                        confirmButtonColor: "#3085d6"
-                                    }).then(() => {
-                                        location.reload();
-                                    });
-                                },
-                                error: function () {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Error",
-                                        text: "Something went wrong. Try again."
-                                    });
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Order Cancelled",
+                                            text: response.message,
+                                            confirmButtonColor: "#3085d6"
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Error",
+                                            text: response.message
+                                        });
+                                    }
                                 }
                             });
                         }
