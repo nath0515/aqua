@@ -437,6 +437,7 @@
                                     reason: result.value
                                 },
                                 success: function(response) {
+                                    console.log(response);
                                     if (response.success) {
                                         Swal.fire({
                                             icon: "success",
