@@ -411,32 +411,47 @@
                     Swal.fire({
                         title: "Cancel Order",
                         html: `
-                            <select id="cancelReason" class="swal2-input">
-                                <option value="" disabled selected>Select a reason</option>
-                                <option value="Changed my mind">Changed my mind</option>
-                                <option value="Found a better price">Found a better price</option>
-                                <option value="Order took too long">Order took too long</option>
-                                <option value="Wrong item ordered">Wrong item ordered</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <input type="text" id="otherReason" class="swal2-input" placeholder="Enter reason" style="display:none;">
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <select id="cancelReason" class="swal2-input">
+                                    <option value="" disabled selected>Select a reason</option>
+                                    <option value="Changed my mind">Changed my mind</option>
+                                    <option value="Found a better price">Found a better price</option>
+                                    <option value="Order took too long">Order took too long</option>
+                                    <option value="Wrong item ordered">Wrong item ordered</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input type="text" id="otherReason" class="swal2-input" 
+                                    placeholder="Enter reason" style="display:none;">
+                            </div>
                         `,
-                        focusConfirm: false,
-                        preConfirm: () => {
-                            const selected = document.getElementById("cancelReason").value;
-                            const other = document.getElementById("otherReason").value.trim();
+                        didOpen: () => {
+                            const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                            const input = Swal.getPopup().querySelector("#otherReason");
 
-                            if (!selected) {
+                            dropdown.addEventListener("change", () => {
+                                if (dropdown.value === "Other") {
+                                    input.style.display = "block";
+                                } else {
+                                    input.style.display = "none";
+                                    input.value = ""; // clear if hidden
+                                }
+                            });
+                        },
+                        preConfirm: () => {
+                            const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                            const input = Swal.getPopup().querySelector("#otherReason");
+
+                            if (!dropdown.value) {
                                 Swal.showValidationMessage("Please select a reason");
                                 return false;
                             }
 
-                            if (selected === "Other" && !other) {
+                            if (dropdown.value === "Other" && !input.value.trim()) {
                                 Swal.showValidationMessage("Please enter your reason");
                                 return false;
                             }
 
-                            return selected === "Other" ? other : selected;
+                            return dropdown.value === "Other" ? input.value.trim() : dropdown.value;
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -476,7 +491,6 @@
                             });
                         }
                     });
-
                 });
             });
         </script>
