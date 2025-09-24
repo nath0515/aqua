@@ -308,10 +308,8 @@
                                     <i class="bi bi-eye"></i> View
                                 </a>
                                 <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
-                                    data-id="<?php echo $row['order_id']; ?>"
-                                    title="Cancel Order">
-                                    <i class="bi bi-x-circle"></i>
-                                </button>
+                                data-id="${order.order_id}"
+                                title="Cancel Order">
                             </td>
                         `;
                         tbody.appendChild(row);
@@ -458,5 +456,6 @@
                 });
             });
         });
+    </script>
 </body>
 </html>
