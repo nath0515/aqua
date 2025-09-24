@@ -249,12 +249,14 @@
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
-                                            <td> <button 
-                                                    class="btn btn-danger btn-sm delete-btn" 
-                                                    data-user-id="<?php echo $row['user_id']; ?>"
-                                                >
-                                                    Delete
-                                                </button>
+                                            <td> <<button 
+                                                class="btn btn-danger btn-sm delete-btn" 
+                                                data-user-id="<?php echo $row['user_id']; ?>" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmDeleteModal"
+                                            >
+                                                Delete
+                                            </button>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>
@@ -274,6 +276,29 @@
             </div>
         </div>
 
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="confirmDeleteForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <input type="hidden" name="user_id" id="deleteUserId">
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">Enter your password to confirm:</label>
+                        <input type="password" class="form-control" id="adminPassword" name="admin_password" required>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -325,40 +350,39 @@
             });
         </script>
         <script>
+            // Capture user ID into hidden input when delete button clicked
             $(document).on('click', '.delete-btn', function () {
                 const userId = $(this).data('user-id');
+                $('#deleteUserId').val(userId);
+            });
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This account will be permanently deleted!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: 'delete_account.php',
-                            method: 'POST',
-                            data: { user_id: userId },
-                            success: function (response) {
-                                try {
-                                    const res = JSON.parse(response);
-                                    if (res.status === 'success') {
-                                        Swal.fire('Deleted!', res.message, 'success')
-                                            .then(() => location.reload());
-                                    } else {
-                                        Swal.fire('Error!', res.message, 'error');
-                                    }
-                                } catch (e) {
-                                    Swal.fire('Error!', 'Unexpected response.', 'error');
-                                }
-                            },
-                            error: function () {
-                                Swal.fire('Error!', 'Could not connect to the server.', 'error');
+            // Handle form submission
+            $('#confirmDeleteForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: 'delete_account.php',
+                    method: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        try {
+                            const res = JSON.parse(response);
+                            $('#confirmDeleteModal').modal('hide');
+
+                            if (res.status === 'success') {
+                                Swal.fire('Deleted!', res.message, 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Error', res.message, 'error');
                             }
-                        });
+                        } catch (e) {
+                            Swal.fire('Error', 'Invalid server response.', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Error', 'Server error occurred.', 'error');
                     }
                 });
             });
