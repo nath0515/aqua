@@ -1,5 +1,5 @@
 <?php
-require 'session.php';  // Start session and get $_SESSION['user_id']
+require 'session.php';
 require 'db.php';
 
 header('Content-Type: application/json');
@@ -24,6 +24,16 @@ if (empty($order_id) || empty($reason)) {
 }
 
 try {
+    // Get Cancel status_id once
+    $cancelStatusStmt = $conn->prepare("SELECT status_id FROM orderstatus WHERE status_name = 'Cancel' LIMIT 1");
+    $cancelStatusStmt->execute();
+    $cancelStatusId = $cancelStatusStmt->fetchColumn();
+
+    if (!$cancelStatusId) {
+        echo json_encode(['success' => false, 'message' => 'Cancel status not found.']);
+        exit;
+    }
+
     // Check if order exists and belongs to the logged-in user
     $stmt = $conn->prepare("SELECT order_id, status_id FROM orders WHERE order_id = :order_id AND user_id = :user_id");
     $stmt->execute([':order_id' => $order_id, ':user_id' => $user_id]);
@@ -34,19 +44,14 @@ try {
         exit;
     }
 
-    // Optional: Check if order is already canceled or delivered (depends on your business logic)
-    if ($order['status_id'] == (SELECT status_id FROM orderstatus WHERE status_name = 'Cancel')) {
+    if ($order['status_id'] == $cancelStatusId) {
         echo json_encode(['success' => false, 'message' => 'Order is already cancelled.']);
         exit;
     }
 
     // Update order status to Cancel
-    $update = $conn->prepare("
-        UPDATE orders 
-        SET status_id = (SELECT status_id FROM orderstatus WHERE status_name = 'Cancel')
-        WHERE order_id = :order_id
-    ");
-    $update->execute([':order_id' => $order_id]);
+    $update = $conn->prepare("UPDATE orders SET status_id = :cancelStatusId WHERE order_id = :order_id");
+    $update->execute([':cancelStatusId' => $cancelStatusId, ':order_id' => $order_id]);
 
     // Log cancellation activity for the user
     $log = $conn->prepare("
@@ -64,3 +69,4 @@ try {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Error cancelling order: ' . $e->getMessage()]);
 }
+?>
