@@ -966,24 +966,26 @@
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const stockInput = document.getElementById('edit_stock');
+                const stockInputs = document.querySelectorAll('input[type="number"][name="stock"]');
 
-                if (stockInput) {
-                    // 🚫 Block typing minus
-                    stockInput.addEventListener('keydown', function (e) {
+                stockInputs.forEach(function(input) {
+                    // Block minus sign
+                    input.addEventListener('keydown', function(e) {
                         if (e.key === '-' || e.key === 'Minus') {
                             e.preventDefault();
                         }
                     });
 
-                    // 💡 Also block pasting negative numbers
-                    stockInput.addEventListener('input', function () {
-                        if (parseInt(stockInput.value) < 1) {
-                            stockInput.value = '';
+                    // Sanitize invalid values
+                    input.addEventListener('input', function() {
+                        const value = parseInt(input.value);
+                        if (isNaN(value) || value < 1) {
+                            input.value = '';
                         }
                     });
-                }
+                });
             });
         </script>
+
     </body>
 </html>
