@@ -367,7 +367,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const table = document.querySelector('#accountTable');
                 const dataTable = new simpleDatatables.DataTable(table, {
-                    perPage: 5,
+                    perPage: 0,
                     perPageSelect: [0, 5, 10, 15, 20],
                     searchable: true,
                     sortable: true,
