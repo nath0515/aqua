@@ -1,7 +1,7 @@
 <?php 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    
+
     require 'session.php';
     require 'db.php';
     require 'notification_helper.php';
@@ -286,7 +286,7 @@
                         <span class="visually-hidden">unread messages</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
+                         <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
                     </ul>
                 </li>
