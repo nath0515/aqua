@@ -538,7 +538,15 @@
                                     <label for="stock" class="form-label">Stock</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                        <input type="number" class="form-control" id="stock" name="stock" required>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="stock" 
+                                            name="stock" 
+                                            required 
+                                            min="1" 
+                                            oninput="validateStock(this)"
+                                        >
                                     </div>
                                 </div>
 
@@ -587,7 +595,15 @@
                                     <label for="stock" class="form-label">Stock</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                        <input type="number" class="form-control" id="stock" name="stock" required>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="stock" 
+                                            name="stock" 
+                                            required 
+                                            min="1" 
+                                            oninput="validateStock(this)"
+                                        >
                                     </div>
                                 </div>
 
@@ -940,5 +956,14 @@
             });
         </script>
         <?php endif; ?>
+        <script>
+            function validateStock(input) {
+                if (input.value <= 0) {
+                    input.setCustomValidity("Stock must be greater than zero.");
+                } else {
+                    input.setCustomValidity("");
+                }
+            }
+        </script>
     </body>
 </html>

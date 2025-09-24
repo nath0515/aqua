@@ -9,6 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stock = $_POST['stock'];
         $now = date("Y-m-d H:i:s");
 
+        if (empty($product_name) || $water_price <= 0 || $stock <= 0) {
+            header("Location: stock.php?status=invalid");
+            exit();
+        }
+
         $sql = "SELECT * FROM products WHERE product_name = :product_name";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':product_name', $product_name);
