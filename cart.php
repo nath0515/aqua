@@ -612,6 +612,10 @@ error_reporting(E_ALL);
             const deliveryDate = document.getElementById("modal_delivery_date").value;
             const deliveryTime = document.getElementById("modal_delivery_time").value;
 
+            // 💡 Time range validation
+            const minTime = "08:00";
+            const maxTime = "17:00";
+
             if (!deliveryDate) {
                 Swal.fire({
                     icon: 'warning',
@@ -621,9 +625,26 @@ error_reporting(E_ALL);
                 return;
             }
 
+            if (!deliveryTime) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select Delivery Time',
+                    text: 'Please choose a delivery time to proceed.'
+                });
+                return;
+            }
+
+            if (deliveryTime < minTime || deliveryTime > maxTime) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Time',
+                    text: 'Delivery time must be between 8:00 AM and 5:00 PM.'
+                });
+                return;
+            }
+
             const { items, payment_id, location_id } = window.reservationData;
 
-            // Proceed with reservation
             const formData = new FormData();
             formData.append("items", JSON.stringify(items));
             formData.append("payment_id", payment_id);
