@@ -410,21 +410,33 @@
 
                     Swal.fire({
                         title: "Cancel Order",
-                        input: "textarea",
-                        inputLabel: "Reason for cancellation",
-                        inputPlaceholder: "Enter reason here...",
-                        inputAttributes: {
-                            "aria-label": "Enter reason here"
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: "Cancel Order",
-                        cancelButtonText: "Close",
-                        confirmButtonColor: "#d33",
-                        preConfirm: (reason) => {
-                            if (!reason) {
-                                Swal.showValidationMessage("Reason is required!");
+                        html: `
+                            <select id="cancelReason" class="swal2-input">
+                                <option value="" disabled selected>Select a reason</option>
+                                <option value="Changed my mind">Changed my mind</option>
+                                <option value="Found a better price">Found a better price</option>
+                                <option value="Order took too long">Order took too long</option>
+                                <option value="Wrong item ordered">Wrong item ordered</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="text" id="otherReason" class="swal2-input" placeholder="Enter reason" style="display:none;">
+                        `,
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const selected = document.getElementById("cancelReason").value;
+                            const other = document.getElementById("otherReason").value.trim();
+
+                            if (!selected) {
+                                Swal.showValidationMessage("Please select a reason");
+                                return false;
                             }
-                            return reason;
+
+                            if (selected === "Other" && !other) {
+                                Swal.showValidationMessage("Please enter your reason");
+                                return false;
+                            }
+
+                            return selected === "Other" ? other : selected;
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -437,7 +449,6 @@
                                     reason: result.value
                                 },
                                 success: function(response) {
-                                    console.log(response);
                                     if (response.success) {
                                         Swal.fire({
                                             icon: "success",
@@ -454,10 +465,18 @@
                                             text: response.message
                                         });
                                     }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Server Error",
+                                        text: "Something went wrong: " + error
+                                    });
                                 }
                             });
                         }
                     });
+
                 });
             });
         </script>
