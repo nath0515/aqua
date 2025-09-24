@@ -610,6 +610,7 @@ error_reporting(E_ALL);
 
         document.getElementById("confirm-reserve-btn").addEventListener("click", function () {
             const deliveryDate = document.getElementById("modal_delivery_date").value;
+            const deliveryTime = document.getElementById("modal_delivery_time").value;
 
             if (!deliveryDate) {
                 Swal.fire({
