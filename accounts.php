@@ -26,7 +26,7 @@
     
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
-    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, role_name, contact_number,created_at FROM users u
+    $sql = "SELECT u.user_id,CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, role_name, contact_number,created_at FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     JOIN roles r ON u.role_id = r.role_id";
     $stmt = $conn->prepare($sql);
@@ -249,7 +249,13 @@
                                             <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
-                                            <td><?php echo $row['contact_number']; ?></td>
+                                            <td> <button 
+                                                    class="btn btn-danger btn-sm delete-btn" 
+                                                    data-user-id="<?php echo $row['user_id']; ?>"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -318,8 +324,45 @@
                 fetchFilteredAccounts();
             });
         </script>
+        <script>
+            $(document).on('click', '.delete-btn', function () {
+                const userId = $(this).data('user-id');
 
-
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This account will be permanently deleted!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'delete_account.php',
+                            method: 'POST',
+                            data: { user_id: userId },
+                            success: function (response) {
+                                try {
+                                    const res = JSON.parse(response);
+                                    if (res.status === 'success') {
+                                        Swal.fire('Deleted!', res.message, 'success')
+                                            .then(() => location.reload());
+                                    } else {
+                                        Swal.fire('Error!', res.message, 'error');
+                                    }
+                                } catch (e) {
+                                    Swal.fire('Error!', 'Unexpected response.', 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Error!', 'Could not connect to the server.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const table = document.querySelector('#accountTable');
