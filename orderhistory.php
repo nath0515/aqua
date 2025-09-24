@@ -431,6 +431,7 @@
                             $.ajax({
                                 url: "user_cancel_order.php",
                                 type: "POST",
+                                dataType: "json",
                                 data: {
                                     order_id: orderId,
                                     reason: result.value
