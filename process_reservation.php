@@ -19,7 +19,7 @@ try {
         !isset($_POST['items']) || 
         !isset($_POST['payment_id']) || 
         !isset($_POST['location_id']) || 
-        !isset($_POST['delivery_date'])
+        !isset($_POST['delivery_date']) || !isset($_POST['delivery_time'])
     ) {
         echo json_encode(['success' => false, 'message' => 'Missing required fields.']);
         exit;
@@ -29,6 +29,9 @@ try {
     $payment_id = (int) $_POST['payment_id'];
     $location_id = (int) $_POST['location_id'];
     $delivery_date = $_POST['delivery_date'];
+    $delivery_time = $_POST['delivery_time'];
+
+    $delivery_datetime = $delivery_date . ' ' . $delivery_time;
 
     if (empty($items) || $payment_id === 0 || $location_id === 0 || empty($delivery_date)) {
         echo json_encode(['success' => false, 'message' => 'Invalid reservation data.']);
@@ -46,9 +49,9 @@ try {
 
     // Insert into orders table
     $order_sql = "INSERT INTO orders (
-        user_id, payment_id, location_id, delivery_date, status_id, amount, rider, proof_file, proofofpayment
+    user_id, payment_id, location_id, delivery_datetime, status_id, amount, rider, proof_file, proofofpayment
     ) VALUES (
-        :user_id, :payment_id, :location_id, :delivery_date, 7, :amount, 0, 0, 0
+        :user_id, :payment_id, :location_id, :delivery_datetime, 7, :amount, 0, 0, 0
     )";
     
     $stmt = $conn->prepare($order_sql);
@@ -56,7 +59,7 @@ try {
         ':user_id' => $user_id,
         ':payment_id' => $payment_id,
         ':location_id' => $location_id,
-        ':delivery_date' => $delivery_date,
+        ':delivery_datetime' => $delivery_datetime,
         ':amount' => $total_amount
     ]);
 
@@ -67,7 +70,7 @@ try {
     $log_stmt = $conn->prepare($log_sql);
     $log_stmt->execute([
         ':user_id' => $user_id,
-        ':message' => 'You reserved an order for delivery on ' . date('F j, Y', strtotime($delivery_date)),
+        'You reserved an order for delivery on ' . date('F j, Y \a\t g:i A', strtotime($delivery_datetime))
         ':destination' => 'costumer_orderdetails.php?id=' . $order_id
     ]);
 

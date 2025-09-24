@@ -628,6 +628,7 @@ error_reporting(E_ALL);
             formData.append("payment_id", payment_id);
             formData.append("location_id", location_id);
             formData.append("delivery_date", deliveryDate);
+            formData.append("delivery_time", deliveryTime);
 
             fetch("process_reservation.php", {
                 method: "POST",
