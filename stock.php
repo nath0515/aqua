@@ -712,10 +712,9 @@
                                     <label for="stock" class="form-label">Stock</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                        <input type="number" class="form-control" id="editStock" name="stock" required>
+                                        <input type="number" id="edit_stock" name="stock" class="form-control" min="1" step="1" required>
                                     </div>
                                 </div>
-
                         </div>
             
                         <!-- Modal Footer -->
@@ -967,29 +966,24 @@
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Select input fields by ID (or use a class if you have many)
-                const inputs = ['stock', 'waterPrice'];
+                const stockInput = document.getElementById('edit_stock');
 
-                inputs.forEach(function(id) {
-                    const input = document.getElementById(id);
-                    if (!input) return;
-
-                    // Block minus key
-                    input.addEventListener('keydown', function (e) {
+                if (stockInput) {
+                    // 🚫 Block typing minus
+                    stockInput.addEventListener('keydown', function (e) {
                         if (e.key === '-' || e.key === 'Minus') {
-                            e.preventDefault(); // 🚫 Block typing negative
+                            e.preventDefault();
                         }
                     });
 
-                    // Also sanitize pasted values
-                    input.addEventListener('input', function () {
-                        if (parseFloat(input.value) < 0) {
-                            input.value = ''; // or reset to 1 if preferred
+                    // 💡 Also block pasting negative numbers
+                    stockInput.addEventListener('input', function () {
+                        if (parseInt(stockInput.value) < 1) {
+                            stockInput.value = '';
                         }
                     });
-                });
+                }
             });
         </script>
-
     </body>
 </html>
