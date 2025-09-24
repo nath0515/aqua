@@ -1,5 +1,5 @@
 <?php
-require 'session.php';
+require 'session.php';  // Start session and get $_SESSION['user_id']
 require 'db.php';
 
 header('Content-Type: application/json');
@@ -24,36 +24,37 @@ if (empty($order_id) || empty($reason)) {
 }
 
 try {
-    // Get Cancel status_id once
-    $cancelStatusStmt = $conn->prepare("SELECT status_id FROM orderstatus WHERE status_name = 'Cancel' LIMIT 1");
-    $cancelStatusStmt->execute();
-    $cancelStatusId = $cancelStatusStmt->fetchColumn();
-
-    if (!$cancelStatusId) {
-        echo json_encode(['success' => false, 'message' => 'Cancel status not found.']);
-        exit;
-    }
-
-    // Check if order exists and belongs to the logged-in user
+    // 1. Check if order exists and belongs to the user
     $stmt = $conn->prepare("SELECT order_id, status_id FROM orders WHERE order_id = :order_id AND user_id = :user_id");
     $stmt->execute([':order_id' => $order_id, ':user_id' => $user_id]);
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$order) {
-        echo json_encode(['success' => false, 'message' => 'Order not found or you do not have permission to cancel this order.']);
+        echo json_encode(['success' => false, 'message' => 'Order not found or permission denied.']);
         exit;
     }
 
+    // 2. Get cancel status_id
+    $cancelStatusStmt = $conn->prepare("SELECT status_id FROM orderstatus WHERE status_name = 'Cancel' LIMIT 1");
+    $cancelStatusStmt->execute();
+    $cancelStatusId = $cancelStatusStmt->fetchColumn();
+
+    if (!$cancelStatusId) {
+        echo json_encode(['success' => false, 'message' => 'Cancel status not found in the system.']);
+        exit;
+    }
+
+    // 3. Check if order is already cancelled
     if ($order['status_id'] == $cancelStatusId) {
         echo json_encode(['success' => false, 'message' => 'Order is already cancelled.']);
         exit;
     }
 
-    // Update order status to Cancel
+    // 4. Update order status to Cancel
     $update = $conn->prepare("UPDATE orders SET status_id = :cancelStatusId WHERE order_id = :order_id");
     $update->execute([':cancelStatusId' => $cancelStatusId, ':order_id' => $order_id]);
 
-    // Log cancellation activity for the user
+    // 5. Log cancellation activity
     $log = $conn->prepare("
         INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
         VALUES (:user_id, :message, 'orders.php', NOW(), 0)
@@ -69,4 +70,3 @@ try {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Error cancelling order: ' . $e->getMessage()]);
 }
-?>
