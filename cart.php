@@ -60,6 +60,11 @@ error_reporting(E_ALL);
     $stmt = $conn->prepare($sql);
     $stmt->execute([':user_id' => $user_id]);
     $user_locations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $gcash = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -423,7 +428,7 @@ error_reporting(E_ALL);
                                 <p>Please upload proof of payment (photo, receipt.):</p>
                                 <input type="file" id="proofpayment" class="swal2-input" accept="image/*,.pdf">
                             `,
-                            imageUrl: 'assets/img/gcash.jpg',
+                            imageUrl: 'uploads/<?=$gcash?>',
                             imageWidth: 200,
                             imageHeight: 200,
                             imageAlt: 'GCash QR Code',
