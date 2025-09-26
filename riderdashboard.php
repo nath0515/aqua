@@ -36,12 +36,12 @@
     $stmt->execute();
     $status_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT status FROM store_status WHERE ss_id = 0";
+    $sql = "SELECT status FROM store_status WHERE ss_id = 1";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $rider_status = $stmt->fetchColumn();
-    if($rider_status == 1){
-        header('Location: riderdashboard.php');
+    if($rider_status == 0){
+        header('Location: riderdashboardclosed.php');
         exit();
     }
 
