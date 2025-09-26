@@ -173,12 +173,12 @@
                                             ?>
                                                 <img src="<?php echo $gcash_path; ?>" 
                                                     alt="Profile Picture" 
-                                                    id="profilePreview"
+                                                    id="gcashPreview"
                                                     class="img-thumbnail rounded-circle" 
                                                     style="width: 150px; height: 150px; object-fit: cover;">
                                             <?php else: ?>
                                                 <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
-                                                    id="profilePreview"
+                                                    id="gcashPreview"
                                                     style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
                                                     <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
                                                 </div>
@@ -304,6 +304,12 @@
                 const file = event.target.files[0];
                 if (file) {
                     document.getElementById("profilePreview").src = URL.createObjectURL(file);
+                }
+            });
+            document.getElementById("gcash")?.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    document.getElementById("gcashPreview").src = URL.createObjectURL(file);
                 }
             });
 
