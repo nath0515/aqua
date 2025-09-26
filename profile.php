@@ -169,7 +169,7 @@
                                             $stmt->execute();
                                             $gcash = $stmt->fetchColumn();
                                             $gcash_path = "uploads/" . ($gcash ?? 'default.png');
-                                            if (!empty($gcash) && file_exists($$gcash_path)): 
+                                            if (!empty($gcash) && file_exists($gcash_path)): 
                                             ?>
                                                 <img src="<?php echo $gcash_path; ?>" 
                                                     alt="Profile Picture" 
