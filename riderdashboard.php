@@ -150,6 +150,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                             Attendance
                         </a>
+                            <a class="nav-link" href="calendar.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                            Calendar
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
