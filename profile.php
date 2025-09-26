@@ -157,29 +157,31 @@
                                         <label for="profile_pic" class="form-label">Change Profile Picture</label>
                                         <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
                                     </div>
-
-                                    <div class="mb-3 text-center">
-                                        <?php 
-                                        $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
-                                        $stmt = $conn->prepare($sql);
-                                        $stmt->execute();
-                                        $gcash = $stmt->fetchColumn();
-                                        $gcash_path = "uploads/" . ($gcash ?? 'default.png');
-                                        if (!empty($gcash) && file_exists($$gcash_path)): 
-                                        ?>
-                                            <img src="<?php echo $gcash_path; ?>" 
-                                                alt="Profile Picture" 
-                                                id="profilePreview"
-                                                class="img-thumbnail rounded-circle" 
-                                                style="width: 150px; height: 150px; object-fit: cover;">
-                                        <?php else: ?>
-                                            <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
-                                                id="profilePreview"
-                                                style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
-                                                <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
-                                            </div>
-                                        <?php endif; ?>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="mb-3 text-center">
+                                            <?php 
+                                            $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute();
+                                            $gcash = $stmt->fetchColumn();
+                                            $gcash_path = "uploads/" . ($gcash ?? 'default.png');
+                                            if (!empty($gcash) && file_exists($$gcash_path)): 
+                                            ?>
+                                                <img src="<?php echo $gcash_path; ?>" 
+                                                    alt="Profile Picture" 
+                                                    id="profilePreview"
+                                                    class="img-thumbnail rounded-circle" 
+                                                    style="width: 150px; height: 150px; object-fit: cover;">
+                                            <?php else: ?>
+                                                <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
+                                                    id="profilePreview"
+                                                    style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                    <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
+                                    
 
                                     <div class="mb-3" id="fullnameGroup">
                                         <label for="fullname">Full Name</label>
