@@ -184,6 +184,11 @@
                                                 </div>
                                             <?php endif; ?>
                                         </div>
+
+                                        <div class="mb-3 d-none" id="gcashGroup">
+                                            <label for="profile_pic" class="form-label">Change Profile Picture</label>
+                                            <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
+                                        </div>
                                     </div>
                                     
 
@@ -283,6 +288,7 @@
 
             // ✅ Show profile picture upload input when editing
             document.getElementById("profilePicGroup").classList.remove("d-none");
+            document.getElementById("gcashGroup").classList.remove("d-none");
 
             document.getElementById("editBtn").classList.add("d-none");
             document.getElementById("updateBtn").classList.remove("d-none");
