@@ -158,6 +158,29 @@
                                         <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
                                     </div>
 
+                                    <div class="mb-3 text-center">
+                                        <?php 
+                                        $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+                                        $gcash = $stmt->fetchColumn();
+                                        $gcash_path = "uploads/" . ($gcash ?? 'default.png');
+                                        if (!empty($gcash) && file_exists($$gcash_path)): 
+                                        ?>
+                                            <img src="<?php echo $gcash_path; ?>" 
+                                                alt="Profile Picture" 
+                                                id="profilePreview"
+                                                class="img-thumbnail rounded-circle" 
+                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center" 
+                                                id="profilePreview"
+                                                style="width: 150px; height: 150px; background-color: #f8f9fa; border: 2px solid #dee2e6;">
+                                                <i class="fas fa-user text-primary" style="font-size: 60px;"></i>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+
                                     <div class="mb-3" id="fullnameGroup">
                                         <label for="fullname">Full Name</label>
                                         <input type="text" class="form-control" id="fullname"
@@ -236,14 +259,14 @@
             document.getElementById("lastname").value = last;
 
             ["email", "contact_number"].forEach(id => {
-        const element = document.getElementById(id);
-        console.log(`Checking element with ID: ${id}`, element);  // Debugging line
-        if (element) {
-            element.removeAttribute("readonly");
-        } else {
-            console.warn(`Element with id "${id}" not found.`);  // Debugging line
-        }
-    });
+                const element = document.getElementById(id);
+                console.log(`Checking element with ID: ${id}`, element);
+                if (element) {
+                    element.removeAttribute("readonly");
+                } else {
+                    console.warn(`Element with id "${id}" not found.`);
+                }
+            });
 
             // ✅ Show profile picture upload input when editing
             document.getElementById("profilePicGroup").classList.remove("d-none");
