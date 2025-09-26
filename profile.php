@@ -235,8 +235,15 @@
             document.getElementById("firstname").value = first;
             document.getElementById("lastname").value = last;
 
-            ["email", "contact_number"].forEach(id =>
-                document.getElementById(id).removeAttribute("readonly"));
+            ["email", "contact_number"].forEach(id => {
+        const element = document.getElementById(id);
+        console.log(`Checking element with ID: ${id}`, element);  // Debugging line
+        if (element) {
+            element.removeAttribute("readonly");
+        } else {
+            console.warn(`Element with id "${id}" not found.`);  // Debugging line
+        }
+    });
 
             // ✅ Show profile picture upload input when editing
             document.getElementById("profilePicGroup").classList.remove("d-none");
