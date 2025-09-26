@@ -186,8 +186,8 @@
                                         </div>
 
                                         <div class="mb-3 d-none" id="gcashGroup">
-                                            <label for="profile_pic" class="form-label">Change Profile Picture</label>
-                                            <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
+                                            <label for="profile_pic" class="form-label">Change GCash QR Code</label>
+                                            <input type="file" class="form-control" name="gcash" id="gcash" accept="image/*">
                                         </div>
                                     </div>
                                     

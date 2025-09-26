@@ -17,8 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // File upload handling
     $profile_pic = null;
+    $gcash = null;
     $upload_dir = 'uploads/';
     $upload_path = '';
+
 
     if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
         $file_tmp = $_FILES['profile_pic']['tmp_name'];
@@ -44,6 +46,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $profile_pic = $new_file_name;
+    }
+
+    if (isset($_FILES['gcash']) && $_FILES['gcash']['error'] === UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES['gcash']['tmp_name'];
+        $file_name = basename($_FILES['gcash']['name']);
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    
+        if (!in_array($file_ext, $allowed_exts)) {
+            $response['status'] = 'error';
+            $response['error'] = 'Invalid image format. Only JPG, PNG, GIF, and WEBP allowed.';
+            echo json_encode($response);
+            exit;
+        }
+    
+        // ✅ Changed from 'user_' to 'gcash_'
+        $new_file_name = 'gcash_' . $user_id . '_' . time() . '.' . $file_ext;
+        $upload_path = $upload_dir . $new_file_name;
+    
+        if (!move_uploaded_file($file_tmp, $upload_path)) {
+            $response['status'] = 'error';
+            $response['error'] = 'Failed to upload GCash QR image.';
+            echo json_encode($response);
+            exit;
+        }
+    
+        $gcash = $new_file_name;
     }
 
     try {
@@ -84,6 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':address' => $address,
                 ':user_id' => $user_id
             ]);
+        }
+
+        if($gcash){
+            $sql = "UPDATE store_status SET gcash = :gcash WHERE ss_id = 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([':gcash' => $gcash]);
         }
 
         $response['status'] = 'success';
