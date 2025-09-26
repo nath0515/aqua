@@ -134,7 +134,7 @@
                             </div>
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
-                                    <div class="d-flex justify-content-center">
+                                    <div class="d-flex justify-content-center" id="d1">
                                         <div class="mb-3 text-center">
                                             <?php 
                                             $profile_pic_path = "uploads/" . ($user_data['profile_pic'] ?? 'default.png');
@@ -161,7 +161,7 @@
                                         
                                     </div>
 
-                                    <div class="d-flex justify-content-center">
+                                    <div class="d-flex justify-content-center" id="d2">
                                         <div class="mb-3 text-center">
                                             <?php 
                                             $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
@@ -264,6 +264,11 @@
             document.getElementById("firstname").value = first;
             document.getElementById("lastname").value = last;
 
+            document.getElementById("d1").classList.remove("d-flex");
+            document.getElementById("d1").classList.remove("justify-content-center");
+            document.getElementById("d2").classList.remove("d-flex");
+            document.getElementById("d2").classList.remove("justify-content-center");
+
             ["email", "contact_number"].forEach(id => {
                 const element = document.getElementById(id);
                 console.log(`Checking element with ID: ${id}`, element);
@@ -273,6 +278,8 @@
                     console.warn(`Element with id "${id}" not found.`);
                 }
             });
+
+            
 
             // ✅ Show profile picture upload input when editing
             document.getElementById("profilePicGroup").classList.remove("d-none");
