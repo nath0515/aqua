@@ -134,7 +134,7 @@
                             </div>
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
-                                    <div class="d-flex flex-column justify-content-center">
+                                    <div class="d-flex justify-content-center">
                                         <div class="mb-3 text-center">
                                             <?php 
                                             $profile_pic_path = "uploads/" . ($user_data['profile_pic'] ?? 'default.png');
@@ -159,6 +159,9 @@
                                             <input type="file" class="form-control" name="profile_pic" id="profile_pic" accept="image/*">
                                         </div>
                                         
+                                    </div>
+
+                                    <div class="d-flex justify-content-center">
                                         <div class="mb-3 text-center">
                                             <?php 
                                             $sql = "SELECT gcash FROM store_status WHERE ss_id = 1";
