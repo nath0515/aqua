@@ -134,7 +134,7 @@
                             </div>
                             <div class="card-body">
                                 <form id="profileForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
-                                    <div class="d-flex justify-content-center">
+                                    <div class="d-flex flex-column justify-content-center">
                                         <div class="mb-3 text-center">
                                             <?php 
                                             $profile_pic_path = "uploads/" . ($user_data['profile_pic'] ?? 'default.png');
