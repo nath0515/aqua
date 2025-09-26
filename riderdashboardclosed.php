@@ -242,25 +242,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!-- Shift Info -->
-                            <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5>Shift Schedule</h5>
-                                <p class="mb-1">8:00 AM – 5:00 PM</p>
-                                <?php
-                                    $badgeClass = $status_rider ? 'bg-success' : 'bg-secondary';
-                                    $statusText = $status_rider ? 'On Duty' : 'Off Duty';
-                                    ?>
-                                    Status: 
-                                    <a class="mb-0" href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
-                                        <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
-                                    </a>
-                                </div>
-                            </div>
-                            </div>
                         </div>
                     </div>
                 </main>
