@@ -23,13 +23,6 @@
     require 'notification_helper.php';
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
-
-    // Calculate total amount for filtered data
-    $total_amount = 0;
-    $total_orders = count($order_data);
-    foreach ($order_data as $order) {
-        $total_amount += floatval($order['amount']);
-    }
     
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
@@ -84,6 +77,13 @@
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Calculate total amount for filtered data
+    $total_amount = 0;
+    $total_expense = count($data);
+    foreach ($data as $order) {
+        $total_amount += floatval($order['amount']);
     }
 
 
@@ -346,7 +346,7 @@
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
-                                    <?php if ($total_orders > 0): ?>
+                                    <?php if ($total_expense > 0): ?>
                                         <button onclick="downloadPDF()" class="btn btn-success ms-2">
                                             <i class="fas fa-download"></i> Download PDF
                                         </button>
@@ -362,11 +362,11 @@
                         </div>
                         
                         <!-- Total Summary -->
-                        <?php if ($total_orders > 0): ?>
+                        <?php if ($total_expense > 0): ?>
                         <div class="alert alert-info mb-4">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <strong>Total Orders:</strong> <?php echo $total_orders; ?>
+                                    <strong>Total Orders:</strong> <?php echo $total_expense; ?>
                                 </div>
                                 <div class="col-md-4">
                                     <strong>Total Amount:</strong> ₱<?php echo number_format($total_amount, 2); ?>
