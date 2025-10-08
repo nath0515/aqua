@@ -1,6 +1,4 @@
 <?php 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
     require 'session.php';
     require 'db.php';
 
@@ -658,6 +656,90 @@ ini_set('display_errors', 1);
                 amountInput.value = floatVal.toFixed(2);
             });
         });
+        </script>
+                </script>
+        <!-- JavaScript to handle dropdown selection -->
+        <script>
+        document.querySelectorAll('#quickFilterDropdown .dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const value = this.getAttribute('data-value');
+
+                document.getElementById('start_date').value = '';
+                document.getElementById('end_date').value = '';
+
+                document.getElementById('filter_range_input').value = value;
+                document.getElementById('filterForm').submit();
+            });
+        });
+        
+        // Real-time date validation
+        document.getElementById('start_date').addEventListener('change', validateDateRange);
+        document.getElementById('end_date').addEventListener('change', validateDateRange);
+        
+        // Date Range Validation Function
+        function validateDateRange() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const errorDiv = document.getElementById('dateError');
+            
+            // Hide error message first
+            errorDiv.style.display = 'none';
+            
+            // Check if both dates are selected
+            if (startDate && endDate) {
+                // Convert to Date objects for comparison
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                // Check if start date is after end date
+                if (start > end) {
+                    // Show error message
+                    errorDiv.style.display = 'block';
+                    
+                    // Scroll to error message
+                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Prevent form submission
+                    return false;
+                }
+            }
+            
+            // Allow form submission if validation passes
+            return true;
+        }
+        
+        // PDF Download Function
+        function downloadPDF() {
+            // Get current filter parameters
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const filterRange = document.getElementById('filter_range_input').value;
+            
+            // Debug: Log the values
+            console.log('Download PDF - Start Date:', startDate);
+            console.log('Download PDF - End Date:', endDate);
+            console.log('Download PDF - Filter Range:', filterRange);
+            
+            // Create download URL with current filters
+            let downloadUrl = 'download_sales_pdf.php?';
+            if (startDate) downloadUrl += 'start_date=' + startDate + '&';
+            if (endDate) downloadUrl += 'end_date=' + endDate + '&';
+            if (filterRange) downloadUrl += 'filter_range=' + filterRange + '&';
+            
+            // Remove trailing & if exists
+            downloadUrl = downloadUrl.replace(/&$/, '');
+            
+            console.log('Download URL:', downloadUrl);
+            
+            // Create a temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = 'Sales_Report_' + new Date().toISOString().slice(0,10) + '.html';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
         </script>
 
 
