@@ -51,8 +51,20 @@
         }
     }
 
-    // Step 2: If start & end dates are valid, run filter
-    if (validateDate($start_date_val) && validateDate($end_date_val)) {
+   // Step 2: If start & end dates are valid, run filter
+if (validateDate($start_date_val) && validateDate($end_date_val)) {
+    // Convert to DateTime objects for comparison
+    $start_date_obj = new DateTime($start_date_val);
+    $end_date_obj = new DateTime($end_date_val);
+
+    if ($start_date_obj > $end_date_obj) {
+        // Handle invalid range (start date after end date)
+        $date_range_invalid = true;
+
+        // Default: show all or empty data depending on your preference
+        $data = [];
+    } else {
+        // Valid range — run query
         $start_datetime = $start_date_val . ' 00:00:00';
         $end_datetime = $end_date_val . ' 23:59:59';
 
@@ -63,21 +75,25 @@
                 ORDER BY date DESC";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
-        $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
+        $stmt->bindParam(':start_date', $start_datetime);
+        $stmt->bindParam(':end_date', $end_datetime);
         $stmt->execute();
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        // Default: show all
-        $sql = "SELECT date, expensetype_name, comment, amount 
-                FROM expense e1 
-                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id
-                ORDER BY date DESC";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $date_range_invalid = false;
     }
+} else {
+    // Default: show all
+    $sql = "SELECT date, expensetype_name, comment, amount 
+            FROM expense e1 
+            JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id
+            ORDER BY date DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $date_range_invalid = false;
+}
+
 
     // Calculate total amount for filtered data
     $total_amount = 0;

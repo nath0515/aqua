@@ -64,7 +64,7 @@ ini_set('display_errors', 1);
 
     $params = [];
 
-    if (isset($start_date, $end_date) && $start_date && $end_date) {
+    if ($start_date && $end_date) {
         $start_date_time = $start_date . ' 00:00:00';
         $end_date_time = $end_date . ' 23:59:59';
         
