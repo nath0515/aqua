@@ -23,6 +23,13 @@
     require 'notification_helper.php';
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
+
+    // Calculate total amount for filtered data
+    $total_amount = 0;
+    $total_orders = count($order_data);
+    foreach ($order_data as $order) {
+        $total_amount += floatval($order['amount']);
+    }
     
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
@@ -339,9 +346,43 @@
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
+                                    <?php if ($total_orders > 0): ?>
+                                        <button onclick="downloadPDF()" class="btn btn-success ms-2">
+                                            <i class="fas fa-download"></i> Download PDF
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </form>
+
+                        <!-- Error Message -->
+                        <div id="dateError" class="alert alert-danger" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Invalid Date Range:</strong> Start date cannot be after end date. Please select a valid date range.
+                        </div>
+                        
+                        <!-- Total Summary -->
+                        <?php if ($total_orders > 0): ?>
+                        <div class="alert alert-info mb-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Total Orders:</strong> <?php echo $total_orders; ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Total Amount:</strong> ₱<?php echo number_format($total_amount, 2); ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Date Range:</strong> 
+                                    <?php 
+                                    if ($start_date && $end_date) {
+                                        echo date('M d, Y', strtotime($start_date)) . ' - ' . date('M d, Y', strtotime($end_date));
+                                    } else {
+                                        echo 'All Time';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card mb-4">
                             <div class="card-header">
