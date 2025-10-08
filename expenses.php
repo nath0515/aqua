@@ -51,20 +51,8 @@
         }
     }
 
-   // Step 2: If start & end dates are valid, run filter
-if (validateDate($start_date_val) && validateDate($end_date_val)) {
-    // Convert to DateTime objects for comparison
-    $start_date_obj = new DateTime($start_date_val);
-    $end_date_obj = new DateTime($end_date_val);
-
-    if ($start_date_obj > $end_date_obj) {
-        // Handle invalid range (start date after end date)
-        $date_range_invalid = true;
-
-        // Default: show all or empty data depending on your preference
-        $data = [];
-    } else {
-        // Valid range — run query
+    // Step 2: If start & end dates are valid, run filter
+    if (validateDate($start_date_val) && validateDate($end_date_val)) {
         $start_datetime = $start_date_val . ' 00:00:00';
         $end_datetime = $end_date_val . ' 23:59:59';
 
@@ -75,31 +63,20 @@ if (validateDate($start_date_val) && validateDate($end_date_val)) {
                 ORDER BY date DESC";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':start_date', $start_datetime);
-        $stmt->bindParam(':end_date', $end_datetime);
+        $stmt->bindParam(':start_date', $start_datetime, PDO::PARAM_STR);
+        $stmt->bindParam(':end_date', $end_datetime, PDO::PARAM_STR);
         $stmt->execute();
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $date_range_invalid = false;
-    }
-} else {
-    // Default: show all
-    $sql = "SELECT date, expensetype_name, comment, amount 
-            FROM expense e1 
-            JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id
-            ORDER BY date DESC";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $date_range_invalid = false;
-}
-
-
-    // Calculate total amount for filtered data
-    $total_amount = 0;
-    $total_expense = count($data);
-    foreach ($data as $order) {
-        $total_amount += floatval($order['amount']);
+    } else {
+        // Default: show all
+        $sql = "SELECT date, expensetype_name, comment, amount 
+                FROM expense e1 
+                JOIN expensetype e2 ON e1.expensetype_id = e2.expensetype_id
+                ORDER BY date DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -362,43 +339,9 @@ if (validateDate($start_date_val) && validateDate($end_date_val)) {
                                 <div>
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="expenses.php" class="btn btn-outline-danger">Clear Filters</a>
-                                    <?php if ($total_expense > 0): ?>
-                                        <button onclick="downloadPDF()" class="btn btn-success ms-2">
-                                            <i class="fas fa-download"></i> Download PDF
-                                        </button>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         </form>
-
-                        <!-- Error Message -->
-                        <div id="dateError" class="alert alert-danger" style="display: none;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Invalid Date Range:</strong> Start date cannot be after end date. Please select a valid date range.
-                        </div>
-                        
-                        <!-- Total Summary -->
-                        <?php if ($total_expense > 0): ?>
-                        <div class="alert alert-info mb-4">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <strong>Total Orders:</strong> <?php echo $total_expense; ?>
-                                </div>
-                                <div class="col-md-4">
-                                    <strong>Total Amount:</strong> ₱<?php echo number_format($total_amount, 2); ?>
-                                </div>
-                                <div class="col-md-4">
-                                    <strong>Date Range:</strong> 
-                                    <?php 
-                                    if ($start_date && $end_date) {
-                                        echo date('M d, Y', strtotime($start_date)) . ' - ' . date('M d, Y', strtotime($end_date));
-                                    } else {
-                                        echo 'All Time';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="card mb-4">
                             <div class="card-header">
@@ -672,90 +615,6 @@ if (validateDate($start_date_val) && validateDate($end_date_val)) {
                 amountInput.value = floatVal.toFixed(2);
             });
         });
-        </script>
-                </script>
-        <!-- JavaScript to handle dropdown selection -->
-        <script>
-        document.querySelectorAll('#quickFilterDropdown .dropdown-item').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const value = this.getAttribute('data-value');
-
-                document.getElementById('start_date').value = '';
-                document.getElementById('end_date').value = '';
-
-                document.getElementById('filter_range_input').value = value;
-                document.getElementById('filterForm').submit();
-            });
-        });
-        
-        // Real-time date validation
-        document.getElementById('start_date').addEventListener('change', validateDateRange);
-        document.getElementById('end_date').addEventListener('change', validateDateRange);
-        
-        // Date Range Validation Function
-        function validateDateRange() {
-            const startDate = document.getElementById('start_date').value;
-            const endDate = document.getElementById('end_date').value;
-            const errorDiv = document.getElementById('dateError');
-            
-            // Hide error message first
-            errorDiv.style.display = 'none';
-            
-            // Check if both dates are selected
-            if (startDate && endDate) {
-                // Convert to Date objects for comparison
-                const start = new Date(startDate);
-                const end = new Date(endDate);
-                
-                // Check if start date is after end date
-                if (start > end) {
-                    // Show error message
-                    errorDiv.style.display = 'block';
-                    
-                    // Scroll to error message
-                    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    // Prevent form submission
-                    return false;
-                }
-            }
-            
-            // Allow form submission if validation passes
-            return true;
-        }
-        
-        // PDF Download Function
-        function downloadPDF() {
-            // Get current filter parameters
-            const startDate = document.getElementById('start_date').value;
-            const endDate = document.getElementById('end_date').value;
-            const filterRange = document.getElementById('filter_range_input').value;
-            
-            // Debug: Log the values
-            console.log('Download PDF - Start Date:', startDate);
-            console.log('Download PDF - End Date:', endDate);
-            console.log('Download PDF - Filter Range:', filterRange);
-            
-            // Create download URL with current filters
-            let downloadUrl = 'download_sales_pdf.php?';
-            if (startDate) downloadUrl += 'start_date=' + startDate + '&';
-            if (endDate) downloadUrl += 'end_date=' + endDate + '&';
-            if (filterRange) downloadUrl += 'filter_range=' + filterRange + '&';
-            
-            // Remove trailing & if exists
-            downloadUrl = downloadUrl.replace(/&$/, '');
-            
-            console.log('Download URL:', downloadUrl);
-            
-            // Create a temporary link and trigger download
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = 'Sales_Report_' + new Date().toISOString().slice(0,10) + '.html';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
         </script>
 
 
