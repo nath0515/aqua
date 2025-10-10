@@ -30,9 +30,18 @@ error_reporting(E_ALL);
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
-    $sql = "SELECT a.id, CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, ud.contact_number, a.application_date, a.status FROM applications a
-    LEFT JOIN users u ON a.user_id = u.user_id
-    LEFT JOIN user_details ud ON u.user_id = ud.user_id";
+    $sql = "SELECT 
+            a.id, 
+            CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, 
+            ud.contact_number, 
+            a.application_date, 
+            a.status
+        FROM applications a
+        LEFT JOIN users u ON a.user_id = u.user_id
+        LEFT JOIN user_details ud ON u.user_id = ud.user_id
+        ORDER BY 
+            FIELD(a.status, 'pending', 'approved', 'rejected'),
+            a.application_date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $alluserdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
