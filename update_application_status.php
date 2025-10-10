@@ -43,7 +43,7 @@ $user_id = $stmt->fetchColumn();
 if($status == 'approved'){
     $sql = "UPDATE users SET rs = 1 WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
 }
 
