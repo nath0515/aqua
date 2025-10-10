@@ -30,7 +30,7 @@ error_reporting(E_ALL);
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
-    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, ud.contact_number, a.application_date FROM applications a
+    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, ud.contact_number, a.application_date, a.status FROM applications a
     LEFT JOIN users u ON a.user_id = u.user_id
     LEFT JOIN user_details ud ON u.user_id = ud.user_id";
     $stmt = $conn->prepare($sql);
@@ -216,6 +216,7 @@ error_reporting(E_ALL);
                                             <th>Name</th>
                                             <th>Contact Number</th>
                                             <th>Application Date</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -225,6 +226,28 @@ error_reporting(E_ALL);
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['application_date'])); ?></td>
+                                           <td>
+                                                <?php
+                                                    $status = strtolower($row['status']);
+                                                    $badgeClass = '';
+
+                                                    switch ($status) {
+                                                        case 'approved':
+                                                            $badgeClass = 'bg-success';
+                                                            break;
+                                                        case 'rejected':
+                                                            $badgeClass = 'bg-danger';
+                                                            break;
+                                                        case 'pending':
+                                                        default:
+                                                            $badgeClass = 'bg-warning text-dark';
+                                                            break;
+                                                    }
+                                                ?>
+                                                <span class="badge <?php echo $badgeClass; ?>">
+                                                    <?php echo ucfirst($status); ?>
+                                                </span>
+                                            </td>
                                             <td><button 
                                                 class="btn btn-danger btn-sm delete-btn" 
                                                 data-user-id="<?php echo $row['user_id']; ?>" 
