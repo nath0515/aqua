@@ -226,7 +226,7 @@ error_reporting(E_ALL);
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['application_date'])); ?></td>
-                                           <td>
+                                            <td>
                                                 <?php
                                                     $status = strtolower($row['status']);
                                                     $badgeClass = '';
@@ -250,7 +250,7 @@ error_reporting(E_ALL);
                                             </td>
                                             <td><button 
                                                 class="btn btn-danger btn-sm delete-btn" 
-                                                data-user-id="<?php echo $row['user_id']; ?>" 
+                                                data-id="<?php echo $row['id']; ?>" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#confirmDeleteModal"
                                             >
