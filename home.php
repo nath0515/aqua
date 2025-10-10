@@ -357,8 +357,23 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                         cancelButtonText: 'Cancel'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            const currentUrl = encodeURIComponent(window.location.href);
-                                            window.location.href = 'apply.php?dest='+ currentUrl;
+                                            fetch('apply.php', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                                }
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
+                                                } else {
+                                                    Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
+                                                }
+                                            })
+                                            .catch(() => {
+                                                Swal.fire('Error', 'An unexpected error occurred.', 'error');
+                                            });
                                         }
                                     });
                                 }
