@@ -11,7 +11,7 @@
         exit;
     }
 
-    $sql = "SELECT status FROM applications WHERE user_id = :user_id LIMIT 1";
+    $sql = "SELECT status, reason FROM applications WHERE user_id = :user_id LIMIT 1";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
@@ -20,7 +20,8 @@
     if ($result) {
         echo json_encode([
             'exists' => true,
-            'status' => $result['status']
+            'status' => $result['status'],
+            'reason' => $result['reason']
         ]);
     } else {
         echo json_encode([

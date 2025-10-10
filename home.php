@@ -340,7 +340,12 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                             Swal.fire('Application Pending', 'You already have a pending reseller application under review.', 'info');
                                             break;
                                         case 'rejected':
-                                            Swal.fire('Application Rejected', 'Unfortunately, your reseller application was not approved.', 'warning');
+                                            Swal.fire(
+                                                'Application Rejected',
+                                                'Unfortunately, your reseller application was not approved.' + 
+                                                (data.reason ? '\nReason: ' + data.reason : ''),
+                                                'warning'
+                                            );
                                             break;
                                         case 'approved':
                                             Swal.fire('Already Approved', 'You are already a reseller.', 'success');
