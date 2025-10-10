@@ -101,16 +101,117 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
 
-                        <?php 
-                        $sql = "SELECT rs FROM users WHERE user_id = :user_id";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(':user_id', $user_id);
-                        $stmt->execute();
-                        $rs = $stmt->fetchColumn();
-                        if($rs == 0):
-                        ?>
-                            <li><a class="dropdown-item" href="apply.php">Apply as Reseller</a></li>
-                        <?php endif; ?>
+                       <?php 
+                    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(':user_id', $user_id);
+                    $stmt->execute();
+                    $rs = $stmt->fetchColumn();
+                    if($rs == 0):?>
+                        <li><a class="dropdown-item" id="apply-reseller">Apply as Reseller</a></li>
+                        <script>
+
+                            document.addEventListener('DOMContentLoaded', function () {
+                            const applyBtn = document.getElementById('apply-reseller');
+
+                            if (!applyBtn) return;
+
+                            applyBtn.addEventListener('click', function (e) {
+                                e.preventDefault();
+
+                                fetch('check_application_status.php', {
+                                    method: 'GET',
+                                    credentials: 'same-origin'
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.error) {
+                                        Swal.fire('Error', data.error, 'error');
+                                        return;
+                                    }
+
+                                    if (data.exists) {
+                                        switch (data.status.toLowerCase()) {
+                                            case 'pending':
+                                                Swal.fire('Application Pending', 'You already have a pending reseller application under review.', 'info');
+                                                break;
+                                            case 'rejected':
+                                                Swal.fire({
+                                                    title: 'Application Rejected',
+                                                    html: 'Unfortunately, your reseller application was not approved.' +
+                                                        (data.reason ? '<br><strong>Reason:</strong> ' + data.reason : ''),
+                                                    icon: 'warning'
+                                                });
+                                                break;
+                                            case 'approved':
+                                                Swal.fire('Already Approved', 'You are already a reseller.', 'success');
+                                                break;
+                                            default:
+                                                Swal.fire('Notice', 'Your application status: ' + data.status, 'info');
+                                        }
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Apply as Reseller',
+                                            text: 'Are you sure you want to submit a reseller application? Our team will review it promptly.',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Yes, apply now',
+                                            cancelButtonText: 'Cancel'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Show second Swal with file upload
+                                                Swal.fire({
+                                                    title: 'Upload Valid ID',
+                                                    text: 'Please upload a clear image of a valid government-issued ID.',
+                                                    input: 'file',
+                                                    inputAttributes: {
+                                                        accept: 'image/*',
+                                                        'aria-label': 'Upload your ID'
+                                                    },
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Submit Application',
+                                                    cancelButtonText: 'Cancel'
+                                                }).then((uploadResult) => {
+                                                    if (uploadResult.isConfirmed) {
+                                                        const file = uploadResult.value;
+
+                                                        if (!file) {
+                                                            Swal.fire('Error', 'No file selected. Please try again.', 'error');
+                                                            return;
+                                                        }
+
+                                                        const formData = new FormData();
+                                                        formData.append('id_image', file);
+
+                                                        fetch('apply.php', {
+                                                            method: 'POST',
+                                                            body: formData
+                                                        })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data.success) {
+                                                                Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
+                                                            } else {
+                                                                Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
+                                                            }
+                                                        })
+                                                        .catch(() => {
+                                                            Swal.fire('Error', 'An unexpected error occurred while submitting your application.', 'error');
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(() => {
+                                    Swal.fire('Error', 'Failed to check your application status. Please try again later.', 'error');
+                                });
+                            });
+                        });
+
+                        </script>
+                <?php endif; ?>
                         <li><a class="dropdown-item" href="addresses.php">My Addresses</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
