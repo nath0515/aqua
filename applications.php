@@ -234,7 +234,7 @@ error_reporting(E_ALL);
                                         <tr>
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
-                                            <td><?php echo date('F j, Y', strtotime($row['application_date'])); ?></td>
+                                            <td><?php echo date('F j, Y - g:iA', strtotime($row['application_date'])); ?></td>
                                             <td>
                                                 <?php
                                                     $status = strtolower($row['status']);
