@@ -35,6 +35,7 @@ error_reporting(E_ALL);
             CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, 
             ud.contact_number, 
             a.application_date, 
+            a.valid_id,
             a.status
         FROM applications a
         LEFT JOIN users u ON a.user_id = u.user_id
@@ -225,6 +226,7 @@ error_reporting(E_ALL);
                                             <th>Name</th>
                                             <th>Contact Number</th>
                                             <th>Application Date</th>
+                                            <th>Valid ID</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -235,6 +237,7 @@ error_reporting(E_ALL);
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y - g:iA', strtotime($row['application_date'])); ?></td>
+                                            <td><a class="btn btn-success btn-sm" href="<?php echo $row['valid_id']?>">View</a></td>
                                             <td>
                                                 <?php
                                                     $status = strtolower($row['status']);
