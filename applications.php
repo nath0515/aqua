@@ -248,14 +248,11 @@ error_reporting(E_ALL);
                                                     <?php echo ucfirst($status); ?>
                                                 </span>
                                             </td>
-                                            <td><button 
-                                                class="btn btn-danger btn-sm delete-btn" 
-                                                data-id="<?php echo $row['id']; ?>" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#confirmDeleteModal"
-                                            >
-                                                Delete
-                                            </button>
+                                            <td>
+                                                <?php if (strtolower($row['status']) === 'pending'): ?>
+                                                    <button class="btn btn-success btn-sm" data-id="<?php echo $row['id']; ?>">Approve</button>
+                                                    <button class="btn btn-danger btn-sm" data-id="<?php echo $row['id']; ?>">Reject</button>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>
