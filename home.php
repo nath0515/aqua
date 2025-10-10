@@ -322,6 +322,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
 
                         applyBtn.addEventListener('click', function (e) {
                             e.preventDefault();
+
                             fetch('check_application_status.php', {
                                 method: 'GET',
                                 credentials: 'same-origin'
@@ -357,22 +358,46 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                         cancelButtonText: 'Cancel'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            fetch('apply.php', {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                            // Show second Swal with file upload
+                                            Swal.fire({
+                                                title: 'Upload Valid ID',
+                                                text: 'Please upload a clear image of a valid government-issued ID.',
+                                                input: 'file',
+                                                inputAttributes: {
+                                                    accept: 'image/*',
+                                                    'aria-label': 'Upload your ID'
+                                                },
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Submit Application',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((uploadResult) => {
+                                                if (uploadResult.isConfirmed) {
+                                                    const file = uploadResult.value;
+
+                                                    if (!file) {
+                                                        Swal.fire('Error', 'No file selected. Please try again.', 'error');
+                                                        return;
+                                                    }
+
+                                                    const formData = new FormData();
+                                                    formData.append('id_image', file);
+
+                                                    fetch('apply.php', {
+                                                        method: 'POST',
+                                                        body: formData
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (data.success) {
+                                                            Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
+                                                        } else {
+                                                            Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
+                                                        }
+                                                    })
+                                                    .catch(() => {
+                                                        Swal.fire('Error', 'An unexpected error occurred while submitting your application.', 'error');
+                                                    });
                                                 }
-                                            })
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                if (data.success) {
-                                                    Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
-                                                } else {
-                                                    Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
-                                                }
-                                            })
-                                            .catch(() => {
-                                                Swal.fire('Error', 'An unexpected error occurred.', 'error');
                                             });
                                         }
                                     });
@@ -383,6 +408,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                             });
                         });
                     });
+
                     </script>
                 <?php endif; ?>
 

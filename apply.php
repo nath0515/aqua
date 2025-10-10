@@ -45,11 +45,50 @@ if ($exist) {
     exit;
 }
 
+$uploadDir = 'uploads/ids/';
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true); 
+}
+
+if (!isset($_FILES['id_image']) || $_FILES['id_image']['error'] !== UPLOAD_ERR_OK) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Failed to upload ID. Please try again.'
+    ]);
+    exit;
+}
+
+$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+$fileType = mime_content_type($_FILES['id_image']['tmp_name']);
+
+if (!in_array($fileType, $allowedTypes)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid file type. Only JPG, PNG, and WEBP are allowed.'
+    ]);
+    exit;
+}
+
+$ext = pathinfo($_FILES['id_image']['name'], PATHINFO_EXTENSION);
+$filename = uniqid('valid_id_') . '.' . $ext;
+$targetFile = $uploadDir . $filename;
+
+if (!move_uploaded_file($_FILES['id_image']['tmp_name'], $targetFile)) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Failed to save uploaded file.'
+    ]);
+    exit;
+}
+
+$valid_id = $targetFile;
+
 // Insert new application
-$sql = "INSERT INTO applications (user_id, application_date, status) VALUES (:user_id, :application_date, 'pending')";
+$sql = "INSERT INTO applications (user_id, application_date, status, valid_id) VALUES (:user_id, :application_date, 'pending', :valid_id)";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':user_id', $user_id);
 $stmt->bindParam(':application_date', $currentDateTime);
+$stmt->bindParam(':valid_id', $valid_id);
 
 if ($stmt->execute()) {
     echo json_encode([
