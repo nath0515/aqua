@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Get and sanitize inputs
 $id = $_POST['id'] ?? null;
 $status = $_POST['status'] ?? null;
+$reason = $_POST['reason'] ?? null;
 
 $allowedStatuses = ['approved', 'rejected'];
 
@@ -44,6 +45,13 @@ if($status == 'approved'){
     $sql = "UPDATE users SET rs = 1 WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+else{
+    $sql = "UPDATE applications SET reason = :reason WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':reason', $reason);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 }
 
