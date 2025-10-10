@@ -237,7 +237,7 @@ error_reporting(E_ALL);
                                             <td><?php echo $row['full_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y - g:iA', strtotime($row['application_date'])); ?></td>
-                                            <td><a class="btn btn-success btn-sm" href="<?php echo $row['valid_id']?>">View</a></td>
+                                            <td><a class="btn btn-success btn-sm" target="_blank" href="<?php echo $row['valid_id']?>">View</a></td>
                                             <td>
                                                 <?php
                                                     $status = strtolower($row['status']);
