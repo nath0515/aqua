@@ -129,6 +129,17 @@ error_reporting(E_ALL);
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+
+                        <?php 
+                        $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(':user_id', $user_id);
+                        $stmt->execute();
+                        $rs = $stmt->fetchColumn();
+                        if($rs == 0):
+                        ?>
+                            <li><a class="dropdown-item" href="apply.php">Apply as Reseller</a></li>
+                        <?php endif; ?>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
                         <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                         <li><hr class="dropdown-divider" /></li>
