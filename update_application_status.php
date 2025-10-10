@@ -32,17 +32,24 @@ $sql = "UPDATE applications SET status = :status WHERE id = :id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':status', $status);
 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 
-// Execute and return result
-if ($stmt->execute()) {
-    echo json_encode([
-        'success' => true,
-        'message' => "Application has been " . htmlspecialchars($status) . "."
-    ]);
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Failed to update application status.'
-    ]);
+$sql = "SELECT user_id FROM applications WHERE id = :id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$user_id = $stmt->fetchColumn();
+
+if($status == 'approved'){
+    $sql = "UPDATE users SET rs = 1 WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 }
+
+echo json_encode([
+    'success' => true,
+    'message' => "Application has been " . htmlspecialchars($status) . "."
+]);
+
 exit;
