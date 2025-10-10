@@ -26,9 +26,10 @@
     
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
-    $sql = "SELECT u.user_id,CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, role_name, contact_number,created_at FROM users u
-    JOIN user_details ud ON u.user_id = ud.user_id
-    JOIN roles r ON u.role_id = r.role_id";
+
+    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, contact_number, application_date FROM applications a
+    LEFT JOIN users u ON a.user_id = u.user_id
+    LEFT JOIN user_details ud ON u.user_id = ud.user_id";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $alluserdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -210,9 +211,8 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Role</th>
                                             <th>Contact Number</th>
-                                            <th>Date Created</th>
+                                            <th>Application Date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -220,7 +220,6 @@
                                         <?php foreach($alluserdata as $row):?>
                                         <tr>
                                             <td><?php echo $row['full_name']; ?></td>
-                                            <td><?php echo $row['role_name']; ?></td>
                                             <td><?php echo $row['contact_number']; ?></td>
                                             <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
                                             <td><button 
