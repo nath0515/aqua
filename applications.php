@@ -30,7 +30,7 @@ error_reporting(E_ALL);
     // Check for notification success message
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
-    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, a.contact_number, a.application_date FROM applications a
+    $sql = "SELECT CONCAT(ud.firstname, ' ', ud.lastname) AS full_name, ud.contact_number, a.application_date FROM applications a
     LEFT JOIN users u ON a.user_id = u.user_id
     LEFT JOIN user_details ud ON u.user_id = ud.user_id";
     $stmt = $conn->prepare($sql);
