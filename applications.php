@@ -36,7 +36,8 @@ error_reporting(E_ALL);
             ud.contact_number, 
             a.application_date, 
             a.valid_id,
-            a.status
+            a.status,
+            a.reason
         FROM applications a
         LEFT JOIN users u ON a.user_id = u.user_id
         LEFT JOIN user_details ud ON u.user_id = ud.user_id
@@ -259,6 +260,24 @@ error_reporting(E_ALL);
                                                 <span class="badge <?php echo $badgeClass; ?>">
                                                     <?php echo ucfirst($status); ?>
                                                 </span>
+                                                <?php if ($status === 'rejected'): ?>
+                                                    <button class="btn btn-info btn-sm ms-2" id="show-reason-btn">Reason</button>
+                                                    <script>
+                                                    document.addEventListener('DOMContentLoaded', function() {
+                                                        const reasonBtn = document.getElementById('show-reason-btn');
+                                                        if(reasonBtn) {
+                                                            reasonBtn.addEventListener('click', function() {
+                                                                Swal.fire({
+                                                                    title: 'Reason',
+                                                                    text: <?php echo json_encode($row['reason'] ?? 'No reason provided.'); ?>,
+                                                                    icon: 'info',
+                                                                    confirmButtonText: 'Close'
+                                                                });
+                                                            });
+                                                        }
+                                                    });
+                                                    </script>
+                                                <?php endif; ?>
                                             </td>
                                             <td>
                                                 <?php if (strtolower($row['status']) === 'pending'): ?>
