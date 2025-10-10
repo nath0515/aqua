@@ -322,11 +322,9 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
 
                         applyBtn.addEventListener('click', function (e) {
                             e.preventDefault();
-
-                            // Fetch status from backend
                             fetch('check_application_status.php', {
                                 method: 'GET',
-                                credentials: 'same-origin' // important if using sessions
+                                credentials: 'same-origin'
                             })
                             .then(response => response.json())
                             .then(data => {
@@ -336,7 +334,6 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                 }
 
                                 if (data.exists) {
-                                    // User already applied - handle statuses
                                     switch (data.status.toLowerCase()) {
                                         case 'pending':
                                             Swal.fire('Application Pending', 'You already have a pending reseller application under review.', 'info');
@@ -351,7 +348,6 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                             Swal.fire('Notice', 'Your application status: ' + data.status, 'info');
                                     }
                                 } else {
-                                    // Not applied yet - ask for confirmation
                                     Swal.fire({
                                         title: 'Apply as Reseller',
                                         text: 'Are you sure you want to submit a reseller application? Our team will review it promptly.',
@@ -361,7 +357,8 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                         cancelButtonText: 'Cancel'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            window.location.href = 'apply.php';
+                                            const currentUrl = encodeURIComponent(window.location.href);
+                                            window.location.href = 'apply.php?dest='+ currentUrl;
                                         }
                                     });
                                 }
