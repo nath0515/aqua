@@ -261,7 +261,7 @@ error_reporting(E_ALL);
                                                     <?php echo ucfirst($status); ?>
                                                 </span>
                                                 <?php if ($status === 'rejected'): ?>
-                                                    <button class="btn btn-info btn-sm ms-2" id="show-reason-btn">Reason</button>
+                                                    <button class="btn btn-outline-info btn-sm ms-2" id="show-reason-btn"><i class="bi bi-info-circle"></i></button>
                                                     <script>
                                                     document.addEventListener('DOMContentLoaded', function() {
                                                         const reasonBtn = document.getElementById('show-reason-btn');
