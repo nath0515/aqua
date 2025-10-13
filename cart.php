@@ -65,6 +65,12 @@ error_reporting(E_ALL);
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $gcash = $stmt->fetchColumn();
+
+    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rs = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -315,7 +321,7 @@ error_reporting(E_ALL);
                                         $quantity = $row['quantity'];
                                         $with_container = $row['with_container'];
                                         $container_quantity = $row['container_quantity'];
-                                        $price = $quantity >= 10 
+                                        $price = $rs == 1
                                         ? $quantity * $row['water_price_promo'] 
                                         : $quantity * $row['water_price'];
                                     
