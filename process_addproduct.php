@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $product_name = $_POST['product_name'];
         $water_price = $_POST['water_price'];
         $water_price_promo = $_POST['water_price_promo'];
+        $container_price = $_POST['container_price'];
         $stock = $_POST['stock'];
         $now = date("Y-m-d H:i:s");
 
