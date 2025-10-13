@@ -30,8 +30,8 @@
     if(isset($_GET['id'])){
         $order_id = $_GET['id'];
 
-        $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
-        b.product_name, b.water_price, b.container_price, 
+        $sql = "SELECT a.quantity, a.with_container,a.container_quantity, a.isDiscounted,
+        b.product_name, b.water_price, b.water_price_promo, b.container_price, 
         c.date, c.amount, c.rider, c.location_id, c.proof_file,
         d.firstname, d.lastname, d.contact_number,
         e.status_name,
@@ -86,6 +86,12 @@
             $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
         }
     }
+
+    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rs = $stmt->fetchColumn();
     
 ?>
 <!DOCTYPE html>
@@ -349,7 +355,8 @@
                                         <?php foreach($order_data as $row):?>
                                             <?php
                                             // Calculate line item total
-                                            $line_total = $row['water_price'] * $row['quantity'];
+                                            $unit_price = ($row['isDiscounted'] == 1) ? $row['water_price_promo'] : $row['water_price'];
+                                            $line_total = $unit_price * $row['quantity'];
                                             if($row['with_container'] == 1) {
                                                 $line_total += $row['container_price'] * $row['container_quantity'];
                                             }
