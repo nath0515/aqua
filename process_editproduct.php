@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $product_id = $_POST['product_id'];
         $product_name = $_POST['product_name'];
         $water_price = $_POST['water_price'];
+        $water_price_promo = $_POST['water_price_promo'];
         $container_price = $_POST['container_price'];
         $stock = $_POST['stock'];
 
@@ -41,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     product_name = :product_name, 
                     product_photo = :product_photo, 
                     water_price = :water_price, 
+                    water_price_promo = :water_price_promo,
                     container_price = :container_price,
                     stock = :stock
                     WHERE product_id = :product_id";
@@ -55,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "UPDATE products SET 
                 product_name = :product_name,  
                 water_price = :water_price, 
+                water_price_promo = :water_price_promo,
                 container_price = :container_price,
                 stock = :stock
                 WHERE product_id = :product_id";
@@ -64,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Bind common parameters
         $stmt->bindParam(':product_name', $product_name);
         $stmt->bindParam(':water_price', $water_price);
+        $stmt->bindParam(':water_price_promo', $water_price_promo);
         $stmt->bindParam(':container_price', $container_price);
         $stmt->bindParam(':stock', $stock);
         $stmt->bindParam(':product_id', $product_id);
