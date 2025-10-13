@@ -533,6 +533,12 @@
                         newRow.insertCell(7).innerHTML = "<button type='button' class='btn btn-danger' title='Remove' onclick='deleteRow(this)'><i class='bi bi-trash'></i></button>";
                         newRow.insertCell(8).innerText = productId;
                         newRow.cells[8].style.display = 'none';
+                        if(isDiscountedCheckbox.checked){
+                            newRow.insertCell(9).innerText = 1;
+                        }
+                        else{
+                            newRow.insertCell(9).innerText = 0;
+                        }
                     }
 
                     // Clear inputs
@@ -600,7 +606,8 @@
                     container_quantity: parseInt(cells[4].innerText),
                     container_price: parseFloat(cells[5].innerText.replace("₱", "").trim()),
                     total_price: parseFloat(cells[6].innerText.replace("₱", "").trim()),
-                    product_id: parseInt(cells[8].innerText) // hidden
+                    product_id: parseInt(cells[8].innerText), // hidden
+                    isDiscounted: parseInt(cells[9].innerText)
                 };
 
                 receiptData.push(rowData);

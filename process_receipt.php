@@ -31,9 +31,9 @@ try {
     $orderId = $conn->lastInsertId();
 
     $itemStmt = $conn->prepare('INSERT INTO orderitems 
-    (order_id, product_id, quantity, with_container, container_quantity) 
+    (order_id, product_id, quantity, with_container, container_quantity, isDiscounted) 
     VALUES 
-    (:order_id, :product_id, :quantity, :with_container, :container_quantity)');
+    (:order_id, :product_id, :quantity, :with_container, :container_quantity, :isDiscounted)');
 
     $selectStmt = $conn->prepare('SELECT stock FROM products WHERE product_id = :product_id');
 
@@ -45,7 +45,8 @@ try {
             ':product_id' => $item['product_id'],
             ':quantity' => $item['quantity'],
             ':with_container' => $item['has_container'],
-            ':container_quantity' => $item['container_quantity']
+            ':container_quantity' => $item['container_quantity'],
+            ':isDiscounted' => $item['isDiscounted']
         ]);
 
         $selectStmt->execute([':product_id' => $item['product_id']]);
