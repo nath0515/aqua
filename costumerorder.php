@@ -59,6 +59,12 @@
     foreach ($cart_data as $item) {
         $cart_count += $item['quantity'];
     }
+
+    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rs = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -420,7 +426,18 @@
                                 <div class="product-details">
                                     <div class="price-item">
                                         <span class="price-label">Water Price:</span>
-                                        <span class="price-value">₱<?php echo $row['water_price']; ?></span>
+                                        <?php if ($rs == 1): ?>
+                                            <span class="price-value" style="text-decoration: line-through; color: #888;">
+                                                ₱<?php echo number_format($row['water_price'], 2); ?>
+                                            </span>
+                                            <span class="price-value" style="color: #e53935; font-weight: bold; margin-left: 10px;">
+                                                ₱<?php echo number_format($row['water_price_promo'], 2); ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="price-value">
+                                                ₱<?php echo number_format($row['water_price'], 2); ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </div>
                                     
                                     <?php if ($row['container_price'] > 0): ?>
