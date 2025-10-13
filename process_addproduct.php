@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt->execute()) {
                 $message = "New product added: $product_name – Water Price: ₱" . number_format($water_price, 2) .
-                ", Container Price: ₱" . number_format($container_price, 2) .
+                ", Discounted Price: ₱" . number_format($water_price_promo, 2) .", Container Price: ₱" . number_format($container_price, 2) .
                 ", Stock: $stock stock.";
                  $destination = "stock.php";
                  
