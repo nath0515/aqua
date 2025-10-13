@@ -38,7 +38,7 @@ error_reporting(E_ALL);
     if(isset($_GET['id'])){
         $order_id = $_GET['id'];
 
-        $sql = "SELECT a.quantity, a.with_container,a.container_quantity,
+        $sql = "SELECT a.quantity, a.with_container,a.container_quantity, a.isDiscounted,
         b.product_name, b.water_price, b.water_price_promo, b.container_price, 
         c.date, c.amount, c.rider,
         d.firstname, d.lastname, d.address, d.contact_number,
@@ -259,7 +259,7 @@ error_reporting(E_ALL);
                                             <?php foreach($order_data as $row):?>
                                                 <?php
                                                 // Calculate line item total
-                                                $unit_price = ($row['quantity'] >= 10) ? $row['water_price_promo'] : $row['water_price'];
+                                                $unit_price = ($row['isDiscounted'] == 1) ? $row['water_price_promo'] : $row['water_price'];
                                                 $line_total = $unit_price * $row['quantity'];
                                                 if($row['with_container'] == 1) {
                                                     $line_total += $row['container_price'] * $row['container_quantity'];
