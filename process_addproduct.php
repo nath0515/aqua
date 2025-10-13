@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':product_name', $product_name);
             $stmt->bindParam(':product_photo', $target_file);
             $stmt->bindParam(':water_price', $water_price);
-            $stmt->bindParam(':water_price', $water_price_promo);
+            $stmt->bindParam(':water_price_promo', $water_price_promo);
             $stmt->bindParam(':stock', $stock);
 
             if ($stmt->execute()) {
