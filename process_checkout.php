@@ -107,8 +107,8 @@ try {
 
     // Insert order items
     $item_stmt = $conn->prepare("
-        INSERT INTO orderitems (order_id, product_id, quantity, with_container, container_quantity) 
-        VALUES (:order_id, :product_id, :quantity, :with_container, :container_quantity)
+        INSERT INTO orderitems (order_id, product_id, quantity, with_container, container_quantity, isDiscounted) 
+        VALUES (:order_id, :product_id, :quantity, :with_container, :container_quantity, :isDiscounted)
     ");
 
     foreach ($data_items as $item) {
@@ -117,7 +117,8 @@ try {
             ':product_id' => intval($item['product_id']),
             ':quantity' => intval($item['quantity']),
             ':with_container' => intval($item['with_container']),
-            ':container_quantity' => intval($item['container_quantity'])
+            ':container_quantity' => intval($item['container_quantity']),
+            ':isDiscounted' => intval($rs)
         ]);
     }
 
