@@ -528,11 +528,23 @@
 
                                 <!-- Water Price -->
                                 <div class="mb-3">
-                                    <label for="waterPrice" class="form-label">Water Price (₱)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="waterPrice" name="water_price" step="0.01" required>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="waterPrice" class="form-label">Water Price (₱)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">₱</span>
+                                                <input type="number" class="form-control" id="waterPrice" name="water_price" step="0.01" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="promoPrice" class="form-label">Discounted Price (₱)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">₱</span>
+                                                <input type="number" class="form-control" id="promoPrice" name="water_price_promo" step="0.01" required placeholder="for resellers price">
+                                            </div>
+                                        </div>
                                     </div>
+                                   
                                 </div>
 
                                 <!-- Stock -->
