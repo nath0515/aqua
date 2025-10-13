@@ -37,14 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if (move_uploaded_file($_FILES["product_photo"]["tmp_name"], $target_file)) {
-            $sql = "INSERT INTO products (product_name, product_photo, water_price, water_price_promo, stock) 
-                    VALUES (:product_name, :product_photo, :water_price, :water_price_promo, :stock)";
+            $sql = "INSERT INTO products (product_name, product_photo, water_price, water_price_promo, container_price, stock) 
+                    VALUES (:product_name, :product_photo, :water_price, :water_price_promo, :container_price, :stock)";
             $stmt = $conn->prepare($sql);
 
             $stmt->bindParam(':product_name', $product_name);
             $stmt->bindParam(':product_photo', $target_file);
             $stmt->bindParam(':water_price', $water_price);
             $stmt->bindParam(':water_price_promo', $water_price_promo);
+            $stmt->bindParam(':container_price', $container_price);
             $stmt->bindParam(':stock', $stock);
 
             if ($stmt->execute()) {

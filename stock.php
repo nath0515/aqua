@@ -544,7 +544,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                   
+                                </div>
+
+                                <!-- Container Price -->
+                                <div class="mb-3">
+                                    <label for="containerPrice" class="form-label">Container Price (₱)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" class="form-control" id="containerPrice" name="container_price" step="0.01" required>
+                                    </div>
                                 </div>
 
                                 <!-- Stock -->
