@@ -219,7 +219,7 @@
                                     <div class="mb-3 row">
                                         <div class="col">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="updateTotalPrice()">
+                                                <input class="form-check-input" type="checkbox" id="isDiscounted">
                                                 <label class="form-check-label" for="isDiscounted">
                                                     Discounted Price
                                                 </label>
@@ -440,7 +440,7 @@
                             else{
                                 document.getElementById("unitprice").value = data.data.water_price;
                             }
-                            
+                            updateTotalPrice();
 
                         });
                         document.getElementById("availablequantity").value = data.data.stock;
