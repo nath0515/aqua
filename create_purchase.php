@@ -498,7 +498,7 @@
 
                     let table = document.getElementById("receipt").getElementsByTagName("tbody")[0];
                     let rows = table.getElementsByTagName("tr");
-                    let waterPrice = parseFloat(data.data.water_price);
+                    let waterPrice = parseFloat(unitPriceInput.value);
                     let found = false;
 
                     for (let i = 0; i < rows.length; i++) {
