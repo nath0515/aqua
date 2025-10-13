@@ -68,7 +68,7 @@ try {
     foreach ($data_items as $item) {
         $quantity = intval($item['quantity']);
         $with_container = intval($item['with_container']);
-        $container_quantity = intval($item['container_quantity']);
+        $container_quantity = intval($item['container_quantity']) ?? 0;
         $product_id = intval($item['product_id']);
 
         $sql = "SELECT water_price, water_price_promo, container_price FROM products WHERE product_id = :product_id";
@@ -135,7 +135,7 @@ try {
         $current_stock = $select_stock_stmt->fetchColumn();
         
         // Calculate new stock (reduce by quantity ordered)
-        $new_stock = $current_stock - $quantity;
+        $new_stock = $current_stock - $container_quantity;
         
         // Update stock
         $update_stock_stmt->execute([
