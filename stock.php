@@ -745,7 +745,7 @@
                                     <label for="stock" class="form-label">Stock</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                        <input type="number" id="edit_stock" name="stock" class="form-control" min="1" step="1" required>
+                                        <input type="number" id="editStock" name="stock" class="form-control" min="1" step="1" required>
                                     </div>
                                 </div>
                         </div>
