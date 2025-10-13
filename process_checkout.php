@@ -58,6 +58,11 @@ if ($payment_id === 1) {
 
 try {
     $total_amount = 0;
+    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rs = $stmt->fetchColumn();
 
     // Calculate total amount
     foreach ($data_items as $item) {
@@ -72,7 +77,7 @@ try {
         $stmt->execute();
         $prices = $stmt->fetch();
 
-        $item_price = ($quantity >= 10) ? $prices['water_price_promo'] : $prices['water_price'];
+        $item_price = ($rs == 1) ? $prices['water_price_promo'] : $prices['water_price'];
         $container_price = $prices['container_price'];
 
         $item_total = $quantity * $item_price;
