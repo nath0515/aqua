@@ -705,11 +705,21 @@
 
                                 <!-- Water Price -->
                                 <div class="mb-3">
-                                    <label for="waterPrice" class="form-label">Water Price (₱)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="editWaterPrice" name="water_price" step="0.01" required>
+                                    <div class="col-6">
+                                        <label for="waterPrice" class="form-label">Water Price (₱)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control" id="editWaterPrice" name="water_price" step="0.01" required placeholder="normal price">
+                                        </div>
                                     </div>
+                                    <div class="col-6">
+                                        <label for="waterPrice" class="form-label">Discounted Price (₱)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="number" class="form-control" id="editPromoPrice" name="water_price_promo" step="0.01" required placeholder="for reseller price">
+                                        </div>
+                                    </div>
+                                    
                                 </div>
 
                                 <!-- Container Price -->
@@ -916,6 +926,7 @@
                                 $('#editProductId').val(productId);
                                 $('#editProductName').val(response.data.product_name);
                                 $('#editWaterPrice').val(response.data.water_price);
+                                $('#editPromoPrice').val(response.data.water_price_promo);
                                 $('#editContainerPrice').val(response.data.container_price);
                                 $('#editStock').val(response.data.stock);
                                 $('#editProductImagePreview').attr('src', response.data.product_photo);
