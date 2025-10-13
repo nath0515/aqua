@@ -44,6 +44,12 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $rs = $stmt->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -290,15 +296,15 @@
                         }
                         
                         let quantity = document.getElementById('quantity').value;
-                        if (quantity >= 10) {
+                        <?php if($rs == 1): ?>
                                 document.getElementById("unitprice").value = data.data.water_price_promo;
                                 document.getElementById('totalprice').value = (parseFloat(quantity) * parseFloat(data.data.water_price_promo)).toFixed(2);
 
-                            } else {
+                        <?php else: ?>
                                 document.getElementById("unitprice").value = data.data.water_price;
                                 document.getElementById('totalprice').value = (parseFloat(quantity) * parseFloat(data.data.water_price)).toFixed(2);
 
-                            }
+                        <?php endif;?>
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
 
