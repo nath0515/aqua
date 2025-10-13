@@ -219,7 +219,7 @@
                                     <div class="mb-3 row">
                                         <div class="col">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="togglePriceInput()">
+                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="">
                                                 <label class="form-check-label" for="isDiscounted">
                                                     Discounted Price
                                                 </label>
@@ -431,6 +431,17 @@
                                 document.getElementById("unitprice").value = data.data.water_price;
                             }
                             
+                        });
+
+                        isDiscountedCheckbox.addEventListener("change", function () {
+                            if(this.checked){
+                                document.getElementById("unitprice").value = data.data.water_price_promo;
+                            }
+                            else{
+                                document.getElementById("unitprice").value = data.data.water_price;
+                            }
+                            
+
                         });
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
