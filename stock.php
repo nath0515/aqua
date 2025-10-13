@@ -470,6 +470,10 @@
                                                 <span class="price-value">₱<?php echo number_format($row['water_price'], 2); ?></span>
                                             </div>
                                             <div class="price-row">
+                                                <span class="price-label">Discounted Price:</span>
+                                                <span class="price-value">₱<?php echo number_format($row['water_price_promo'], 2); ?></span>
+                                            </div>
+                                            <div class="price-row">
                                                 <span class="price-label">Container Price:</span>
                                                 <span class="price-value">₱<?php echo number_format($row['container_price'], 2); ?></span>
                                             </div>
