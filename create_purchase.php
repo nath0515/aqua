@@ -460,6 +460,7 @@
                 const totalPriceInput = document.getElementById('totalprice');
                 const productIdInput = document.getElementById('product_id');
                 const availableInput = document.getElementById('availablequantity');
+                const isDiscountedCheckbox = document.getElementById('isDiscounted');
 
                 let unitprice = parseFloat(unitPriceInput.value);
                 let quantity = parseInt(quantityInput.value);
@@ -541,6 +542,7 @@
                     containerPriceInput.value = '';
                     totalPriceInput.value = '';
                     productIdInput.value = '';
+                    isDiscountedCheckbox.checked = false;
 
                     updateTotalPrice1();
                 })
