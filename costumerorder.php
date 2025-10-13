@@ -430,7 +430,7 @@
                                             <span class="price-value" style="text-decoration: line-through; color: #888;">
                                                 ₱<?php echo number_format($row['water_price'], 2); ?>
                                             </span>
-                                            <span class="price-value" style="color: #e53935; font-weight: bold; margin-left: 10px;">
+                                            <span class="price-value" style="color: #198754; font-weight: bold; margin-left: 10px;">
                                                 ₱<?php echo number_format($row['water_price_promo'], 2); ?>
                                             </span>
                                         <?php else: ?>
