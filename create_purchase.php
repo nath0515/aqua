@@ -219,6 +219,16 @@
                                     <div class="mb-3 row">
                                         <div class="col">
                                             <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="">
+                                                <label class="form-check-label" for="isDiscounted">
+                                                    Discounted Price
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col">
+                                            <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="hasContainer" onchange="togglePriceInput()">
                                                 <label class="form-check-label" for="hasContainer">
                                                     With Container
@@ -402,6 +412,7 @@
                 .then(data => {
                     if (data.success) {
                         // Hide "With Container" option if container price is 0 or very low
+                        const isDiscountedCheckbox = document.getElementById("isDiscounted");
                         const containerCheckbox = document.getElementById("hasContainer");
                         const containerLabel = containerCheckbox.nextElementSibling;
                         const containerDiv = containerCheckbox.closest('.col');
@@ -413,7 +424,13 @@
                         }
                         
                         document.getElementById("quantity").addEventListener("input", function () {
-                            document.getElementById("unitprice").value = data.data.water_price;
+                            if(isDiscountedCheckbox.checked){
+                                document.getElementById("unitprice").value = data.data.water_price_promo;
+                            }
+                            else{
+                                document.getElementById("unitprice").value = data.data.water_price;
+                            }
+                            
                         });
                         document.getElementById("availablequantity").value = data.data.stock;
                         document.getElementById("containerprice").value = data.data.container_price;
