@@ -363,7 +363,7 @@
                                             ?>
                                             <tr>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td>₱<?php echo number_format($row['water_price'], 2);?></td>
+                                                <td>₱<?php echo number_format($unit_price, 2);?></td>
                                                 <td><?php echo $row['quantity'];?></td>
                                                 <?php if($has_containers): ?>
                                                     <td>
