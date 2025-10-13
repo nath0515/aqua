@@ -219,7 +219,7 @@
                                     <div class="mb-3 row">
                                         <div class="col">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="">
+                                                <input class="form-check-input" type="checkbox" id="isDiscounted" onchange="updateTotalPrice()">
                                                 <label class="form-check-label" for="isDiscounted">
                                                     Discounted Price
                                                 </label>
