@@ -191,7 +191,6 @@ if (isset($_SESSION['loggedin'])) {
     <!-- Left Side Logo -->
     <div class="logo-section">
       <img src="assets/img/logo2.png" alt="AQUADROP Logo">
-      <h2>AQUADROP</h2>
     </div>
 
     <!-- Right Side Form -->
