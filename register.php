@@ -52,7 +52,7 @@
 
                                 <!-- Responsive Logo -->
                                 <div class="text-center mt-4">
-                                    <img src="assets/img/logo1.png" alt="Logo" class="img-fluid mb-2" style="max-width: 150px; height: auto;">
+                                    <img src="assets/img/logo2.png" alt="Logo" class="img-fluid mb-2" style="max-width: 150px; height: auto;">
                                 </div>
 
                                 <div class="card-header text-center">
