@@ -47,70 +47,104 @@
             <main>
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-lg-4">
+                        <div class="col-lg-4 col-md-6 col-sm-10">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <img src="assets/img/logo1.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+
+                                <!-- Responsive Logo -->
+                                <div class="text-center mt-4">
+                                    <img src="assets/img/logo1.png" alt="Logo" class="img-fluid mb-2" style="max-width: 150px; height: auto;">
+                                </div>
+
+                                <div class="card-header text-center">
+                                    <h3 class="font-weight-light my-3">Create Account</h3>
+                                </div>
+
                                 <div class="card-body">
-                                    <form action="process_register.php" method="POST" onsubmit="return checkForm()">
-                                        <div class="mb-3">
-                                            <label for="" class="form-label">Username</label>
-                                            <input type="text" name="username" class="form-control" placeholder="Username" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="" class="form-label">Email Address</label>
-                                            <input type="email" name="email" class="form-control" value="<?php if(isset($_GET['email'])) echo $_GET['email']?>" placeholder="Email" required readonly>
-                                        </div>
+                                <form action="process_register.php" method="POST" onsubmit="return checkForm()">
 
-                                        <div class="mb-3">
-                                            <label for="" class="form-label">Password</label>
-                                            <div class="input-group">
-                                                <input type="password" id="password" class="form-control" name="password"  onInput="check()" placeholder="Password" required>
-                                                <span class="input-group-text" onclick="togglePassword()">
-                                                    <i class="fa fa-eye" id="eyeIcon"></i> 
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <!-- Username -->
+                                    <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                                    </div>
 
-                                        <div class="mb-3 d-none" id="validation">
-                                            <div id="count">Length : 0</div>
-                                            <!-- Password Strength Check (Moved here under Confirm Password) -->
-                                            <div id="check0">
-                                                <i class="far fa-check-circle"></i> <span> Length more than 8.</span>
-                                            </div>
-                                            <div id="check2">
-                                                <i class="far fa-check-circle"></i> <span> Contains numerical character.</span>
-                                            </div>
-                                            <div id="check3">
-                                                <i class="far fa-check-circle"></i> <span> Contains special character.</span>
-                                            </div>
-                                            <div id="check4">
-                                                <i class="far fa-check-circle"></i> <span> Shouldn't contain spaces.</span>
-                                            </div>
-                                        </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                    <label class="form-label">Email Address</label>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        class="form-control"
+                                        value="<?php if(isset($_GET['email'])) echo $_GET['email']?>" 
+                                        placeholder="Email" 
+                                        required 
+                                        readonly
+                                    >
+                                    </div>
 
-                                        <div class="mb-3">
-                                            <label for="" class="form-label">Confirm Password</label>
-                                            <div class="input-group">
-                                                <input type="password" id="confirm_password" class="form-control" name="confirm_password" onInput="confirmCheck()" placeholder="Password" required>
-                                                <span class="input-group-text" onclick="toggleConfirmPassword()">
-                                                    <i class="fa fa-eye" id="confirmEyeIcon"></i> 
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 d-none" id="validation1">
-                                            <div id="check5">
-                                                <i class="far fa-check-circle"></i> <span> Passwords do not match.</span>
-                                            </div>
-                                            
-                                        </div>
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input 
+                                        type="password" 
+                                        id="password" 
+                                        class="form-control" 
+                                        name="password"  
+                                        onInput="check()" 
+                                        placeholder="Password" 
+                                        required
+                                        >
+                                        <span class="input-group-text" onclick="togglePassword()">
+                                        <i class="fa fa-eye" id="eyeIcon"></i>
+                                        </span>
+                                    </div>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-primary w-100">Continue</button>
-                                    </form>
+                                    <!-- Password validation -->
+                                    <div class="mb-3 d-none" id="validation">
+                                    <div id="count">Length : 0</div>
+                                    <div id="check0"><i class="far fa-check-circle"></i> <span>Length more than 8.</span></div>
+                                    <div id="check2"><i class="far fa-check-circle"></i> <span>Contains numerical character.</span></div>
+                                    <div id="check3"><i class="far fa-check-circle"></i> <span>Contains special character.</span></div>
+                                    <div id="check4"><i class="far fa-check-circle"></i> <span>Shouldn't contain spaces.</span></div>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="mb-3">
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input 
+                                        type="password" 
+                                        id="confirm_password" 
+                                        class="form-control" 
+                                        name="confirm_password" 
+                                        onInput="confirmCheck()" 
+                                        placeholder="Password" 
+                                        required
+                                        >
+                                        <span class="input-group-text" onclick="toggleConfirmPassword()">
+                                        <i class="fa fa-eye" id="confirmEyeIcon"></i>
+                                        </span>
+                                    </div>
+                                    </div>
+
+                                    <!-- Password Match Check -->
+                                    <div class="mb-3 d-none" id="validation1">
+                                    <div id="check5">
+                                        <i class="far fa-check-circle"></i> 
+                                        <span>Passwords do not match.</span>
+                                    </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Continue</button>
+                                </form>
                                 </div>
+
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="login.php">Go back</a></div>
+                                <div class="small"><a href="login.php">Go back</a></div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
