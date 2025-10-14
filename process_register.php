@@ -12,7 +12,7 @@
     use PHPMailer\PHPMailer\Exception;
     ob_start();
 
-    $globalquery = "INSERT INTO users (username, email, password, verification_token, fp_token, role_id, created_at) VALUES (:username, :email, :password, :verification_token, :fp_token, 0, :created_at)";
+    $globalquery = "INSERT INTO users (username, email, password, verification_token, fp_token, role_id, created_at) VALUES (:username, :email, :password, :verification_token, :fp_token, 2, :created_at)";
     $verification_token = bin2hex(random_bytes(16));
     $fp_token = bin2hex(random_bytes(16));
     $date = date('Y-m-d H:i:s');
