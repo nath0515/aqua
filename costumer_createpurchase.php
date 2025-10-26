@@ -517,3 +517,14 @@
         <?php endif; ?>
 </body>
 </html>
+
+<?php 
+	$sql = "SELECT * FROM user_locations";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	
+	if ($stmt->rowCount() === 0) {
+	   	header('Location: addresses.php?status=noadd');
+		exit();
+	}
+?>
