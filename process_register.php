@@ -54,17 +54,6 @@
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
-            $address = 'Address not set';
-            $contact = 'Contact not set';
-            $user_details_sql = "INSERT INTO user_details (user_id, firstname, lastname, address, contact_number) VALUES (:user_id, :firstname, :lastname, :address, :contact_number)";
-            $user_details_stmt = $conn->prepare($user_details_sql);
-            $user_details_stmt->bindParam(':user_id', $conn->lastInsertId());
-            $user_details_stmt->bindParam(':firstname', $username);
-            $user_details_stmt->bindParam(':lastname', $username);
-            $user_details_stmt->bindParam(':address', $address);
-            $user_details_stmt->bindParam(':contact_number', $contact);
-            $user_details_stmt->execute();
-
             $mailsent= sendVerificationEmail($email, $verification_token);
             if ($mailsent){
                 header("Location: register.php?status=success");
