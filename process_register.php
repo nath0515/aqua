@@ -54,20 +54,6 @@
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
-            // For local development, skip email verification
-            // $mailsent= sendVerificationEmail($email, $verification_token);
-            // if ($mailsent){
-            //     header("Location: register.php?status=success");
-            //     exit();
-            // }
-            // else{
-            //     header("Location: register.php?status=error");
-            //     exit();
-            // }
-            
-            // Auto-verify for local development
-            // Create user details record
-
             $address = 'Address not set';
             $contact = 'Contact not set';
             $user_details_sql = "INSERT INTO user_details (user_id, firstname, lastname, address, contact_number) VALUES (:user_id, :firstname, :lastname, :address, :contact_number)";
@@ -78,9 +64,16 @@
             $user_details_stmt->bindParam(':address', $address);
             $user_details_stmt->bindParam(':contact_number', $contact);
             $user_details_stmt->execute();
-            
-            header("Location: register.php?status=success");
-            exit();
+
+            $mailsent= sendVerificationEmail($email, $verification_token);
+            if ($mailsent){
+                header("Location: register.php?status=success");
+                exit();
+            }
+            else{
+                header("Location: register.php?status=error");
+                exit();
+            }
             
         } catch (PDOException $e) {
             error_log("Registration error: " . $e->getMessage());
