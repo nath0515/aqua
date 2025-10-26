@@ -50,6 +50,16 @@
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $rs = $stmt->fetchColumn();
+
+	$sql = "SELECT * FROM user_locations WHERE user_id = :user_id";
+	$stmt = $conn->prepare($sql);
+	$stmt->bindParam(':user_id', $user_id);
+	$stmt->execute();
+	
+	if ($stmt->rowCount() === 0) {
+	   	header('Location: addresses.php?status=noadd');
+		exit();
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -517,15 +527,3 @@
         <?php endif; ?>
 </body>
 </html>
-
-<?php 
-	$sql = "SELECT * FROM user_locations WHERE user_id = :user_id";
-	$stmt = $conn->prepare($sql);
-	$stmt->bindParam(':user_id', $user_id);
-	$stmt->execute();
-	
-	if ($stmt->rowCount() === 0) {
-	   	header('Location: addresses.php?status=noadd');
-		exit();
-	}
-?>
