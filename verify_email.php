@@ -43,7 +43,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-4">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <img src="assets/img/logo.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
+                            <img src="assets/img/logo3.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
                                 <div class="card-header"><h3 class="text-center font-weight-light my-4">User Details</h3></div>
                                 <div class="card-body">
                                     <form action="process_verifydetails.php" method="POST" onsubmit="return checkForm()">
