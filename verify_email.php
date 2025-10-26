@@ -5,7 +5,7 @@
 
  if (isset($_GET['token'])) {
     $token = $_GET['token'];
-    $sql = "SELECT * FROM users WHERE verification_token = :token AND role_id = 0";
+    $sql = "SELECT * FROM users WHERE verification_token = :token AND role_id = 2";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':token', $token);
     $stmt->execute();
