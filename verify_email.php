@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">Username</label>
-                                            <input type="text" name="username" class="form-control" value="" placeholder="Username" required>
+                                            <input type="text" name="username" class="form-control" value="<?php echo $data['username']?>" placeholder="Username" required readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">First Name</label>
