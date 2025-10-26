@@ -712,6 +712,16 @@
                 });
             });
         </script>
+
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'noadd'): ?>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No addresses found.',
+                    text: 'Please create your address first.',
+                });
+            </script>
+        <?php endif; ?>
             
     </body>
 </html>
