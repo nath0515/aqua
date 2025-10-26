@@ -29,9 +29,10 @@
             }
             $lastId = $user['user_id'];
             
-            $sql = "SELECT username FROM users WHERE username = :username";
+            $sql = "SELECT username FROM users WHERE username = :username AND verification_token != :verification_token";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':verification_token', $token);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 header('Location: verify_email.php?status=exist&token='.$token);
