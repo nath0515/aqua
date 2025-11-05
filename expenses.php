@@ -422,7 +422,7 @@
                                     <span class="input-group-text"><i class="bi bi-receipt"></i></span>
                                     <input type="text" name="comment" class="form-control" placeholder="Comment" required>
                                 </div>
-                            </div>
+                            </div><!-- -->
                            <div class="mb-3">
                                 <label for="amount" class="form-label">Amount</label>
                                 <div class="input-group">
