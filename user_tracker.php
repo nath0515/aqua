@@ -1,4 +1,8 @@
 <?php 
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
     require 'session.php';
     require 'db.php';
     require 'notification_helper.php';
