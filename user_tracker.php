@@ -30,6 +30,12 @@ ini_set('display_errors', 1);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+     require 'notification_helper.php';
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+    
+    // Check for notification success message
+    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
     $sql = "SELECT ul.latitude, ul.longitude, ul.label, ul.address, o.rider,
                    tb.barangay_name, tm.municipality_name, tp.province_name
