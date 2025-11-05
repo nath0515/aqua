@@ -375,6 +375,7 @@
                                         <input type="time" name="startTime" id="startTime" value="<?php echo date('H:i'); ?>">
                                     </div>
                                 </div>
+                                <!-- ito tatanggalin -->
                             </div>
                         </div>
                     </div>
