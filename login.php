@@ -6,6 +6,9 @@
 
     if (isset($_SESSION['loggedin'])) {
         switch($_SESSION['role_id']){
+            case 0:
+                $error_message = "Please verify your email address.";
+                break;
             case 1:
                 $d = "index.php";
                 break;

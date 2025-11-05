@@ -36,7 +36,7 @@
                     exit();
                 }
                 else{
-                    $globalquery = "UPDATE users SET username = :username, password = :password, verification_token = :verification_token, fp_token = :fp_token, role_id = 2 WHERE email = :email";
+                    $globalquery = "UPDATE users SET username = :username, password = :password, verification_token = :verification_token, fp_token = :fp_token, role_id = 0 WHERE email = :email";
                 }
             }
             if ($password == $confirm_password) {
