@@ -16,6 +16,9 @@ try {
     $totalPrice = $data['total_price'];
     $paymentMethod = $data['payment_method'];
     $now = date("Y-m-d H:i:s");
+    $dateSel = $data['dateSel'] ?? date('Y-m-d');
+    $timeSel = $data['timeSel'] ?? date('H:i');
+    $dateTime = date('Y-m-d H:i:s', strtotime($dateSel . ' ' . $timeSel));
 
     $conn->beginTransaction();
 
@@ -23,7 +26,7 @@ try {
     $stmt->execute([
         ':amount' => $totalPrice,
         ':payment_id' => $paymentMethod,
-        ':date' => $now,
+        ':date' => $dateTime,
         ':user_id' => 31,
         ':status_id' => 5
     ]);

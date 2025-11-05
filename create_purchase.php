@@ -367,6 +367,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!-- dito ko nilagay -->
+                                <div class="col-md-4 mt-3">
+                                    <div class="form-group form-group-default">
+                                        <label for="">Date/Time</label>
+                                        <input type="date" name="startDate" id="startDate" value="<?php echo date('Y-m-d'); ?>">
+                                        <input type="time" name="startTime" id="startTime" value="<?php echo date('H:i'); ?>">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -588,6 +596,8 @@
             let receiptData = [];
 
             let paymentMethod = document.getElementById("payment_id").value;
+            let startDate = document.getElementById("startDate").value;
+            let startTime = document.getElementById("startTime").value;
             if (paymentMethod != '1' && paymentMethod != '2') {
                 Swal.fire("Error!", "Please select a valid payment method.", "error");
                 return;
@@ -645,7 +655,9 @@
                                     body: JSON.stringify({
                                         receipt: receiptData,
                                         total_price: totalPrice,
-                                        payment_method: paymentMethod
+                                        payment_method: paymentMethod,
+                                        dateSel: startDate,
+                                        timeSel: startTime
                                     })
                                 })
                                 .then(response => response.json())
@@ -668,7 +680,9 @@
                             body: JSON.stringify({
                                 receipt: receiptData,
                                 total_price: totalPrice,
-                                payment_method: paymentMethod
+                                payment_method: paymentMethod,
+                                dateSel: startDate,
+                                timeSel: startTime
                             })
                         })
                         .then(response => response.json())
