@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':expensetype_id', $expensetype_id);
         $stmt->bindParam(':comment', $comment);
         $stmt->bindParam(':amount', $amount);
-        $stmt->bindParam(':date', $dateTime);
+        $stmt->bindParam(':date', $datetime);
         $stmt->execute();
 
         header("Location: expenses.php?status=success");
