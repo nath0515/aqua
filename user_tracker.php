@@ -80,14 +80,16 @@ ini_set('display_errors', 1);
                         <i class="fas fa-shopping-cart"></i>
                     </a>
                 </li>
-             <li class="nav-item dropdown me-1">
+                <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <?php echo renderNotificationBadge($notifications['unread_count']); ?>
-                        <span class="visually-hidden">unread messages</span>
+                        <i class="fas fa-bell fs-5"></i>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <?php echo renderNotificationDropdown($notifications['recent_notifications']); ?>
+                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsrider.php">View all notifications</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
