@@ -1,8 +1,4 @@
 <?php 
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
     require 'session.php';
     require 'db.php';
     require 'notification_helper.php';
@@ -30,7 +26,6 @@ ini_set('display_errors', 1);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-     require 'notification_helper.php';
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
     
