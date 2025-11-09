@@ -130,7 +130,7 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
+                <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Menu</div>
                             <a class="nav-link" href="index.php">
@@ -157,7 +157,6 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="sales.php">Sales</a>
                                     <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="income.php">Income</a>
                                     <a class="nav-link" href="report.php">Report</a>
                                 </nav>
                             </div>
@@ -176,10 +175,6 @@
                                 </nav>
                             </div>
                         </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
                     </div>
                 </nav>
             </div>
