@@ -175,7 +175,6 @@ ini_set('display_errors', 1);
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="sales.php">Sales</a>
                                     <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="income.php">Income</a>
                                     <a class="nav-link" href="report.php">Report</a>
                                 </nav>
                             </div>
