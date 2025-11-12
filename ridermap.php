@@ -838,6 +838,61 @@
             });
         </script>
         <?php endif; ?>
+        <script>
+            $(document).ready(function() {
+                $(".cancelOrderBtn").on("click", function() {
+                var orderId = $(this).data("id");
+
+                Swal.fire({
+                    title: "Cancel Order",
+                    input: "textarea",
+                    inputLabel: "Reason for cancellation",
+                    inputPlaceholder: "Enter reason here...",
+                    inputAttributes: {
+                        "aria-label": "Enter reason here"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "Cancel Order",
+                    cancelButtonText: "Close",
+                    confirmButtonColor: "#d33",
+                    preConfirm: (reason) => {
+                        if (!reason) {
+                            Swal.showValidationMessage("Reason is required!");
+                        }
+                        return reason;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "process_cancelorder.php",
+                            type: "POST",
+                            data: {
+                                order_id: orderId,
+                                reason: result.value
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Order Cancelled",
+                                    text: "The user will be notified.",
+                                    confirmButtonColor: "#3085d6"
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Something went wrong. Try again."
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        </script>
 </body>
 </html>
 

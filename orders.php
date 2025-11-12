@@ -633,8 +633,8 @@ error_reporting(E_ALL);
         });
         </script>
         <script>
-        $(document).ready(function() {
-            $(".cancelOrderBtn").on("click", function() {
+            $(document).ready(function() {
+                $(".cancelOrderBtn").on("click", function() {
                 var orderId = $(this).data("id");
 
                 Swal.fire({
