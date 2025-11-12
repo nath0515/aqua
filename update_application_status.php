@@ -46,6 +46,17 @@ if($status == 'approved'){
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
+
+    //notif para kay user
+    $notif = $conn->prepare("
+        INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
+        VALUES (:user_id, :message, '#', NOW(), 0)
+    ");
+    $notif->execute([
+        ':user_id' => $user_id,
+        ':message' => "Congratulations! Your reseller application has been approved."
+    ]);
+
 }
 else{
     $sql = "UPDATE applications SET reason = :reason WHERE id = :id";
@@ -53,6 +64,16 @@ else{
     $stmt->bindParam(':reason', $reason);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
+
+    //notif para kay user
+    $notif = $conn->prepare("
+        INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
+        VALUES (:user_id, :message, '#', NOW(), 0)
+    ");
+    $notif->execute([
+        ':user_id' => $user_id,
+        ':message' => "We regret to inform you that your reseller application has been rejected. Reason: $reason."
+    ]);
 }
 
 echo json_encode([
