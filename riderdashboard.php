@@ -208,13 +208,10 @@
                                                                                 }
                                                                             ?>
                                                                             <a 
-                                                                                href="#ridermap.php"
+                                                                                href="edit_order.php?id=<?= $row['order_id']; ?>" 
                                                                                 class="badge <?= $badgeClass ?> border-0 text-start text-decoration-none"
                                                                                 style="cursor: pointer;"
-                                                                                data-id="<?= $row['order_id']; ?>"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target="#editorder"
-                                                                                title="Click to edit status"
+                                                                                title="Go to edit page"
                                                                             >
                                                                                 <?= $status ?>
                                                                             </a>
