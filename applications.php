@@ -273,79 +273,7 @@ error_reporting(E_ALL);
                                        
                                     </tbody>
                                 </table>
-                                <script>
-                                        document.querySelectorAll('.action-btn').forEach(button => {
-                                            button.addEventListener('click', () => {
-                                                const appId = button.dataset.id;
-                                                const newStatus = button.dataset.status;
-
-                                                const actionText = newStatus === 'approved' ? 'approve' : 'reject';
-                                                const confirmBtnText = newStatus === 'approved' ? 'Yes, approve' : 'Yes, reject';
-
-                                                Swal.fire({
-                                                    title: `Confirm ${actionText}?`,
-                                                    text: `Are you sure you want to ${actionText} this application?`,
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonText: confirmBtnText,
-                                                    cancelButtonText: 'Cancel'
-                                                }).then(result => {
-                                                    if (result.isConfirmed) {
-                                                        if (newStatus === 'rejected') {
-                                                            Swal.fire({
-                                                                title: 'Reason for Rejection',
-                                                                input: 'text',
-                                                                inputPlaceholder: 'Enter reason...',
-                                                                showCancelButton: true,
-                                                                confirmButtonText: 'Submit',
-                                                                cancelButtonText: 'Cancel',
-                                                                inputValidator: value => !value && 'You must provide a reason!'
-                                                            }).then(reasonResult => {
-                                                                if (reasonResult.isConfirmed) {
-                                                                    sendApplicationStatus(appId, newStatus, reasonResult.value);
-                                                                }
-                                                            });
-                                                        } else {
-                                                            sendApplicationStatus(appId, newStatus);
-                                                        }
-                                                    }
-                                                });
-                                            });
-                                        });
-
-                                        // Show reason buttons
-                                        document.querySelectorAll('.show-reason-btn').forEach(btn => {
-                                            btn.addEventListener('click', () => {
-                                                Swal.fire({
-                                                    title: 'Reason',
-                                                    text: btn.dataset.reason,
-                                                    icon: 'info',
-                                                    confirmButtonText: 'Close'
-                                                });
-                                            });
-                                        });
-
-                                        function sendApplicationStatus(appId, status, reason = '') {
-                                            const data = new URLSearchParams({ id: appId, status });
-                                            if (status === 'rejected' && reason) data.append('reason', reason);
-
-                                            fetch('update_application_status.php', {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                                body: data.toString()
-                                            })
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                if (data.success) {
-                                                    Swal.fire('Success', data.message || 'Status updated.', 'success')
-                                                        .then(() => location.reload());
-                                                } else {
-                                                    Swal.fire('Error', data.message || 'Failed to update status.', 'error');
-                                                }
-                                            })
-                                            .catch(() => Swal.fire('Error', 'An unexpected error occurred.', 'error'));
-                                        }
-                                </script>
+                                
                             </div>
                         </div>
                     </div>
@@ -402,6 +330,89 @@ error_reporting(E_ALL);
                 });
             });
         </script>
+
+        <script>
+            $(document).ready(function() {
+                // ✅ Approve / Reject buttons (delegated for DataTables compatibility)
+                $(document).on('click', '.action-btn', function(e) {
+                    e.preventDefault(); // prevent accidental form submits or link actions
+
+                    const appId = $(this).data('id');
+                    const newStatus = $(this).data('status');
+
+                    const actionText = newStatus === 'approved' ? 'approve' : 'reject';
+                    const confirmBtnText = newStatus === 'approved' ? 'Yes, approve' : 'Yes, reject';
+
+                    Swal.fire({
+                        title: `Confirm ${actionText}?`,
+                        text: `Are you sure you want to ${actionText} this application?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: confirmBtnText,
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (newStatus === 'rejected') {
+                                Swal.fire({
+                                    title: 'Reason for Rejection',
+                                    input: 'text',
+                                    inputPlaceholder: 'Enter reason...',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Submit',
+                                    cancelButtonText: 'Cancel',
+                                    inputValidator: (value) => {
+                                        if (!value) return 'You must provide a reason!';
+                                    }
+                                }).then((reasonResult) => {
+                                    if (reasonResult.isConfirmed) {
+                                        const reason = reasonResult.value;
+                                        sendApplicationStatus(appId, newStatus, reason);
+                                    }
+                                });
+                            } else {
+                                sendApplicationStatus(appId, newStatus);
+                            }
+                        }
+                    });
+                });
+
+                // ✅ Show reason buttons (delegated)
+                $(document).on('click', '.show-reason-btn', function() {
+                    const reason = $(this).data('reason') || 'No reason provided.';
+                    Swal.fire({
+                        title: 'Reason',
+                        text: reason,
+                        icon: 'info',
+                        confirmButtonText: 'Close'
+                    });
+                });
+
+                // ✅ Function to send status update
+                function sendApplicationStatus(appId, status, reason = '') {
+                    const postData = { id: appId, status: status };
+                    if (status === 'rejected' && reason) postData.reason = reason;
+
+                    $.ajax({
+                        url: 'update_application_status.php',
+                        type: 'POST',
+                        data: postData,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.success) {
+                                Swal.fire('Success', data.message || 'Status updated.', 'success')
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire('Error', data.message || 'Failed to update status.', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error', 'An unexpected error occurred.', 'error');
+                        }
+                    });
+                }
+            });
+            </script>
+
         <script>
             let deferredPrompt;
 
