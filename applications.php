@@ -274,8 +274,6 @@ error_reporting(E_ALL);
                                     </tbody>
                                 </table>
                                 <script>
-                                    document.addEventListener('DOMContentLoaded', () => {
-                                        // Approve / Reject buttons
                                         document.querySelectorAll('.action-btn').forEach(button => {
                                             button.addEventListener('click', () => {
                                                 const appId = button.dataset.id;
@@ -347,7 +345,6 @@ error_reporting(E_ALL);
                                             })
                                             .catch(() => Swal.fire('Error', 'An unexpected error occurred.', 'error'));
                                         }
-                                    });
                                 </script>
                             </div>
                         </div>
