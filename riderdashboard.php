@@ -98,23 +98,6 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogsrider.php">Activity Log</a></li>
-                        <?php 
-                        // Commented out Off Duty toggle
-                        /*
-                        $sql = "SELECT status FROM rider_status WHERE user_id = :user_id AND DATE(date) = :date";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(':user_id', $user_id);
-                        $stmt->bindParam(':date', $today);
-                        $stmt->execute();
-                        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                        $status_rider = $row ? $row['status'] : 0;
-                        */
-                        ?>
-                        <!-- <li>
-                        <a class="dropdown-item" href="javascript:void(0);" onclick="return confirmToggle(event, <?= $status_rider ?>)">
-                            <?php echo ($status_rider) ? 'Off Duty' : 'On Duty'; ?>
-                        </a>
-                        </li> -->
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
@@ -429,6 +412,78 @@
             });
         </script>
         <?php endif; ?>
+        <script>
+            $(document).ready(function () {
+                // When rider changes order status
+                $('form[action="process_editorder.php"]').on('submit', function (e) {
+                    const selectedStatus = $('#editStatusId').val();
+
+                    // If selected "Cancelled" (status_id = 6)
+                    if (selectedStatus == 6) {
+                        e.preventDefault(); // stop normal submit
+
+                        Swal.fire({
+                            title: "Cancel Order",
+                            html: `
+                                <div style="display:flex; flex-direction:column; gap:10px;">
+                                    <select id="cancelReason" class="swal2-input">
+                                        <option value="" disabled selected>Select a reason</option>
+                                        <option value="Customer not available">Customer not available</option>
+                                        <option value="Wrong delivery address">Wrong delivery address</option>
+                                        <option value="Damaged item">Damaged item</option>
+                                        <option value="Vehicle issue">Vehicle issue</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <input type="text" id="otherReason" class="swal2-input" placeholder="Enter other reason" style="display:none;">
+                                </div>
+                            `,
+                            didOpen: () => {
+                                const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                                const input = Swal.getPopup().querySelector("#otherReason");
+
+                                dropdown.addEventListener("change", () => {
+                                    if (dropdown.value === "Other") {
+                                        input.style.display = "block";
+                                    } else {
+                                        input.style.display = "none";
+                                        input.value = "";
+                                    }
+                                });
+                            },
+                            preConfirm: () => {
+                                const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                                const input = Swal.getPopup().querySelector("#otherReason");
+
+                                if (!dropdown.value) {
+                                    Swal.showValidationMessage("Please select a reason");
+                                    return false;
+                                }
+                                if (dropdown.value === "Other" && !input.value.trim()) {
+                                    Swal.showValidationMessage("Please enter your reason");
+                                    return false;
+                                }
+
+                                return dropdown.value === "Other" ? input.value.trim() : dropdown.value;
+                            },
+                            confirmButtonText: "Confirm Cancellation",
+                            showCancelButton: true,
+                            cancelButtonText: "Cancel"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Append reason dynamically and submit the form
+                                $('<input>').attr({
+                                    type: 'hidden',
+                                    name: 'cancel_reason',
+                                    value: result.value
+                                }).appendTo('form[action="process_editorder.php"]');
+
+                                $('form[action="process_editorder.php"]')[0].submit();
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
 
