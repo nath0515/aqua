@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $update = $conn->prepare("
             UPDATE orders 
-            SET status_id = (SELECT status_id FROM orderstatus WHERE status_name = 'Cancel') 
+            SET status_id = (SELECT status_id FROM orderstatus WHERE status_name = 'Cancelled') 
             WHERE order_id = :order_id
         ");
         $update->execute([':order_id' => $order_id]);
