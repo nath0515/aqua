@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
         $sql = $conn->prepare("SELECT CONCAT(firstname, ' ', lastname) AS full_name FROM user_details WHERE user_id = :user_id");
-        $sql->execute();
+        $sql->execute([':user_id' => $user_id]);
         $rider_fullname = $sql->fetchColumn();
 
         //notif para kay admin
