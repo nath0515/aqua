@@ -227,6 +227,11 @@
                                                                     <button class="btn btn-sm btn-success complete-delivery-btn" data-order-id="<?php echo $delivery['order_id']; ?>" style="display: none;">
                                                                         <i class="fas fa-check me-1"></i>Complete
                                                                     </button>
+                                                                    <button class="btn btn-outline-danger btn-sm cancelOrderBtn"
+                                                                        data-id="<?php echo $row['order_id']; ?>"
+                                                                        title="Cancel Order">
+                                                                        <i class="bi bi-x-circle"></i>
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         <?php endforeach; ?>
