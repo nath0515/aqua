@@ -265,106 +265,107 @@ error_reporting(E_ALL);
                                                 <?php if (strtolower($row['status']) === 'pending'): ?>
                                                     <button class="btn btn-success btn-sm action-btn" data-id="<?php echo $row['id']; ?>" data-status="approved">Approve</button>
                                                     <button class="btn btn-danger btn-sm action-btn" data-id="<?php echo $row['id']; ?>" data-status="rejected">Reject</button>
-                                                    <script>
-                                                        document.addEventListener('DOMContentLoaded', function () {
-                                                            document.querySelectorAll('.action-btn').forEach(button => {
-                                                                button.addEventListener('click', function () {
-                                                                    const appId = this.getAttribute('data-id');
-                                                                    const newStatus = this.getAttribute('data-status');
-
-                                                                    const actionText = newStatus === 'approved' ? 'approve' : 'reject';
-                                                                    const confirmBtnText = newStatus === 'approved' ? 'Yes, approve' : 'Yes, reject';
-
-                                                                    Swal.fire({
-                                                                        title: `Confirm ${actionText}?`,
-                                                                        text: `Are you sure you want to ${actionText} this application?`,
-                                                                        icon: 'warning',
-                                                                        showCancelButton: true,
-                                                                        confirmButtonText: confirmBtnText,
-                                                                        cancelButtonText: 'Cancel'
-                                                                    }).then((result) => {
-                                                                        if (result.isConfirmed) {
-
-                                                                            // If rejecting, prompt for reason
-                                                                            if (newStatus === 'rejected') {
-                                                                                Swal.fire({
-                                                                                    title: 'Reason for Rejection',
-                                                                                    input: 'text',
-                                                                                    inputPlaceholder: 'Enter reason...',
-                                                                                    inputAttributes: {
-                                                                                        'aria-label': 'Reason for rejection'
-                                                                                    },
-                                                                                    showCancelButton: true,
-                                                                                    confirmButtonText: 'Submit',
-                                                                                    cancelButtonText: 'Cancel',
-                                                                                    inputValidator: (value) => {
-                                                                                        if (!value) {
-                                                                                            return 'You must provide a reason!';
-                                                                                        }
-                                                                                    }
-                                                                                }).then((reasonResult) => {
-                                                                                    if (reasonResult.isConfirmed) {
-                                                                                        const reason = reasonResult.value;
-                                                                                        sendApplicationStatus(appId, newStatus, reason);
-                                                                                    }
-                                                                                });
-                                                                            } else {
-                                                                                // If approved, no reason needed
-                                                                                sendApplicationStatus(appId, newStatus);
-                                                                            }
-
-                                                                        }
-                                                                    });
-                                                                });
-                                                            });
-                                                            document.querySelectorAll('.show-reason-btn').forEach(btn => {
-                                                                btn.addEventListener('click', () => {
-                                                                    Swal.fire({
-                                                                        title: 'Reason',
-                                                                        text: btn.dataset.reason,
-                                                                        icon: 'info',
-                                                                        confirmButtonText: 'Close'
-                                                                    });
-                                                                });
-                                                            });
-
-                                                            function sendApplicationStatus(appId, status, reason = '') {
-                                                                const data = new URLSearchParams();
-                                                                data.append('id', appId);
-                                                                data.append('status', status);
-                                                                if (status === 'rejected' && reason) {
-                                                                    data.append('reason', reason);
-                                                                }
-
-                                                                fetch('update_application_status.php', {
-                                                                    method: 'POST',
-                                                                    headers: {
-                                                                        'Content-Type': 'application/x-www-form-urlencoded'
-                                                                    },
-                                                                    body: data.toString()
-                                                                })
-                                                                .then(response => response.json())
-                                                                .then(data => {
-                                                                    if (data.success) {
-                                                                        Swal.fire('Success', data.message || 'Status updated.', 'success')
-                                                                            .then(() => {
-                                                                                location.reload();
-                                                                            });
-                                                                    } else {
-                                                                        Swal.fire('Error', data.message || 'Failed to update status.', 'error');
-                                                                    }
-                                                                })
-                                                                .catch(() => {
-                                                                    Swal.fire('Error', 'An unexpected error occurred.', 'error');
-                                                                });
-                                                            }
-                                                        });
-
-                                                    </script>
+                                                    
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                document.querySelectorAll('.action-btn').forEach(button => {
+                                                    button.addEventListener('click', function () {
+                                                        const appId = this.getAttribute('data-id');
+                                                        const newStatus = this.getAttribute('data-status');
+
+                                                        const actionText = newStatus === 'approved' ? 'approve' : 'reject';
+                                                        const confirmBtnText = newStatus === 'approved' ? 'Yes, approve' : 'Yes, reject';
+
+                                                        Swal.fire({
+                                                            title: `Confirm ${actionText}?`,
+                                                            text: `Are you sure you want to ${actionText} this application?`,
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonText: confirmBtnText,
+                                                            cancelButtonText: 'Cancel'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+
+                                                                // If rejecting, prompt for reason
+                                                                if (newStatus === 'rejected') {
+                                                                    Swal.fire({
+                                                                        title: 'Reason for Rejection',
+                                                                        input: 'text',
+                                                                        inputPlaceholder: 'Enter reason...',
+                                                                        inputAttributes: {
+                                                                            'aria-label': 'Reason for rejection'
+                                                                        },
+                                                                        showCancelButton: true,
+                                                                        confirmButtonText: 'Submit',
+                                                                        cancelButtonText: 'Cancel',
+                                                                        inputValidator: (value) => {
+                                                                            if (!value) {
+                                                                                return 'You must provide a reason!';
+                                                                            }
+                                                                        }
+                                                                    }).then((reasonResult) => {
+                                                                        if (reasonResult.isConfirmed) {
+                                                                            const reason = reasonResult.value;
+                                                                            sendApplicationStatus(appId, newStatus, reason);
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    // If approved, no reason needed
+                                                                    sendApplicationStatus(appId, newStatus);
+                                                                }
+
+                                                            }
+                                                        });
+                                                    });
+                                                });
+                                                document.querySelectorAll('.show-reason-btn').forEach(btn => {
+                                                    btn.addEventListener('click', () => {
+                                                        Swal.fire({
+                                                            title: 'Reason',
+                                                            text: btn.dataset.reason,
+                                                            icon: 'info',
+                                                            confirmButtonText: 'Close'
+                                                        });
+                                                    });
+                                                });
+
+                                                function sendApplicationStatus(appId, status, reason = '') {
+                                                    const data = new URLSearchParams();
+                                                    data.append('id', appId);
+                                                    data.append('status', status);
+                                                    if (status === 'rejected' && reason) {
+                                                        data.append('reason', reason);
+                                                    }
+
+                                                    fetch('update_application_status.php', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/x-www-form-urlencoded'
+                                                        },
+                                                        body: data.toString()
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        if (data.success) {
+                                                            Swal.fire('Success', data.message || 'Status updated.', 'success')
+                                                                .then(() => {
+                                                                    location.reload();
+                                                                });
+                                                        } else {
+                                                            Swal.fire('Error', data.message || 'Failed to update status.', 'error');
+                                                        }
+                                                    })
+                                                    .catch(() => {
+                                                        Swal.fire('Error', 'An unexpected error occurred.', 'error');
+                                                    });
+                                                }
+                                            });
+
+                                        </script>
                                     </tbody>
                                 </table>
                             </div>
