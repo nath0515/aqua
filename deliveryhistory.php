@@ -43,8 +43,8 @@
         LEFT JOIN table_province tp ON tm.province_id = tp.province_id
         LEFT JOIN orderstatus c ON a.status_id = c.status_id 
         LEFT JOIN user_details r ON a.rider = r.user_id
-        WHERE a.rider = :user_id AND a.status_id IN (3, 4, 5)
-        ORDER BY a.date DESC";  // Show For Delivery (3), Delivered (4), and Cancelled (5) orders - Most recent first
+        WHERE a.rider = :user_id AND a.status_id IN (3, 4, 5, 6)
+        ORDER BY a.date DESC"; 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);  // Bind user_id here
     $stmt->execute();

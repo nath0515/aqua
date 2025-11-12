@@ -839,28 +839,58 @@
         </script>
         <?php endif; ?>
         <script>
-            $(document).ready(function() {
-                $(".cancelOrderBtn").on("click", function() {
+        $(document).ready(function () {
+            $(".cancelOrderBtn").on("click", function () {
                 var orderId = $(this).data("id");
 
                 Swal.fire({
                     title: "Cancel Order",
-                    input: "textarea",
-                    inputLabel: "Reason for cancellation",
-                    inputPlaceholder: "Enter reason here...",
-                    inputAttributes: {
-                        "aria-label": "Enter reason here"
+                    html: `
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <select id="cancelReason" class="swal2-input">
+                                <option value="" disabled selected>Select a reason</option>
+                                <option value="Customer not available">Customer not available</option>
+                                <option value="Wrong delivery address">Wrong delivery address</option>
+                                <option value="Damaged item">Damaged item</option>
+                                <option value="Vehicle issue">Vehicle issue</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="text" id="otherReason" class="swal2-input" placeholder="Enter other reason" style="display:none;">
+                        </div>
+                    `,
+                    didOpen: () => {
+                        const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                        const input = Swal.getPopup().querySelector("#otherReason");
+
+                        dropdown.addEventListener("change", () => {
+                            if (dropdown.value === "Other") {
+                                input.style.display = "block";
+                            } else {
+                                input.style.display = "none";
+                                input.value = "";
+                            }
+                        });
                     },
-                    showCancelButton: true,
-                    confirmButtonText: "Cancel Order",
-                    cancelButtonText: "Close",
-                    confirmButtonColor: "#d33",
-                    preConfirm: (reason) => {
-                        if (!reason) {
-                            Swal.showValidationMessage("Reason is required!");
+                    preConfirm: () => {
+                        const dropdown = Swal.getPopup().querySelector("#cancelReason");
+                        const input = Swal.getPopup().querySelector("#otherReason");
+
+                        if (!dropdown.value) {
+                            Swal.showValidationMessage("Please select a reason");
+                            return false;
                         }
-                        return reason;
-                    }
+
+                        if (dropdown.value === "Other" && !input.value.trim()) {
+                            Swal.showValidationMessage("Please enter your reason");
+                            return false;
+                        }
+
+                        return dropdown.value === "Other" ? input.value.trim() : dropdown.value;
+                    },
+                    confirmButtonText: "Cancel Order",
+                    showCancelButton: true,
+                    cancelButtonText: "Close",
+                    confirmButtonColor: "#d33"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
@@ -870,7 +900,7 @@
                                 order_id: orderId,
                                 reason: result.value
                             },
-                            success: function(response) {
+                            success: function (response) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Order Cancelled",
@@ -880,7 +910,7 @@
                                     location.reload();
                                 });
                             },
-                            error: function() {
+                            error: function () {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Error",
