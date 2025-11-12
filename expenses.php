@@ -394,7 +394,7 @@
                         <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-plus-circle"></i> Add Expense</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="addexpense.php" method="POST" enctype="multipart/form-data">
+                    <form action="addexpense.php" method="POST" enctype="multipart/form-data" id="addExpenseForm">
                         <!-- Modal Body -->
                         <div class="modal-body">
                                 <!-- Status -->
@@ -611,7 +611,7 @@
             });
 
             // On form submit, convert formatted value back to plain number
-            document.querySelector('form').addEventListener('submit', function (e) {
+            document.getElementById("addExpenseForm").addEventListener('submit', function (e) {
                 let value = amountInput.value.replace(/,/g, '');
                 let floatVal = parseFloat(value);
                 if (isNaN(floatVal) || floatVal > 100000) {
