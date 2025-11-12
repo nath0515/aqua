@@ -208,10 +208,10 @@
                                                                                 }
                                                                             ?>
                                                                             <a 
-                                                                                href="edit_order.php?id=<?= $row['order_id']; ?>" 
+                                                                                href="ridermap.php" 
                                                                                 class="badge <?= $badgeClass ?> border-0 text-start text-decoration-none"
                                                                                 style="cursor: pointer;"
-                                                                                title="Go to edit page"
+                                                                                title="Go to map"
                                                                             >
                                                                                 <?= $status ?>
                                                                             </a>
