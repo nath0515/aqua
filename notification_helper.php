@@ -26,7 +26,7 @@ function getNotifications($conn, $user_id, $role_id) {
         } elseif ($role_id == 3) { // Rider
             $recent_sql = "SELECT * FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC LIMIT 5";
         } else{ // Admin
-            $recent_sql = "SELECT * FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC LIMIT 5";
+            $recent_sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 5";
         }
         
         $recent_stmt = $conn->prepare($recent_sql);
