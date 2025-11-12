@@ -270,7 +270,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
 
 <!-- Top Navbar -->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
-    <img src="assets/img/aquadrop.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
+    <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 236px; height: 40px;">
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>     
     
     <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
