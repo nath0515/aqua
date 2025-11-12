@@ -29,13 +29,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ");
         $update->execute([':order_id' => $order_id]);
 
+        //notif para kay rider
         $notif = $conn->prepare("
             INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
-            VALUES (:user_id, :message, 'orders.php', NOW(), 0)
+            VALUES (:user_id, :message, 'deliveryhistory.php', NOW(), 0)
         ");
         $notif->execute([
             ':user_id' => $user_id,
             ':message' => "Your order #$order_id has been cancelled. Reason: $reason"
+        ]);
+
+        $sql = $conn->prepare("SELECT CONCAT(firstname, ' ', lastname) AS full_name FROM user_details WHERE user_id = :user_id");
+        $sql->execute();
+        $rider_fullname = $stmt->fetchColumn();
+
+        //notif para kay admin
+        $notif = $conn->prepare("
+            INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
+            VALUES (0, :message, 'orders.php', NOW(), 0)
+        ");
+        $notif->execute([
+            ':user_id' => $user_id,
+            ':message' => "Order #$order_id has been cancelled by $rider_fullname. Reason: $reason"
         ]);
 
         echo "success";
