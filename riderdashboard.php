@@ -195,7 +195,7 @@
                                                                         <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2">
                                                                             <?php
                                                                                 $status = htmlspecialchars($row['status_name']);
-                                                                                $badgeClass = 'bg-secondary'; // Default
+                                                                                $badgeClass = 'bg-secondary'; // Default badge color
 
                                                                                 if ($status === 'Delivered') {
                                                                                     $badgeClass = 'bg-success';
@@ -203,11 +203,13 @@
                                                                                     $badgeClass = 'bg-warning text-dark';
                                                                                 } elseif ($status === 'Cancelled') {
                                                                                     $badgeClass = 'bg-danger';
+                                                                                } elseif ($status === 'Pending') {
+                                                                                    $badgeClass = 'bg-info text-dark';
                                                                                 }
                                                                             ?>
-                                                                            <button 
-                                                                                id="editOrderBtn"
-                                                                                class="badge <?= $badgeClass ?> border-0 text-start"
+                                                                            <a 
+                                                                                href="#ridermap.php"
+                                                                                class="badge <?= $badgeClass ?> border-0 text-start text-decoration-none"
                                                                                 style="cursor: pointer;"
                                                                                 data-id="<?= $row['order_id']; ?>"
                                                                                 data-bs-toggle="modal"
@@ -215,7 +217,7 @@
                                                                                 title="Click to edit status"
                                                                             >
                                                                                 <?= $status ?>
-                                                                            </button>
+                                                                            </a>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
