@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES (0, :message, 'orders.php', NOW(), 0)
         ");
         $notif->execute([
-            ':user_id' => $user_id,
             ':message' => "Order #$order_id has been cancelled by $rider_fullname. Reason: $reason"
         ]);
 
