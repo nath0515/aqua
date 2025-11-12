@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ");
         $notif->execute([
             ':user_id' => $_SESSION['user_id'],
-            ':message' => "Your order #$order_id has been cancelled. Reason: $reason"
+            ':message' => "Order #$order_id has been cancelled successfully. Reason: $reason"
         ]);
 
         $sql = $conn->prepare("SELECT CONCAT(firstname, ' ', lastname) AS full_name FROM user_details WHERE user_id = :user_id");
@@ -50,6 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ");
         $notif->execute([
             ':message' => "Order #$order_id has been cancelled by $rider_fullname. Reason: $reason"
+        ]);
+
+        //notif para kay user
+        $notif = $conn->prepare("
+            INSERT INTO activity_logs (user_id, message, destination, date, read_status) 
+            VALUES (:user_id, :message, 'orders.php', NOW(), 0)
+        ");
+        $notif->execute([
+            ':user_id' => $user_id,
+            ':message' => "Your order #$order_id has been cancelled. Reason: $reason"
         ]);
 
         echo "success";
