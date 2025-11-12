@@ -476,7 +476,7 @@ error_reporting(E_ALL);
                                         <span class="input-group-text"><i class="bi bi-exclamation-circle-fill"></i></span>
                                         <select name="status_id" id="editStatusId" class="form-select">
                                             <?php foreach($status_data as $row):?>
-                                                <option value="<?php echo $row['status_id']?>"><?php echo $row['status_name']?></option>
+                                                <option value="<?php echo $row['status_id'] != 5 :?>"><?php echo $row['status_name']?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
