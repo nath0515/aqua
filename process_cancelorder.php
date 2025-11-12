@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES (:user_id, :message, 'deliveryhistory.php', NOW(), 0)
         ");
         $notif->execute([
-            ':user_id' => $user_id,
+            ':user_id' => $_SESSION['user_id'],
             ':message' => "Your order #$order_id has been cancelled. Reason: $reason"
         ]);
 
         $sql = $conn->prepare("SELECT CONCAT(firstname, ' ', lastname) AS full_name FROM user_details WHERE user_id = :user_id");
-        $sql->execute([':user_id' => $user_id]);
+        $sql->execute([':user_id' => $_SESSION['user_id']]);
         $rider_fullname = $sql->fetchColumn();
 
         //notif para kay admin
