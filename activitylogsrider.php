@@ -27,9 +27,9 @@
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
     
     // Get all rider notifications (not just recent 5)
-    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs WHERE (destination LIKE 'rider_orderdetails.php%' OR destination = 'rider_ratings.php') ORDER BY date DESC";
+    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    $stmt->execute(':user_id' => $user_id);
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>

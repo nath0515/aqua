@@ -27,7 +27,7 @@
     $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
     
     // Get all customer notifications (not just recent 5)
-    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs WHERE destination LIKE 'costumer_orderdetails.php%' AND user_id = :user_id ORDER BY date DESC";
+    $sql = "SELECT activitylogs_id, message, date, destination, read_status FROM activity_logs WHERE user_id = :user_id ORDER BY date DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
