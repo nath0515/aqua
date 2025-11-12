@@ -36,13 +36,13 @@
             ul.label, ul.address, ul.latitude, ul.longitude,
             tb.barangay_name, tm.municipality_name, tp.province_name
         FROM orders a
-        JOIN user_details b ON a.user_id = b.user_id
+        LEFT JOIN user_details b ON a.user_id = b.user_id
         LEFT JOIN user_locations ul ON a.location_id = ul.location_id
         LEFT JOIN table_barangay tb ON ul.barangay_id = tb.barangay_id
         LEFT JOIN table_municipality tm ON tb.municipality_id = tm.municipality_id
         LEFT JOIN table_province tp ON tm.province_id = tp.province_id
-        JOIN orderstatus c ON a.status_id = c.status_id 
-        JOIN user_details r ON a.rider = r.user_id
+        LEFT JOIN orderstatus c ON a.status_id = c.status_id 
+        LEFT JOIN user_details r ON a.rider = r.user_id
         WHERE a.rider = :user_id AND a.status_id IN (3, 4, 5)
         ORDER BY a.date DESC";  // Show For Delivery (3), Delivered (4), and Cancelled (5) orders - Most recent first
     $stmt = $conn->prepare($sql);
