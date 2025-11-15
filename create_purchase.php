@@ -366,6 +366,9 @@
                                         </select>
                                     </div>
                                 </div>
+                                <input type="date" name="startDate" id="startDate" value="<?php echo date('Y-m-d'); ?>" hidden>
+                                <input type="time" name="startTime" id="startTime" value="<?php echo date('H:i'); ?>" hidden>
+
                             </div>
                         </div>
                     </div>
