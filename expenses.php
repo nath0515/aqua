@@ -437,13 +437,7 @@
                                         required>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                            <input type="date" name="startDate" id="startDate" class="form-control" 
-                                value="<?php echo date('Y-m-d'); ?>">
 
-                            <input type="time" name="startTime" id="startTime" class="form-control" 
-                                value="<?php echo date('H:i'); ?>">
-                            </div>
                             <div class="mb-3" id="orderItemsContainer">
                             </div>   
                         </div>
