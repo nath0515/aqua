@@ -366,15 +366,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- dito ko nilagay -->
-                                <div class="col-md-4 mt-3">
-                                    <div class="form-group form-group-default">
-                                        <label for="">Date/Time</label>
-                                        <input type="date" name="startDate" id="startDate" value="<?php echo date('Y-m-d'); ?>">
-                                        <input type="time" name="startTime" id="startTime" value="<?php echo date('H:i'); ?>">
-                                    </div>
-                                </div>
-                                <!-- ito tatanggalin -->
                             </div>
                         </div>
                     </div>
