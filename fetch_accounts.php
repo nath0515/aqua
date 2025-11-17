@@ -52,6 +52,15 @@ try {
                 <td>" . htmlspecialchars($row['role_name']) . "</td>
                 <td>" . htmlspecialchars($row['contact_number']) . "</td>
                 <td>" . date('F j, Y', strtotime($row['created_at'])) . "</td>
+                <td><button 
+                    class='btn btn-danger btn-sm delete-btn'
+                    data-user-id='". $row['user_id'] ."'
+                    data-bs-toggle='modal'
+                    data-bs-target='#confirmDeleteModal'
+                >
+                    Delete
+                </button>
+                </td>
             </tr>";
         }
     } else {
