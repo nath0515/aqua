@@ -408,6 +408,26 @@ require 'db.php';
                                                 </div>
                                             </div>
                                             <canvas id="barChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+                                            <form action="expenses.php" method="GET">
+                                            <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
+                                                <div>
+                                                    <label for="start_date" class="form-label">Start Date</label>
+                                                    <input type="date" id="start_date" name="start_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                                </div>
+                                                <div>
+                                                    <label for="end_date" class="form-label">End Date</label>
+                                                    <input type="date" id="end_date" name="end_date" class="form-control" max="<?php echo date('Y-m-d'); ?>" required>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label d-block">&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label d-block">&nbsp;</label>
+                                                    <a href="<?php echo strtok($_SERVER["REQUEST_URI"], '?'); ?>" class="btn btn-secondary">Clear Filter</a>
+                                                </div>
+                                            </div>
+                                        </form>
                                         </div>
                                     </div>
                                 </div>
