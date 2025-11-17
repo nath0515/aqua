@@ -296,7 +296,6 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                             </ul>
                         </nav>
                     </div>
-                <?php endif; ?>
             </main>
 
             <footer class="py-4 bg-light mt-auto">
