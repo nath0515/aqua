@@ -288,14 +288,6 @@ ini_set('display_errors', 1);
                                     <label class="form-label d-block">&nbsp;</label>
                                     <a href="sales.php" class="btn btn-outline-danger">Clear Filters</a>
                                 </div>
-                                <div class="text-end mt-3">
-                                    <a href="sale_promo.php" class="btn btn-primary">Promo Sales</a>
-                                    <?php if ($total_orders > 0): ?>
-                                        <button onclick="downloadPDF()" class="btn btn-success ms-2">
-                                            <i class="fas fa-download"></i> Download PDF
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
                             </div>
                         </form>
                         
