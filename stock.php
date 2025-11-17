@@ -391,9 +391,6 @@
                                     <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
                                 </nav>
                             </div>
-                            </div>
-                        </div>
-                        </div>
                     </div>
                 </nav>
             </div>
