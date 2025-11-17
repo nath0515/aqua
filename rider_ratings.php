@@ -160,7 +160,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                 <a class="nav-link" href="ridermap.php">Maps</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="rider_ratings.php">
+                        <a class="nav-link active" href="rider_ratings.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                             My Ratings
                         </a>
