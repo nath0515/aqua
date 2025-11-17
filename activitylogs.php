@@ -29,6 +29,18 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $logsPerPage = 5; // Change this to however many logs you want per page
+    $totalLogs = count($logs); // Total logs fetched
+    $totalPages = ceil($totalLogs / $logsPerPage);
+
+    // Get current page from query parameter, default to 1
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $currentPage = max(1, min($totalPages, $currentPage)); // Ensure within bounds
+
+    // Calculate the index to slice the logs array
+    $startIndex = ($currentPage - 1) * $logsPerPage;
+    $logsToShow = array_slice($logs, $startIndex, $logsPerPage);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -180,7 +192,7 @@
                         <h1 class="m-2 text-white"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
-                        <?php foreach($logs as $row): ?>
+                        <?php foreach($logsToShow as $row): ?>
                             <a class="text-dark text-decoration-none" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>">
                                 <div class="mx-4 mb-3 p-3 <?php if ($row['read_status'] == 0) echo 'bg-light border rounded shadow-sm'; ?>">
                                     <?php echo $row['message']; ?>
@@ -191,6 +203,31 @@
                                 </div>
                             </a> 
                         <?php endforeach; ?> 
+                    </div>
+
+                    <!-- Pagination links -->
+                    <div class="d-flex justify-content-center mb-5">
+                        <nav>
+                            <ul class="pagination">
+                                <?php if($currentPage > 1): ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
+                                    </li>
+                                <?php endif; ?>
+
+                                <?php for($i = 1; $i <= $totalPages; $i++): ?>
+                                    <li class="page-item <?php if($i == $currentPage) echo 'active'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    </li>
+                                <?php endfor; ?>
+
+                                <?php if($currentPage < $totalPages): ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </nav>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
