@@ -304,17 +304,16 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
 
-                <?php 
-                    $sql = "SELECT rs FROM users WHERE user_id = :user_id";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bindParam(':user_id', $user_id);
-                    $stmt->execute();
-                    $rs = $stmt->fetchColumn();
-                    if($rs == 0):?>
-                        <li><a class="dropdown-item" id="apply-reseller">Apply as Reseller</a></li>
-                        <script>
-
-                            document.addEventListener('DOMContentLoaded', function () {
+               <?php 
+                $sql = "SELECT rs FROM users WHERE user_id = :user_id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->execute();
+                $rs = $stmt->fetchColumn();
+                if($rs == 0):?>
+                    <li><a class="dropdown-item" id="apply-reseller">Apply as Reseller</a></li>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
                             const applyBtn = document.getElementById('apply-reseller');
 
                             if (!applyBtn) return;
@@ -353,6 +352,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                                 Swal.fire('Notice', 'Your application status: ' + data.status, 'info');
                                         }
                                     } else {
+                                        // Step 1: Confirm Application
                                         Swal.fire({
                                             title: 'Apply as Reseller',
                                             text: 'Are you sure you want to submit a reseller application? Our team will review it promptly.',
@@ -362,44 +362,78 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                             cancelButtonText: 'Cancel'
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                // Show second Swal with file upload
+
+                                                // Step 2: Show ID Upload Guidelines
                                                 Swal.fire({
-                                                    title: 'Upload Valid ID',
-                                                    text: 'Please upload a clear image of a valid government-issued ID.',
-                                                    input: 'file',
-                                                    inputAttributes: {
-                                                        accept: 'image/*',
-                                                        'aria-label': 'Upload your ID'
-                                                    },
+                                                    title: 'ID Upload Guidelines',
+                                                    html: `
+                                                        <img src="<?php echo '/mnt/data/3a08f8c6-eeac-419d-9550-9f112626120d.png'; ?>" 
+                                                            style="width:100%; border-radius:8px; margin-bottom:15px;">
+                                                        <p style="text-align:left;">
+                                                            ✔ Upload a clear, well-lit photo showing the entire ID<br>
+                                                            ✔ Ensure all four corners & edges are visible<br>
+                                                            ✔ Text must be sharp and readable<br>
+                                                            ✔ Avoid glare, shadows, or reflections<br><br>
+                                                            <b>Accepted IDs:</b><br>
+                                                            • Passport<br>
+                                                            • Driver’s License<br>
+                                                            • National ID<br>
+                                                            • SSS ID<br>
+                                                            • GSIS ID<br>
+                                                            • Voter’s ID<br>
+                                                            • Postal ID<br>
+                                                            • Senior Citizen ID<br>
+                                                            • UMID<br>
+                                                            • PhilHealth ID<br>
+                                                            • PRC ID<br>
+                                                            • Other Government ID
+                                                        </p>
+                                                    `,
+                                                    confirmButtonText: 'Proceed to Upload',
                                                     showCancelButton: true,
-                                                    confirmButtonText: 'Submit Application',
-                                                    cancelButtonText: 'Cancel'
-                                                }).then((uploadResult) => {
-                                                    if (uploadResult.isConfirmed) {
-                                                        const file = uploadResult.value;
+                                                }).then((guideResult) => {
+                                                    if (guideResult.isConfirmed) {
 
-                                                        if (!file) {
-                                                            Swal.fire('Error', 'No file selected. Please try again.', 'error');
-                                                            return;
-                                                        }
+                                                        // Step 3: Upload Valid ID
+                                                        Swal.fire({
+                                                            title: 'Upload Valid ID',
+                                                            text: 'Please upload a clear image of a valid government-issued ID.',
+                                                            input: 'file',
+                                                            inputAttributes: {
+                                                                accept: 'image/*',
+                                                                'aria-label': 'Upload your ID'
+                                                            },
+                                                            showCancelButton: true,
+                                                            confirmButtonText: 'Submit Application',
+                                                            cancelButtonText: 'Cancel'
+                                                        }).then((uploadResult) => {
+                                                            if (uploadResult.isConfirmed) {
+                                                                const file = uploadResult.value;
 
-                                                        const formData = new FormData();
-                                                        formData.append('id_image', file);
+                                                                if (!file) {
+                                                                    Swal.fire('Error', 'No file selected. Please try again.', 'error');
+                                                                    return;
+                                                                }
 
-                                                        fetch('apply.php', {
-                                                            method: 'POST',
-                                                            body: formData
-                                                        })
-                                                        .then(response => response.json())
-                                                        .then(data => {
-                                                            if (data.success) {
-                                                                Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
-                                                            } else {
-                                                                Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
+                                                                const formData = new FormData();
+                                                                formData.append('id_image', file);
+
+                                                                fetch('apply.php', {
+                                                                    method: 'POST',
+                                                                    body: formData
+                                                                })
+                                                                .then(response => response.json())
+                                                                .then(data => {
+                                                                    if (data.success) {
+                                                                        Swal.fire('Success', 'Your reseller application has been submitted successfully.', 'success');
+                                                                    } else {
+                                                                        Swal.fire('Error', data.message || 'Failed to submit application.', 'error');
+                                                                    }
+                                                                })
+                                                                .catch(() => {
+                                                                    Swal.fire('Error', 'An unexpected error occurred while submitting your application.', 'error');
+                                                                });
                                                             }
-                                                        })
-                                                        .catch(() => {
-                                                            Swal.fire('Error', 'An unexpected error occurred while submitting your application.', 'error');
                                                         });
                                                     }
                                                 });
@@ -412,9 +446,9 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                 });
                             });
                         });
-
-                        </script>
+                    </script>
                 <?php endif; ?>
+
 
                 <li><a class="dropdown-item" href="activitylogsuser.php">Activity Log</a></li>
                 <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
