@@ -367,7 +367,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
                                                 Swal.fire({
                                                     title: 'ID Upload Guidelines',
                                                     html: `
-                                                        <img src="<?php echo '/mnt/data/3a08f8c6-eeac-419d-9550-9f112626120d.png'; ?>" 
+                                                        <img src="./image/example.png" 
                                                             style="width:100%; border-radius:8px; margin-bottom:15px;">
                                                         <p style="text-align:left;">
                                                             ✔ Upload a clear, well-lit photo showing the entire ID<br>
