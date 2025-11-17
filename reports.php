@@ -583,6 +583,7 @@
 
             // --- SALES TABLE ---
             pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(16);
             pdf.text("Sales", 14, y);
             y += 6;
 
@@ -616,6 +617,7 @@
             // =====================
 
             pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(16);
             pdf.text("Expenses", 14, y);
             y += 6;
 
