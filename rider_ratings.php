@@ -43,6 +43,16 @@ if($total_orders > 0) {
     $avg_order_rating = round($total_order_rating / $total_orders, 1);
     $avg_rider_rating = round($total_rider_rating / $total_orders, 1);
 }
+
+$ratingsPerPage = 5;
+$totalRatings = count($ratings);
+$totalPages = ceil($totalRatings / $ratingsPerPage);
+
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$currentPage = max(1, min($totalPages, $currentPage));
+
+$startIndex = ($currentPage - 1) * $ratingsPerPage;
+$ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
 ?>
 
 <!DOCTYPE html>
@@ -196,8 +206,9 @@ if($total_orders > 0) {
                         <h4 class="mt-3 text-muted">No ratings yet</h4>
                         <p class="text-muted">Complete more deliveries to receive customer ratings!</p>
                     </div>
+                <?php if(empty($ratingsToShow)): ?>
                 <?php else: ?>
-                    <?php foreach($ratings as $rating): ?>
+                    <?php foreach($ratingsToShow as $rating): ?>
                         <div class="rating-card">
                             <div class="row">
                                 <div class="col-md-8">
@@ -241,6 +252,51 @@ if($total_orders > 0) {
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+
+<!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav>
+                    <ul class="pagination">
+                        <?php if($currentPage > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php
+                        $range = 1; // show current ±1 page
+                        $startPage = max(1, $currentPage - $range);
+                        $endPage = min($totalPages, $currentPage + $range);
+                        ?>
+
+                        <?php if($startPage > 1): ?>
+                            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                            <?php if($startPage > 2): ?>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php for($i = $startPage; $i <= $endPage; $i++): ?>
+                            <li class="page-item <?php if($i == $currentPage) echo 'active'; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <?php if($endPage < $totalPages): ?>
+                            <?php if($endPage < $totalPages - 1): ?>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <?php endif; ?>
+                            <li class="page-item"><a class="page-link" href="?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a></li>
+                        <?php endif; ?>
+
+                        <?php if($currentPage < $totalPages): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            </div>
             </main>
 
             <footer class="py-4 bg-light mt-auto">
