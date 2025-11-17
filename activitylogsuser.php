@@ -32,6 +32,22 @@
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+     $logsPerPage = 5; // Change this to however many logs you want per page
+    $totalLogs = count($logs); // Total logs fetched
+    $totalPages = ceil($totalLogs / $logsPerPage);
+
+    // Get current page from query parameter, default to 1
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $currentPage = max(1, min($totalPages, $currentPage)); // Ensure within bounds
+
+    // Calculate the index to slice the logs array
+    $startIndex = ($currentPage - 1) * $logsPerPage;
+    $logsToShow = array_slice($logs, $startIndex, $logsPerPage);
+
+    $range = 1; // pages before and after current page
+    $startPage = max(1, $currentPage - $range);
+    $endPage = min($totalPages, $currentPage + $range);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -273,21 +289,60 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
-                        <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
+                        <h1 class="m-2 text-white"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
-                        <?php foreach($logs as $row): ?>
-                            <a class="text-dark text-decoration-none" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>">
-                                <div class="mx-4 mb-3 p-3 <?php if ($row['read_status'] == 0) echo 'bg-light border rounded shadow-sm'; ?>">
-                                    <?php echo $row['message']; ?>
-                                    <br>
-                                    <small class="text-muted">
-                                        <i><?php echo date('g:i a F j', strtotime($row['date'])); ?></i>
-                                    </small>
-                                </div>
-                            </a> 
-                        <?php endforeach; ?> 
-                    </div>
+                    <?php foreach($logsToShow as $row): ?>
+                        <a class="text-dark text-decoration-none" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>">
+                            <div class="mx-4 mb-3 p-3 <?php if ($row['read_status'] == 0) echo 'bg-light border rounded shadow-sm'; ?>">
+                                <?php echo $row['message']; ?>
+                                <br>
+                                <small class="text-muted">
+                                    <i><?php echo date('g:i a F j', strtotime($row['date'])); ?></i>
+                                </small>
+                            </div>
+                        </a> 
+                    <?php endforeach; ?> 
+                </div>
+
+                <!-- Limited Pagination -->
+                <div class="d-flex justify-content-center mb-5">
+                    <nav>
+                        <ul class="pagination">
+                            <?php if($currentPage > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if($startPage > 1): ?>
+                                <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                <?php if($startPage > 2): ?>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <?php for($i = $startPage; $i <= $endPage; $i++): ?>
+                                <li class="page-item <?php if($i == $currentPage) echo 'active'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if($endPage < $totalPages): ?>
+                                <?php if($endPage < $totalPages - 1): ?>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <?php endif; ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a></li>
+                            <?php endif; ?>
+
+                            <?php if($currentPage < $totalPages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
