@@ -216,6 +216,12 @@
 
                                     <div class="mb-3" id="licensePicGroup">
                                         <label for="driver_license_pic" class="form-label">Driver's License</label>
+                                        <div style="font-size: 0.9em; color: #333; margin-bottom: 8px;">
+                                            ✔ Upload a clear, well-lit photo showing the entire ID<br>
+                                            ✔ Ensure all four corners & edges are visible<br>
+                                            ✔ Text must be sharp and readable<br>
+                                            ✔ Avoid glare, shadows, or reflections<br><br>
+                                        </div>
                                         <input type="file" class="form-control" name="driver_license_pic" id="driver_license_pic" accept="image/*">
                                     </div>
 
