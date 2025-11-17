@@ -326,15 +326,15 @@ require 'db.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xl-4">
-                                <div class="card">
+                        <div class="row g-4"> <!-- g-4 adds consistent gap between columns -->
+                            <div class="col-xl-4 col-md-6">
+                                <div class="card h-100">
                                     <div class="card-header">
                                         <div class="card-title">Sales Chart</div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                            <canvas id="multipleLineChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+                                        <div class="chart-container">
+                                            <canvas id="multipleLineChart" style="width: 100%; height: 300px;"></canvas>
                                         </div>
                                         <form method="GET" action="">
                                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
@@ -359,16 +359,17 @@ require 'db.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4">
-                                <div class="card">
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="card h-100">
                                     <div class="card-header">
                                         <div class="card-title">Income Chart</div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                                            <canvas id="incomeChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+                                        <div class="chart-container">
+                                            <canvas id="incomeChart" style="width: 100%; height: 300px;"></canvas>
                                         </div>
-                                        <form action="expenses.php" method="GET">
+                                        <form method="GET" action="expenses.php">
                                             <div class="d-flex align-items-end gap-3 flex-wrap mb-3">
                                                 <div>
                                                     <label for="start_date" class="form-label">Start Date</label>
@@ -391,28 +392,22 @@ require 'db.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4">
-                                <div class="card mt-4">
+
+                            <div class="col-xl-4 col-md-6">
+                                <div class="card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
                                         Bar Chart Example
                                     </div>
                                     <div class="card-body">
                                         <div class="chart-container">
-                                            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                                <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
-                                                </div>
-                                                <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-                                                </div>
-                                            </div>
-                                            <canvas id="barChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
+                                            <canvas id="barChart" style="width: 100%; height: 300px;"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <!-- Bar Chart Card -->
                             <div class="col-xl-6">
