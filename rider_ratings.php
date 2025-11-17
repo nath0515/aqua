@@ -206,97 +206,97 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                         <h4 class="mt-3 text-muted">No ratings yet</h4>
                         <p class="text-muted">Complete more deliveries to receive customer ratings!</p>
                     </div>
-                <?php if(empty($ratingsToShow)): ?>
                 <?php else: ?>
                     <?php foreach($ratingsToShow as $rating): ?>
-                        <div class="rating-card">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <h5 class="customer-name">
-                                        <?php echo htmlspecialchars($rating['firstname'] . ' ' . $rating['lastname']); ?>
-                                    </h5>
-                                    <p class="text-muted mb-2">
-                                        Order #<?php echo $rating['order_id']; ?> • 
-                                        <?php echo date('M d, Y', strtotime($rating['date'])); ?>
-                                    </p>
-                                    <p class="mb-2">
-                                        <strong>Order Amount:</strong> ₱<?php echo number_format($rating['amount'], 2); ?>
-                                    </p>
-                                </div>
-                                <div class="col-md-4 text-end">
-                                    <div class="mb-2">
-                                        <small class="text-muted">Order Rating:</small><br>
-                                        <div class="stars">
-                                            <?php for($i = 1; $i <= 5; $i++): ?>
-                                                <i class="fas fa-star <?php echo $i <= $rating['order_rating'] ? '' : 'text-muted'; ?>"></i>
-                                            <?php endfor; ?>
+                            <div class="rating-card">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5 class="customer-name">
+                                            <?php echo htmlspecialchars($rating['firstname'] . ' ' . $rating['lastname']); ?>
+                                        </h5>
+                                        <p class="text-muted mb-2">
+                                            Order #<?php echo $rating['order_id']; ?> • 
+                                            <?php echo date('M d, Y', strtotime($rating['date'])); ?>
+                                        </p>
+                                        <p class="mb-2">
+                                            <strong>Order Amount:</strong> ₱<?php echo number_format($rating['amount'], 2); ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <div class="mb-2">
+                                            <small class="text-muted">Order Rating:</small><br>
+                                            <div class="stars">
+                                                <?php for($i = 1; $i <= 5; $i++): ?>
+                                                    <i class="fas fa-star <?php echo $i <= $rating['order_rating'] ? '' : 'text-muted'; ?>"></i>
+                                                <?php endfor; ?>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">Your Rating:</small><br>
+                                            <div class="stars">
+                                                <?php for($i = 1; $i <= 5; $i++): ?>
+                                                    <i class="fas fa-star <?php echo $i <= $rating['rider_rating'] ? '' : 'text-muted'; ?>"></i>
+                                                <?php endfor; ?>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <small class="text-muted">Your Rating:</small><br>
-                                        <div class="stars">
-                                            <?php for($i = 1; $i <= 5; $i++): ?>
-                                                <i class="fas fa-star <?php echo $i <= $rating['rider_rating'] ? '' : 'text-muted'; ?>"></i>
-                                            <?php endfor; ?>
-                                        </div>
-                                    </div>
                                 </div>
+                                
+                                <?php if(!empty($rating['review_text'])): ?>
+                                    <div class="review-text">
+                                        <i class="fas fa-quote-left me-2"></i>
+                                        <?php echo htmlspecialchars($rating['review_text']); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                            
-                            <?php if(!empty($rating['review_text'])): ?>
-                                <div class="review-text">
-                                    <i class="fas fa-quote-left me-2"></i>
-                                    <?php echo htmlspecialchars($rating['review_text']); ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav>
+                            <ul class="pagination">
+                                <?php if($currentPage > 1): ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
+                                    </li>
+                                <?php endif; ?>
+
+                                <?php
+                                $range = 1; // show current ±1 page
+                                $startPage = max(1, $currentPage - $range);
+                                $endPage = min($totalPages, $currentPage + $range);
+                                ?>
+
+                                <?php if($startPage > 1): ?>
+                                    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                    <?php if($startPage > 2): ?>
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
+                                <?php for($i = $startPage; $i <= $endPage; $i++): ?>
+                                    <li class="page-item <?php if($i == $currentPage) echo 'active'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    </li>
+                                <?php endfor; ?>
+
+                                <?php if($endPage < $totalPages): ?>
+                                    <?php if($endPage < $totalPages - 1): ?>
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <?php endif; ?>
+                                    <li class="page-item"><a class="page-link" href="?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a></li>
+                                <?php endif; ?>
+
+                                <?php if($currentPage < $totalPages): ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </nav>
+                    </div>
                 <?php endif; ?>
-
-<!-- Pagination -->
-            <div class="d-flex justify-content-center mt-4">
-                <nav>
-                    <ul class="pagination">
-                        <?php if($currentPage > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
-                            </li>
-                        <?php endif; ?>
-
-                        <?php
-                        $range = 1; // show current ±1 page
-                        $startPage = max(1, $currentPage - $range);
-                        $endPage = min($totalPages, $currentPage + $range);
-                        ?>
-
-                        <?php if($startPage > 1): ?>
-                            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                            <?php if($startPage > 2): ?>
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <?php for($i = $startPage; $i <= $endPage; $i++): ?>
-                            <li class="page-item <?php if($i == $currentPage) echo 'active'; ?>">
-                                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <?php if($endPage < $totalPages): ?>
-                            <?php if($endPage < $totalPages - 1): ?>
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            <?php endif; ?>
-                            <li class="page-item"><a class="page-link" href="?page=<?php echo $totalPages; ?>"><?php echo $totalPages; ?></a></li>
-                        <?php endif; ?>
-
-                        <?php if($currentPage < $totalPages): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
-            </div>
             </main>
 
             <footer class="py-4 bg-light mt-auto">
