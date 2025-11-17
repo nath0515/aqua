@@ -177,7 +177,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="card card-body card-dark bg-primary bubble-shadow mb-4 mt-4 animated fadeInDown m-5 ">
-                        <h1 class="m-2"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
+                        <h1 class="m-2" style="color: white;"><i class="far fa-bell"></i> &nbsp; Activity Logs</h1>
                     </div>
                     <div class="card card-body mb-4 animated fadeInUp m-5">
                         <?php foreach($logs as $row): ?>
