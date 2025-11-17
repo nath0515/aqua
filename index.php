@@ -392,31 +392,6 @@ require 'db.php';
                                 </div>
                             </div>
                             <div class="col-xl-4">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-calculator me-1"></i>
-                                        Predicted Production for Today
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Predicted Production for Today:</strong></p>
-                                        <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
-                                    </div>
-                                </div>
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-calendar-check"></i>
-                                        Reserved Orders for Todays
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Total Reservations Received Today:</strong></p>
-                                        <p><?php echo $reservationCount; ?> orders</p> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- Bar Chart Card -->
-                            <div class="col-xl-12">
                                 <div class="card mt-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
@@ -434,6 +409,33 @@ require 'db.php';
                                             </div>
                                             <canvas id="barChart" width="491" height="300" style="display: block; width: 491px; height: 300px;" class="chartjs-render-monitor"></canvas>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Bar Chart Card -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-calculator me-1"></i>
+                                        Predicted Production for Today
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Predicted Production for Today:</strong></p>
+                                        <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-calendar-check"></i>
+                                        Reserved Orders for Todays
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Total Reservations Received Today:</strong></p>
+                                        <p><?php echo $reservationCount; ?> orders</p> 
                                     </div>
                                 </div>
                             </div>
