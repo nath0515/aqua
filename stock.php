@@ -345,52 +345,52 @@
                                 Dashboard
                             </a>
                             <a class="nav-link <?php echo ($current_page == 'orders.php' || $current_page == 'stock.php') ? '' : 'collapsed'; ?>" 
-                                href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="<?php echo ($current_page == 'orders.php' || $current_page == 'stock.php') ? 'true' : 'false'; ?>" 
-                                aria-controls="collapseLayouts">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                    Order Management
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse <?php echo ($current_page == 'orders.php' || $current_page == 'stock.php') ? 'show' : ''; ?>" id="collapseLayouts" data-bs-parent="#sidenavAccordion">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link <?php echo $current_page == 'orders.php' ? 'active' : ''; ?>" href="orders.php">Orders</a>
-                                        <a class="nav-link <?php echo $current_page == 'stock.php' ? 'active' : ''; ?>" href="stock.php">Stock</a>
-                                    </nav>
-                                </div>
+                            href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="<?php echo ($current_page == 'orders.php' || $current_page == 'stock.php') ? 'true' : 'false'; ?>" 
+                            aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Order Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse <?php echo ($current_page == 'orders.php' || $current_page == 'stock.php') ? 'show' : ''; ?>" id="collapseLayouts" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link <?php echo $current_page == 'orders.php' ? 'active' : ''; ?>" href="orders.php">Orders</a>
+                                    <a class="nav-link <?php echo $current_page == 'stock.php' ? 'active' : ''; ?>" href="stock.php">Stock</a>
+                                </nav>
+                            </div>
 
-                                <!-- Analytics -->
-                                <a class="nav-link <?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? '' : 'collapsed'; ?>" 
-                                href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="<?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? 'true' : 'false'; ?>" 
-                                aria-controls="collapsePages">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                    Analytics
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse <?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? 'show' : ''; ?>" id="collapsePages" data-bs-parent="#sidenavAccordion">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link <?php echo $current_page == 'sales.php' ? 'active' : ''; ?>" href="sales.php">Sales</a>
-                                        <a class="nav-link <?php echo $current_page == 'expenses.php' ? 'active' : ''; ?>" href="expenses.php">Expenses</a>
-                                        <a class="nav-link <?php echo $current_page == 'report.php' ? 'active' : ''; ?>" href="report.php">Report</a>
-                                    </nav>
-                                </div>
+                            <!-- Analytics -->
+                            <a class="nav-link <?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? '' : 'collapsed'; ?>" 
+                            href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="<?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? 'true' : 'false'; ?>" 
+                            aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Analytics
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse <?php echo ($current_page == 'sales.php' || $current_page == 'expenses.php' || $current_page == 'report.php') ? 'show' : ''; ?>" id="collapsePages" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link <?php echo $current_page == 'sales.php' ? 'active' : ''; ?>" href="sales.php">Sales</a>
+                                    <a class="nav-link <?php echo $current_page == 'expenses.php' ? 'active' : ''; ?>" href="expenses.php">Expenses</a>
+                                    <a class="nav-link <?php echo $current_page == 'report.php' ? 'active' : ''; ?>" href="report.php">Report</a>
+                                </nav>
+                            </div>
 
-                                <!-- Account Management -->
-                                <a class="nav-link <?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? '' : 'collapsed'; ?>" 
-                                href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="<?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? 'true' : 'false'; ?>" 
-                                aria-controls="collapseLayouts2">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                    Account Management
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse <?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? 'show' : ''; ?>" id="collapseLayouts2" data-bs-parent="#sidenavAccordion">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link <?php echo $current_page == 'accounts.php' ? 'active' : ''; ?>" href="accounts.php">Accounts</a>
-                                        <a class="nav-link <?php echo $current_page == 'rideraccount.php' ? 'active' : ''; ?>" href="rideraccount.php">Add Rider</a>
-                                        <a class="nav-link <?php echo $current_page == 'adminaccount.php' ? 'active' : ''; ?>" href="adminaccount.php">Add Admin</a>
-                                        <a class="nav-link <?php echo $current_page == 'addstaff.php' ? 'active' : ''; ?>" href="addstaff.php">Add Staff</a>
-                                        <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
-                                    </nav>
-                                </div>
+                            <!-- Account Management -->
+                            <a class="nav-link <?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? '' : 'collapsed'; ?>" 
+                            href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="<?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? 'true' : 'false'; ?>" 
+                            aria-controls="collapseLayouts2">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Account Management
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse <?php echo ($current_page == 'accounts.php' || $current_page == 'rideraccount.php' || $current_page == 'adminaccount.php' || $current_page == 'addstaff.php' || $current_page == 'applications.php') ? 'show' : ''; ?>" id="collapseLayouts2" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link <?php echo $current_page == 'accounts.php' ? 'active' : ''; ?>" href="accounts.php">Accounts</a>
+                                    <a class="nav-link <?php echo $current_page == 'rideraccount.php' ? 'active' : ''; ?>" href="rideraccount.php">Add Rider</a>
+                                    <a class="nav-link <?php echo $current_page == 'adminaccount.php' ? 'active' : ''; ?>" href="adminaccount.php">Add Admin</a>
+                                    <a class="nav-link <?php echo $current_page == 'addstaff.php' ? 'active' : ''; ?>" href="addstaff.php">Add Staff</a>
+                                    <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
+                                </nav>
+                            </div>
                             </div>
                         </div>
                     </div>
