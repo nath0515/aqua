@@ -73,7 +73,7 @@ function renderNotificationDropdown($recent_notifications, $unread_count, $user_
     } else {
         // Add mark all as read button if there are unread notifications
         if ($unread_count > 0) {
-            $html .= '<li><a class="dropdown-item text-center text-primary fw-bold" href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '"><i class="fas fa-check-double"></i> Mark All as Read</a></li>';
+            $html .= '<li><a class="dropdown-item text-center text-primary fw-bold" href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '">';
             $html .= '<li><hr class="dropdown-divider"></li>';
         }
         
