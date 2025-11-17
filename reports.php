@@ -256,8 +256,8 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div id="reportContent">
-                    <h1>💧 DoodsNer Water Refilling Station</h1>
-                    <h5>📅 Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
+                    <h1 class="ms-3">DoodsNer Water Refilling Station</h1>
+                    <h5 class="ms-3">Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
                         <div class="d-flex justify-content-end mb-4">
                             <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
                                 <i class="fas fa-file-pdf"></i>
