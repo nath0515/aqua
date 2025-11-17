@@ -416,7 +416,7 @@ require 'db.php';
                         <div class="row">
                             <!-- Bar Chart Card -->
                             <div class="col-xl-6">
-                                <div class="card mb-4">
+                                <div class="card mb-4 mt-3">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
                                         Predicted Production for Today
@@ -428,7 +428,7 @@ require 'db.php';
                                 </div>
                             </div>
                             <div class="col-xl-6">
-                                <div class="card mb-4">
+                                <div class="card mb-4 mt-3">
                                     <div class="card-header">
                                         <i class="fas fa-calendar-check"></i>
                                         Reserved Orders for Todays
