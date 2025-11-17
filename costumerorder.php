@@ -67,6 +67,8 @@ ini_set('display_errors', 1);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $rs = $stmt->fetchColumn();
+
+    $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -378,15 +380,19 @@ ini_set('display_errors', 1);
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link collapsed <?php echo ($current_page == 'costumerorder.php' || $current_page == 'orderhistory.php') ? '' : 'collapsed'; ?>" 
+                            href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="<?php echo ($current_page == 'costumerorder.php' || $current_page == 'orderhistory.php') ? 'true' : 'false'; ?>" 
+                            aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Order Management
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+
+                            <div class="collapse <?php echo ($current_page == 'costumerorder.php' || $current_page == 'orderhistory.php') ? 'show' : ''; ?>" 
+                                id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="costumerorder.php">Products</a>
-                                    <a class="nav-link" href="orderhistory.php">Order History</a>
+                                    <a class="nav-link <?php echo $current_page == 'costumerorder.php' ? 'active' : ''; ?>" href="costumerorder.php">Order</a>
+                                    <a class="nav-link <?php echo $current_page == 'orderhistory.php' ? 'active' : ''; ?>" href="orderhistory.php">Order History</a>
                                 </nav>
                             </div>
                         </div>
