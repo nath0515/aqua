@@ -156,7 +156,7 @@ require 'db.php';
 
             .notification-text{
                 white-space: nowrap;
-                overflow: hidden;D
+                overflow: hidden;
                 text-overflow: ellipsis;
                 display: block;
                 max-width: 200px;

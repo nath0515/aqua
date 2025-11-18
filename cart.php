@@ -94,6 +94,43 @@ error_reporting(E_ALL);
             border-radius: 5px;
             transition: 0.3s ease;
         }
+            #loadingOverlay {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                background: rgba(255, 255, 255, 0.8);
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+            .spinner {
+                border: 6px solid #f3f3f3;
+                border-top: 6px solid #0077b6;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 0.8s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+
+            .notification-text{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+            }
+            
 </style>
     </head>
     <body class="sb-nav-fixed">
@@ -122,11 +159,22 @@ error_reporting(E_ALL);
                         <i class="fas fa-bell"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
-                        <li><hr class="dropdown-divider"></li>
+                    <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
+
+                        <!-- Header with "Mark All as Read" -->
+                        <li class="dropdown-header d-flex justify-content-between align-items-center fw-bold text-dark">
+                            Notifications
+                            <?php 
+                                if ($unread_count > 0) {
+                                    echo '<a href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '" class="text-primary small fw-bold"><i class="fas fa-check-double"></i> Mark All</a>';
+                                }
+                            ?>
+                        </li>
                         <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
-                        <li><a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
