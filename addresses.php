@@ -216,6 +216,7 @@
                 padding: 2rem;
                 border-radius: 15px;
                 margin-bottom: 2rem;
+                margin-top: 20px;
                 box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
             }
             
