@@ -307,8 +307,8 @@
                             </div>
                         </div>
 
-                        <h1>💧 DoodsNer Water Refilling Station</h1>
-                        <h5>📅 Custom Sales & Expense Report - <?php echo date('F j, Y', strtotime($start_date)); ?> to <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
+                        <h1 class ="ms-3"> DoodsNer Water Refilling Station</h1>
+                        <h5 class ="ms-3"> Custom Sales & Expense Report - <?php echo date('F j, Y', strtotime($start_date)); ?> to <?php echo date('F j, Y', strtotime($end_date)); ?></h5>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
