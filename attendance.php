@@ -237,7 +237,7 @@
                                 </div>
                             </div>
                         </form>
-                        <button id="downloadPdf" class="btn btn-danger mb-3">
+                        <button id="downloadPDF" class="btn btn-danger mb-3">
                             <i class="fas fa-file-pdf me-2"></i> Download Attendance as PDF
                         </button>
                         <div class="card mb-4">
