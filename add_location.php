@@ -23,6 +23,12 @@
         $cart_count += $item['quantity'];
     }
 
+    // Get notifications
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+
+    $current_page = basename($_SERVER['PHP_SELF']);
+
     if(isset($location_id)){
         $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
         $stmt->execute(['location_id' => $location_id]);
