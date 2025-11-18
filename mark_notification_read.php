@@ -1,6 +1,6 @@
 <?php
 require 'db.php';
-require 'session.php'
+require 'session.php';
 
 if (isset($_GET['user_id'])) {
     $id = intval($_GET['user_id']);
