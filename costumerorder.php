@@ -373,7 +373,7 @@ ini_set('display_errors', 1);
 
                         </script>
                 <?php endif; ?>
-                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogsuser.php">Activity Log</a></li>
                         <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
