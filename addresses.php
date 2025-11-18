@@ -22,6 +22,16 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $sql = "SELECT a.cart_id, a.product_id, b.product_name, b.product_photo, a.with_container, b.water_price, b.water_price_promo, b.container_price, a.quantity, a.container_quantity 
+    FROM cart a 
+    JOIN products b ON a.product_id = b.product_id 
+    WHERE user_id = :user_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $cart_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calculate total items in cart (only product quantity, not containers)
     $cart_count = 0;
     foreach ($cart_data as $item) {
         $cart_count += $item['quantity'];
