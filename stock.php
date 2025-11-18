@@ -391,6 +391,7 @@
                                     <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
                                 </nav>
                             </div>
+                        </div>
                     </div>
                      <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
