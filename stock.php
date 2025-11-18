@@ -69,6 +69,7 @@
                 color: white;
                 padding: 40px 0;
                 border-radius: 15px;
+                margin-top: 20px;
                 margin-bottom: 30px;
                 box-shadow: 0 4px 20px rgba(0, 119, 182, 0.15);
             }
