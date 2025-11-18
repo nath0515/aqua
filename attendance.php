@@ -254,15 +254,17 @@
                                 </div>
                             </div>
                         </form>
-                        <button id="downloadPDF" class="btn btn-danger mb-3">
-                            <i class="fas fa-file-pdf me-2"></i> Download Attendance as PDF
-                        </button>
-                        <button id="printAttendance" class="btn btn-secondary mb-3 ms-2">
-                            <i class="fas fa-print me-2"></i> Print Attendance
-                        </button>
-                        <button id="previewReport" class="btn btn-warning mb-3 ms-2">
-                            <i class="fas fa-eye me-2"></i> Print Preview
-                        </button>
+                        <div class="d-flex justify-content-end mb-4">
+                            <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="printAttendance" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Receipt">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button id="previewReport" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>   
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-clock me-1"></i>
