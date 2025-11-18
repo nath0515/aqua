@@ -25,10 +25,6 @@
 
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // FIX: define role_id so notifications work
-    $role_id = $user_data['role_id'];
-
-    // Get notifications
     require 'notification_helper.php';
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
