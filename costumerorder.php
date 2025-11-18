@@ -90,6 +90,7 @@ ini_set('display_errors', 1);
                 background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
                 color: white;
                 padding: 40px 0;
+                margin-top: 20px;
                 margin-bottom: 40px;
             }
             
