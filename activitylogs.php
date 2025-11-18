@@ -12,7 +12,7 @@
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
-    WHERE u.user_id = 0";
+    WHERE u.user_id = 2";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
