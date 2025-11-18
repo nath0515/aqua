@@ -167,10 +167,13 @@ error_reporting(E_ALL);
                 box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
                 color: white;
             }
+            .custom-navbar {
+            background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
         </style>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+       <nav class="sb-topnav navbar navbar-expand navbar-dark custom-navbar">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">
                 <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 170px; height: 60px;">
