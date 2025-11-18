@@ -200,6 +200,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="addresses.php">Addresses</a></li>
                         <li><a id="installBtn" class="dropdown-item" style="display: none;">Install AquaDrop</a></li>
                         <div id="loadingOverlay">
                             <div class="spinner"></div>
