@@ -86,7 +86,8 @@ error_reporting(E_ALL);
         <style>
          .custom-navbar {
             background: linear-gradient(135deg, #0077b6, #005a8b) !important;
-        }</style>
+        }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark custom-navbar">
