@@ -8,10 +8,7 @@
     }else if ($role_id == 3){
         header("Location: riderdashboard.php");
         exit();
-    }else if ($role_id != 1){
-        header("Location: login.php");
-        exit();
-    }
+    };
 
     $user_id = $_SESSION['user_id'];
 
