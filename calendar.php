@@ -27,12 +27,12 @@ $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
     // Get notifications using helper for consistency
-    require 'notification_helper.php';
-    $notifications = getNotifications($conn, $user_id, $role_id);
-    $unread_count = $notifications['unread_count'];
-    
-    // Check for notification success message
-    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
+require 'notification_helper.php';
+$notifications = getNotifications($conn, $user_id, $role_id);
+$unread_count = $notifications['unread_count'];
+
+// Check for notification success message
+$notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
 // Get today's attendance data
 $stmt = $conn->prepare("SELECT in_time, out_time FROM attendance WHERE user_id = :user_id AND DATE(in_time) = :today");
@@ -75,9 +75,6 @@ if ($next_month > 12) {
     $next_month = 1;
     $next_year++;
 }
- require 'notification_helper.php';
-$notifications = getNotifications($conn, $user_id, $role_id);
-$unread_count = $notifications['unread_count'];
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
