@@ -57,10 +57,9 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
     <style>
         /* Professional Business Styling */
         .hero-section {
-            background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+            background: linear-gradient(135deg, #0077b6 0%, #005a8b 80%);
             color: white;
             padding: 80px 0;
-            margin-top: 80px;
             text-align: center;
         }
         
