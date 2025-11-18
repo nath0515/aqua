@@ -97,6 +97,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
         
         .features-section {
             padding: 80px 0;
+            margin-top: 80px;
             background: #f8f9fa;
         }
         
@@ -506,7 +507,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
     <div id="layoutSidenav_content">
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="container mt-4">
+            <div class="container">
                 <h1 class="hero-title">Premium Water Delivery</h1>
                 <p class="hero-subtitle">Clean, safe, and reliable water delivered right to your doorstep. Experience the convenience of modern water delivery service.</p>
                 <a href="costumerorder.php" class="hero-cta">Start Ordering Now</a>
