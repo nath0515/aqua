@@ -465,10 +465,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
             background: #dc3545;
             color: white;
         }
+          .custom-navbar {
+            background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
     </style>
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark custom-navbar">
          <a class="navbar-brand ps-3" href="index.php">
                 <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 170px; height: 60px;">
             </a>
