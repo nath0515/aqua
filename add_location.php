@@ -237,10 +237,13 @@
                 width: 0%;
                 transition: width 0.3s ease;
             }
+             .custom-navbar {
+            background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
         </style>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark custom-navbar">
             <!-- Navbar Brand-->
              <a class="navbar-brand ps-3" href="index.php">
                 <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 170px; height: 60px;">
@@ -288,7 +291,7 @@
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
 
                         <?php 
                     $sql = "SELECT rs FROM users WHERE user_id = :user_id";
