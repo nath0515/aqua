@@ -129,8 +129,8 @@
                         <i class="fas fa-user fa-fw"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="userprofile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="activitylogsuser.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="activitylogsrider.php">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
