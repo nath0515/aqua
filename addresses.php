@@ -25,6 +25,8 @@
     // Get notifications
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
+
+     $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
