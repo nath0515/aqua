@@ -26,6 +26,8 @@ $stmt = $conn->prepare("SELECT u.user_id, username, email, role_id, firstname, l
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+$role_id = $user_data['role_id'];
+
     // Get notifications using helper for consistency
 require 'notification_helper.php';
 $notifications = getNotifications($conn, $user_id, $role_id);
