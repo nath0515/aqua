@@ -265,7 +265,6 @@
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>   
-
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-clock me-1"></i>
