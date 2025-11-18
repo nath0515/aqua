@@ -243,7 +243,7 @@
                         <button id="printAttendance" class="btn btn-secondary mb-3 ms-2">
                             <i class="fas fa-print me-2"></i> Print Attendance
                         </button>
-                        <button id="previewPrint" class="btn btn-warning mb-3 ms-2">
+                        <button id="previewReport" class="btn btn-warning mb-3 ms-2">
                             <i class="fas fa-eye me-2"></i> Print Preview
                         </button>
                         <div class="card mb-4">
@@ -326,25 +326,12 @@
                 </footer>
             </div>
         </div>
-        <!-- Print Preview Modal -->
-        <div class="modal fade" id="printPreviewModal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Print Preview – Attendance Report</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body" id="printPreviewContent" style="max-height:70vh; overflow:auto;">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="printNow" class="btn btn-primary">
-                        <i class="fas fa-print me-1"></i> Print
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                        </button>
-                    </div>
-                </div>
+        <div id="printPreviewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.5); overflow:auto; z-index:9999;">
+            <div style="background:#fff; margin:30px auto; padding:20px; width:90%; max-width:1000px; position:relative;">
+                <button id="closePreview" style="position:absolute; top:10px; right:10px;">Close</button>
+                <button id="printPreviewBtn" style="position:absolute; top:10px; right:80px;">Print</button>
+                <div id="previewContent"></div>
             </div>
         </div>
 
@@ -527,59 +514,69 @@
         </script>
 
         <script>
-        document.getElementById("previewPrint").addEventListener("click", function () {
-            let tableContent = document.querySelector("#datatablesSimple").outerHTML;
+        document.getElementById("previewReport").addEventListener("click", function () {
+            const preview = document.getElementById("previewContent");
+            preview.innerHTML = ''; // Clear previous content
 
-            let previewHTML = `
-                <div style="padding: 20px; font-family: Arial;">
-                    <h2 style="text-align:center;">AquaDrop Attendance Report</h2>
-                    <p><strong>Employee:</strong> <?= $user_data['firstname'] . " " . $user_data['lastname'] ?></p>
-                    <p><strong>Period:</strong> 
-                        <?= !empty($start_date) ? date('F j, Y', strtotime($start_date)) : 'Start' ?> -
-                        <?= !empty($end_date) ? date('F j, Y', strtotime($end_date)) : 'End' ?>
-                    </p>
+            // HEADER
+            preview.innerHTML += '<h2 style="text-align:center;">AquaDrop Water Refilling Station</h2>';
+            preview.innerHTML += '<h3 style="text-align:center;">Employee Attendance Report</h3>';
+            preview.innerHTML += '<p style="text-align:center;">Period: <?= !empty($start_date) ? date("F j, Y", strtotime($start_date)) : "Start" ?> - <?= !empty($end_date) ? date("F j, Y", strtotime($end_date)) : "End" ?></p>';
 
-                    ${tableContent}
+            // TABLE
+            let table = '<table style="width:100%; border-collapse: collapse;">';
+            table += '<thead><tr>';
+            table += '<th style="border:1px solid #000; padding:5px;">Date</th>';
+            table += '<th style="border:1px solid #000; padding:5px;">Time-In</th>';
+            table += '<th style="border:1px solid #000; padding:5px;">Time-Out</th>';
+            table += '<th style="border:1px solid #000; padding:5px; text-align:right;">Daily Salary (Php)</th>';
+            table += '</tr></thead><tbody>';
 
-                    <h3 style="text-align:right; margin-top:20px;">
-                        Total Salary: ₱<?= number_format($total_salary, 2) ?>
-                    </h3>
+            <?php foreach ($attendance_data as $row): 
+                $date = date('F j, Y', strtotime($row['date']));
+                $tin = ($row['time_in'] == "00:00:00" || empty($row['time_in'])) ? "Not timed in" : $row['time_in'];
+                $tout = ($row['time_out'] == "00:00:00" || empty($row['time_out'])) ? "Not timed out" : $row['time_out'];
+                $daily_salary = 0;
+                if (!empty($row['time_in']) && !empty($row['time_out'])) {
+                    $daily_salary = ((strtotime($row['time_out']) - strtotime($row['time_in'])) / 3600) * $hourly_rate;
+                }
+            ?>
+                table += '<tr>';
+                table += '<td style="border:1px solid #000; padding:5px;"><?= $date ?></td>';
+                table += '<td style="border:1px solid #000; padding:5px;"><?= $tin ?></td>';
+                table += '<td style="border:1px solid #000; padding:5px;"><?= $tout ?></td>';
+                table += '<td style="border:1px solid #000; padding:5px; text-align:right;"><?= number_format($daily_salary,2) ?></td>';
+                table += '</tr>';
+            <?php endforeach; ?>
 
-                    <p style="margin-top:40px; text-align:center; font-size:12px;">
-                        Generated by AquaDrop Water Ordering System
-                    </p>
-                </div>
-            `;
+            table += '</tbody></table>';
+            preview.innerHTML += table;
 
-            document.getElementById("printPreviewContent").innerHTML = previewHTML;
+            // TOTAL
+            preview.innerHTML += '<h3 style="text-align:right; margin-top:20px;">Total Salary: Php <?= number_format($total_salary,2) ?></h3>';
 
-            let modal = new bootstrap.Modal(document.getElementById("printPreviewModal"));
-            modal.show();
+            // FOOTER
+            preview.innerHTML += '<p style="text-align:center; font-style:italic;">Generated by: <?= $user_data["firstname"] . " " . $user_data["lastname"] ?></p>';
+            preview.innerHTML += '<p style="text-align:center; font-style:italic;">Generated by AquaDrop Water Ordering System</p>';
+
+            // Show modal
+            document.getElementById("printPreviewModal").style.display = "block";
         });
 
-        document.getElementById("printNow").addEventListener("click", function () {
-            let printContents = document.getElementById("printPreviewContent").innerHTML;
-            let printWindow = window.open("", "", "width=900,height=700");
+        // Close modal
+        document.getElementById("closePreview").addEventListener("click", function() {
+            document.getElementById("printPreviewModal").style.display = "none";
+        });
 
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Print Attendance</title>
-                    <style>
-                        body { font-family: Arial; padding: 20px; }
-                        table { width: 100%; border-collapse: collapse; }
-                        table, th, td { border: 1px solid black; }
-                        th, td { padding: 8px; }
-                        h2 { text-align: center; }
-                        .salary { text-align: right; }
-                    </style>
-                </head>
-                <body>${printContents}</body>
-                </html>
-            `);
+        // Print from modal
+        document.getElementById("printPreviewBtn").addEventListener("click", function() {
+            const printContents = document.getElementById("previewContent").innerHTML;
+            const originalContents = document.body.innerHTML;
 
-            printWindow.document.close();
-            printWindow.print();
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // reload to restore original JS functionality
         });
         </script>
 
