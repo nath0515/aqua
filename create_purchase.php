@@ -4,13 +4,6 @@
 
     $user_id = $_SESSION['user_id'];
 
-    require 'notification_helper.php';
-    $notifications = getNotifications($conn, $user_id, $role_id);
-    $unread_count = $notifications['unread_count'];
-    
-    // Check for notification success message
-    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
-
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
     WHERE u.user_id = :user_id";
@@ -28,6 +21,13 @@
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $payment_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    require 'notification_helper.php';
+    $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
+    
+    // Check for notification success message
+    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
     $current_page = basename($_SERVER['PHP_SELF']);
 ?>
