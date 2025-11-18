@@ -122,7 +122,7 @@ error_reporting(E_ALL);
                         <i class="fas fa-bell"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
+                     <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
 
                         <!-- Header with "Mark All as Read" -->
                         <li class="dropdown-header d-flex justify-content-between align-items-center fw-bold text-dark">
