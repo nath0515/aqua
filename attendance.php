@@ -237,6 +237,9 @@
                                 </div>
                             </div>
                         </form>
+                        <button id="downloadPdf" class="btn btn-danger mb-3">
+                            <i class="fas fa-file-pdf me-2"></i> Download Attendance as PDF
+                        </button>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-clock me-1"></i>
@@ -326,6 +329,40 @@
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+        <script>
+            document.getElementById("downloadPdf").addEventListener("click", function () {
+                const { jsPDF } = window.jspdf;
+
+                const element = document.getElementById("attendanceCard");
+
+                html2canvas(element, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL("image/png");
+                    const pdf = new jsPDF("p", "mm", "a4");
+
+                    const imgWidth = 190;
+                    const pageHeight = 295;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                    let heightLeft = imgHeight;
+                    let position = 10;
+
+                    pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight + 10;
+                        pdf.addPage();
+                        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    pdf.save("attendance_records.pdf");
+                });
+            });
+        </script>
 
         <script>
             // Date validation
