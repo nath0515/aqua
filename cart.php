@@ -71,6 +71,8 @@ error_reporting(E_ALL);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $rs = $stmt->fetchColumn();
+
+    $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
