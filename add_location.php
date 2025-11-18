@@ -18,6 +18,11 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $cart_count = 0;
+    foreach ($cart_data as $item) {
+        $cart_count += $item['quantity'];
+    }
+
     if(isset($location_id)){
         $stmt = $conn->prepare("SELECT * FROM user_locations WHERE location_id = :location_id");
         $stmt->execute(['location_id' => $location_id]);
@@ -238,14 +243,38 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
-             <li class="nav-item dropdown me-1">
+                <li class="nav-item me-2">
+                    <a class="nav-link position-relative" href="cart.php">
+                        <i class="fas fa-shopping-cart"></i>
+                        <?php if ($cart_count > 0): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <?php echo $cart_count; ?>
+                            <span class="visually-hidden">items in cart</span>
+                        </span>
+                        <?php endif; ?>
+                    </a>
+                </li>
+                <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <?php echo renderNotificationBadge($notifications['unread_count']); ?>
-                        <span class="visually-hidden">unread messages</span>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                         <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                    <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
+
+                        <!-- Header with "Mark All as Read" -->
+                        <li class="dropdown-header d-flex justify-content-between align-items-center fw-bold text-dark">
+                            Notifications
+                            <?php 
+                                if ($unread_count > 0) {
+                                    echo '<a href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '" class="text-primary small fw-bold"><i class="fas fa-check-double"></i> Mark All</a>';
+                                }
+                            ?>
+                        </li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
