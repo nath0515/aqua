@@ -3,6 +3,7 @@
     require 'db.php';
 
     $user_id = $_SESSION['user_id'];
+    $role_id = $user_data['role_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
     JOIN user_details ud ON u.user_id = ud.user_id
