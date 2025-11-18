@@ -22,11 +22,16 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $cart_count = 0;
+    foreach ($cart_data as $item) {
+        $cart_count += $item['quantity'];
+    }
+
     // Get notifications
     $notifications = getNotifications($conn, $user_id, $role_id);
     $unread_count = $notifications['unread_count'];
 
-     $current_page = basename($_SERVER['PHP_SELF']);
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -276,22 +281,17 @@
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>     
             <!-- Navbar-->
-           <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+            <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
                 <li class="nav-item me-2">
-                    <a class="nav-link position-relative" href="cart.php">
+                    <a class="nav-link" href="cart.php">
                         <i class="fas fa-shopping-cart"></i>
-                        <?php if ($cart_count > 0): ?>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            <?php echo $cart_count; ?>
-                            <span class="visually-hidden">items in cart</span>
-                        </span>
-                        <?php endif; ?>
                     </a>
                 </li>
-                <li class="nav-item dropdown me-1">
+             <li class="nav-item dropdown me-1">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <?php echo renderNotificationBadge($unread_count); ?>
+                        <?php echo renderNotificationBadge($notifications['unread_count']); ?>
+                        <span class="visually-hidden">unread messages</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
 
