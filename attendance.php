@@ -328,10 +328,16 @@
         </div>
         <div id="printPreviewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
             background: rgba(0,0,0,0.5); overflow:auto; z-index:9999;">
-            <div style="background:#fff; margin:30px auto; padding:20px; width:90%; max-width:1000px; position:relative;">
-                <div id="previewContent"></div>
-                <button id="closePreview" style="position:absolute; top:10px; right:10px;">Close</button>
-                <button id="printPreviewBtn" style="position:absolute; top:10px; right:80px;">Print</button>
+            <div style="background:#fff; margin:30px auto; padding:20px; width:90%; max-width:1000px; position:relative; min-height:400px;">
+                
+                <!-- Modal content -->
+                <div id="previewContent" style="margin-bottom:60px;"></div>
+
+                <!-- Buttons at bottom-right -->
+                <div style="position:absolute; bottom:10px; right:20px;">
+                    <button id="closePreview" style="margin-right:10px;">Close</button>
+                    <button id="printPreviewBtn">Print</button>
+                </div>
             </div>
         </div>
 
