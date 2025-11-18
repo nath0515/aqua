@@ -43,6 +43,34 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         
         <style>  
+            .notification-text{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+                max-width: 200px;
+                
+            }
+            .notification-text.fw-bold {
+                font-weight: 600;
+                color: #000;
+            }
+            .btn-modern {
+                background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+            }
+            
+            .btn-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+                color: white;
+            }
         .custom-navbar {
             background: linear-gradient(135deg, #0077b6, #005a8b) !important;
         }
