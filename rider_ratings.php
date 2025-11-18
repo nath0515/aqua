@@ -13,6 +13,14 @@ $unread_count = $notifications['unread_count'];
 // Check for notification success message
 $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
 
+$sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
+JOIN user_details ud ON u.user_id = ud.user_id
+WHERE u.user_id = :user_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Only riders can access this page
 if($role_id != 3){
     header("Location: index.php");
