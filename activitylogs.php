@@ -130,6 +130,26 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <?php 
+                        $sql = "SELECT status FROM store_status WHERE ss_id = 1";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $status = $stmt->fetchColumn();
+                        ?>
+                        <li>
+                            <a 
+                                href="process_dailyreport.php" 
+                                class="dropdown-item"
+                                <?php if ($status == 1): ?>
+                                    onclick="return confirmCloseShop(event)"
+                                <?php endif; ?>
+                            >
+                                <?php echo ($status == 1) ? 'Close Shop' : 'Open Shop'; ?>
+                            </a>
+                        </li>
+                        <div id="loadingOverlay">
+                            <div class="spinner"></div>
+                        </div>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     </ul>
