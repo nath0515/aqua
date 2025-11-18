@@ -103,6 +103,9 @@
              .custom-navbar {
             background: linear-gradient(135deg, #0077b6, #005a8b) !important;
         }
+        .custom-navbar {
+            background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
     </style>
     </head>
     <body class="sb-nav-fixed">
