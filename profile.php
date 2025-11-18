@@ -2,6 +2,17 @@
     require 'session.php';
     require 'db.php';
 
+    if($role_id == 2){
+        header("Location: home.php");
+        exit();
+    }else if ($role_id == 3){
+        header("Location: riderdashboard.php");
+        exit();
+    }else if ($role_id != 1){
+        header("Location: login.php");
+        exit();
+    }
+
     $user_id = $_SESSION['user_id'];
 
     $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number,profile_pic FROM users u
