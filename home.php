@@ -263,7 +263,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
             background: linear-gradient(135deg, #0077b6, #005a8b) !important;
         }
         body {
-            padding-top: 80px; /* adjust based on navbar height */
+            padding-top: 90px; /* adjust based on navbar height */
         }
     </style>
 
