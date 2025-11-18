@@ -78,7 +78,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="activitylogs.php">Activity Log</a></li>
+                        <li><a class="dropdown-item" href="activitylogsrider.php">Activity Log</a></li>
                         <?php 
                         // Commented out Off Duty toggle
                         /*
