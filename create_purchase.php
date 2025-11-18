@@ -91,6 +91,12 @@
                
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto d-flex flex-row align-items-center pe-1">
+                <?php 
+                    $sql = "SELECT * FROM activity_logs ORDER BY date DESC LIMIT 3";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $activity_logs = $stmt->fetchAll();
+                ?>
                 
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
