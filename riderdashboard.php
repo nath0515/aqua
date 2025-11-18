@@ -84,7 +84,7 @@
                         <i class="fas fa-bell"></i>
                         <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
+                   <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
 
                         <!-- Header with "Mark All as Read" -->
                         <li class="dropdown-header d-flex justify-content-between align-items-center fw-bold text-dark">
@@ -101,6 +101,19 @@
                             <a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle mt-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="riderprofile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="activitylogsrider.php">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
