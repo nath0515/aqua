@@ -70,24 +70,24 @@
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link position-relative mt-2" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell fs-5"></i>
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                            <?php if ($unread_count > 0): ?>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                    <?php echo $unread_count; ?>
-                                    <span class="visually-hidden">unread notifications</span>
-                                </span>
-                            <?php endif; ?>
-                            <span class="visually-hidden">unread notifications</span>
-                        </span>
+                        <?php echo renderNotificationBadge($unread_count); ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 250px;">
-                        <li class="dropdown-header fw-bold text-dark">Notifications</li>
+                    <ul class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown">
+
+                        <!-- Header with "Mark All as Read" -->
+                        <li class="dropdown-header d-flex justify-content-between align-items-center fw-bold text-dark">
+                            Notifications
+                            <?php 
+                                if ($unread_count > 0) {
+                                    echo '<a href="process_readnotification.php?action=mark_all_read&user_id=' . $user_id . '&role_id=' . $role_id . '&redirect=' . urlencode($current_page) . '" class="text-primary small fw-bold"><i class="fas fa-check-double"></i> Mark All</a>';
+                                }
+                            ?>
+                        </li>
+                        <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><hr class="dropdown-divider"></li>
-                        <?php foreach($activity_logs as $row):?>
-                         <li><a class="dropdown-item notification-text" href="process_readnotification.php?id=<?php echo $row['activitylogs_id']?>&destination=<?php echo $row['destination']?>"><?php echo $row['message'];?></a></li>
-                        <hr>
-                        <?php endforeach; ?>
-                        <li><a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a></li>
+                        <li>
+                            <a class="dropdown-item text-center text-muted small" href="activitylogs.php">View all notifications</a>
+                        </li>
                     </ul>
                 </li>
 
