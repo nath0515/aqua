@@ -107,7 +107,7 @@
                         <?php echo renderNotificationDropdown($notifications['recent_notifications'], $unread_count, $user_id, $role_id); ?>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item text-center text-muted small" href="activitylogsusers.php">View all notifications</a>
+                            <a class="dropdown-item text-center text-muted small" href="activitylogsuser.php">View all notifications</a>
                         </li>
                     </ul>
                 </li>
