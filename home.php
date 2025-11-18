@@ -57,7 +57,7 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
     <style>
         /* Professional Business Styling */
         .hero-section {
-            background: linear-gradient(135deg, #0077b6 0%, #005a8b 80%);
+            background: linear-gradient(135deg, #0077b6 0%, #005a8b 100%);
             color: white;
             padding: 80px 0;
             text-align: center;
@@ -261,6 +261,9 @@ $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notif
         }
            .custom-navbar {
             background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
+        body {
+            padding-top: 80px; /* adjust based on navbar height */
         }
     </style>
 
