@@ -285,6 +285,10 @@ error_reporting(E_ALL);
                             </div>
                         </div>
                     </div>
+                     <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
+                    </div>
                 </nav>
             </div>
             <div id="layoutSidenav_content">
