@@ -253,7 +253,6 @@ ini_set('display_errors', 1);
                                     <a class="nav-link <?php echo $current_page == 'accounts.php' ? 'active' : ''; ?>" href="accounts.php">Accounts</a>
                                     <a class="nav-link <?php echo $current_page == 'rideraccount.php' ? 'active' : ''; ?>" href="rideraccount.php">Add Rider</a>
                                     <a class="nav-link <?php echo $current_page == 'adminaccount.php' ? 'active' : ''; ?>" href="adminaccount.php">Add Admin</a>
-                                    <a class="nav-link <?php echo $current_page == 'addstaff.php' ? 'active' : ''; ?>" href="addstaff.php">Add Staff</a>
                                     <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
                                 </nav>
                             </div>
