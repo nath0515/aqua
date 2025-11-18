@@ -174,7 +174,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                         </a>
                     </div>
                 </div>
-                <div class="sb-sidenav-footer">
+                 <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
                         <?php echo "".$user_data['firstname']." ".$user_data['lastname'];?>
                     </div>
