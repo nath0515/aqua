@@ -186,6 +186,7 @@
                 display: flex;
                 justify-content: space-between;
                 margin-bottom: 2rem;
+                margin-top: 20px;
                 position: relative;
             }
             
