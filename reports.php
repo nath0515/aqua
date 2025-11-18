@@ -130,10 +130,13 @@
                 font-weight: 600;
                 color: #000;
             }
+             .custom-navbar {
+            background: linear-gradient(135deg, #0077b6, #005a8b) !important;
+        }
     </style>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark custom-navbar">
             <!-- Navbar Brand-->
            <a class="navbar-brand ps-3" href="index.php">
                 <img src="assets/img/tagiled2.png" alt="AquaDrop Logo" style="width: 220px; height: 60px;">
@@ -255,7 +258,6 @@
                                     <a class="nav-link <?php echo $current_page == 'accounts.php' ? 'active' : ''; ?>" href="accounts.php">Accounts</a>
                                     <a class="nav-link <?php echo $current_page == 'rideraccount.php' ? 'active' : ''; ?>" href="rideraccount.php">Add Rider</a>
                                     <a class="nav-link <?php echo $current_page == 'adminaccount.php' ? 'active' : ''; ?>" href="adminaccount.php">Add Admin</a>
-                                    <a class="nav-link <?php echo $current_page == 'addstaff.php' ? 'active' : ''; ?>" href="addstaff.php">Add Staff</a>
                                     <a class="nav-link <?php echo $current_page == 'applications.php' ? 'active' : ''; ?>" href="applications.php">Applications</a>
                                 </nav>
                             </div>
