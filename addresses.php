@@ -24,6 +24,7 @@
 
     // Get notifications
     $notifications = getNotifications($conn, $user_id, $role_id);
+    $unread_count = $notifications['unread_count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
