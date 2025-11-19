@@ -294,6 +294,9 @@
                                         <?php else: ?>
                                             <?php foreach ($attendance_data as $row): ?>
                                                 <tr>
+                                                    <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
+
+                                                    <!-- TIME IN -->
                                                     <td>
                                                         <?php
                                                             if ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00' || empty($row['time_in'])) {
@@ -303,9 +306,10 @@
                                                             }
                                                         ?>
                                                         <?= $timeInDisplay ?>
-                                                        </td>
+                                                    </td>
 
-                                                        <td>
+                                                    <!-- TIME OUT -->
+                                                    <td>
                                                         <?php
                                                             if ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00' || empty($row['time_out'])) {
                                                                 $timeOutDisplay = 'Not yet timed out';
@@ -314,7 +318,9 @@
                                                             }
                                                         ?>
                                                         <?= $timeOutDisplay ?>
-                                                        </td>
+                                                    </td>
+
+                                                    <!-- SALARY -->
                                                     <?php
                                                         $daily_salary = 0;
                                                         if (!empty($row['time_in']) && !empty($row['time_out'])) {
