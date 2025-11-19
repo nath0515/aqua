@@ -294,23 +294,27 @@
                                         <?php else: ?>
                                             <?php foreach ($attendance_data as $row): ?>
                                                 <tr>
-                                                    <td><?= date('F j, Y', strtotime($row['date'])) ?></td>
                                                     <td>
-                                                    <?php
-                                                        $timeInDisplay = ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00' || empty($row['time_in'])) 
-                                                            ? 'Not yet timed in' 
-                                                            : htmlspecialchars($row['time_in']);
+                                                        <?php
+                                                            if ($row['time_in'] === '00:00:00' || $row['time_in'] === '0000-00-00 00:00:00' || empty($row['time_in'])) {
+                                                                $timeInDisplay = 'Not yet timed in';
+                                                            } else {
+                                                                $timeInDisplay = date('g:i A', strtotime($row['time_in']));
+                                                            }
                                                         ?>
-                                                    <?= $timeInDisplay ?>
-                                                    </td>
-                                                    <td>
-                                                    <?php
-                                                        $timeOutDisplay = ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00' || empty($row['time_out'])) 
-                                                            ? 'Not yet timed out' 
-                                                            : htmlspecialchars($row['time_out']);
-                                                    ?>
-                                                    <?= $timeOutDisplay ?>
-                                                    </td>
+                                                        <?= $timeInDisplay ?>
+                                                        </td>
+
+                                                        <td>
+                                                        <?php
+                                                            if ($row['time_out'] === '00:00:00' || $row['time_out'] === '0000-00-00 00:00:00' || empty($row['time_out'])) {
+                                                                $timeOutDisplay = 'Not yet timed out';
+                                                            } else {
+                                                                $timeOutDisplay = date('g:i A', strtotime($row['time_out']));
+                                                            }
+                                                        ?>
+                                                        <?= $timeOutDisplay ?>
+                                                        </td>
                                                     <?php
                                                         $daily_salary = 0;
                                                         if (!empty($row['time_in']) && !empty($row['time_out'])) {
