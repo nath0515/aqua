@@ -139,7 +139,7 @@ if($total_orders > 0) {
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link" href="rider_ratings.php">
+                        <a class="nav-link" href="rider_ratingsclosed.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
                             My Ratings
                         </a>
