@@ -814,17 +814,19 @@ require 'db.php';
         </script>
 
         <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const notifications = document.querySelectorAll(".notification-text");
+            document.addEventListener("DOMContentLoaded", function () {
+                const notifications = document.querySelectorAll(".notification-text");
+                console.log("Found notifications:", notifications.length); // Debug
 
-            notifications.forEach(n => {
-                let words = n.textContent.trim().split(" ");
+                notifications.forEach(n => {
+                    let text = n.textContent.trim();
+                    let words = text.split(/\s+/);
 
-                if (words.length > 5) {
-                    n.textContent = words.slice(0, 5).join(" ") + "…";
-                }
+                    if (words.length > 5) {
+                        n.textContent = words.slice(0, 5).join(" ") + "…";
+                    }
+                });
             });
-        });
         </script>
         
         <?php if ($notification_success > 0): ?>
