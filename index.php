@@ -462,9 +462,9 @@ require 'db.php';
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4 mt-3">
+                        <div class="row d-flex align-items-stretch">
+                            <div class="col-xl-6 mb-4">
+                                <div class="card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-calculator me-1"></i>
                                         Predicted Production for Today
@@ -485,11 +485,11 @@ require 'db.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4 mt-3">
+                            <div class="col-xl-6 mb-4">
+                                <div class="card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-calendar-check"></i>
-                                        Reserved Orders for Todays
+                                        Reserved Orders for Today
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Total Reservations Received Today:</strong></p>
