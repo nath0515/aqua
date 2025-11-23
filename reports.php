@@ -284,6 +284,9 @@
                             <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
                                 <i class="fas fa-eye"></i>
                             </button>
+                           <button id="downloadExcel" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Excel">
+                                <i class="fas fa-file-excel"></i>
+                            </button>
                         </div>             
                         <div class="card mb-4">
                             <div class="card-header">
@@ -502,8 +505,7 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
@@ -728,6 +730,64 @@
                 modal.show();
             });
         </script>
+        <script>
+        document.getElementById("downloadExcel").addEventListener("click", function () {
+
+            // =====================
+            //  CREATE EXCEL DATA
+            // =====================
+
+            let salesData = [
+                ["Date", "Product", "Amount (Php)"],
+                <?php foreach($order_data as $row): ?>
+                ["<?php echo date('M d, Y g:iA', strtotime($row['date'])); ?>",
+                "<?php echo $row['product_name']; ?>",
+                "<?php echo number_format($row['amount'], 2); ?>"],
+                <?php endforeach; ?>
+                ["", "Total Sales", "Php <?php echo number_format($total_amount, 2); ?>"]
+            ];
+
+            let expenseData = [
+                ["Date", "Purpose", "Amount (Php)"],
+                <?php foreach($expense_data as $row): ?>
+                ["<?php echo date('M d, Y g:iA', strtotime($row['date'])); ?>",
+                "<?php echo $row['expensetype_name']; ?>",
+                "<?php echo number_format($row['amount'], 2); ?>"],
+                <?php endforeach; ?>
+                ["", "Total Expenses", "Php <?php echo number_format($total_expense, 2); ?>"]
+            ];
+
+            let summaryData = [
+                ["Summary", "Amount"],
+                ["Total Sales", "Php <?php echo number_format($total_amount, 2); ?>"],
+                ["Total Expenses", "Php <?php echo number_format($total_expense, 2); ?>"],
+                ["Net Income", "Php <?php echo number_format($total_income, 2); ?>"]
+            ];
+
+            // =====================
+            // CREATE WORKBOOK & SHEETS
+            // =====================
+
+            const wb = XLSX.utils.book_new();
+
+            const wsSales = XLSX.utils.aoa_to_sheet(salesData);
+            const wsExpenses = XLSX.utils.aoa_to_sheet(expenseData);
+            const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+
+            XLSX.utils.book_append_sheet(wb, wsSales, "Sales");
+            XLSX.utils.book_append_sheet(wb, wsExpenses, "Expenses");
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Summary");
+
+            // =====================
+            // DOWNLOAD EXCEL FILE
+            // =====================
+
+            const filename = `Report_<?php echo date('Ymd', strtotime($date_data)); ?>.xlsx`;
+            XLSX.writeFile(wb, filename);
+
+        });
+        </script>
+
 
     </body>
 </html>
