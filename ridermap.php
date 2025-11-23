@@ -600,8 +600,7 @@
                                     <i class="fas fa-camera me-2"></i>
                                     Proof of Delivery Image
                                 </label>
-                                <input type="file" class="form-control" id="proof_of_delivery" name="proof_of_delivery" 
-                                       accept="image/*" required>
+                                <input type="file" class="form-control" id="proof_of_delivery" name="proof_of_delivery" accept="image/*" capture="camera" required>
                                 <div class="form-text">Upload a photo showing the delivery was completed (e.g., customer signature, delivered items, etc.)</div>
                             </div>
                             
