@@ -157,15 +157,9 @@ require 'db.php';
             100% { transform: rotate(360deg); }
         }
         .notification-text {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;        /* ✨ number of lines before cutoff */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-break: break-word;
-            max-width: 100%;
-            line-height: 1.3;
             font-size: 14px;
+            line-height: 1.3;
+            word-break: break-word;
         }
 
         .notification-text.fw-bold {
@@ -816,6 +810,20 @@ require 'db.php';
                 .catch(error => {
                     console.error('Failed to mark all as read:', error);
                 });
+        });
+        </script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const notifications = document.querySelectorAll(".notification-text");
+
+            notifications.forEach(n => {
+                let words = n.textContent.trim().split(" ");
+
+                if (words.length > 5) {
+                    n.textContent = words.slice(0, 5).join(" ") + "…";
+                }
+            });
         });
         </script>
         
