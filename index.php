@@ -463,27 +463,27 @@ require 'db.php';
                         </div>
 
                         <div class="row">
-                            <!-- Bar Chart Card -->
-                            <div class="card mb-4 mt-3">
-                                <div class="card-header">
-                                    <i class="fas fa-calculator me-1"></i>
-                                    Predicted Production for Today
-                                </div>
-                                <div class="card-body">
-                                    <div class="row text-center">
-                                        <div class="col-md-6 border-end">
-                                            <p class="mb-1"><strong>Predicted Production:</strong></p>
-                                            <p class="mb-0"><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p>
+                            <div class="col-xl-6">
+                                <div class="card mb-4 mt-3">
+                                    <div class="card-header">
+                                        <i class="fas fa-calculator me-1"></i>
+                                        Predicted Production for Today
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-md-6 border-end">
+                                                <p class="mb-1"><strong>Predicted Production:</strong></p>
+                                                <p class="mb-0"><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p>
+                                            </div>
+                                            <?php if (isset($accuracy_rate)): ?>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Accuracy Rate:</strong></p>
+                                                <p class="mb-0"><?php echo number_format($accuracy_rate, 2); ?>%</p>
+                                            </div>
+                                            <?php endif; ?>
                                         </div>
-                                        <?php if (isset($accuracy_rate)): ?>
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Accuracy Rate:</strong></p>
-                                            <p class="mb-0"><?php echo number_format($accuracy_rate, 2); ?>%</p>
-                                        </div>
-                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4 mt-3">
