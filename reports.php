@@ -275,6 +275,9 @@
                     <h1 class="ms-3">DoodsNer Water Refilling Station</h1>
                     <h5 class="ms-3">Daily Sales & Expense Report - <?php echo date('F j, Y', strtotime($date_data)); ?></h5>
                         <div class="d-flex justify-content-end mb-4">
+                            <button id="downloadExcel" class="btn btn-success me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Excel">
+                                <i class="fas fa-file-excel"></i>
+                            </button>
                             <button id="downloadPDF" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Receipt as PDF">
                                 <i class="fas fa-file-pdf"></i>
                             </button>
@@ -283,9 +286,6 @@
                             </button>
                             <button id="viewReceipt" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Receipt">
                                 <i class="fas fa-eye"></i>
-                            </button>
-                           <button id="downloadExcel" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Excel">
-                                <i class="fas fa-file-excel"></i>
                             </button>
                         </div>             
                         <div class="card mb-4">
