@@ -209,8 +209,12 @@
                                             <input type="number" class="form-control" id="unitprice" readonly>
                                         </div>
                                     </div>
-
                                     <div class="mb-3 row align-items-center">
+                                        <div class="col-12 mb-2">
+                                            <small class="text-muted">
+                                                Disclaimer: Adding a container will incur an additional fee and If you don’t have a container, you have to buy one.
+                                            </small>
+                                        </div>
                                         <div class="col-6">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="hasContainer" onchange="togglePriceInput()">
