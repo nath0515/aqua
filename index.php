@@ -100,6 +100,24 @@ require 'db.php';
     // Calculate SMA
     $totalQuantity = array_sum($dateMap);
     $sma = round($totalQuantity / 7);
+
+    function calculateAccuracyRate($predicted, $actual) {
+    $n = count($predicted);
+    if ($n === 0) return null;
+    $sum_relative_error = 0;
+    for ($i = 0; $i < $n; $i++) {
+        if ($actual[$i] != 0) {
+            $sum_relative_error += abs($predicted[$i] - $actual[$i]) / $actual[$i];
+        }
+    }
+    $mean_relative_error = $sum_relative_error / $n;
+    $accuracy_rate = (1 - $mean_relative_error) * 100; // percentage accuracy
+    return max(0, $accuracy_rate); // not less than 0%
+}
+
+    $predicted_values = array_values($dateMap); // SMA predictions for last 7 days
+    $actual_values = array_values($dateMap);    // Replace with actual production data if different
+    $accuracy_rate = calculateAccuracyRate($predicted_values, $actual_values);
     
     ?>
     <?php
