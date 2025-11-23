@@ -455,6 +455,9 @@ require 'db.php';
                                     <div class="card-body">
                                         <p><strong>Predicted Production for Today:</strong></p>
                                         <p><?php echo $sma !== null ? number_format($sma) . ' gallons' : 'Not enough data'; ?></p> 
+                                        <?php if (isset($accuracy_rate)): ?>
+                                            <p><strong>Accuracy Rate:</strong> <?php echo number_format($accuracy_rate, 2); ?>%</p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
