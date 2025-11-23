@@ -408,21 +408,26 @@ error_reporting(E_ALL);
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Address</label>
-                                            <select name="location_id" id="location_id" class="form-select">
-                                                <option value="0">Select Address</option>
+                                            <select name="location_id" id="location_id" class="form-select" required>
+                                                <option value="" disabled selected hidden>Select Address</option>
                                                 <?php foreach($user_locations as $row): ?>
-                                                    <option value="<?php echo $row['location_id']?>"><?php echo $row['label']?></option>
+                                                    <option value="<?php echo $row['location_id']; ?>">
+                                                        <?php echo $row['label']; ?>
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Payment Method</label>
-                                            <select name="payment_id" id="payment_id" class="form-select">
-                                                <option value="0">Select Payment Method</option>
+                                            <select name="payment_id" id="payment_id" class="form-select" required>
+                                                <option value="" disabled selected hidden>Select Payment Method</option>
                                                 <?php foreach($payment_data as $row): ?>
-                                                    <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
+                                                    <option value="<?php echo $row['payment_id']; ?>">
+                                                        <?php echo $row['payment_name']; ?>
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
