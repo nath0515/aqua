@@ -822,8 +822,8 @@ require 'db.php';
                     let text = n.textContent.trim();
                     let words = text.split(/\s+/);
 
-                    if (words.length > 5) {
-                        n.textContent = words.slice(0, 5).join(" ") + "…";
+                    if (words.length > 3) {
+                        n.textContent = words.slice(0, 3).join(" ") + "…";
                     }
                 });
             });
