@@ -157,12 +157,13 @@ require 'db.php';
             100% { transform: rotate(360deg); }
         }
         .notification-text {
-            white-space: normal !important;  
-            word-break: break-word;         
+            display: -webkit-box;
+            -webkit-line-clamp: 3;        /* ✨ number of lines before cutoff */
+            -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: block;
-            max-width: 100% !important;
+            word-break: break-word;
+            max-width: 100%;
             line-height: 1.3;
             font-size: 14px;
         }
