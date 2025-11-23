@@ -396,7 +396,6 @@
                                     <div class="form-group form-group-default">
                                         <label>Payment Method</label>
                                         <select name="payment_id" id="payment_id" class="form-select">
-                                            <option value="0"></option>
                                             <?php foreach($payment_data as $row):?>
                                                 <option value="<?php echo $row['payment_id']?>"><?php echo $row['payment_name']?></option>
                                             <?php endforeach;?>
