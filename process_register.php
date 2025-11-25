@@ -57,11 +57,11 @@
 
             $mailsent= sendVerificationEmail($email, $verification_token);
             if ($mailsent){
-                header("Location: register.php?status=success");
+                header("Location: register?status=success");
                 exit();
             }
             else{
-                header("Location: register.php?status=error");
+                header("Location: register?status=error");
                 exit();
             }
             
