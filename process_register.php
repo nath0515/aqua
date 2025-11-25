@@ -18,11 +18,11 @@
     $fp_token = bin2hex(random_bytes(16));
     $date = date('Y-m-d H:i:s');
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $username = $_POST['username'] ?? '';
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password'];
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $username = $GET['username'] ?? '';
+        $email = $GET['email'];
+        $password = $_GET['password'];
+        $confirm_password = $_GET['confirm_password'];
 
         try {
             //check if email exists
