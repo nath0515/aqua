@@ -1,6 +1,7 @@
 <?php
-    error_reporting(E_ALL);
     ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     require 'PHPMailer/src/Exception.php';
     require 'PHPMailer/src/PHPMailer.php';
     require 'PHPMailer/src/SMTP.php';
@@ -33,7 +34,8 @@
             if ($stmt->rowCount() > 0) {
                 $data = $stmt->fetch();
                 if($data['role_id'] != 0){
-                    echo "exist";
+                    header("Location: register.php?status=exist&email=".$email);
+                    exit();
                 }
                 else{
                     $globalquery = "UPDATE users SET username = :username, password = :password, verification_token = :verification_token, fp_token = :fp_token, role_id = 0 WHERE email = :email";
@@ -42,7 +44,8 @@
             if ($password == $confirm_password) {
                 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
             } else {
-                echo "password do not match";
+                header("Location: register.php?status=notmatch&email=".$email);
+                exit();
             }
             $stmt = $conn->prepare($globalquery);
             $stmt->bindParam(':username', $username);
@@ -55,14 +58,18 @@
 
             $mailsent= sendVerificationEmail($email, $verification_token);
             if ($mailsent){
-                echo "mail sent";
+                header("Location: register.php?status=success");
+                exit();
             }
             else{
-                echo "error mail sent";
+                header("Location: register.php?status=error");
+                exit();
             }
             
         } catch (PDOException $e) {
-            echo("Registration error: " . $e->getMessage());
+            error_log("Registration error: " . $e->getMessage());
+            header("Location: register.php?status=error");
+            exit();
         }
     }
 
@@ -76,7 +83,6 @@
             $mail->Password = '8=4u?LaKm062';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-            $mail->SMTPDebug = 2;
     
             $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
             $mail->addAddress($email);
@@ -104,7 +110,7 @@
             $mail->send();
             return true;
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
             return false;
         }
     }
