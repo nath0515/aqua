@@ -274,6 +274,9 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                         <i class="fas fa-quote-left me-2"></i>
                                         <?php echo htmlspecialchars($rating['review_text']); ?>
                                     </div>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#actionModal<?php echo $rating['id']; ?>">
+                                        Add Action Taken
+                                    </button>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
