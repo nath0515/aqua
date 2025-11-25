@@ -342,6 +342,30 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
             </footer>
         </div>
     </div>
+    <div class="modal fade" id="actionModal<?php echo $rating['id']; ?>" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" action="save_action.php">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Action Taken</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="rating_id" value="<?php echo $rating['id']; ?>">
+
+                        <label class="form-label">Describe the action you took:</label>
+                        <textarea class="form-control" name="action_text" rows="4" required></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Save Action</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
