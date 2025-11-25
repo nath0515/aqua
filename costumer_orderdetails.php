@@ -450,10 +450,11 @@
                                                         <h6>Action Taken:</h6>
                                                         <p class="text-muted"><?php echo htmlspecialchars($existing_rating['action_taken']); ?></p>
                                                         <small class="text-muted">
-                                                            Date: <?php echo date('M d, Y H:i', strtotime($existing_rating['action_date'])); ?>
+                                                            Date: <?php echo date('M d, Y h:i A', strtotime($existing_rating['action_date'])); ?>
                                                         </small>
                                                     </div>
                                                 <?php endif; ?>
+
                                             <?php else: ?>
                                                 <!-- Rating form -->
                                                 <form id="ratingForm">
