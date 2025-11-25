@@ -207,12 +207,6 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
         <div id="layoutSidenav_content">
             <main class="container-fluid px-4">
                 <h1 class="mt-4">My Ratings & Reviews</h1>
-                <?php if (isset($_GET['success']) && $_GET['success'] === 'action_saved'): ?>
-                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                        <strong>Action Saved!</strong> Your action taken has been recorded successfully.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                <?php endif; ?>
                 <!-- Rating Summary -->
                 <div class="rating-summary">
                     <div class="row text-center">
@@ -391,6 +385,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/scripts.js"></script>
         <?php if ($notification_success > 0): ?>
         <script>
