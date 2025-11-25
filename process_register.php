@@ -33,8 +33,7 @@
             if ($stmt->rowCount() > 0) {
                 $data = $stmt->fetch();
                 if($data['role_id'] != 0){
-                    header("Location: register.php?status=exist&email=".$email);
-                    exit();
+                    echo "exist";
                 }
                 else{
                     $globalquery = "UPDATE users SET username = :username, password = :password, verification_token = :verification_token, fp_token = :fp_token, role_id = 0 WHERE email = :email";
@@ -43,8 +42,7 @@
             if ($password == $confirm_password) {
                 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
             } else {
-                header("Location: register.php?status=notmatch&email=".$email);
-                exit();
+                echo "password do not match";
             }
             $stmt = $conn->prepare($globalquery);
             $stmt->bindParam(':username', $username);
