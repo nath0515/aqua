@@ -57,18 +57,14 @@
 
             $mailsent= sendVerificationEmail($email, $verification_token);
             if ($mailsent){
-                header("Location: register?status=success");
-                exit();
+                echo "mail sent";
             }
             else{
-                header("Location: register?status=error");
-                exit();
+                echo "error mail sent";
             }
             
         } catch (PDOException $e) {
-            error_log("Registration error: " . $e->getMessage());
-            header("Location: register.php?status=error");
-            exit();
+            echo("Registration error: " . $e->getMessage());
         }
     }
 
