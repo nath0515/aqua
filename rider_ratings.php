@@ -207,7 +207,12 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
         <div id="layoutSidenav_content">
             <main class="container-fluid px-4">
                 <h1 class="mt-4">My Ratings & Reviews</h1>
-                
+                <?php if (isset($_GET['success']) && $_GET['success'] === 'action_saved'): ?>
+                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                        <strong>Action Saved!</strong> Your action taken has been recorded successfully.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
                 <!-- Rating Summary -->
                 <div class="rating-summary">
                     <div class="row text-center">
@@ -392,6 +397,19 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                     title: 'Notifications Marked as Read!',
                     text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
                     timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'action_saved'): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Action Saved!',
+                    text: 'Your action taken has been successfully recorded.',
+                    timer: 2500,
                     showConfirmButton: false
                 });
             });
