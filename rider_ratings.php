@@ -269,24 +269,36 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                             </div>
                                         </div>
 
-                                        <!-- Action Taken Button -->
-                                        <button class="btn btn-sm btn-primary mt-2" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#actionModal<?php echo $rating['id']; ?>">
-                                            Action Taken
-                                        </button>
+                                        <!-- Only show button if there's comment AND action not submitted -->
+                                        <?php if(!empty($rating['review_text']) && empty($rating['action_taken'])): ?>
+                                            <button class="btn btn-sm btn-primary mt-2"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#actionModal<?php echo $rating['id']; ?>">
+                                                Action Taken
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
+                                <!-- Customer Comment -->
                                 <?php if(!empty($rating['review_text'])): ?>
                                     <div class="review-text">
                                         <i class="fas fa-quote-left me-2"></i>
                                         <?php echo htmlspecialchars($rating['review_text']); ?>
                                     </div>
                                 <?php endif; ?>
+
+                                <!-- Show Action Taken chunk if submitted -->
+                                <?php if(!empty($rating['action_taken'])): ?>
+                                    <div class="mt-3 p-2 border rounded bg-light">
+                                        <strong>Action Taken:</strong><br>
+                                        <?php echo nl2br(htmlspecialchars($rating['action_taken'])); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
-                            <!-- Modal FOR THIS SPECIFIC RATING -->
+                            <!-- Modal (only shown if action wasn't done yet) -->
+                            <?php if(empty($rating['action_taken']) && !empty($rating['review_text'])): ?>
                             <div class="modal fade" id="actionModal<?php echo $rating['id']; ?>" tabindex="-1">
                                 <div class="modal-dialog">
                                     <form method="POST" action="save_action.php">
@@ -311,7 +323,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                     </form>
                                 </div>
                             </div>
-
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
 
