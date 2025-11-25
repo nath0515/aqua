@@ -297,7 +297,10 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                 <?php if(!empty($rating['action_taken'])): ?>
                                     <div class="mt-3 p-2 border rounded bg-light">
                                         <strong>Action Taken:</strong><br>
-                                        <?php echo nl2br(htmlspecialchars($rating['action_taken'])); ?>
+                                        <?php echo nl2br(htmlspecialchars($rating['action_taken'])); ?><br>
+                                        <small class="text-muted">
+                                            Date: <?php echo date('M d, Y H:i', strtotime($rating['action_date'])); ?>
+                                        </small>
                                     </div>
                                 <?php endif; ?>
                             </div>
