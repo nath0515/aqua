@@ -786,13 +786,13 @@ require 'db.php';
             });
         </script>
         <script>
-        var productNames = <?php echo json_encode($productNames); ?>;
+        var productNames  = <?php echo json_encode($productNames); ?>;
         var productStocks = <?php echo json_encode($productStocks); ?>;
-        var colors = <?php echo json_encode($colors); ?>;
+        var colors        = <?php echo json_encode($colors); ?>;
 
-        var barChart = document.getElementById('barChart').getContext('2d');
+        var ctx = document.getElementById('barChart').getContext('2d');
 
-        var myBarChart = new Chart(barChart, {
+        var chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: productNames,
@@ -800,9 +800,8 @@ require 'db.php';
                     label: "Stocks",
                     backgroundColor: colors,
                     borderColor: colors,
-                    borderWidth: 1,
                     data: productStocks
-                }],
+                }]
             },
             options: {
                 responsive: true,
@@ -811,32 +810,45 @@ require 'db.php';
                 legend: {
                     display: true,
                     labels: {
+                        // Force Chart.js to use OUR custom labels
                         generateLabels: function(chart) {
-                            var labels = productNames.map(function(name, i) {
+                            var dataset = chart.data.datasets[0];
+                            var meta = chart.getDatasetMeta(0);
+
+                            return chart.data.labels.map(function(label, index) {
+                                var value = dataset.data[index];
+
                                 return {
-                                    text: name,
-                                    fillStyle: colors[i],
-                                    strokeStyle: colors[i],
-                                    index: i
+                                    text: label,
+                                    fillStyle: dataset.backgroundColor[index],
+                                    strokeStyle: dataset.borderColor[index],
+                                    hidden: meta.data[index].hidden || false,
+                                    index: index
                                 };
                             });
-                            return labels;
                         }
+                    },
+
+                    // CLICKABLE LEGEND FOR EACH PRODUCT
+                    onClick: function(e, legendItem) {
+                        var index = legendItem.index;
+                        var meta  = this.chart.getDatasetMeta(0);
+
+                        // Toggle visibility of that specific bar
+                        meta.data[index].hidden = !meta.data[index].hidden;
+
+                        this.chart.update();
                     }
                 },
 
                 scales: {
                     yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+                        ticks: { beginAtZero: true }
                     }]
                 }
             }
         });
         </script>
-
-
 
 
         <script>
