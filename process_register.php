@@ -56,7 +56,7 @@
             $stmt->bindParam(':created_at', $date);
             $stmt->execute();
 
-            $mailsent= sendVerificationEmail($email, $verification_token);
+            $mailsent = sendVerificationEmail($email, $username, $verification_token);
             if ($mailsent){
                 header("Location: register.php?status=success");
                 exit();
