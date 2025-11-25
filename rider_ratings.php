@@ -258,7 +258,8 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                                 <?php endfor; ?>
                                             </div>
                                         </div>
-                                        <div>
+
+                                        <div class="mb-2">
                                             <small class="text-muted">Your Rating:</small><br>
                                             <div class="stars">
                                                 <?php for($i = 1; $i <= 5; $i++): ?>
@@ -266,6 +267,13 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                                 <?php endfor; ?>
                                             </div>
                                         </div>
+
+                                        <!-- Action Taken Button (top-right area) -->
+                                        <button class="btn btn-sm btn-primary mt-2" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#actionModal<?php echo $rating['id']; ?>">
+                                            Action Taken
+                                        </button>
                                     </div>
                                 </div>
                                 
@@ -274,9 +282,6 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                         <i class="fas fa-quote-left me-2"></i>
                                         <?php echo htmlspecialchars($rating['review_text']); ?>
                                     </div>
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#actionModal<?php echo $rating['id']; ?>">
-                                        Add Action Taken
-                                    </button>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
