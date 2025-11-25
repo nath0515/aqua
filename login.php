@@ -319,7 +319,7 @@
                         </div>
                     </div>
                     <div class="login-right">
-                        <form method="POST" class="login-form">
+                        <form method="POST" action="login.php" class="login-form">
                             <div class="avatar">
                                 <i class="fas fa-user-circle fa-4x"></i>
                             </div>
