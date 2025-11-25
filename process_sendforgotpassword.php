@@ -49,7 +49,6 @@
             $mail->Password = '8=4u?LaKm062';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-            $mail->SMTPDebug = 2;
     
             $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
             $mail->addAddress($email);
