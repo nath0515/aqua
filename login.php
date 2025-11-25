@@ -427,7 +427,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             
-                <form action="" method="POST">
+                <form action="login.php" method="POST">
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <p class="small">Please fill out the email form to create an account.</p>
