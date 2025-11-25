@@ -519,6 +519,8 @@ require 'db.php';
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/datatables-simple-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@..."></script>
+
 
 
         <script>
