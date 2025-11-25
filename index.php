@@ -743,6 +743,32 @@ require 'db.php';
                 }
             });
 
+            // Bar Chart: Product Stocks
+            var barChart = document.getElementById('barChart').getContext('2d');
+            var myBarChart = new Chart(barChart, {
+                type: 'bar',
+                data: {
+                    labels: productNames,
+                    datasets: [{
+                        label: "Stocks",
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        data: productStocks,
+                    }],
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                }
+            });
+
             var incomeChart = document.getElementById('incomeChart').getContext('2d');
             var myIncomeChart = new Chart(incomeChart, {
                 type: 'line',
@@ -786,52 +812,53 @@ require 'db.php';
             });
         </script>
         <script>
-            const productNames = <?php echo json_encode($productNames); ?>;
-            const productStocks = <?php echo json_encode($productStocks); ?>;
-            const productColors = <?php echo json_encode($colors); ?>;
+        const productNames = <?php echo json_encode($productNames); ?>;
+        const productStocks = <?php echo json_encode($productStocks); ?>;
+        const productColors = <?php echo json_encode($colors); ?>;
 
-            const ctx = document.getElementById('barChart').getContext('2d');
+        const ctx = document.getElementById('barChart').getContext('2d');
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: productNames,
-                    datasets: [{
-                        label: 'Stocks',
-                        data: productStocks,
-                        backgroundColor: productColors,
-                        borderColor: productColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                generateLabels: function(chart) {
-                                    return productNames.map((name, index) => {
-                                        return {
-                                            text: name,
-                                            fillStyle: productColors[index],
-                                            strokeStyle: productColors[index],
-                                            lineWidth: 2,
-                                            hidden: false,
-                                            index: index
-                                        };
-                                    });
-                                }
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: productNames,
+                datasets: [{
+                    label: 'Stocks',
+                    data: productStocks,
+                    backgroundColor: productColors,
+                    borderColor: productColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            generateLabels: function(chart) {
+                                return productNames.map((name, index) => {
+                                    return {
+                                        text: name,
+                                        fillStyle: productColors[index],
+                                        strokeStyle: productColors[index],
+                                        lineWidth: 2,
+                                        hidden: false,
+                                        index: index
+                                    };
+                                });
                             }
                         }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
         </script>
+
 
         <script>
             function confirmCloseShop(event) {
