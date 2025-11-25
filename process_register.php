@@ -73,47 +73,52 @@
         }
     }
 
-    function sendVerificationEmail($email, $verification_token) {
-        $mail = new PHPMailer(true);
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.hostinger.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'techsupport@aqua-drop.shop';
-            $mail->Password = '8=4u?LaKm062';
-            $mail->SMTPSecure = 'ssl';
-            $mail->Port = 465;
-    
-            $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
-            $mail->addAddress($email);
-    
-            $mail->isHTML(true);
-            $mail->Subject = 'Email Verification';
-            $mail->Body = "
-                <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #343a40;'>
-                    <h2 style='color: #343a40;'>Hi,</h2>
-                    <p>Thank you for signing up! Please click the button below to verify your email address:</p>
-                    
-                    <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
-                    style='display: inline-block; padding: 12px 24px; color: #ffffff; background-color: #0d6efd; 
-                            text-decoration: none; border-radius: 5px; font-weight: bold;'>
-                        Verify Email
-                    </a>
-                    
-                    <p style='margin-top: 20px;'>If you did not sign up for this account, you can ignore this email.</p>
-                    
-                    <p style='margin-top: 30px;'>Best regards,<br>
-                    <strong>AquaDrop Team</strong><br>
-                    <small><a href='http://aqua-drop.shop' style='color: #0d6efd; text-decoration: none;'>www.aqua-drop.shop</a></small></p>
-                </div>
-            ";
-            $mail->send();
-            return true;
-        } catch (Exception $e) {
-            error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
-            return false;
-        }
+    function sendVerificationEmail($email, $username, $verification_token) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.hostinger.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'techsupport@aqua-drop.shop';
+        $mail->Password = '8=4u?LaKm062';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
+
+        $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Verify Your Aqua Drop Account';
+
+        $mail->Body = "
+        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #343a40;'>
+            <h2 style='color: #0d6efd;'>Hello " . htmlspecialchars($username) . ",</h2>
+            <p>Thank you for creating an account with Aqua Drop. To complete your registration and activate your account, please verify your email address by clicking the button below:</p>
+            
+            <p style='text-align: center; margin: 30px 0;'>
+                <a href='http://aqua-drop.shop/verify_email.php?token=$verification_token' 
+                   style='display: inline-block; padding: 12px 25px; font-size: 16px; color: #ffffff; 
+                   background-color: #0d6efd; text-decoration: none; border-radius: 5px; font-weight: bold;'>
+                   Verify Email
+                </a>
+            </p>
+
+            <p>If you did not create this account, please ignore this email or contact our support team.</p>
+
+            <p>Best regards,<br>
+            <strong>Aqua Drop Support Team</strong><br>
+            <small><a href='http://aqua-drop.shop' style='color: #0d6efd; text-decoration: none;'>www.aqua-drop.shop</a></small></p>
+        </div>
+        ";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Verification email could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
     }
+}
+
 
     ob_end_flush();
 ?>
