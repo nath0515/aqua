@@ -278,7 +278,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                         <?php if(!empty($rating['review_text']) && empty($rating['action_taken'])): ?>
                                             <button class="btn btn-sm btn-primary mt-2"
                                                     data-bs-toggle="modal" 
-                                                    data-bs-target="#actionModal<?php echo $rating['id']; ?>">
+                                                    data-bs-target="#actionModal<?php echo $rating['rating_id']; ?>">
                                                 Action Taken
                                             </button>
                                         <?php endif; ?>
@@ -304,7 +304,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
 
                             <!-- Modal (only shown if action wasn't done yet) -->
                             <?php if(empty($rating['action_taken']) && !empty($rating['review_text'])): ?>
-                            <div class="modal fade" id="actionModal<?php echo $rating['id']; ?>" tabindex="-1">
+                            <div class="modal fade" id="actionModal<?php echo $rating['rating_id']; ?>" tabindex="-1">
                                 <div class="modal-dialog">
                                     <form method="POST" action="save_action.php">
                                         <div class="modal-content">
@@ -314,7 +314,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                             </div>
 
                                             <div class="modal-body">
-                                                <input type="hidden" name="rating_id" value="<?php echo $rating['id']; ?>">
+                                                <input type="hidden" name="rating_id" value="<?php echo $rating['rating_id']; ?>">
 
                                                 <label class="form-label">Describe the action you took:</label>
                                                 <textarea class="form-control" name="action_text" rows="4" required></textarea>
