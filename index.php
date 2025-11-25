@@ -812,52 +812,57 @@ require 'db.php';
             });
         </script>
         <script>
-        const productNames = <?php echo json_encode($productNames); ?>;
-        const productStocks = <?php echo json_encode($productStocks); ?>;
-        const productColors = <?php echo json_encode($colors); ?>;
+        var productNames = <?php echo json_encode($productNames); ?>;
+        var productStocks = <?php echo json_encode($productStocks); ?>;
+        var colors = <?php echo json_encode($colors); ?>;
 
-        const ctx = document.getElementById('barChart').getContext('2d');
+        var barChart = document.getElementById('barChart').getContext('2d');
 
-        new Chart(ctx, {
+        var myBarChart = new Chart(barChart, {
             type: 'bar',
             data: {
                 labels: productNames,
                 datasets: [{
-                    label: 'Stocks',
-                    data: productStocks,
-                    backgroundColor: productColors,
-                    borderColor: productColors,
-                    borderWidth: 1
-                }]
+                    label: "Stocks",
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1,
+                    data: productStocks
+                }],
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            generateLabels: function(chart) {
-                                return productNames.map((name, index) => {
-                                    return {
-                                        text: name,
-                                        fillStyle: productColors[index],
-                                        strokeStyle: productColors[index],
-                                        lineWidth: 2,
-                                        hidden: false,
-                                        index: index
-                                    };
-                                });
-                            }
+                maintainAspectRatio: false,
+
+                legend: {
+                    display: true,
+                    labels: {
+                        generateLabels: function(chart) {
+                            var labels = productNames.map(function(name, i) {
+                                return {
+                                    text: name,
+                                    fillStyle: colors[i],
+                                    strokeStyle: colors[i],
+                                    index: i
+                                };
+                            });
+                            return labels;
                         }
                     }
                 },
+
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
                 }
             }
         });
         </script>
+
+
 
 
         <script>
