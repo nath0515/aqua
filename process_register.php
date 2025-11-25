@@ -19,8 +19,8 @@
     $date = date('Y-m-d H:i:s');
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $username = $GET['username'] ?? '';
-        $email = $GET['email'];
+        $username = $_GET['username'] ?? '';
+        $email = $_GET['email'];
         $password = $_GET['password'];
         $confirm_password = $_GET['confirm_password'];
 
