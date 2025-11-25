@@ -233,8 +233,8 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                         <h4 class="mt-3 text-muted">No ratings yet</h4>
                         <p class="text-muted">Complete more deliveries to receive customer ratings!</p>
                     </div>
-                <?php else: ?>
-                    <?php foreach($ratingsToShow as $rating): ?>
+                    <?php else: ?>
+                        <?php foreach($ratingsToShow as $rating): ?>
                             <div class="rating-card">
                                 <div class="row">
                                     <div class="col-md-8">
@@ -249,6 +249,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                             <strong>Order Amount:</strong> ₱<?php echo number_format($rating['amount'], 2); ?>
                                         </p>
                                     </div>
+
                                     <div class="col-md-4 text-end">
                                         <div class="mb-2">
                                             <small class="text-muted">Order Rating:</small><br>
@@ -268,7 +269,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                             </div>
                                         </div>
 
-                                        <!-- Action Taken Button (top-right area) -->
+                                        <!-- Action Taken Button -->
                                         <button class="btn btn-sm btn-primary mt-2" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#actionModal<?php echo $rating['id']; ?>">
@@ -276,7 +277,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <?php if(!empty($rating['review_text'])): ?>
                                     <div class="review-text">
                                         <i class="fas fa-quote-left me-2"></i>
@@ -284,6 +285,33 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                     </div>
                                 <?php endif; ?>
                             </div>
+
+                            <!-- Modal FOR THIS SPECIFIC RATING -->
+                            <div class="modal fade" id="actionModal<?php echo $rating['id']; ?>" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <form method="POST" action="save_action.php">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Action Taken</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <input type="hidden" name="rating_id" value="<?php echo $rating['id']; ?>">
+
+                                                <label class="form-label">Describe the action you took:</label>
+                                                <textarea class="form-control" name="action_text" rows="4" required></textarea>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button class="btn btn-primary" type="submit">Save Action</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                         <?php endforeach; ?>
                     <?php endif; ?>
 
@@ -342,31 +370,6 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
             </footer>
         </div>
     </div>
-    <div class="modal fade" id="actionModal<?php echo $rating['id']; ?>" tabindex="-1">
-        <div class="modal-dialog">
-            <form method="POST" action="save_action.php">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Action Taken</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <input type="hidden" name="rating_id" value="<?php echo $rating['id']; ?>">
-
-                        <label class="form-label">Describe the action you took:</label>
-                        <textarea class="form-control" name="action_text" rows="4" required></textarea>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" type="submit">Save Action</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
         <?php if ($notification_success > 0): ?>
