@@ -451,7 +451,7 @@ require 'db.php';
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        Stocks
                                     </div>
                                     <div class="card-body">
                                         <div class="chart-container">
