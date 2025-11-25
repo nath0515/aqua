@@ -743,32 +743,6 @@ require 'db.php';
                 }
             });
 
-            // Bar Chart: Product Stocks
-            var barChart = document.getElementById('barChart').getContext('2d');
-            var myBarChart = new Chart(barChart, {
-                type: 'bar',
-                data: {
-                    labels: productNames,
-                    datasets: [{
-                        label: "Stocks",
-                        backgroundColor: colors,
-                        borderColor: colors,
-                        data: productStocks,
-                    }],
-                },
-                options: {
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    },
-                }
-            });
-
             var incomeChart = document.getElementById('incomeChart').getContext('2d');
             var myIncomeChart = new Chart(incomeChart, {
                 type: 'line',
