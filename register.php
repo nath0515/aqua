@@ -52,7 +52,7 @@
                             <img src="assets/img/logoreg.png" alt="Logo" class="mb-2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
                                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
                                 <div class="card-body">
-                                    <form action="process_register.php" method="POST" onsubmit="return checkForm()">
+                                    <form action="process_register.php" method="GET" onsubmit="return checkForm()">
                                         <div class="mb-3">
                                             <label for="" class="form-label">Username</label>
                                             <input type="text" name="username" class="form-control" placeholder="Username" required>
