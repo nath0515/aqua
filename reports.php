@@ -637,7 +637,7 @@
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Product", 60, y);
-            pdf.text("Qty", 115, y);
+            pdf.text("Quantity", 115, y);
             pdf.text("Unit Price", 135, y);
             pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
