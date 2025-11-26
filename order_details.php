@@ -399,28 +399,30 @@ error_reporting(E_ALL);
                                             </div>
                                         <?php endif; ?>
                                     </div>   
-                                    <div class="modal fade" id="actionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form method="POST">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Add Action Taken</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
+                                    <?php if($existing_rating && !empty($existing_rating['review_text'])): ?>
+                                        <div class="modal fade" id="actionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form method="POST">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Add Action Taken</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
 
-                                                    <div class="modal-body">
-                                                        <textarea name="action_taken" class="form-control" rows="4" placeholder="Enter action taken..."></textarea>
-                                                        <input type="hidden" name="rating_id" value="<?php echo $existing_rating['rating_id']; ?>">
-                                                    </div>
+                                                        <div class="modal-body">
+                                                            <textarea name="action_taken" class="form-control" rows="4" placeholder="Enter action taken..."></textarea>
+                                                            <input type="hidden" name="rating_id" value="<?php echo $existing_rating['rating_id']; ?>">
+                                                        </div>
 
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button class="btn btn-primary" type="submit" name="save_action">Save</button>
-                                                    </div>
-                                                </form>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button class="btn btn-primary" type="submit" name="save_action">Save</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php endif; ?>
                                     <p><i id="processedBy"></i></p>
                                 </div>
                             </div>
