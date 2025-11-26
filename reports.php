@@ -26,23 +26,11 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.report_id,a.order_id,d.date,d.amount,b.product_id,c.product_name,
-
-            b.quantity,
-            b.unit_price
-
-        FROM report_content a
-        
-        JOIN orderitems b 
-            ON a.order_id = b.order_id
-        
-        JOIN products c 
-            ON b.product_id = c.product_id
-        
-        JOIN orders d 
-            ON a.order_id = d.order_id
-        
-        WHERE a.report_id = :report_id";
+    $sql = "SELECT a.order_id, a.report_id, b.product_id, c.product_name, d.amount, d.date FROM report_content a 
+    JOIN orderitems b ON a.order_id = b.order_id
+    JOIN products c ON b.product_id = c.product_id
+    JOIN orders d ON a.order_id = d.order_id
+    WHERE report_id = :report_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':report_id', $report_id);
     $stmt->execute();
@@ -309,35 +297,29 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Product Name</th>
-                                            <th>Quantity</th>
-                                            <th>Unit Price</th>
-                                            <th>Amount</th>
+                                            <th> Date</th>
+                                            <th> Product Name</th>
+                                            <th> Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row): ?>
+                                        <?php foreach($order_data as $row):?>
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                <td><?php echo $row['product_name']; ?></td>
-                                                <td><?php echo $row['quantity']; ?></td>
-                                                <td>₱<?php echo number_format($row['unit_price'], 2); ?></td>
+                                                <td><?php echo $row['product_name'];?></td>
                                                 <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
-                                        <?php endforeach; ?>
-
+                                        <?php endforeach;?>
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                            <td style="text-align: right;"><strong>Total:</strong></td>
-                                            <td><strong>₱<?php echo number_format($total_amount, 2); ?></strong></td>
+                                            <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -752,7 +734,6 @@
         document.getElementById("downloadExcel").addEventListener("click", function () {
 
             // =====================
-            p
             //  CREATE EXCEL DATA
             // =====================
 
