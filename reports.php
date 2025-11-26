@@ -652,14 +652,14 @@
                 pdf.text("<?php echo date('M d, Y g:iA', strtotime($row['date'])); ?>", 14, y);
                 pdf.text("<?php echo $row['product_name']; ?>", 60, y);
 
-                pdf.text("<?php echo $row['quantity']; ?>", 120, y);
+                pdf.text("<?php echo $row['quantity']; ?>", 130, y);
 
                 pdf.text("<?php echo ($row['water_price_promo'] > 0 
                             ? number_format($row['water_price_promo'], 2) 
                             : number_format($row['water_price'], 2)); ?>", 
-                        140, y);
+                        155, y);
 
-                pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
+                pdf.text("<?php echo number_format($row['amount'], 2); ?>", 190, y, { align: "right" });
 
                 y += 6;
                 y = checkPageBreak(y);
