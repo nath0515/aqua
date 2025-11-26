@@ -758,5 +758,19 @@ error_reporting(E_ALL);
             });
         </script>
         <?php endif; ?>
+
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'action_saved'): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Action Saved!',
+                    text: 'Your action taken has been successfully recorded.',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
     </body>
 </html>
