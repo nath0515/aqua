@@ -26,7 +26,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.report_id, b.product_id, c.product_name, d.amount, d.date FROM report_content a 
+    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,d.amount, d.date FROM report_content a 
     JOIN orderitems b ON a.order_id = b.order_id
     JOIN products c ON b.product_id = c.product_id
     JOIN orders d ON a.order_id = d.order_id
@@ -299,6 +299,8 @@
                                         <tr>
                                             <th> Date</th>
                                             <th> Product Name</th>
+                                            <th> Quantity</th>
+                                            <th> Unit Price</th>
                                             <th> Amount</th>
                                         </tr>
                                     </thead>
@@ -307,10 +309,14 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['product_name'];?></td>
+                                                <td><?php echo $row['product_name'];?></td>
+                                                <td><?php echo $row['product_name'];?></td>
                                                 <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
