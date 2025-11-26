@@ -637,12 +637,12 @@
             pdf.text("Sales", 14, y);
             y += 6;
 
+            pdf.setFontSize(11);
             pdf.text("Date", 14, y);
             pdf.text("Product", 60, y);
             pdf.text("Qty", 130, y);
             pdf.text("Unit Price", 155, y);
             pdf.text("Amount", 190, y, { align: "right" });
-
             y += 6;
 
             pdf.setFont("helvetica", "normal");
