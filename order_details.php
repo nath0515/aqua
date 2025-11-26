@@ -371,7 +371,7 @@ error_reporting(E_ALL);
                                             <!-- Review Text -->
                                             <?php if(!empty($existing_rating['review_text'])): ?>
                                                 <div class="mt-3">
-                                                    <h6>Your Review:</h6>
+                                                    <h6>Customer Review:</h6>
                                                     <p class="text-muted"><?php echo htmlspecialchars($existing_rating['review_text']); ?></p>
                                                 </div>
                                             <?php endif; ?>
