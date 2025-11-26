@@ -344,44 +344,41 @@
         }
 
         function enableEdit() {
-            const fullNameInput = document.getElementById("fullname");
-            const fullName = fullNameInput.value;
+        // Proceed with showing fields without validation
+        document.getElementById("fullnameGroup").classList.add("d-none");
+        document.getElementById("firstnameGroup").classList.remove("d-none");
+        document.getElementById("lastnameGroup").classList.remove("d-none");
 
-            // ✅ Check if input is empty or just spaces
-            if (!fullName || fullName.trim() === "") {
-                alert("Full name cannot be empty or just spaces.");
-                fullNameInput.focus();
-                return; // Stop the function
-            }
+        // Populate first and last name from full name, even if spaces
+        const fullName = document.getElementById("fullname").value.trim();
+        const parts = fullName.split(" ");
+        const first = parts.slice(0, -1).join(" ") || "";
+        const last = parts.slice(-1).join(" ") || "";
 
-            const parts = fullName.trim().split(" ");
-            const first = parts.slice(0, -1).join(" ").trim();  // trim each part
-            const last = parts.slice(-1).join(" ").trim();       // trim last part
+        document.getElementById("firstname").value = first;
+        document.getElementById("lastname").value = last;
 
-            // ✅ Check if first or last is empty after trimming
-            if (first === "" || last === "") {
-                alert("First name and last name cannot be empty or just spaces.");
-                return; // Stop the function
-            }
+        ["email", "contact_number"].forEach(id =>
+            document.getElementById(id).removeAttribute("readonly"));
 
-            // Proceed with showing fields
-            document.getElementById("fullnameGroup").classList.add("d-none");
-            document.getElementById("firstnameGroup").classList.remove("d-none");
-            document.getElementById("lastnameGroup").classList.remove("d-none");
+        document.getElementById("profilePicGroup").classList.remove("d-none");
 
-            document.getElementById("firstname").value = first;
-            document.getElementById("lastname").value = last;
+        document.getElementById("editBtn").classList.add("d-none");
+        document.getElementById("updateBtn").classList.remove("d-none");
+        document.getElementById("cancelBtn").classList.remove("d-none");
+    }
 
-            ["email", "contact_number"].forEach(id =>
-                document.getElementById(id).removeAttribute("readonly"));
+    // ✅ Validate on update
+    document.getElementById("updateBtn").addEventListener("click", function(e) {
+        const first = document.getElementById("firstname").value.trim();
+        const last = document.getElementById("lastname").value.trim();
 
-            // Show profile picture upload input
-            document.getElementById("profilePicGroup").classList.remove("d-none");
-
-            document.getElementById("editBtn").classList.add("d-none");
-            document.getElementById("updateBtn").classList.remove("d-none");
-            document.getElementById("cancelBtn").classList.remove("d-none");
+        if (first === "" || last === "") {
+            alert("First name and last name cannot be empty or just spaces.");
+            e.preventDefault(); // stop form submission
         }
+    });
+
 
 
             function cancelEdit() {
