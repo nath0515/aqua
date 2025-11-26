@@ -346,9 +346,16 @@
         function enableEdit() {
             const fullName = document.getElementById("fullname").value.trim();
             const parts = fullName.split(" ");
-            const first = parts.slice(0, -1).join(" ") || "";
-            const last = parts.slice(-1).join(" ") || "";
+            const first = parts.slice(0, -1).join(" ").trim();  // trim each part
+            const last = parts.slice(-1).join(" ").trim();       // trim last part
 
+            // ✅ Check if first or last is empty after trimming
+            if (first === "" || last === "") {
+                alert("First name and last name cannot be empty or just spaces.");
+                return; // Stop the function
+            }
+
+            // Proceed with showing fields
             document.getElementById("fullnameGroup").classList.add("d-none");
             document.getElementById("firstnameGroup").classList.remove("d-none");
             document.getElementById("lastnameGroup").classList.remove("d-none");
@@ -359,12 +366,13 @@
             ["email", "contact_number"].forEach(id =>
                 document.getElementById(id).removeAttribute("readonly"));
 
-            // ✅ Show profile picture upload input when editing
+            // Show profile picture upload input
             document.getElementById("profilePicGroup").classList.remove("d-none");
 
             document.getElementById("editBtn").classList.add("d-none");
             document.getElementById("updateBtn").classList.remove("d-none");
             document.getElementById("cancelBtn").classList.remove("d-none");
+
         }
 
             function cancelEdit() {
