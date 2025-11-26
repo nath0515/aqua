@@ -26,7 +26,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,c.water_price_promo,d.amount, d.date FROM report_content a 
+    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,c.water_price_promo,c.isDiscounted,d.amount, d.date FROM report_content a 
     JOIN orderitems b ON a.order_id = b.order_id
     JOIN products c ON b.product_id = c.product_id
     JOIN orders d ON a.order_id = d.order_id
@@ -297,34 +297,52 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th> Date</th>
-                                            <th> Product Name</th>
-                                            <th> Quantity</th>
-                                            <th> Unit Price</th>
-                                            <th> Amount</th>
+                                            <th>Date</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($order_data as $row):?>
-                                            <tr>
-                                                <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
-                                                <td><?php echo $row['product_name'];?></td>
-                                                <td><?php echo $row['quantity'];?></td>
-                                                <td>
-                                                    ₱<?php echo number_format(
-                                                            $row['water_price_promo'] > 0 ? $row['water_price_promo'] : $row['water_price'], 
-                                                            2
-                                                        ); ?>
-                                                </td>
-                                                <td>₱<?php echo number_format($row['amount'], 2); ?></td>
-                                            </tr>
-                                        <?php endforeach;?>
+                                        <?php 
+                                        $total_amount = 0;
+                                        foreach($order_data as $row):
+
+                                            // Determine correct unit price
+                                            $unit_price = ($row['isDiscounted'] == 1 && $row['water_price_promo'] > 0)
+                                                            ? $row['water_price_promo']
+                                                            : $row['water_price'];
+
+                                            // Compute amount properly
+                                            $line_total = $unit_price * $row['quantity'];
+
+                                            // Add container cost if applicable
+                                            if (!empty($row['with_container']) && $row['with_container'] == 1) {
+                                                $line_total += $row['container_price'] * $row['container_quantity'];
+                                            }
+
+                                            // Add to report total
+                                            $total_amount += $line_total;
+                                        ?>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td colspan="2" style="text-align: right;"><strong>Total: ₱<?php echo number_format($total_amount, 2); ?></strong></td>
+                                            <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
+                                            <td><?php echo $row['product_name']; ?></td>
+                                            <td><?php echo $row['quantity']; ?></td>
+
+                                            <td>
+                                                ₱<?php echo number_format($unit_price, 2); ?>
+                                            </td>
+
+                                            <td>
+                                                ₱<?php echo number_format($line_total, 2); ?>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+
+                                        <tr>
+                                            <td></td><td></td><td></td><td style="text-align:right;"><strong>Total:</strong></td>
+                                            <td><strong>₱<?php echo number_format($total_amount, 2); ?></strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
