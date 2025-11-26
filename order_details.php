@@ -4,79 +4,90 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-    require 'session.php';
-    require 'db.php';
+require 'session.php';
+require 'db.php';
 
-    
+$user_id = $_SESSION['user_id'];
+$dateNow = date('Y-m-d');
+$role_id = $_SESSION['role_id'];
+if($role_id == 2){
+    header("Location: home.php");
+    exit;
+}else if ($role_id == 3){
+    header("Location: riderdashboard.php");
+    exit;
+}
 
-    $user_id = $_SESSION['user_id'];
-    $dateNow = date('Y-m-d');
-    $role_id = $_SESSION['role_id'];
-    if($role_id == 2){
-        header("Location: home.php");
-    }else if ($role_id == 3){
-        header("Location: riderdashboard.php");
+$sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number 
+        FROM users u
+        JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.user_id = :user_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+require 'notification_helper.php';
+$notifications = getNotifications($conn, $user_id, $role_id);
+$unread_count = $notifications['unread_count'] ?? 0; // fallback 0 if not set
+
+$notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
+
+$order_id = 0;
+$order_data = [];
+$proof_file = ['proof_file' => null, 'proofofpayment' => null, 'payment_id' => null];
+$date_data = ['date' => null];
+$existing_rating = null;
+
+if(isset($_GET['id'])) {
+    $order_id = $_GET['id'];
+
+    // Fetch order items
+    $sql = "SELECT a.quantity, a.with_container, a.container_quantity, a.isDiscounted,
+            b.product_name, b.water_price, b.water_price_promo, b.container_price, 
+            c.date, c.amount, c.rider,
+            d.firstname, d.lastname, d.address, d.contact_number,
+            e.status_name
+            FROM orderitems a
+            JOIN products b ON a.product_id = b.product_id
+            JOIN orders c ON a.order_id = c.order_id
+            JOIN user_details d ON c.user_id = d.user_id
+            JOIN orderstatus e ON c.status_id = e.status_id
+            WHERE a.order_id = :order_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id);
+    $stmt->execute();
+    $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (!$order_data) {
+        $order_data = [];
     }
 
-    $sql = "SELECT u.user_id, username, email, role_id, firstname, lastname, address, contact_number FROM users u
-    JOIN user_details ud ON u.user_id = ud.user_id
-    WHERE u.user_id = :user_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id);
+    // Fetch proof files
+    $stmt = $conn->prepare("SELECT proof_file, proofofpayment, payment_id FROM orders WHERE order_id = :order_id");
+    $stmt->bindParam(':order_id', $order_id);
     $stmt->execute();
-    $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Get notifications using helper for consistency
-    require 'notification_helper.php';
-    $notifications = getNotifications($conn, $user_id, $role_id);
-    $unread_count = $notifications['unread_count'];
-    
-    // Check for notification success message
-    $notification_success = isset($_GET['notifications_marked']) ? (int)$_GET['notifications_marked'] : 0;
+    $proof_file = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$proof_file) {
+        $proof_file = ['proof_file' => null, 'proofofpayment' => null, 'payment_id' => null];
+    }
 
-    $order_id = 0;
+    // Fetch order date
+    $sql = "SELECT date FROM orders WHERE order_id = :order_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id);
+    $stmt->execute();
+    $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$date_data) {
+        $date_data = ['date' => null];
+    }
 
-    if(isset($_GET['id'])){
-        $order_id = $_GET['id'];
-
-        $sql = "SELECT a.quantity, a.with_container,a.container_quantity, a.isDiscounted,
-        b.product_name, b.water_price, b.water_price_promo, b.container_price, 
-        c.date, c.amount, c.rider,
-        d.firstname, d.lastname, d.address, d.contact_number,
-        e.status_name
-        FROM orderitems a
-        JOIN products b ON a.product_id = b.product_id
-        JOIN orders c ON a.order_id = c.order_id
-        JOIN user_details d ON c.user_id = d.user_id
-        JOIN orderstatus e ON c.status_id = e.status_id
-        WHERE a.order_id = :order_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        $stmt->execute();
-        $order_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $stmt = $conn->prepare("SELECT proof_file, proofofpayment, payment_id FROM orders WHERE order_id = :order_id");
-        $stmt->execute([':order_id' => $order_id]);
-        $proof_file = $stmt->fetch();
-
-        $sql = "SELECT date FROM orders WHERE order_id = :order_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id);
-        $stmt->execute();
-        $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
-        }
-        
-        $existing_rating = null;
-
-        if(isset($_GET['id'])) {
-            $order_id = $_GET['id'];
-            
-            // Admin: get rating for this order
-            $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':order_id', $order_id);
-            $stmt->execute();
-            $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+    // Fetch existing rating for admin
+    $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':order_id', $order_id);
+    $stmt->execute();
+    $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 ?>
 <!DOCTYPE html>
