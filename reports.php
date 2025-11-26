@@ -636,15 +636,25 @@
 
             pdf.setFontSize(11);
             pdf.text("Date", 14, y);
-            pdf.text("Product", 70, y);
+            pdf.text("Product", 60, y);
+            pdf.text("Qty", 115, y);
+            pdf.text("Unit Price", 135, y);
             pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
+
             pdf.setFont("helvetica", "normal");
 
             <?php foreach($order_data as $row): ?>
+
+                let qty = "<?php echo $row['quantity']; ?>";
+                let unitPrice = "<?php echo ($row['water_price_promo'] > 0 ? number_format($row['water_price_promo'], 2) : number_format($row['water_price'], 2)); ?>";
+
                 pdf.text("<?php echo date('M d, Y g:iA', strtotime($row['date'])); ?>", 14, y);
-                pdf.text("<?php echo $row['product_name']; ?>", 70, y);
+                pdf.text("<?php echo $row['product_name']; ?>", 60, y);
+                pdf.text(qty, 115, y);
+                pdf.text(unitPrice, 135, y);
                 pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
+
                 y += 6;
                 y = checkPageBreak(y);
             <?php endforeach; ?>
@@ -652,6 +662,7 @@
             pdf.setFont("helvetica", "bold");
             pdf.text("Total Sales: Php <?php echo number_format($total_amount, 2); ?>", 170, y, { align: "right" });
             y += 12;
+
 
             // =====================
             //   FORCE PAGE BREAK HERE
@@ -673,12 +684,14 @@
             pdf.text("Purpose", 70, y);
             pdf.text("Amount (Php)", 170, y, { align: "right" });
             y += 6;
+
             pdf.setFont("helvetica", "normal");
 
             <?php foreach($expense_data as $row): ?>
                 pdf.text("<?php echo date('M d, Y g:iA', strtotime($row['date'])); ?>", 14, y);
                 pdf.text("<?php echo $row['expensetype_name']; ?>", 70, y);
                 pdf.text("<?php echo number_format($row['amount'], 2); ?>", 170, y, { align: "right" });
+
                 y += 6;
                 y = checkPageBreak(y);
             <?php endforeach; ?>
@@ -732,6 +745,7 @@
             pdf.save(filename);
         });
         </script>
+
         <script>
             document.getElementById("printReceipt").addEventListener("click", function () {
                 const content = document.getElementById("printableReceipt").innerHTML;
