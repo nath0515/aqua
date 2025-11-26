@@ -26,7 +26,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,c.water_price_promo,c.isDiscounted,d.amount, d.date FROM report_content a 
+    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,b.isDiscounted,c.product_name,c.water_price,c.water_price_promo,d.amount, d.date FROM report_content a 
     JOIN orderitems b ON a.order_id = b.order_id
     JOIN products c ON b.product_id = c.product_id
     JOIN orders d ON a.order_id = d.order_id
