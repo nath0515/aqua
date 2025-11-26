@@ -65,6 +65,24 @@ error_reporting(E_ALL);
         $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
+         $order_status = '';
+        $can_rate = false;
+        $existing_rating = null;
+        
+        if(isset($_GET['id']) && !empty($order_data)) {
+            $order_status = $order_data[0]['status_name'];
+            $can_rate = ($order_status === 'Delivered' || $order_status === 'Completed');
+            
+            // Check if already rated
+            if($can_rate) {
+                $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':order_id', $_GET['id']);
+                $stmt->execute();
+                $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+        }
+
     
     
 ?>
