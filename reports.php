@@ -309,8 +309,8 @@
                                             <tr>
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['product_name'];?></td>
-                                                <td><?php echo $row['product_name'];?></td>
-                                                <td><?php echo $row['product_name'];?></td>
+                                                <td><?php echo $row['quantity'];?></td>
+                                                <td><?php echo $row['water_price'];?></td>
                                                 <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
