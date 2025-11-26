@@ -207,7 +207,6 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
         <div id="layoutSidenav_content">
             <main class="container-fluid px-4">
                 <h1 class="mt-4">My Ratings & Reviews</h1>
-                
                 <!-- Rating Summary -->
                 <div class="rating-summary">
                     <div class="row text-center">
@@ -233,8 +232,8 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                         <h4 class="mt-3 text-muted">No ratings yet</h4>
                         <p class="text-muted">Complete more deliveries to receive customer ratings!</p>
                     </div>
-                <?php else: ?>
-                    <?php foreach($ratingsToShow as $rating): ?>
+                    <?php else: ?>
+                        <?php foreach($ratingsToShow as $rating): ?>
                             <div class="rating-card">
                                 <div class="row">
                                     <div class="col-md-8">
@@ -249,6 +248,7 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                             <strong>Order Amount:</strong> ₱<?php echo number_format($rating['amount'], 2); ?>
                                         </p>
                                     </div>
+
                                     <div class="col-md-4 text-end">
                                         <div class="mb-2">
                                             <small class="text-muted">Order Rating:</small><br>
@@ -258,7 +258,8 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                                 <?php endfor; ?>
                                             </div>
                                         </div>
-                                        <div>
+
+                                        <div class="mb-2">
                                             <small class="text-muted">Your Rating:</small><br>
                                             <div class="stars">
                                                 <?php for($i = 1; $i <= 5; $i++): ?>
@@ -266,16 +267,65 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                                                 <?php endfor; ?>
                                             </div>
                                         </div>
+
+                                        <!-- Only show button if there's comment AND action not submitted -->
+                                        <?php if(!empty($rating['review_text']) && empty($rating['action_taken'])): ?>
+                                            <button class="btn btn-sm btn-primary mt-2"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#actionModal<?php echo $rating['rating_id']; ?>">
+                                                Action Taken
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                                
+
+                                <!-- Customer Comment -->
                                 <?php if(!empty($rating['review_text'])): ?>
                                     <div class="review-text">
                                         <i class="fas fa-quote-left me-2"></i>
                                         <?php echo htmlspecialchars($rating['review_text']); ?>
                                     </div>
                                 <?php endif; ?>
+
+                                <!-- Show Action Taken chunk if submitted -->
+                                <?php if(!empty($rating['action_taken'])): ?>
+                                    <div class="mt-3 p-2 border rounded bg-light">
+                                        <strong>Action Taken:</strong><br>
+                                        <?php echo nl2br(htmlspecialchars($rating['action_taken'])); ?><br>
+                                        <small class="text-muted">
+                                            Date: <?php echo date('M d, Y h:i A', strtotime($rating['action_date'])); ?>
+                                        </small>
+                                    </div>
+                                <?php endif; ?>
                             </div>
+
+                            <!-- Modal (only shown if action wasn't done yet) -->
+                            <?php if(empty($rating['action_taken']) && !empty($rating['review_text'])): ?>
+                            <div class="modal fade" id="actionModal<?php echo $rating['rating_id']; ?>" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <form method="POST" action="save_action.php">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Action Taken</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <input type="hidden" name="rating_id" value="<?php echo $rating['rating_id']; ?>">
+
+                                                <label class="form-label">Describe the action you took:</label>
+                                                <textarea class="form-control" name="action_text" rows="4" required></textarea>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button class="btn btn-primary" type="submit">Save Action</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
 
@@ -334,8 +384,8 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
             </footer>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/scripts.js"></script>
         <?php if ($notification_success > 0): ?>
         <script>
@@ -345,6 +395,19 @@ $ratingsToShow = array_slice($ratings, $startIndex, $ratingsPerPage);
                     title: 'Notifications Marked as Read!',
                     text: '<?php echo $notification_success; ?> notification(s) have been marked as read.',
                     timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+        <?php endif; ?>
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'action_saved'): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Action Saved!',
+                    text: 'Your action taken has been successfully recorded.',
+                    timer: 2500,
                     showConfirmButton: false
                 });
             });

@@ -17,9 +17,10 @@
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $fp_token = bin2hex(random_bytes(16));
-            $sql = "UPDATE users SET fp_token = :fp_token";
+            $sql = "UPDATE users SET fp_token = :fp_token WHERE email = :email";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':fp_token', $fp_token);
+            $stmt->bindParam(':email', $email);
             $stmt->execute();
             
             $mailsent= sendVerificationEmail($email, $fp_token);
@@ -48,7 +49,6 @@
             $mail->Password = '8=4u?LaKm062';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-            $mail->SMTPDebug = 2;
     
             $mail->setFrom('techsupport@aqua-drop.shop', 'Aqua Drop');
             $mail->addAddress($email);
@@ -56,17 +56,20 @@
             $mail->isHTML(true);
             $mail->Subject = 'Reset Password Link';
             $mail->Body = "
-                        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>
-                            <h2 style='color: #343a40;'>Hi,</h2>
-                            <p>Click the link below to recover your account:</p>
-                            <a href='http://aqua-drop.shop/forgot_password.php?token=$fp_token' 
-                            style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #0d6efd; 
-                                    text-decoration: none; border-radius: 5px;'>
-                            Recover Password
-                            </a>
-                            <p style='margin-top: 20px;'>Thank you.</p>
-                        </div>
-                        ";
+                <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa; color: #343a40;'>
+                    <h2 style='color: #0d6efd;'>Password Reset Request</h2>
+                    <p>Dear User,</p>
+                    <p>We received a request to reset the password associated with this email address. If you made this request, please click the button below to reset your password:</p>
+                    <p style='text-align: center; margin: 30px 0;'>
+                        <a href='http://aqua-drop.shop/forgot_password.php?token=$fp_token' 
+                            style='display: inline-block; padding: 12px 25px; font-size: 16px; color: #ffffff; background-color: #0d6efd; text-decoration: none; border-radius: 5px;'>
+                            Reset Password
+                        </a>
+                    </p>
+                    <p>If you did not request a password reset, please disregard this email or contact our support team if you have any concerns.</p>
+                    <p>Thank you,<br><strong>Aqua Drop Support Team</strong></p>
+                </div>
+            ";
     
             $mail->send();
             return true;
