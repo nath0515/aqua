@@ -386,8 +386,6 @@ error_reporting(E_ALL);
                                                         </small>
                                                     </div>
                                                 <?php endif; ?>
-
-                                                <!-- ⭐ SHOW BUTTON ONLY IF THERE IS A REVIEW & NO ACTION TAKEN YET -->
                                                 <?php if(!empty($existing_rating['review_text']) && empty($existing_rating['action_taken'])): ?>
                                                     <button class="btn btn-sm btn-primary mt-3"
                                                         data-bs-toggle="modal" 
@@ -403,7 +401,7 @@ error_reporting(E_ALL);
                                         <div class="modal fade" id="actionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form method="POST">
+                                                    <form method="POST" action="save_action.php">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">Add Action Taken</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
