@@ -256,7 +256,14 @@ if(isset($_GET['id'])) {
                                     $total_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                     ?>
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="mb-0"><?php echo date("F j, Y - h:iA", strtotime($date_data['date'])); ?></h5>
+                                        <h5 class="mb-0"><?php
+                                            if (!empty($date_data['date'])) {
+                                                echo date("F j, Y - h:iA", strtotime($date_data['date']));
+                                            } else {
+                                                echo "Date not available";
+                                            }
+                                            ?>
+                                        </h5>
                                         <h5 class="mb-0">Total Price: ₱ <?php echo $total_data['amount']?></h5>
                                     </div>
                                     <?php
