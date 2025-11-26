@@ -344,8 +344,17 @@
         }
 
         function enableEdit() {
-            const fullName = document.getElementById("fullname").value.trim();
-            const parts = fullName.split(" ");
+            const fullNameInput = document.getElementById("fullname");
+            const fullName = fullNameInput.value;
+
+            // ✅ Check if input is empty or just spaces
+            if (!fullName || fullName.trim() === "") {
+                alert("Full name cannot be empty or just spaces.");
+                fullNameInput.focus();
+                return; // Stop the function
+            }
+
+            const parts = fullName.trim().split(" ");
             const first = parts.slice(0, -1).join(" ").trim();  // trim each part
             const last = parts.slice(-1).join(" ").trim();       // trim last part
 
@@ -372,8 +381,8 @@
             document.getElementById("editBtn").classList.add("d-none");
             document.getElementById("updateBtn").classList.remove("d-none");
             document.getElementById("cancelBtn").classList.remove("d-none");
-
         }
+
 
             function cancelEdit() {
                 location.reload();
