@@ -677,8 +677,7 @@
 
                 pdf.text("<?php echo ($row['water_price_promo'] > 0 
                             ? number_format($row['water_price_promo'], 2) 
-                            : number_format($row['water_price'], 2)); ?>", 
-                        155, y);
+                            : number_format($row['water_price'], 2)); ?>", 155, y);
 
                 pdf.text("<?php echo number_format($row['amount'], 2); ?>", 190, y, { align: "right" });
 
