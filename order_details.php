@@ -64,27 +64,20 @@ error_reporting(E_ALL);
         $stmt->execute();
         $date_data = $stmt->fetch(PDO::FETCH_ASSOC);
         }
-
-         $order_status = '';
-        $can_rate = false;
-        $existing_rating = null;
         
-        if(isset($_GET['id']) && !empty($order_data)) {
-            $order_status = $order_data[0]['status_name'];
-            $can_rate = ($order_status === 'Delivered' || $order_status === 'Completed');
+        $existing_rating = null;
+
+        if(isset($_GET['id'])) {
+            $order_id = $_GET['id'];
             
-            // Check if already rated
-            if($can_rate) {
-                $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':order_id', $_GET['id']);
-                $stmt->execute();
-                $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
-            }
+            // Admin: get rating for this order
+            $sql = "SELECT * FROM order_ratings WHERE order_id = :order_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':order_id', $order_id);
+            $stmt->execute();
+            $existing_rating = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
-    
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -386,43 +379,46 @@ error_reporting(E_ALL);
                                                         </small>
                                                     </div>
                                                 <?php endif; ?>
-                                                <?php if (!empty($rating['review_text']) && empty($rating['action_taken'])): ?>
+
+                                                <!-- Admin Action Button -->
+                                                <?php if (!empty($existing_rating['review_text']) && empty($existing_rating['action_taken'])): ?>
                                                     <button class="btn btn-sm btn-primary mt-2"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#adminActionModal<?php echo $rating['rating_id']; ?>">
+                                                            data-bs-target="#adminActionModal<?php echo $existing_rating['rating_id']; ?>">
                                                         Action Taken
                                                     </button>
                                                 <?php endif; ?>
                                             </div>
-                                        <?php endif; ?>
-                                    </div>   
-                                    <?php if (empty($rating['action_taken']) && !empty($rating['review_text'])): ?>
-                                        <div class="modal fade" id="adminActionModal<?php echo $rating['rating_id']; ?>" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <form method="POST" action="admin_save_action.php">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Action Taken</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                        </div>
 
-                                                        <div class="modal-body">
-                                                            <input type="hidden" name="rating_id" value="<?php echo $rating['rating_id']; ?>">
-                                                            <input type="hidden" name="order_id" value="<?php echo $_GET['order_id']; ?>">
+                                            <!-- Admin Action Modal -->
+                                            <?php if (empty($existing_rating['action_taken']) && !empty($existing_rating['review_text'])): ?>
+                                                <div class="modal fade" id="adminActionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
+                                                    <div class="modal-dialog">
+                                                        <form method="POST" action="admin_save_action.php">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Action Taken</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                </div>
 
-                                                            <label class="form-label">Describe the action taken:</label>
-                                                            <textarea class="form-control" name="action_text" rows="4" required></textarea>
-                                                        </div>
+                                                                <div class="modal-body">
+                                                                    <input type="hidden" name="rating_id" value="<?php echo $existing_rating['rating_id']; ?>">
+                                                                    <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
 
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                            <button class="btn btn-primary" type="submit">Save Action</button>
-                                                        </div>
+                                                                    <label class="form-label">Describe the action taken:</label>
+                                                                    <textarea class="form-control" name="action_text" rows="4" required></textarea>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button class="btn btn-primary" type="submit">Save Action</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     <p><i id="processedBy"></i></p>
                                 </div>
                             </div>
