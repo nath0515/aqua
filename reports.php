@@ -410,108 +410,129 @@
             </div>
         </div>
         <div id="printableReceipt" style="display: none;">
-            <style>
-                #printableReceipt {
-                    font-family: Arial, sans-serif;
-                    padding: 20px;
-                }
-                h2, h3 {
-                    text-align: center;
-                    margin: 0;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 15px;
-                }
-                th, td {
-                    border-bottom: 1px solid #ccc;
-                    padding: 5px;
-                    text-align: left;
-                }
-                .right {
-                    text-align: right;
-                }
-                .section-title {
-                    margin-top: 20px;
-                    font-weight: bold;
-                }
-            </style>
+        <style>
+            #printableReceipt {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+            h2, h3 {
+                text-align: center;
+                margin: 0;
+            }
+            .section-title {
+                margin-top: 20px;
+                font-weight: bold;
+            }
+            .two-column {
+                display: flex;
+                justify-content: space-between;
+                gap: 20px;
+            }
+            .column {
+                width: 48%;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+            th, td {
+                border-bottom: 1px solid #ccc;
+                padding: 5px;
+                text-align: left;
+            }
+            .right {
+                text-align: right;
+            }
+        </style>
 
-            <h2>DoodsNer Water Refilling Station</h2>
-            <h3>Daily Sales & Expense Report</h3>
-            <p style="text-align: center;">Date: <?php echo date('F j, Y', strtotime($date_data)); ?></p>
+        <h2>DoodsNer Water Refilling Station</h2>
+        <h3>Daily Sales & Expense Report</h3>
+        <p style="text-align: center;">Date: <?php echo date('F j, Y', strtotime($date_data)); ?></p>
 
-            <div class="section-title">Sales</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Product</th>
-                        <th class="right">Amount (₱)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($order_data as $row): ?>
-                    <tr>
-                        <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
-                        <td><?php echo $row['product_name']; ?></td>
-                        <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="2"><strong>Total Sales</strong></td>
-                        <td class="right"><strong>₱<?php echo number_format($total_amount, 2); ?></strong></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="two-column">
+            <!-- Sales Column -->
+            <div class="column">
+                <div class="section-title">Sales</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Unit Price (₱)</th>
+                            <th class="right">Amount (₱)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($order_data as $row): ?>
+                        <tr>
+                            <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
+                            <td><?php echo $row['product_name']; ?></td>
+                            <td><?php echo $row['quantity']; ?></td>
+                            <td><?php echo number_format(($row['water_price_promo'] > 0 ? $row['water_price_promo'] : $row['water_price']), 2); ?></td>
+                            <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="4"><strong>Total Sales</strong></td>
+                            <td class="right"><strong>₱<?php echo number_format($total_amount, 2); ?></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <div class="section-title">Expenses</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Purpose</th>
-                        <th class="right">Amount (₱)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($expense_data as $row): ?>
-                    <tr>
-                        <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
-                        <td><?php echo $row['expensetype_name']; ?></td>
-                        <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="2"><strong>Total Expenses</strong></td>
-                        <td class="right"><strong>₱<?php echo number_format($total_expense, 2); ?></strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="section-title">Net Income Summary</div>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Total Sales</td>
-                        <td class="right">₱<?php echo number_format($total_amount, 2); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Total Expenses</td>
-                        <td class="right">₱<?php echo number_format($total_expense, 2); ?></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Net Income</strong></td>
-                        <td class="right"><strong>₱<?php echo number_format($total_income, 2); ?></strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p style="text-align: center; font-style: italic; margin-top: 40px;">
-                Generated by AquaDrop Water Ordering System
-            </p>
+            <!-- Expenses Column -->
+            <div class="column">
+                <div class="section-title">Expenses</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Purpose</th>
+                            <th class="right">Amount (₱)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($expense_data as $row): ?>
+                        <tr>
+                            <td><?php echo date('M d, Y g:iA', strtotime($row['date'])); ?></td>
+                            <td><?php echo $row['expensetype_name']; ?></td>
+                            <td class="right"><?php echo number_format($row['amount'], 2); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2"><strong>Total Expenses</strong></td>
+                            <td class="right"><strong>₱<?php echo number_format($total_expense, 2); ?></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <div class="section-title">Net Income Summary</div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Total Sales</td>
+                    <td class="right">₱<?php echo number_format($total_amount, 2); ?></td>
+                </tr>
+                <tr>
+                    <td>Total Expenses</td>
+                    <td class="right">₱<?php echo number_format($total_expense, 2); ?></td>
+                </tr>
+                <tr>
+                    <td><strong>Net Income</strong></td>
+                    <td class="right"><strong>₱<?php echo number_format($total_income, 2); ?></strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="text-align: center; font-style: italic; margin-top: 40px;">
+            Generated by AquaDrop Water Ordering System
+        </p>
+        </div>
+
          <!-- Receipt Modal -->
         <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
