@@ -26,7 +26,7 @@
     $stmt->execute();
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,d.amount, d.date FROM report_content a 
+    $sql = "SELECT a.order_id, a.report_id, b.product_id,b.quantity,c.product_name,c.water_price,c.water_price_promo,d.amount, d.date FROM report_content a 
     JOIN orderitems b ON a.order_id = b.order_id
     JOIN products c ON b.product_id = c.product_id
     JOIN orders d ON a.order_id = d.order_id
@@ -310,7 +310,12 @@
                                                 <td><?php echo date('F j, Y - g:iA', strtotime($row['date'])); ?></td>
                                                 <td><?php echo $row['product_name'];?></td>
                                                 <td><?php echo $row['quantity'];?></td>
-                                                <td><?php echo $row['water_price'];?></td>
+                                                <td>
+                                                    ₱<?php echo number_format(
+                                                            $row['water_price_promo'] > 0 ? $row['water_price_promo'] : $row['water_price'], 
+                                                            2
+                                                        ); ?>
+                                                </td>
                                                 <td>₱<?php echo number_format($row['amount'], 2); ?></td>
                                             </tr>
                                         <?php endforeach;?>
