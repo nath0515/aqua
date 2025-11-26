@@ -342,52 +342,85 @@ error_reporting(E_ALL);
                                             </div>
                                         <?php endif; ?>
                                     </div>
-                                    <?php if($existing_rating): ?>
-                                        <div class="mt-4 p-3 border rounded">
-                                            <h5 class="mb-3">Order Rating & Review</h5>
+                                        <?php if($existing_rating): ?>
+                                            <div class="mt-4 p-3 border rounded">
+                                                <h5 class="mb-3">Order Rating & Review</h5>
 
-                                            <div class="row">
-                                                <!-- Order Rating -->
-                                                <div class="col-md-6 mb-2">
-                                                    <h6>Order Rating:</h6>
-                                                    <div class="stars">
-                                                        <?php for($i = 1; $i <= 5; $i++): ?>
-                                                            <i class="fas fa-star <?php echo $i <= $existing_rating['order_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
-                                                        <?php endfor; ?>
+                                                <div class="row">
+                                                    <!-- Order Rating -->
+                                                    <div class="col-md-6 mb-2">
+                                                        <h6>Order Rating:</h6>
+                                                        <div class="stars">
+                                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                                <i class="fas fa-star <?php echo $i <= $existing_rating['order_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
+                                                            <?php endfor; ?>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Rider Rating -->
+                                                    <div class="col-md-6 mb-2">
+                                                        <h6>Rider Rating:</h6>
+                                                        <div class="stars">
+                                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                                <i class="fas fa-star <?php echo $i <= $existing_rating['rider_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
+                                                            <?php endfor; ?>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <!-- Rider Rating -->
-                                                <div class="col-md-6 mb-2">
-                                                    <h6>Rider Rating:</h6>
-                                                    <div class="stars">
-                                                        <?php for($i = 1; $i <= 5; $i++): ?>
-                                                            <i class="fas fa-star <?php echo $i <= $existing_rating['rider_rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
-                                                        <?php endfor; ?>
+                                                <!-- Review Text -->
+                                                <?php if(!empty($existing_rating['review_text'])): ?>
+                                                    <div class="mt-3">
+                                                        <h6>Customer Review:</h6>
+                                                        <p class="text-muted"><?php echo htmlspecialchars($existing_rating['review_text']); ?></p>
                                                     </div>
-                                                </div>
+                                                <?php endif; ?>
+
+                                                <!-- Action Taken -->
+                                                <?php if(!empty($existing_rating['action_taken'])): ?>
+                                                    <div class="mt-3">
+                                                        <h6>Action Taken:</h6>
+                                                        <p class="text-muted"><?php echo htmlspecialchars($existing_rating['action_taken']); ?></p>
+                                                        <small class="text-muted">
+                                                            Date: <?php echo date('M d, Y h:i A', strtotime($existing_rating['action_date'])); ?>
+                                                        </small>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <!-- ⭐ SHOW BUTTON ONLY IF THERE IS A REVIEW & NO ACTION TAKEN YET -->
+                                                <?php if(!empty($existing_rating['review_text']) && empty($existing_rating['action_taken'])): ?>
+                                                    <button class="btn btn-sm btn-primary mt-3"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#actionModal<?php echo $existing_rating['rating_id']; ?>">
+                                                        Action Taken
+                                                    </button>
+                                                <?php endif; ?>
+
                                             </div>
+                                        <?php endif; ?>
+                                    </div>   
+                                    <div class="modal fade" id="actionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form method="POST">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Add Action Taken</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
 
-                                            <!-- Review Text -->
-                                            <?php if(!empty($existing_rating['review_text'])): ?>
-                                                <div class="mt-3">
-                                                    <h6>Customer Review:</h6>
-                                                    <p class="text-muted"><?php echo htmlspecialchars($existing_rating['review_text']); ?></p>
-                                                </div>
-                                            <?php endif; ?>
+                                                    <div class="modal-body">
+                                                        <textarea name="action_taken" class="form-control" rows="4" placeholder="Enter action taken..."></textarea>
+                                                        <input type="hidden" name="rating_id" value="<?php echo $existing_rating['rating_id']; ?>">
+                                                    </div>
 
-                                            <!-- Action Taken -->
-                                            <?php if(!empty($existing_rating['action_taken'])): ?>
-                                                <div class="mt-3">
-                                                    <h6>Action Taken:</h6>
-                                                    <p class="text-muted"><?php echo htmlspecialchars($existing_rating['action_taken']); ?></p>
-                                                    <small class="text-muted">
-                                                        Date: <?php echo date('M d, Y h:i A', strtotime($existing_rating['action_date'])); ?>
-                                                    </small>
-                                                </div>
-                                            <?php endif; ?>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button class="btn btn-primary" type="submit" name="save_action">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                    <?php endif; ?>                                 
+                                    </div>
                                     <p><i id="processedBy"></i></p>
                                 </div>
                             </div>
