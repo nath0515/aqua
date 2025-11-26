@@ -386,38 +386,40 @@ error_reporting(E_ALL);
                                                         </small>
                                                     </div>
                                                 <?php endif; ?>
-                                                <?php if(!empty($existing_rating['review_text']) && empty($existing_rating['action_taken'])): ?>
-                                                    <button class="btn btn-sm btn-primary mt-3"
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#actionModal<?php echo $existing_rating['rating_id']; ?>">
+                                                <?php if (!empty($rating['review_text']) && empty($rating['action_taken'])): ?>
+                                                    <button class="btn btn-sm btn-primary mt-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#adminActionModal<?php echo $rating['rating_id']; ?>">
                                                         Action Taken
                                                     </button>
                                                 <?php endif; ?>
-
                                             </div>
                                         <?php endif; ?>
                                     </div>   
-                                    <?php if($existing_rating && !empty($existing_rating['review_text'])): ?>
-                                        <div class="modal fade" id="actionModal<?php echo $existing_rating['rating_id']; ?>" tabindex="-1">
+                                    <?php if (empty($rating['action_taken']) && !empty($rating['review_text'])): ?>
+                                        <div class="modal fade" id="adminActionModal<?php echo $rating['rating_id']; ?>" tabindex="-1">
                                             <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form method="POST" action="save_action.php">
+                                                <form method="POST" action="admin_save_action.php">
+                                                    <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Add Action Taken</h5>
+                                                            <h5 class="modal-title">Action Taken</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                         </div>
 
                                                         <div class="modal-body">
-                                                            <textarea name="action_taken" class="form-control" rows="4" placeholder="Enter action taken..."></textarea>
-                                                            <input type="hidden" name="rating_id" value="<?php echo $existing_rating['rating_id']; ?>">
+                                                            <input type="hidden" name="rating_id" value="<?php echo $rating['rating_id']; ?>">
+                                                            <input type="hidden" name="order_id" value="<?php echo $_GET['order_id']; ?>">
+
+                                                            <label class="form-label">Describe the action taken:</label>
+                                                            <textarea class="form-control" name="action_text" rows="4" required></textarea>
                                                         </div>
 
                                                         <div class="modal-footer">
-                                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button class="btn btn-primary" type="submit" name="save_action">Save</button>
+                                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button class="btn btn-primary" type="submit">Save Action</button>
                                                         </div>
-                                                    </form>
-                                                </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     <?php endif; ?>
