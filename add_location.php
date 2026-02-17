@@ -36,22 +36,29 @@
     }
     
 
-    $savedLat = isset($user_location['latitude']) ? floatval($user_location['latitude']) : null;
-    $savedLng = isset($user_location['longitude']) ? floatval($user_location['longitude']) : null;
+    // Default fallback coordinates (Santa Cruz center)
+        $defaultLat = 14.2783;
+        $defaultLng = 121.4157;
 
-    // Check if both coordinates are missing or invalid (e.g., 0 or null)
-    if (!$savedLat && !$savedLng) {
-        // Fallback to start address
-        $startAddress = 'Santa Cruz public market, Laguna';
-        $startCoordinates = getCoordinates($startAddress);
+        $savedLat = isset($user_location['latitude']) && $user_location['latitude'] !== ''
+            ? floatval($user_location['latitude'])
+            : null;
 
-        // Ensure fallback coordinates are used as the "saved" ones
-        $savedLat = $startCoordinates['lat'];
-        $savedLng = $startCoordinates['lon'];
-    } else {
-        // Use user's saved coordinates as the default map center
-        $startCoordinates = ['lat' => $savedLat, 'lon' => $savedLng];
-    }
+        $savedLng = isset($user_location['longitude']) && $user_location['longitude'] !== ''
+            ? floatval($user_location['longitude'])
+            : null;
+
+        // If coordinates are missing, use fallback
+        if ($savedLat === null || $savedLng === null) {
+            $savedLat = $defaultLat;
+            $savedLng = $defaultLng;
+        }
+
+        $startCoordinates = [
+            'lat' => $savedLat,
+            'lon' => $savedLng
+        ];
+
 
 
     function getCoordinates($address) {
@@ -670,10 +677,11 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
         // Initialize map
-        const map = L.map('map').setView(
-            [<?php echo $startCoordinates['lat']; ?>, <?php echo $startCoordinates['lon']; ?>], 
-            17
-        );
+        const initialLat = <?php echo json_encode($startCoordinates['lat']); ?>;
+        const initialLng = <?php echo json_encode($startCoordinates['lon']); ?>;
+
+        const map = L.map('map').setView([initialLat, initialLng], 17);
+
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
