@@ -35,16 +35,27 @@ try {
         }
     } else {
         // Original single notification read functionality
-        $id = $_GET['id'];
-        $destination = $_GET['destination'];
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $destination = isset($_GET['destination']) ? $_GET['destination'] : 'home';
 
-        $stmt = $conn->prepare("UPDATE activity_logs SET read_status = 1 WHERE activitylogs_id = :id");
-        $stmt->execute(['id' => $id]);
+    // Update notification
+    $stmt = $conn->prepare("UPDATE activity_logs SET read_status = 1 WHERE activitylogs_id = :id");
+    $stmt->execute(['id' => $id]);
 
-        header('Location: '.$destination);
-        exit();
+    // Remove .php if someone sends it
+    $destination = str_replace('.php', '', $destination);
+
+    // Prevent external redirects (security)
+    if (strpos($destination, 'http') === 0) {
+        $destination = 'home';
     }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
+
+    // Redirect safely
+    header("Location: /" . ltrim($destination, '/'));
+    exit();
+
+        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 ?>
